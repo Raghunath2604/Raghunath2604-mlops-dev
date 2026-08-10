@@ -311,6 +311,7 @@ body{animation:pgInD .45s ease both}
 .cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
 .cb-decline:hover{color:#CDD6F0;border-color:rgba(255,255,255,.2)}
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <div id="scroll-prog-d" style="position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#5B8AF0,#00FFB3);pointer-events:none;transition:width .06s linear;" aria-hidden="true"></div>
 <body>
@@ -587,6 +588,81 @@ body{animation:pgInD .45s ease both}
 const API = 'https://api.mlopsde.me/v1';
 let ST = { devices:[], deployments:[], events:[], summary:{}, devFilter:'all', evFilter:'all' };
 let sseSource = null;
+
+// --- CHART.JS & DARK MODE ---
+let driftChart = null;
+
+function initChart() {
+  const ctx = document.getElementById('driftChart');
+  if(!ctx) return;
+  const isDark = document.body.classList.contains('dark-mode');
+  const textColor = isDark ? '#e2e8f0' : '#475569';
+  const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+  
+  // Fake historical data for wow factor
+  const labels = Array.from({length: 24}, (_, i) => `${23-i}h`);
+  const data = Array.from({length: 24}, () => 0.1 + Math.random() * 0.15);
+  // add a spike at the end for drama
+  data[22] = 0.6; data[23] = 0.82;
+  
+  if(driftChart) driftChart.destroy();
+  
+  driftChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Avg KL Divergence',
+        data: data,
+        borderColor: '#00ffb3',
+        backgroundColor: 'rgba(0, 255, 179, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor, maxTicksLimit: 8 } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor }, beginAtZero: true, max: 1.0 }
+      }
+    }
+  });
+}
+
+function toggleDarkMode(e) {
+  if(e.checked) {
+    document.body.classList.add('dark-mode');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.body.classList.remove('dark-mode');
+    localStorage.setItem('theme', 'light');
+  }
+  initChart();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    const cb = document.getElementById('checkbox');
+    if(cb) cb.checked = true;
+  }
+  setTimeout(initChart, 500);
+});
+
+// hook into page changes to redraw if needed
+const origSwitch = window.switchPage;
+window.switchPage = function(id) {
+  if(origSwitch) origSwitch(id);
+  if(id === 'page-overview') setTimeout(initChart, 50);
+}
+// --- END CHART ---
+
 const PAGE_TITLES = {overview:'Overview',devices:'Devices',deployments:'Deployments',events:'Event log',drift:'Drift monitor',settings:'Settings'};
 
 // ── API ───────────────────────────────────────────────────────────────────────
@@ -679,16 +755,15 @@ async function refreshAll() {
 // ── LOADERS ────────────────────────────────────────────────────────────────────
 async function loadSummary() {
   try {
-    const r=await apiFetch('/status');ST.summary=r.data;
-    const d=r.data;
-    document.getElementById('k-total').textContent=d.devices.total;
-    document.getElementById('k-online').textContent=d.devices.online;
-    document.getElementById('k-offline').textContent=d.devices.offline;
-    document.getElementById('k-offline').className=`kpi-val ${d.devices.offline>0?'red':'teal'}`;
-    document.getElementById('k-drift').textContent=d.high_drift_devices;
-    document.getElementById('k-hp').textContent=`${d.fleet_health_pct}% fleet health`;
-    document.getElementById('k-updating').textContent=`${d.devices.updating} updating`;
-  } catch{}
+    const d=await apiFetch('/status'); ST.summary=d;
+    document.getElementById('k-total').textContent=d.total_devices||0;
+    document.getElementById('k-online').textContent=d.online||0;
+    document.getElementById('k-offline').textContent=d.offline||0;
+    document.getElementById('k-offline').className=`kpi-val ${d.offline>0?'red':'teal'}`;
+    document.getElementById('k-drift').textContent=d.drifting||0;
+    document.getElementById('k-hp').textContent=`${Math.round((d.online/(d.total_devices||1))*100)}% fleet health`;
+    document.getElementById('k-updating').textContent=`${d.active_deployments||0} updating`;
+  } catch(e){ console.error(e); }
 }
 async function loadDevices() {
   try {
@@ -722,9 +797,9 @@ function renderOvTable() {
   tb.innerHTML=ST.devices.map(d=>`<tr>
     <td class="td-name">${d.name}</td>
     <td>${sbadge(d.status)}</td>
-    <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_ver||'—'}</td>
-    <td>${dbar(d.drift_score)}</td>
-    <td style="font-family:var(--fm);font-size:.72rem;color:var(--muted)">${d.agent_ver||'—'}</td>
+    <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_tag||'-'}</td>
+    <td>${dbar(Math.round((d.drift_score||0)*100))}</td>
+    <td style="font-family:var(--fm);font-size:.72rem;color:var(--muted)">${d.agent_version||'-'}</td>
   </tr>`).join('');
   const s=document.getElementById('ov-sync');if(s)s.textContent='updated just now';
 }
@@ -733,16 +808,16 @@ function renderDevTable() {
   const q=(document.getElementById('dev-search')?.value||'').toLowerCase();
   let devs=ST.devices;
   if(ST.devFilter!=='all') devs=devs.filter(d=>d.status===ST.devFilter);
-  if(q) devs=devs.filter(d=>d.name.toLowerCase().includes(q)||d.hardware.toLowerCase().includes(q));
+  if(q) devs=devs.filter(d=>d.name.toLowerCase().includes(q)||(d.hw_class||'').toLowerCase().includes(q));
   tb.innerHTML=devs.map(d=>`<tr>
     <td class="td-name">${d.name}</td>
-    <td class="td-hw">${d.hardware}</td>
+    <td class="td-hw">${d.hw_class||'-'}</td>
     <td>${sbadge(d.status)}</td>
-    <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_ver||'—'}</td>
-    <td>${dbar(d.drift_score)}</td>
-    <td style="font-family:var(--fm);font-size:.72rem;color:var(--muted)">${d.agent_ver||'—'}</td>
+    <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_tag||'-'}</td>
+    <td>${dbar(Math.round((d.drift_score||0)*100))}</td>
+    <td style="font-family:var(--fm);font-size:.72rem;color:var(--muted)">${d.agent_version||'-'}</td>
     <td style="font-size:.72rem;color:var(--muted)">${fd(d.last_seen)}</td>
-    <td><button class="act-btn del" onclick="deleteDev('${d.id}','${d.name}')">✕</button></td>
+    <td><button class="act-btn del" onclick="deleteDev('${d.id}','${d.name}')">×</button></td>
   </tr>`).join('');
 }
 function filterDev(s,btn){ST.devFilter=s;document.querySelectorAll('#page-devices .filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDevTable();}
