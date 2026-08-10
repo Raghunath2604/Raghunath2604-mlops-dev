@@ -13,6 +13,10 @@
 
 **MLOps.dev** is a powerful Python SDK and CLI designed for managing fleet-wide machine learning model deployments to edge devices. Stop writing brittle bash scripts to copy models to Jetson Nanos and Raspberry Pis—use MLOps.dev to deploy, monitor drift, and rollback instantly.
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Raghunath2604/Raghunath2604-mlops-dev/main/brand/og-image.png" alt="MLOps.dev Dashboard" width="800">
+</div>
+
 ## ✨ Features
 
 - 🚀 **One-Command Deploys:** Ship models directly to thousands of edge devices with a single CLI command.
