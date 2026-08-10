@@ -626,7 +626,7 @@ async function doLogin() {
   const btn=document.getElementById('li-btn');
   btn.disabled=true;btn.textContent='Signing in…';
   try {
-    await new Promise(r=>setTimeout(r,600)); const res = {data: {token: "demo"}};
+    await new Promise(r=>setTimeout(r,600)); const res = {data: {token: "demo", user: {name: "Raghunath", email: "demo@mlops.dev", role: "admin"}}};
     localStorage.setItem('np_token',res.data.token);
     localStorage.setItem('np_user',JSON.stringify(res.data.user));
     bootApp(res.data.user);
