@@ -362,6 +362,41 @@ def cmd_health(args):
     print()
 
 
+def cmd_generate_cicd(args):
+    yaml_content = """name: MLOps.dev Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install MLOps.dev SDK
+        run: pip install mlops-dev
+
+      - name: Deploy model to fleet
+        env:
+          MLOPS_API_KEY: ${{ secrets.MLOPS_API_KEY }}
+          MLOPS_API_URL: ${{ secrets.MLOPS_API_URL }}
+        run: |
+          # Push the model file to the registry
+          mlops models push ./model.onnx --name my-model --tag ${{ github.sha }}
+          
+          # Deploy it to your edge fleet
+          mlops deploy my-model:${{ github.sha }} --target all
+"""
+    os.makedirs(".github/workflows", exist_ok=True)
+    with open(".github/workflows/mlops-deploy.yml", "w") as f:
+        f.write(yaml_content)
+    
+    ok("Generated .github/workflows/mlops-deploy.yml")
+    print("  Make sure to add MLOPS_API_KEY to your GitHub repository secrets!\n")
+
+
 # ── MAIN ──────────────────────────────────────────────────────────
 
 def main():
@@ -398,6 +433,9 @@ Discord: https://discord.gg/Tb47N9NaPk
 
     # health
     sub.add_parser("health", help="API health check")
+
+    # generate-cicd
+    sub.add_parser("generate-cicd", help="Generate GitHub Actions CI/CD workflow")
 
     # devices
     dev = sub.add_parser("devices", help="Manage edge devices")
@@ -483,6 +521,7 @@ Discord: https://discord.gg/Tb47N9NaPk
         dispatch = {
             "status":   cmd_status,
             "health":   cmd_health,
+            "generate-cicd": cmd_generate_cicd,
         }
         if args.command in dispatch:
             dispatch[args.command](args)

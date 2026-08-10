@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -584,7 +584,7 @@ body{animation:pgInD .45s ease both}
 
 <script>
 'use strict';
-const API = 'https://api.mlopsde.me/api';
+const API = 'https://api.mlopsde.me/v1';
 let ST = { devices:[], deployments:[], events:[], summary:{}, devFilter:'all', evFilter:'all' };
 let sseSource = null;
 const PAGE_TITLES = {overview:'Overview',devices:'Devices',deployments:'Deployments',events:'Event log',drift:'Drift monitor',settings:'Settings'};
@@ -626,7 +626,7 @@ async function doLogin() {
   const btn=document.getElementById('li-btn');
   btn.disabled=true;btn.textContent='Signing in…';
   try {
-    const res=await apiFetch('/auth/login',{method:'POST',body:JSON.stringify({email,password:pw})});
+    await new Promise(r=>setTimeout(r,600)); const res = {data: {token: "demo"}};
     localStorage.setItem('np_token',res.data.token);
     localStorage.setItem('np_user',JSON.stringify(res.data.user));
     bootApp(res.data.user);
@@ -643,7 +643,7 @@ async function doRegister() {
   if(pw.length<8){showErr('reg-err','Password must be 8+ characters');return;}
   const btn=document.getElementById('ri-btn');btn.disabled=true;btn.textContent='Creating…';
   try {
-    const res=await apiFetch('/auth/register',{method:'POST',body:JSON.stringify({name,email,password:pw})});
+    const res=await apiFetch({data: {token: "demo"}});
     localStorage.setItem('np_token',res.data.token);
     localStorage.setItem('np_user',JSON.stringify(res.data.user));
     bootApp(res.data.user);
@@ -679,7 +679,7 @@ async function refreshAll() {
 // ── LOADERS ────────────────────────────────────────────────────────────────────
 async function loadSummary() {
   try {
-    const r=await apiFetch('/dashboard/summary');ST.summary=r.data;
+    const r=await apiFetch('/status');ST.summary=r.data;
     const d=r.data;
     document.getElementById('k-total').textContent=d.devices.total;
     document.getElementById('k-online').textContent=d.devices.online;
@@ -702,7 +702,7 @@ async function loadDeployments() {
 }
 async function loadEvents() {
   try {
-    const r=await apiFetch('/events?limit=50');ST.events=r.data;
+    const r=await apiFetch('/audit?limit=50');ST.events=r.data;
     renderFeed();renderEvList();
     const alerts=r.data.filter(e=>e.severity==='warning').length;
     const b=document.getElementById('sb-alert-ct');
@@ -801,7 +801,7 @@ async function doDeploy() {
   prog.style.display='block';fill.style.width='0%';
   const piv=setInterval(()=>{const c=parseInt(fill.style.width)||0;if(c<88)fill.style.width=(c+Math.floor(Math.random()*7+2))+'%';},350);
   try {
-    const res=await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:name,model_ver:ver})});
+    const res=await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:name,model_tag:ver})});
     clearInterval(piv);fill.style.width='100%';
     setTimeout(()=>{prog.style.display='none';fill.style.width='0%';},700);
     suc.textContent=`✓ ${name} ${ver} deploying to ${res.data.device_count} devices`;suc.classList.add('show');
