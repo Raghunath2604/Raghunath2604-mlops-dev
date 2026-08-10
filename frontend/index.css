@@ -175,3 +175,36 @@ body.dark-mode .mod-lbl {
 body.dark-mode .leaflet-container {
   background: #0f172a;
 }
+
+
+/* --- RESPONSIVE OVERRIDES --- */
+@media(max-width: 820px) {
+  .ph {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .panel > div {
+    overflow-x: auto;
+  }
+  .ftable th, .ftable td {
+    white-space: nowrap;
+  }
+}
+
+@media(max-width: 500px) {
+  .kpi-row {
+    grid-template-columns: 1fr !important;
+  }
+  #fleet-map {
+    height: 250px !important;
+  }
+  .theme-switch-wrapper em {
+    display: none; /* Hide 'Dark Mode' text on very small screens to save space */
+  }
+  .mod-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .modal-content {
+    padding: 15px;
+  }
+}
