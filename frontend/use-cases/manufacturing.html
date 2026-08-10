@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="canonical" href="https://www.mlops.dev/use-cases/manufacturing"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Manufacturing AI — Edge ML Deployment</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%234F7FEF' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300E5A0'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23080C16'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="description" content="Deploy computer vision and quality inspection models to industrial cameras, Jetson boards, and ARM PLCs — with offline-first sync, drift detection, and rollback. No more SSH scripts."/>
+<meta name="author" content="Raghunathareddy GR"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});gtag('js',new Date());gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03050A;--bg1:#080C16;--bg2:#0D1220;--blue:#4F7FEF;--snow:#CDD6F0;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12);--border2:rgba(79,127,239,.25);--accent:#E8A020}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-height:1.65;animation:pgIn .4s ease both}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--blue)}
+#sp{position:fixed;top:0;left:0;height:1px;z-index:9999;background:linear-gradient(90deg,#4F7FEF,#E8A020);pointer-events:none;transition:width .05s linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(3,5,10,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;font-size:.93rem;font-weight:600;text-decoration:none;color:var(--snow)}
+.lm{width:24px;height:24px;border-radius:5px;background:#4F7FEF;display:grid;place-items:center}
+.lm svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo em{font-style:normal;font-family:monospace;color:#4F7FEF;font-size:.8rem}
+.nav-r{display:flex;gap:.6rem}
+.nav-ghost{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:.78rem;padding:.3rem .75rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.nav-ghost:hover{color:var(--snow);border-color:rgba(79,127,239,.5)}
+.nav-cta{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.78rem;font-weight:600;padding:.32rem .9rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.nav-cta:hover{background:#3D65CC}
+.hero{padding:90px 5% 4rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,6rem);align-items:center}
+.uc-ey{font-family:monospace;font-size:.68rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;display:inline-block;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);background:color-mix(in srgb,var(--accent) 8%,transparent);padding:.25rem .65rem;border-radius:3px}
+.hero-h{font-size:clamp(2rem,3.8vw,3.2rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.8rem;line-height:1.08}
+.hero-p{font-size:.97rem;color:var(--muted);line-height:1.75;margin-bottom:1.8rem;font-weight:300}
+.hero-btns{display:flex;gap:.7rem;flex-wrap:wrap}
+.btn-p{background:#4F7FEF;border:none;border-radius:7px;color:#fff;font-size:.88rem;font-weight:600;padding:.65rem 1.4rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block}
+.btn-p:hover{background:#3D65CC;transform:translateY(-1px)}
+.btn-g{background:none;border:1px solid var(--border2);border-radius:7px;color:var(--snow);font-size:.88rem;font-weight:500;padding:.65rem 1.2rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block}
+.btn-g:hover{border-color:rgba(79,127,239,.5);background:rgba(79,127,239,.06)}
+.stats{display:flex;flex-direction:column;gap:.7rem}
+.stat{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:1rem 1.3rem;display:flex;align-items:center;gap:1rem}
+.stat:hover{border-color:var(--border2)}
+.stat-v{font-family:monospace;font-size:1.5rem;font-weight:700;color:var(--accent);letter-spacing:-.02em;min-width:72px}
+.stat-l{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.4}
+.prob{background:var(--bg1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 5%}
+.prob-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.sec-ey{font-family:monospace;font-size:.68rem;color:#4F7FEF;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;display:block}
+.sec-h{font-size:clamp(1.5rem,2.8vw,2rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.7rem;line-height:1.15}
+.sec-p{font-size:.9rem;color:var(--muted);line-height:1.75;font-weight:300}
+.prob-cards{display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,.04)}
+.pc{background:var(--bg1);padding:1.1rem 1.3rem;transition:background .2s}
+.pc:hover{background:var(--bg2)}
+.pc-n{font-family:monospace;font-size:.6rem;color:var(--dim);margin-bottom:.3rem;letter-spacing:.06em}
+.pc-t{font-size:.88rem;font-weight:600;color:#9AAAC8;margin-bottom:.3rem}
+.pc-d{font-size:.82rem;color:var(--muted);line-height:1.6;font-weight:300}
+.sol{padding:4rem 5%}
+.sol-in{max-width:1200px;margin:0 auto}
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:1.8rem}
+.si{background:var(--bg);padding:1.4rem;transition:background .2s}
+.si:hover{background:var(--bg1)}
+.si-icon{width:30px;height:30px;border-radius:6px;background:rgba(79,127,239,.08);border:1px solid var(--border);display:grid;place-items:center;margin-bottom:.7rem}
+.si-icon svg{width:13px;height:13px;stroke:#4F7FEF;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.si-t{font-size:.88rem;font-weight:700;color:var(--snow);margin-bottom:.3rem}
+.si-d{font-size:.81rem;color:var(--muted);line-height:1.62;font-weight:300}
+.testi{background:var(--bg1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 5%;text-align:center}
+.testi-in{max-width:600px;margin:0 auto}
+.testi-q{font-size:1.02rem;color:#9AAAC8;line-height:1.72;margin-bottom:1.4rem;font-weight:400;font-style:italic;position:relative;padding:0 1.5rem}
+.testi-q::before{content:'"';position:absolute;left:0;top:-.05em;font-size:2rem;color:var(--accent);opacity:.55;line-height:1;font-style:normal}
+.testi-auth{display:flex;align-items:center;gap:.8rem;justify-content:center}
+.tav{width:36px;height:36px;border-radius:50%;background:rgba(79,127,239,.1);border:1px solid rgba(79,127,239,.2);display:grid;place-items:center;font-size:.7rem;font-weight:700;color:#4F7FEF}
+.tname{font-size:.86rem;font-weight:600;color:var(--snow);text-align:left}
+.trole{font-size:.74rem;color:var(--muted)}
+.specs{padding:4rem 5%}
+.specs-in{max-width:1200px;margin:0 auto}
+.specs-tbl{width:100%;border-collapse:collapse;margin-top:1.5rem}
+.specs-tbl th{font-family:monospace;font-size:.64rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding:.65rem 1rem;text-align:left;border-bottom:1px solid var(--border);font-weight:400}
+.specs-tbl td{font-size:.84rem;color:var(--muted);padding:.72rem 1rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:top;line-height:1.55;font-weight:300}
+.specs-tbl td:first-child{color:#9AAAC8;font-weight:500;width:28%;white-space:nowrap}
+.specs-tbl tr:hover td{background:rgba(79,127,239,.02)}
+.uc-cta{background:#4F7FEF;padding:4rem 5%;text-align:center;position:relative;overflow:hidden}
+.uc-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 120% at 50% 50%,rgba(255,255,255,.07),transparent)}
+.cta-in{position:relative;z-index:1}
+.cta-h{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-.04em;color:#fff;margin-bottom:.5rem;line-height:1.1}
+.cta-p{font-size:.95rem;color:rgba(255,255,255,.72);margin-bottom:1.6rem;font-weight:300}
+.cta-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.btn-white{background:#fff;border:none;border-radius:7px;color:#4F7FEF;font-size:.88rem;font-weight:700;padding:.65rem 1.5rem;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif}
+.btn-white:hover{background:rgba(255,255,255,.92);transform:translateY(-2px)}
+.btn-outline{background:none;border:1.5px solid rgba(255,255,255,.45);border-radius:7px;color:#fff;font-size:.88rem;font-weight:500;padding:.65rem 1.3rem;cursor:pointer;transition:all .25s;font-family:'Inter',sans-serif}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;max-width:580px;font-weight:300}
+.cb-text a{color:#4F7FEF;text-decoration:none}
+.cb-actions{display:flex;gap:.6rem}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
+footer{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;font-family:monospace;font-size:.7rem;color:var(--dim);background:var(--bg1)}
+footer a{color:#4F7FEF;text-decoration:none}
+.foot-links{display:flex;justify-content:center;gap:1.3rem;margin-top:.5rem;flex-wrap:wrap}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.prob-in{grid-template-columns:1fr}.sol-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.sol-grid{grid-template-columns:1fr}}
+</style>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
+</head>
+<body>
+<div id="sp"></div>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev. See our <a href="../privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<nav>
+  <a href="../index.html" class="logo">
+    <div class="lm"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg></div>
+    MLOps<em>.dev</em>
+  </a>
+  <div class="nav-r">
+    <button class="nav-ghost" onclick="location.href='../index.html'">Home</button>
+    <button class="nav-cta" onclick="location.href='../index.html#wl'">Join waitlist</button>
+  </div>
+</nav>
+
+<div class="hero rv">
+  <div>
+    <span class="uc-ey">MANUFACTURING AI</span>
+    <h1 class="hero-h">ML models that keep running when the factory floor goes dark.</h1>
+    <p class="hero-p">Deploy computer vision and quality inspection models to industrial cameras, Jetson boards, and ARM PLCs — with offline-first sync, drift detection, and rollback. No more SSH scripts.</p>
+    <div class="hero-btns">
+      <a href="../index.html#wl" class="btn-p">Get early access →</a>
+      <a href="../demo.html" class="btn-g">Watch demo</a>
+    </div>
+  </div>
+  <div class="stats rv d1">
+    <div class="stat"><div class="stat-v">6h+</div><div class="stat-l">Offline operation tested without data loss</div></div>
+    <div class="stat"><div class="stat-v"><90s</div><div class="stat-l">Model update latency factory floor to device</div></div>
+    <div class="stat"><div class="stat-v">95.7%</div><div class="stat-l">Delta compression on model updates</div></div>
+  </div>
+</div>
+
+<div class="prob">
+  <div class="prob-in">
+    <div class="rv">
+      <span class="sec-ey">The problem</span>
+      <h2 class="sec-h">Factory floors break CI/CD pipelines.</h2>
+      <p class="sec-p">Industrial environments have intermittent connectivity, metal-shielded Wi-Fi dead zones, and 24/7 uptime requirements. Standard cloud-first MLOps tools assume reliable network access. They fail silently when they do not have it.</p>
+    </div>
+    <div class="prob-cards rv d1"><div class="pc"><div class="pc-n">PROBLEM 01</div><div class="pc-t">Silent model staleness</div><div class="pc-d">Devices lose connectivity during shift changes. Models go stale. No alert fires. The defect detection model from 3 weeks ago is still running — you find out when a quality audit fails.</div></div><div class="pc"><div class="pc-n">PROBLEM 02</div><div class="pc-t">Heterogeneous hardware</div><div class="pc-d">Your floor has Jetson Nanos, custom ARM PLCs, and legacy x86 industrial PCs. A single model format and a single deployment script cannot handle all three.</div></div><div class="pc"><div class="pc-n">PROBLEM 03</div><div class="pc-t">No rollback under pressure</div><div class="pc-d">A bad model update triggers false positives on the production line at 2am. There is no rollback button. An engineer SSHes into 40 cameras one by one.</div></div></div>
+  </div>
+</div>
+
+<div class="sol">
+  <div class="sol-in">
+    <span class="sec-ey rv">How MLOps.dev solves it</span>
+    <h2 class="sec-h rv d1">Built for manufacturing AI.</h2>
+    <div class="sol-grid"><div class="si rv d1"><div class="si-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="si-t">Drift detection on-device</div><div class="si-d">KL divergence checks run locally every 100 inferences. Lighting changes, product line switches, and camera fouling are caught before your operators notice.</div></div><div class="si rv d2"><div class="si-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0"/><path d="M3.6 9h16.8"/></svg></div><div class="si-t">Offline-first sync</div><div class="si-d">6-hour outage tested on 2G. Telemetry buffers locally. Model updates queue. On reconnect, everything reconciles — chronologically, idempotently, without duplicates.</div></div><div class="si rv d3"><div class="si-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="si-t">Hardware-class canary</div><div class="si-d">Roll to Jetson Orins first, validate, then expand to Nanos. Each hardware class gets the right model format. One rollout, health-gated.</div></div><div class="si rv d1"><div class="si-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="si-t">Immutable audit logs</div><div class="si-d">Every deployment, every drift event, every rollback — timestamped and immutable. Required for ISO 9001 quality audits and traceability reports.</div></div><div class="si rv d2"><div class="si-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="si-t">Fleet visibility</div><div class="si-d">Live dashboard shows every device: model version, drift status, latency, last-seen. Not a spreadsheet — a real-time view of your production floor.</div></div><div class="si rv d3"><div class="si-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div><div class="si-t">One-click rollback</div><div class="si-d">Bad update on the line? Roll back the entire fleet or a specific device group in under 90 seconds from the dashboard.</div></div></div>
+  </div>
+</div>
+
+<div class="testi rv">
+  <div class="testi-in">
+    <div class="testi-q">We were managing 800 factory cameras with Bash scripts and a spreadsheet. MLOps.dev replaced that in one afternoon. The offline sync works through our factory floor Wi-Fi dead zones.</div>
+    <div class="testi-auth">
+      <div class="tav">AK</div>
+      <div><div class="tname">Ananya K.</div><div class="trole">ML Lead · Automotive Manufacturing</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="specs">
+  <div class="specs-in rv">
+    <span class="sec-ey">Technical specification</span>
+    <h2 class="sec-h d1">What ships for manufacturing.</h2>
+    <table class="specs-tbl">
+      <thead><tr><th>Capability</th><th>Detail</th></tr></thead>
+      <tbody><tr><td>Supported hardware</td><td>NVIDIA Jetson Orin/Nano/AGX · Raspberry Pi 4/5 · x86-64 industrial PCs · Custom ARM Cortex-A PLCs</td></tr><tr><td>Model formats</td><td>TensorRT (Jetson GPU) · ONNX Runtime · TFLite · INT8 quantised variants</td></tr><tr><td>Connectivity</td><td>Offline-first — tested on 2G GPRS, factory Wi-Fi with dead zones, Ethernet with planned outages</td></tr><tr><td>Telemetry</td><td>30s heartbeat · inference latency · accuracy samples · drift score · buffered during outages</td></tr><tr><td>Security</td><td>TLS in transit · JWT device authentication · no raw model weights leave the device</td></tr><tr><td>Audit trail</td><td>Immutable deployment log · per-device event history · ISO 9001 compatible export</td></tr><tr><td>Scale tested</td><td>Up to 10,000 devices per control plane instance</td></tr><tr><td>Agent binary</td><td>7.4MB · no runtime dependencies · installs with one curl command</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="uc-cta">
+  <div class="cta-in">
+    <h2 class="cta-h">Your factory floor deserves better than SSH scripts.</h2>
+    <p class="cta-p">Free for fleets under 10 devices. No credit card. Open-source agent.</p>
+    <div class="cta-btns">
+      <button class="btn-white" onclick="location.href='../index.html#wl'">Get early access — free</button>
+      <button class="btn-outline" onclick="location.href='mailto:hello@mlops.dev'">Talk to Raghunath →</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a></div>
+  <div class="foot-links"><a href="https://pypi.org/project/mlops-dev" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">PyPI</a>
+    <a href="../index.html">Home</a><a href="../about.html">About</a><a href="../blog.html">Blog</a>
+    <a href="../faq.html">FAQ</a><a href="../privacy.html">Privacy</a><a href="../terms.html">Terms</a>
+  </div>
+<div style="margin-top:.4rem;font-size:.68rem;color:#2A3450;font-family:monospace;text-align:center"><a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">GitHub</a> · <a href="https://discord.gg/Tb47N9NaPk" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">Discord</a></div>
+</footer>
+<script>
+(function(){var p=document.getElementById('sp');window.addEventListener('scroll',function(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;if(p)p.style.width=(d>0?s/d*100:0)+'%';},{passive:true});})();
+(function(){var els=document.querySelectorAll('.rv');var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('on');});},{threshold:.1});els.forEach(function(el){io.observe(el);});})();
+(function(){if(localStorage.getItem('cookie_consent'))return;setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('show');},2200);})();
+function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
+function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
+if(typeof gtag!=='undefined')gtag('event','use_case_view',{'industry':'manufacturing'});
+</script>
+</body>
+</html>

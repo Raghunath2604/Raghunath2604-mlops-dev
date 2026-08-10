@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="canonical" href="https://www.mlops.dev/changelog"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Changelog — MLOps.dev</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%234F7FEF' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300E5A0'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23080C16'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="description" content="Every release, every fix, every feature shipped by MLOps.dev. Follow the build in public."/>
+<meta name="author" content="Raghunathareddy GR"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});
+gtag('js',new Date());
+gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03050A;--bg1:#080C16;--bg2:#0D1220;--blue:#4F7FEF;--green:#00E5A0;--amber:#E8A020;--red:#E84040;--snow:#CDD6F0;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12);--border2:rgba(79,127,239,.25)}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-height:1.65;animation:pgIn .4s ease both}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--blue)}
+#sp{position:fixed;top:0;left:0;height:1px;z-index:9999;background:linear-gradient(90deg,#4F7FEF,#00E5A0);pointer-events:none;transition:width .05s linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(3,5,10,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;font-size:.93rem;font-weight:600;text-decoration:none;color:var(--snow)}
+.lm{width:24px;height:24px;border-radius:5px;background:#4F7FEF;display:grid;place-items:center}
+.lm svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo em{font-style:normal;font-family:monospace;color:#4F7FEF;font-size:.8rem}
+.nav-r{display:flex;gap:.6rem}
+.nav-ghost{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:.78rem;padding:.3rem .75rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.nav-ghost:hover{color:var(--snow);border-color:rgba(79,127,239,.5)}
+.nav-cta{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.78rem;font-weight:600;padding:.32rem .9rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.nav-cta:hover{background:#3D65CC}
+/* HERO */
+.hero{padding:90px 5% 3rem;max-width:860px;margin:0 auto}
+.hero-ey{font-family:monospace;font-size:.68rem;color:#4F7FEF;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.live-dot{width:5px;height:5px;background:#00E5A0;border-radius:50%;box-shadow:0 0 6px #00E5A0;animation:pd 2s infinite}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+.hero-h{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.6rem;line-height:1.1}
+.hero-p{font-size:.95rem;color:var(--muted);line-height:1.72;max-width:520px;font-weight:300;margin-bottom:1.5rem}
+.sub-btn{background:rgba(79,127,239,.08);border:1px solid var(--border2);border-radius:6px;color:#4F7FEF;font-size:.8rem;padding:.38rem .9rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem}
+.sub-btn:hover{background:rgba(79,127,239,.15)}
+.sub-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+/* TIMELINE */
+.timeline{max-width:860px;margin:0 auto;padding:0 5% 6rem;position:relative}
+.timeline::before{content:'';position:absolute;left:calc(5% + 95px);top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--border2),var(--border),transparent)}
+.cl-entry{display:grid;grid-template-columns:95px 1fr;gap:2rem;margin-bottom:3rem;position:relative}
+.cl-date-col{text-align:right;padding-top:.2rem;position:relative}
+.cl-date{font-family:monospace;font-size:.72rem;color:var(--dim);line-height:1.4;display:block}
+.cl-version{font-family:monospace;font-size:.8rem;font-weight:600;color:#4F7FEF;margin-bottom:.25rem;display:block}
+.cl-dot{position:absolute;right:-2.4rem;top:.35rem;width:9px;height:9px;border-radius:50%;border:2px solid var(--bg);flex-shrink:0}
+.cl-dot-major{background:#4F7FEF;box-shadow:0 0 0 3px rgba(79,127,239,.2)}
+.cl-dot-minor{background:var(--dim)}
+.cl-dot-fix{background:var(--amber)}
+.cl-content{}
+.cl-title{font-size:1.05rem;font-weight:700;color:#E8EDF8;margin-bottom:.4rem;letter-spacing:-.02em;line-height:1.3}
+.cl-desc{font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;font-weight:300}
+.cl-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
+.cl-tag{font-family:monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:3px;letter-spacing:.04em;font-weight:600}
+.tag-feature{background:rgba(79,127,239,.1);border:1px solid rgba(79,127,239,.2);color:#4F7FEF}
+.tag-perf{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.18);color:#00E5A0}
+.tag-fix{background:rgba(232,160,32,.08);border:1px solid rgba(232,160,32,.18);color:#E8A020}
+.tag-breaking{background:rgba(232,64,64,.08);border:1px solid rgba(232,64,64,.18);color:#E84040}
+.tag-security{background:rgba(160,100,255,.08);border:1px solid rgba(160,100,255,.18);color:#A064FF}
+.cl-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.cl-items li{font-size:.84rem;color:var(--muted);padding-left:1.1rem;position:relative;line-height:1.6;font-weight:300}
+.cl-items li::before{content:'→';position:absolute;left:0;color:#4F7FEF;font-family:monospace;font-size:.7rem;top:.14em}
+.cl-items li strong{color:#9AAAC8;font-weight:500}
+code{font-family:monospace;font-size:.83em;background:rgba(79,127,239,.08);border:1px solid rgba(79,127,239,.15);border-radius:3px;padding:.1em .35em;color:var(--snow)}
+/* SUBSCRIBE STRIP */
+.sub-strip{max-width:860px;margin:0 auto 3rem;padding:0 5%}
+.sub-box{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:1.4rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;position:relative;overflow:hidden}
+.sub-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,transparent)}
+.sub-left h3{font-size:.95rem;font-weight:700;color:var(--snow);margin-bottom:.2rem}
+.sub-left p{font-size:.82rem;color:var(--muted);font-weight:300}
+.sub-form{display:flex;gap:.5rem;flex-shrink:0}
+.sub-input{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:.45rem .8rem;color:var(--snow);font-size:.84rem;outline:none;font-family:'Inter',sans-serif;width:220px;transition:border-color .2s}
+.sub-input:focus{border-color:rgba(79,127,239,.5)}
+.sub-input::placeholder{color:var(--dim)}
+.sub-btn2{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.84rem;font-weight:600;padding:.45rem 1rem;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;transition:all .2s}
+.sub-btn2:hover{background:#3D65CC}
+.sub-msg{font-size:.78rem;margin-top:.4rem;color:#00E5A0;display:none}
+/* COOKIE */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;max-width:580px;font-weight:300}
+.cb-text a{color:#4F7FEF;text-decoration:none}
+.cb-actions{display:flex;gap:.6rem}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
+footer{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;font-family:monospace;font-size:.7rem;color:var(--dim);background:var(--bg1)}
+footer a{color:#4F7FEF;text-decoration:none}
+.foot-links{display:flex;justify-content:center;gap:1.3rem;margin-top:.5rem;flex-wrap:wrap}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1)}
+.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}.d5{transition-delay:.30s}
+@media(max-width:640px){.timeline::before{left:calc(5% + 72px)}.cl-entry{grid-template-columns:72px 1fr;gap:1.2rem}.sub-form{flex-direction:column;width:100%}.sub-input{width:100%}}
+</style>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
+</head>
+<body>
+<div id="sp"></div>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="lm"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg></div>
+    MLOps<em>.dev</em>
+  </a>
+  <div class="nav-r">
+    <button class="nav-ghost" onclick="location.href='index.html'">← Home</button>
+    <button class="nav-cta" onclick="location.href='index.html#wl'">Join waitlist</button>
+  </div>
+</nav>
+
+<div class="hero rv">
+  <div class="hero-ey"><span class="live-dot"></span>Built in public · Updated with every release</div>
+  <h1 class="hero-h">Changelog</h1>
+  <p class="hero-p">Every feature shipped, every fix deployed, every design decision made. We build in public because we believe the teams who trust us deserve to see the work.</p>
+  <button class="sub-btn" onclick="document.getElementById('cl-sub-input').focus()">
+    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    Subscribe to updates
+  </button>
+</div>
+
+<!-- Subscribe strip -->
+<div class="sub-strip rv d1">
+  <div class="sub-box">
+    <div class="sub-left">
+      <h3>Get release notes by email</h3>
+      <p>One email per release. No marketing. Unsubscribe any time.</p>
+    </div>
+    <div>
+      <div class="sub-form">
+        <input class="sub-input" id="cl-sub-input" type="email" placeholder="you@company.com" autocomplete="email"/>
+        <button class="sub-btn2" onclick="subscribeChangelog()">Subscribe</button>
+      </div>
+      <div class="sub-msg" id="sub-msg">✓ Subscribed — you'll get the next release note.</div>
+    </div>
+  </div>
+</div>
+
+<div class="timeline">
+
+  <!-- v0.6 -->
+  <div class="cl-entry rv d1">
+    <div class="cl-date-col">
+      <span class="cl-version">v0.6.0</span>
+      <span class="cl-date">Jul 2025</span>
+      <div class="cl-dot cl-dot-major"></div>
+    </div>
+    <div class="cl-content">
+      <div class="cl-title">Fleet dashboard + live SSE streaming</div>
+      <div class="cl-tags">
+        <span class="cl-tag tag-feature">FEATURE</span>
+        <span class="cl-tag tag-feature">DASHBOARD</span>
+      </div>
+      <p class="cl-desc">The full fleet management dashboard ships in this release. Realtime device telemetry via Server-Sent Events, 6 dashboard pages (Overview, Devices, Deployments, Events, Drift, Settings), JWT authentication, and the complete REST API backing it.</p>
+      <ul class="cl-items">
+        <li><strong>Fleet Overview</strong> — live device count, online/offline/drift status, deployment health at a glance</li>
+        <li><strong>Device management</strong> — per-device telemetry, model version, hardware class, last-seen, latency history</li>
+        <li><strong>Deployment page</strong> — staged rollout controls, canary targeting by hardware class, health gate configuration</li>
+        <li><strong>Drift monitor</strong> — KL divergence timeline per device, alert thresholds, rollback controls</li>
+        <li><strong>Events log</strong> — full audit trail, filterable by device, event type, severity</li>
+        <li><strong>SSE live updates</strong> — all dashboard pages refresh without polling; 30s heartbeat from each device</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v0.5 -->
+  <div class="cl-entry rv d2">
+    <div class="cl-date-col">
+      <span class="cl-version">v0.5.0</span>
+      <span class="cl-date">Jun 2025</span>
+      <div class="cl-dot cl-dot-major"></div>
+    </div>
+    <div class="cl-content">
+      <div class="cl-title">KL drift detection — edge-native, 2ms latency</div>
+      <div class="cl-tags">
+        <span class="cl-tag tag-feature">FEATURE</span>
+        <span class="cl-tag tag-perf">PERFORMANCE</span>
+      </div>
+      <p class="cl-desc">Statistical drift detection now runs on the device itself, not in the cloud. Kullback-Leibler divergence computed via a sliding circular buffer with integer arithmetic optimised for ARM Cortex-A class CPUs. Under 2ms per check on Jetson Nano.</p>
+      <ul class="cl-items">
+        <li>Configurable warn (0.4) and alert (0.7) KL divergence thresholds</li>
+        <li>Monitors input distribution, feature layer activations, and output confidence independently</li>
+        <li>Upstream alert fires within 4 minutes of threshold crossing in production tests</li>
+        <li>Baseline distribution captured automatically at model activation time</li>
+        <li>Sliding window of 200 inferences; recomputes every 100 — 60μs average overhead at 30fps</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v0.4 -->
+  <div class="cl-entry rv d3">
+    <div class="cl-date-col">
+      <span class="cl-version">v0.4.0</span>
+      <span class="cl-date">May 2025</span>
+      <div class="cl-dot cl-dot-major"></div>
+    </div>
+    <div class="cl-content">
+      <div class="cl-title">Canary deployments with hardware-class targeting</div>
+      <div class="cl-tags">
+        <span class="cl-tag tag-feature">FEATURE</span>
+      </div>
+      <p class="cl-desc">Stage-based canary rollouts with per-hardware-class targeting. Define stages by device class (jetson_orin, jetson_nano, raspberry_pi5) not just percentage. Health gates block progression if accuracy drops more than a configurable delta.</p>
+      <ul class="cl-items">
+        <li>Hardware fingerprint captured at agent registration (CPU arch, RAM, accelerators, OS)</li>
+        <li>Multi-variant model registration — one deployment version, multiple format files (TensorRT/TFLite/ONNX)</li>
+        <li>Health gate on accuracy delta, latency delta, error rate — configurable per stage</li>
+        <li>Automatic rollback on health gate failure — no manual intervention required</li>
+        <li><code>mlops deploy v4.0 --stage 1:hw_class=jetson_orin,count=1 --health-gate accuracy_delta=-0.03</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v0.3 -->
+  <div class="cl-entry rv d4">
+    <div class="cl-date-col">
+      <span class="cl-version">v0.3.0</span>
+      <span class="cl-date">Apr 2025</span>
+      <div class="cl-dot cl-dot-major"></div>
+    </div>
+    <div class="cl-content">
+      <div class="cl-title">Offline-first sync protocol + delta compression</div>
+      <div class="cl-tags">
+        <span class="cl-tag tag-feature">FEATURE</span>
+        <span class="cl-tag tag-perf">PERFORMANCE</span>
+      </div>
+      <p class="cl-desc">Complete rewrite of the sync protocol from push-based to pull-based. The agent polls the control plane for desired state, reconciles idempotently, and buffers telemetry locally during outages. Binary delta compression reduces model update transfer size by 95.7% on typical version-to-version updates.</p>
+      <ul class="cl-items">
+        <li>Pull-based sync loop — agent owns the deployment, not the CI/CD pipeline</li>
+        <li>Local SQLite buffer — 500MB cap, chronological flush on reconnect</li>
+        <li>bsdiff delta compression — 42.3MB model → 1.8MB delta on v3.1→v3.2 update</li>
+        <li>SHA-256 checksum verification before activation — corrupt transfer = safe fallback, no silent failure</li>
+        <li>Tested on 6-hour outage on 2G connection — zero data loss, full reconciliation on reconnect</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v0.2 -->
+  <div class="cl-entry rv d5">
+    <div class="cl-date-col">
+      <span class="cl-version">v0.2.0</span>
+      <span class="cl-date">Mar 2025</span>
+      <div class="cl-dot cl-dot-minor"></div>
+    </div>
+    <div class="cl-content">
+      <div class="cl-title">Agent binary size: 47MB → 7.4MB</div>
+      <div class="cl-tags">
+        <span class="cl-tag tag-perf">PERFORMANCE</span>
+        <span class="cl-tag tag-fix">OPTIMISATION</span>
+      </div>
+      <p class="cl-desc">Systematic binary size reduction to make the agent viable on constrained devices. 84.3% reduction from initial build to production binary.</p>
+      <ul class="cl-items">
+        <li><code>-ldflags="-s -w"</code> — strip debug symbols and DWARF info (−12MB)</li>
+        <li>musl libc cross-compilation — genuinely static binary, no glibc dependency (−8MB)</li>
+        <li>UPX <code>--best --lzma</code> compression — 50ms startup overhead, acceptable for long-running agent (−14MB)</li>
+        <li>Build tags for optional features — Prometheus, gRPC streaming excluded from minimal build (−4MB)</li>
+        <li>gorilla/websocket → nhooyr.io/websocket, logrus → zerolog (−1.6MB)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v0.1 -->
+  <div class="cl-entry rv">
+    <div class="cl-date-col">
+      <span class="cl-version">v0.1.0</span>
+      <span class="cl-date">Jan 2025</span>
+      <div class="cl-dot cl-dot-minor"></div>
+    </div>
+    <div class="cl-content">
+      <div class="cl-title">Initial agent — Go binary, ARM64, ONNX support</div>
+      <div class="cl-tags">
+        <span class="cl-tag tag-feature">FOUNDATION</span>
+      </div>
+      <p class="cl-desc">First working version of the mlops-agent. Single binary, installs with one curl command, reports heartbeat to control plane, loads and runs ONNX models via ONNX Runtime.</p>
+      <ul class="cl-items">
+        <li>Go 1.21, compiled for linux/arm64 and linux/amd64</li>
+        <li>One-command install: <code>curl -fsSL get.mlops.dev | sh</code></li>
+        <li>ONNX Runtime 1.17 inference backend</li>
+        <li>30-second heartbeat loop with model version reporting</li>
+        <li>JWT authentication with the control plane API</li>
+        <li>First deployment: 2 Jetson Nano devices in Bengaluru factory test environment</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a></div>
+  <div class="foot-links">
+    <a href="index.html">Home</a><a href="about.html">About</a><a href="blog.html">Blog</a>
+    <a href="faq.html">FAQ</a><a href="status.html">Status</a> · <a href='changelog.html' style='color:#4F7FEF;text-decoration:none'>Changelog</a><a href="privacy.html">Privacy</a>
+  </div>
+<!-- Discord + GitHub links wired -->
+<div style="margin-top:.4rem;font-size:.68rem;color:#2A3450;font-family:monospace;text-align:center"><a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">GitHub</a> · <a href="https://discord.gg/Tb47N9NaPk" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">Discord</a> · <a href="https://pypi.org/project/mlops-dev" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">PyPI</a> · <a href="roadmap.html" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">Roadmap</a></div>
+</footer>
+
+<script>
+(function(){var p=document.getElementById('sp');window.addEventListener('scroll',function(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;if(p)p.style.width=(d>0?s/d*100:0)+'%';},{passive:true});})();
+(function(){var els=document.querySelectorAll('.rv');var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('on');});},{threshold:.1});els.forEach(function(el){io.observe(el);});})();
+function subscribeChangelog(){
+  var v=document.getElementById('cl-sub-input').value.trim();
+  if(!v||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){alert('Please enter a valid email.');return;}
+  fetch('https://api.mlopsde.me/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,source:'changelog'})})
+    .then(function(){})
+    .catch(function(){localStorage.setItem('cl_sub',v);});
+  var m=document.getElementById('sub-msg');if(m){m.style.display='block';}
+  if(typeof gtag!=='undefined')gtag('event','changelog_subscribe');
+}
+(function(){if(localStorage.getItem('cookie_consent'))return;setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('show');},2200);})();
+function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
+function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
+</script>
+</body>
+</html>

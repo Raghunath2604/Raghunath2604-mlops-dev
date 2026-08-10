@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});
+gtag('js',new Date());
+gtag('config','G-T4N00SB1DN',{'anonymize_ip':true});
+gtag('event','sign_up',{'method':'waitlist'}); //,{'anonymize_ip':true,'send_page_view':true});
+</script>
+<link rel="canonical" href="https://www.mlops.dev/thankyou"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Welcome to MLOps.dev — You're on the list</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F7FEF'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="robots" content="noindex"/>
+<!-- Google Analytics 4 -->
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03050A;--bg1:#080C16;--bg2:#0D1220;--blue:#4F7FEF;--green:#00E5A0;--snow:#CDD6F0;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12)}
+html,body{min-height:100vh}
+body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden;animation:pgIn .6s ease both}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
+/* Animated bg */
+.bg-orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none}
+.bo1{width:600px;height:600px;background:rgba(79,127,239,.1);top:-100px;left:-100px;animation:float1 18s ease-in-out infinite}
+.bo2{width:400px;height:400px;background:rgba(0,229,160,.07);bottom:-100px;right:-100px;animation:float2 14s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-40px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,30px)}}
+/* Card */
+.card{position:relative;z-index:10;background:var(--bg1);border:1px solid rgba(79,127,239,.2);border-radius:20px;padding:clamp(2rem,5vw,3rem) clamp(2rem,5vw,3.5rem);max-width:520px;width:100%;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.6);animation:cardIn .7s cubic-bezier(.22,1,.36,1) both}
+@keyframes cardIn{from{transform:translateY(24px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,#00E5A0,transparent);border-radius:20px 20px 0 0}
+/* Check icon */
+.check-wrap{width:72px;height:72px;border-radius:50%;background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25);display:grid;place-items:center;margin:0 auto 1.5rem;animation:checkIn .5s cubic-bezier(.22,1,.36,1) .3s both}
+@keyframes checkIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.check-icon{width:30px;height:30px;stroke:#00E5A0;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:50;stroke-dashoffset:50;animation:drawCheck .5s ease .5s forwards}
+@keyframes drawCheck{to{stroke-dashoffset:0}}
+/* Position badge */
+.pos-badge{display:inline-flex;align-items:center;gap:.5rem;font-family:monospace;font-size:.72rem;color:#00E5A0;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);border-radius:999px;padding:.28rem .8rem;margin-bottom:1.2rem;letter-spacing:.04em}
+.pos-dot{width:5px;height:5px;background:#00E5A0;border-radius:50%;box-shadow:0 0 8px #00E5A0;animation:pd 2s infinite}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+h1{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.5rem;line-height:1.15}
+.sub{font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:2rem;font-weight:300}
+.sub strong{color:#9AAAC8;font-weight:500}
+/* Next steps */
+.steps{background:var(--bg2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:1.3rem;margin-bottom:1.8rem;text-align:left}
+.steps-t{font-size:.7rem;font-family:monospace;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.9rem}
+.step{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem}
+.step:last-child{margin-bottom:0}
+.step-n{width:22px;height:22px;border-radius:50%;background:rgba(79,127,239,.12);border:1px solid rgba(79,127,239,.25);display:grid;place-items:center;font-size:.62rem;font-family:monospace;color:#4F7FEF;flex-shrink:0;margin-top:.05rem}
+.step-t{font-size:.85rem;font-weight:600;color:#9AAAC8;margin-bottom:.15rem}
+.step-d{font-size:.78rem;color:var(--muted);font-weight:300;line-height:1.5}
+/* Actions */
+.actions{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem}
+.btn-p{background:#4F7FEF;border:none;border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:600;padding:.65rem 1.4rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none}
+.btn-p:hover{background:#3D65CC;transform:translateY(-1px)}
+.btn-g{background:none;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#9AAAC8;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:500;padding:.65rem 1.2rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
+.btn-g:hover{border-color:rgba(79,127,239,.4);color:#CDD6F0}
+.from-sig{font-size:.78rem;color:var(--dim);font-family:monospace;margin-top:.5rem}
+.from-sig strong{color:#5A6A8A}
+
+/* ── COOKIE CONSENT ── */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;line-height:1.55;max-width:580px;font-weight:300}
+.cb-text a{color:#4F7FEF;text-decoration:none}.cb-text a:hover{text-decoration:underline}
+.cb-actions{display:flex;gap:.6rem;flex-shrink:0;flex-wrap:wrap}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-accept:hover{background:#3D65CC}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-decline:hover{color:#CDD6F0;border-color:rgba(255,255,255,.2)}
+
+/* ── REFERRAL MECHANIC ── */
+.ref-box{background:rgba(79,127,239,.06);border:1px solid rgba(79,127,239,.2);border-radius:10px;padding:1.3rem;margin:1.2rem 0;text-align:left}
+.ref-box h3{font-size:.9rem;font-weight:700;color:#CDD6F0;margin-bottom:.25rem}
+.ref-box p{font-size:.78rem;color:#5A6A8A;margin-bottom:.9rem;font-weight:300;line-height:1.55}
+.ref-url-row{display:flex;gap:.5rem}
+.ref-url{flex:1;background:#080C16;border:1px solid rgba(79,127,239,.25);border-radius:6px;padding:.45rem .7rem;color:#4F7FEF;font-family:monospace;font-size:.73rem;outline:none;cursor:text;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ref-copy-btn{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:600;padding:.45rem .9rem;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.ref-copy-btn:hover{background:#3D65CC}
+.ref-share-row{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
+.ref-share-btn{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#9AAAC8;font-family:'Inter',sans-serif;font-size:.74rem;padding:.35rem .8rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.35rem}
+.ref-share-btn:hover{border-color:rgba(79,127,239,.4);color:#CDD6F0}
+.ref-copied{font-size:.72rem;color:#00E5A0;margin-top:.4rem;display:none}
+
+</style>
+</head>
+<body>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev and to improve the product. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<div class="bg-orb bo1" aria-hidden="true"></div>
+<div class="bg-orb bo2" aria-hidden="true"></div>
+
+<div class="card">
+  <div class="check-wrap">
+    <svg class="check-icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+  </div>
+
+  <div class="pos-badge"><span class="pos-dot"></span>WAITLIST CONFIRMED</div>
+
+  <h1>You're in. Welcome to MLOps.dev.</h1>
+  <p class="sub">
+    We'll be in touch within <strong>24 hours</strong> with your onboarding details.
+    You'll be among the first teams to deploy ML models to edge devices with MLOps.dev.
+  </p>
+
+  <div class="steps">
+    <div class="steps-t">What happens next</div>
+    <div class="step">
+      <div class="step-n">01</div>
+      <div>
+        <div class="step-t">Check your email</div>
+        <div class="step-d">We'll send onboarding instructions and your API key within 24 hours.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">02</div>
+      <div>
+        <div class="step-t">Try the interactive demo</div>
+        <div class="step-d">Get a feel for the full deployment flow — model push, agent install, drift detection.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">03</div>
+      <div>
+        <div class="step-t">Star the GitHub repo</div>
+        <div class="step-d">The open-source edge agent is already there. You can audit every line before deploying.</div>
+      </div>
+    </div>
+  </div>
+
+  
+      <!-- REFERRAL -->
+      <div class="ref-box">
+        <h3>🚀 Move up the list — share your spot</h3>
+        <p>Each person who signs up using your link bumps you up 5 positions. The first 100 get lifetime Starter free.</p>
+        <div class="ref-url-row">
+          <input class="ref-url" id="ref-url" readonly value="https://www.mlops.dev?ref=loading"/>
+          <button class="ref-copy-btn" onclick="copyRefLink()">Copy link</button>
+        </div>
+        <div class="ref-share-row">
+          <button class="ref-share-btn" onclick="shareTwitter()">
+            <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Share on X
+          </button>
+          <button class="ref-share-btn" onclick="shareLinkedIn()">
+            <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            Share on LinkedIn
+          </button>
+          <button class="ref-share-btn" onclick="shareHN()">
+            <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896H6.951z"/></svg>
+            HackerNews
+          </button>
+        </div>
+        <div class="ref-copied" id="ref-copied">✓ Link copied to clipboard!</div>
+      </div>
+
+  <div class="actions">
+    <a href="demo.html" class="btn-p">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
+      Watch the demo
+    </a>
+    <a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank" rel="noopener" class="btn-g">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+      Star on GitHub
+    </a>
+    <a href="index.html" class="btn-g">← Back to site</a>
+  </div>
+
+  <div class="from-sig">From <strong>Raghunathareddy GR</strong> · CEO & Founder · <strong>hello@mlops.dev</strong></div>
+</div>
+<script>
+(function(){if(localStorage.getItem('cookie_consent'))return;setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('show');},2200);})();
+function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
+function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
+</script>
+<script>
+/* ── REFERRAL ── */
+(function(){
+  var email = localStorage.getItem('last_wl_email') || '';
+  var refCode = email ? btoa(email).replace(/[^a-zA-Z0-9]/g,'').slice(0,8) : Math.random().toString(36).slice(2,10);
+  var refUrl = 'https://www.mlops.dev?ref=' + refCode;
+  var inp = document.getElementById('ref-url');
+  if(inp) inp.value = refUrl;
+  window._refUrl = refUrl;
+})();
+function copyRefLink(){
+  var url = window._refUrl || document.getElementById('ref-url').value;
+  navigator.clipboard.writeText(url).then(function(){
+    var el = document.getElementById('ref-copied');
+    if(el){el.style.display='block';setTimeout(function(){el.style.display='none';},2500);}
+    if(typeof gtag!=='undefined') gtag('event','referral_copy');
+  }).catch(function(){
+    document.getElementById('ref-url').select();
+    document.execCommand('copy');
+  });
+}
+function shareTwitter(){
+  var url = encodeURIComponent(window._refUrl||'https://www.mlops.dev');
+  var text = encodeURIComponent('Just joined the @mlopsdev waitlist — deploy ML models to edge devices without SSH scripts. Offline-first, drift-aware. Free for small fleets.');
+  window.open('https://twitter.com/intent/tweet?text='+text+'&url='+url,'_blank');
+  if(typeof gtag!=='undefined') gtag('event','referral_share',{'platform':'twitter'});
+}
+function shareLinkedIn(){
+  var url = encodeURIComponent(window._refUrl||'https://www.mlops.dev');
+  window.open('https://www.linkedin.com/sharing/share-offsite/?url='+url,'_blank');
+  if(typeof gtag!=='undefined') gtag('event','referral_share',{'platform':'linkedin'});
+}
+function shareHN(){
+  var url = encodeURIComponent(window._refUrl||'https://www.mlops.dev');
+  var title = encodeURIComponent('MLOps.dev – Deploy ML models to edge devices without SSH scripts');
+  window.open('https://news.ycombinator.com/submitlink?u='+url+'&t='+title,'_blank');
+  if(typeof gtag!=='undefined') gtag('event','referral_share',{'platform':'hackernews'});
+}
+</script>
+<div style="display:none"><a href="https://discord.gg/Tb47N9NaPk">https://discord.gg/Tb47N9NaPk</a></div>
+</body>
+<!-- pypi ref --><meta name="x-pypi" content="https://pypi.org/project/mlops-dev"/>
+</html>

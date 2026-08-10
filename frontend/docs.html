@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="canonical" href="https://www.mlops.dev/docs"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Documentation — MLOps.dev</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%234F7FEF' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300E5A0'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23080C16'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="description" content="MLOps.dev documentation — install the agent, deploy your first model, configure drift detection."/>
+<meta name="author" content="Raghunathareddy GR"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});gtag('js',new Date());gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03050A;--bg1:#080C16;--bg2:#0D1220;--blue:#4F7FEF;--green:#00E5A0;--snow:#CDD6F0;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12);--border2:rgba(79,127,239,.25)}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-height:1.65}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--blue)}
+#sp{position:fixed;top:0;left:0;height:1px;z-index:9999;background:linear-gradient(90deg,#4F7FEF,#00E5A0);pointer-events:none;transition:width .05s linear}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;padding:0 5%;gap:1rem;background:rgba(3,5,10,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;font-size:.93rem;font-weight:600;text-decoration:none;color:var(--snow)}
+.lm{width:24px;height:24px;border-radius:5px;background:#4F7FEF;display:grid;place-items:center;flex-shrink:0}
+.lm svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo em{font-style:normal;font-family:monospace;color:#4F7FEF;font-size:.8rem}
+.nav-slash{color:var(--dim);font-size:.85rem}
+.nav-doc{font-size:.82rem;color:var(--muted)}
+.nav-r{display:flex;gap:.6rem;margin-left:auto}
+.nav-ghost{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:.78rem;padding:.3rem .75rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.nav-ghost:hover{color:var(--snow)}
+.nav-cta{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.78rem;font-weight:600;padding:.32rem .9rem;cursor:pointer;font-family:'Inter',sans-serif}
+
+/* LAYOUT */
+.docs-layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh;padding-top:52px}
+/* SIDEBAR */
+.sidebar{position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;border-right:1px solid var(--border);padding:1.5rem 0;background:var(--bg1)}
+.sb-section{margin-bottom:1.5rem}
+.sb-section-title{font-size:.62rem;font-family:monospace;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;padding:.4rem 1.2rem;display:block}
+.sb-link{display:flex;align-items:center;gap:.5rem;padding:.42rem 1.2rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .15s;text-decoration:none;border-left:2px solid transparent;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+.sb-link:hover{color:var(--snow);background:rgba(79,127,239,.05);border-left-color:var(--dim)}
+.sb-link.active{color:#4F7FEF;background:rgba(79,127,239,.08);border-left-color:#4F7FEF}
+.sb-badge{font-family:monospace;font-size:.55rem;padding:.1rem .35rem;border-radius:2px;margin-left:auto;letter-spacing:.04em}
+.sb-new{background:rgba(0,229,160,.1);color:#00E5A0}
+/* CONTENT */
+.doc-content{padding:3rem 4rem 6rem;max-width:780px}
+.doc-section{margin-bottom:4rem;scroll-margin-top:80px}
+.doc-eyebrow{font-family:monospace;font-size:.65rem;color:#4F7FEF;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;display:block}
+.doc-h1{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.7rem;line-height:1.1}
+.doc-h2{font-size:1.2rem;font-weight:700;color:#E8EDF8;margin:2.5rem 0 .7rem;letter-spacing:-.02em;padding-top:2rem;border-top:1px solid var(--border)}
+.doc-h3{font-size:1rem;font-weight:600;color:#9AAAC8;margin:1.5rem 0 .5rem}
+.doc-p{font-size:.92rem;color:var(--muted);line-height:1.78;margin-bottom:.9rem;font-weight:300}
+.doc-p strong{color:#9AAAC8;font-weight:500}
+.doc-p a{color:#4F7FEF;text-decoration:none}
+.doc-p a:hover{text-decoration:underline}
+/* Code blocks */
+.code-wrap{background:#080C16;border:1px solid rgba(79,127,239,.18);border-radius:8px;margin:1rem 0;overflow:hidden}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:.5rem .9rem;background:rgba(79,127,239,.05);border-bottom:1px solid rgba(79,127,239,.1)}
+.code-lang{font-family:monospace;font-size:.62rem;color:var(--dim);letter-spacing:.06em}
+.code-copy{background:none;border:1px solid var(--border);border-radius:4px;color:var(--dim);font-family:monospace;font-size:.6rem;padding:.18rem .5rem;cursor:pointer;transition:all .2s}
+.code-copy:hover{color:var(--snow);border-color:var(--border2)}
+.code-body{padding:.9rem 1rem;overflow-x:auto;font-family:'Courier New',monospace;font-size:.82rem;line-height:1.72;color:#8899BB}
+.code-body .cm{color:var(--dim)}
+.code-body .ck{color:#4F7FEF}
+.code-body .cs{color:#00E5A0}
+.code-body .cc{color:#E8A020}
+/* Callouts */
+.callout{border-radius:7px;padding:.9rem 1.1rem;margin:1rem 0;display:flex;gap:.75rem;align-items:flex-start}
+.callout-info{background:rgba(79,127,239,.07);border:1px solid rgba(79,127,239,.2)}
+.callout-tip{background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2)}
+.callout-warn{background:rgba(232,160,32,.06);border:1px solid rgba(232,160,32,.2)}
+.callout-icon{font-size:.9rem;flex-shrink:0;margin-top:.05rem}
+.callout-body{font-size:.85rem;color:var(--muted);line-height:1.65;font-weight:300}
+.callout-body strong{font-weight:500}
+/* Steps */
+.step-list{list-style:none;display:flex;flex-direction:column;gap:0;counter-reset:step}
+.step-item{display:grid;grid-template-columns:32px 1fr;gap:1rem;padding:1.2rem 0;border-bottom:1px solid var(--border);position:relative}
+.step-item:last-child{border-bottom:none}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(79,127,239,.1);border:1px solid rgba(79,127,239,.25);display:grid;place-items:center;font-family:monospace;font-size:.72rem;color:#4F7FEF;flex-shrink:0;margin-top:.1rem}
+.step-body-t{font-size:.92rem;font-weight:600;color:#CDD6F0;margin-bottom:.4rem}
+.step-body-d{font-size:.85rem;color:var(--muted);line-height:1.65;font-weight:300}
+/* Table */
+.doc-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.84rem}
+.doc-table th{font-family:monospace;font-size:.62rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding:.6rem .9rem;text-align:left;border-bottom:1px solid var(--border);font-weight:400}
+.doc-table td{padding:.65rem .9rem;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted);vertical-align:top;line-height:1.55;font-weight:300}
+.doc-table td:first-child{font-family:monospace;color:#4F7FEF;font-size:.8rem}
+.doc-table tr:hover td{background:rgba(79,127,239,.02)}
+/* On-page nav */
+.on-page-nav{display:none}
+/* Cookie */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;max-width:580px;font-weight:300}.cb-text a{color:#4F7FEF;text-decoration:none}
+.cb-actions{display:flex;gap:.6rem}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
+footer{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;font-family:monospace;font-size:.7rem;color:var(--dim);background:var(--bg1)}
+footer a{color:#4F7FEF;text-decoration:none}
+@media(max-width:800px){.docs-layout{grid-template-columns:1fr}.sidebar{display:none}.doc-content{padding:2rem 1.5rem 4rem}}
+</style>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
+</head>
+<body>
+<div id="sp"></div>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="lm"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg></div>
+    MLOps<em>.dev</em>
+  </a>
+  <span class="nav-slash">/</span>
+  <span class="nav-doc">Docs</span>
+  <div class="nav-r">
+    <button class="nav-ghost" onclick="location.href='index.html'">← Site</button>
+    <button class="nav-ghost" onclick="location.href='faq.html'">FAQ</button>
+    <button class="nav-cta" onclick="location.href='index.html#wl'">Join waitlist</button>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" aria-label="Documentation navigation">
+    <div class="sb-section">
+      <span class="sb-section-title">Getting started</span>
+      <a class="sb-link active" onclick="scrollTo('quickstart')">Quick start</a>
+      <a class="sb-link" onclick="scrollTo('install')">Install the agent</a>
+      <a class="sb-link" onclick="scrollTo('first-deploy')">First deployment</a>
+    </div>
+    <div class="sb-section">
+      <span class="sb-section-title">Core concepts</span>
+      <a class="sb-link" onclick="scrollTo('agent')">The edge agent</a>
+      <a class="sb-link" onclick="scrollTo('sync')">Offline-first sync</a>
+      <a class="sb-link" onclick="scrollTo('drift')">Drift detection</a>
+      <a class="sb-link" onclick="scrollTo('canary')">Canary deployments</a>
+    </div>
+    <div class="sb-section">
+      <span class="sb-section-title">Reference</span>
+      <a class="sb-link" onclick="scrollTo('cli')">CLI reference</a>
+      <a class="sb-link" onclick="scrollTo('config')">Agent config</a>
+      <a class="sb-link" onclick="scrollTo('api')">REST API <span class="sb-badge sb-new">v1</span></a>
+    </div>
+    <div class="sb-section">
+      <span class="sb-section-title">Guides</span>
+      <a class="sb-link" onclick="scrollTo('hardware')">Supported hardware</a>
+      <a class="sb-link" onclick="scrollTo('formats')">Model formats</a>
+      <a class="sb-link" onclick="scrollTo('compliance')">Compliance &amp; audit</a>
+    </div>
+    <div class="sb-section">
+      <span class="sb-section-title">Community</span>
+      <a class="sb-link" href="https://discord.gg/Tb47N9NaPk" target="_blank" rel="noopener">Discord</a>
+      <a class="sb-link" href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank" rel="noopener">GitHub</a>
+      <a class="sb-link" href="https://pypi.org/project/mlops-dev" target="_blank" rel="noopener">PyPI Package</a>
+      <a class="sb-link" href="roadmap.html" target="_blank" rel="noopener">Roadmap</a>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="doc-content">
+
+    <!-- QUICK START -->
+    <div class="doc-section" id="quickstart">
+      <span class="doc-eyebrow">Getting started</span>
+      <h1 class="doc-h1">MLOps.dev Documentation</h1>
+      <p class="doc-p">From <code>curl install</code> to your first edge deployment in under 10 minutes. No Kubernetes. No YAML manifests. Just a 7.4MB binary and a CLI.</p>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">✓</span>
+        <div class="callout-body"><strong>Early access:</strong> These docs cover the current private beta. <a href="index.html#wl">Join the waitlist</a> to get access. Questions? Email <a href="mailto:hello@mlops.dev">hello@mlops.dev</a>.</div>
+      </div>
+
+      <h2 class="doc-h2" id="install">1. Install the agent</h2>
+      <p class="doc-p">Run this on your edge device. Works on any Linux ARM or x86-64 system with 256MB+ RAM.</p>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">BASH</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body"><span class="cm"># One-line install</span>
+curl -fsSL get.mlops.dev | sh
+
+<span class="cm"># Verify installation</span>
+mlops --version
+<span class="cs"># mlops-agent v0.6.0 linux/arm64</span>
+
+<span class="cm"># Check device is registered</span>
+mlops status</div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ</span>
+        <div class="callout-body">The install script detects your architecture (arm64, armv7, amd64) and downloads the correct binary. The agent binary is <strong>7.4MB</strong>, statically compiled with musl libc — no runtime dependencies.</div>
+      </div>
+
+      <h2 class="doc-h2" id="first-deploy">2. Push your first model</h2>
+      <p class="doc-p">From your development machine, register a model and deploy it to your device.</p>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">BASH</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body"><span class="cm"># Authenticate</span>
+mlops login
+
+<span class="cm"># Register a model (ONNX, TFLite, or TensorRT)</span>
+mlops push ./model.onnx --name defect-detector --tag v1.0
+
+<span class="cm"># Deploy to your device</span>
+mlops deploy defect-detector:v1.0 --target device-id-here
+
+<span class="cm"># Check deployment status</span>
+mlops status --fleet</div>
+      </div>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">PYTHON SDK</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body"><span class="ck">import</span> mlops
+
+client = mlops.Client(api_key=<span class="cs">"your-api-key"</span>)
+
+<span class="cm"># Register model</span>
+model = client.models.push(
+    path=<span class="cs">"./model.onnx"</span>,
+    name=<span class="cs">"defect-detector"</span>,
+    tag=<span class="cs">"v1.0"</span>
+)
+
+<span class="cm"># Deploy</span>
+deployment = client.deploy(
+    model=<span class="cs">"defect-detector:v1.0"</span>,
+    target=<span class="cs">"jetson-prod-01"</span>
+)
+<span class="ck">print</span>(deployment.status)</div>
+      </div>
+    </div>
+
+    <!-- AGENT -->
+    <div class="doc-section" id="agent">
+      <h2 class="doc-h2">The edge agent</h2>
+      <p class="doc-p">The <code>mlops-agent</code> is a single statically-compiled Go binary that runs on your edge device. It owns the deployment loop — the control plane signals desired state, the agent reconciles.</p>
+
+      <table class="doc-table">
+        <thead><tr><th>Property</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Binary size</td><td>7.4MB (arm64 production build)</td></tr>
+          <tr><td>RAM usage</td><td>~14MB at steady state</td></tr>
+          <tr><td>Startup time</td><td>&lt;200ms</td></tr>
+          <tr><td>Architectures</td><td>arm64, armv7, amd64</td></tr>
+          <tr><td>OS</td><td>Any Linux, kernel 4.9+</td></tr>
+          <tr><td>License</td><td>Apache 2.0</td></tr>
+          <tr><td>Source</td><td>github.com/Raghunath2604/Raghunath2604-mlops-dev/Raghunath2604-mlops-dev</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SYNC -->
+    <div class="doc-section" id="sync">
+      <h2 class="doc-h2">Offline-first sync</h2>
+      <p class="doc-p">The agent uses a <strong>pull-based idempotent sync protocol</strong>. It polls the control plane for desired state every 30 seconds and reconciles itself. During outages, it buffers telemetry locally in SQLite and flushes on reconnect.</p>
+
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0 1rem">
+        <li style="font-size:.88rem;color:var(--muted);padding-left:1.1rem;position:relative">
+          <span style="position:absolute;left:0;color:#4F7FEF;font-family:monospace;font-size:.72rem">→</span>
+          <strong style="color:#9AAAC8">Tested:</strong> 6-hour outage on 2G connection. Zero data loss.
+        </li>
+        <li style="font-size:.88rem;color:var(--muted);padding-left:1.1rem;position:relative">
+          <span style="position:absolute;left:0;color:#4F7FEF;font-family:monospace;font-size:.72rem">→</span>
+          <strong style="color:#9AAAC8">Delta compression:</strong> 95.7% smaller update packages (bsdiff).
+        </li>
+        <li style="font-size:.88rem;color:var(--muted);padding-left:1.1rem;position:relative">
+          <span style="position:absolute;left:0;color:#4F7FEF;font-family:monospace;font-size:.72rem">→</span>
+          <strong style="color:#9AAAC8">Buffer cap:</strong> 500MB local SQLite, discards oldest records when full.
+        </li>
+      </ul>
+    </div>
+
+    <!-- DRIFT -->
+    <div class="doc-section" id="drift">
+      <h2 class="doc-h2">Drift detection</h2>
+      <p class="doc-p">Statistical drift detection runs on the device itself using KL divergence on the input distribution, compared against a baseline captured at deployment time.</p>
+
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">AGENT CONFIG (mlops.yaml)</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body">drift:
+  enabled: <span class="cs">true</span>
+  method: <span class="cs">kl_divergence</span>
+  window_size: <span class="cc">200</span>        <span class="cm"># inferences in rolling window</span>
+  check_every: <span class="cc">100</span>        <span class="cm"># recompute every N inferences</span>
+  warn_threshold: <span class="cc">0.4</span>    <span class="cm"># KL divergence warning level</span>
+  alert_threshold: <span class="cc">0.7</span>   <span class="cm"># KL divergence alert level</span>
+  alert_webhook: <span class="cs">""</span>       <span class="cm"># optional: Slack/PagerDuty URL</span>
+  monitors:
+    - input_distribution
+    - output_confidence</div>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">✓</span>
+        <div class="callout-body">KL drift detection adds ~60 microseconds average overhead per inference at 30fps. On a Jetson Nano, the full computation takes under 2ms.</div>
+      </div>
+    </div>
+
+    <!-- CANARY -->
+    <div class="doc-section" id="canary">
+      <h2 class="doc-h2">Canary deployments</h2>
+      <p class="doc-p">Stage model updates across your fleet by hardware class. Health gates automatically halt rollout if accuracy drops or latency increases beyond thresholds.</p>
+
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">BASH</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body"><span class="cm"># Staged rollout by hardware class</span>
+mlops deploy defect-detector:v2.0   --stage <span class="cs">"hw_class=jetson_orin,count=1"</span>   --stage <span class="cs">"hw_class=jetson_orin,pct=100"</span>   --stage <span class="cs">"hw_class=jetson_nano,pct=25"</span>   --stage <span class="cs">"hw_class=all,pct=100"</span>   --health-gate <span class="cs">"accuracy_delta=-0.03"</span>   --health-gate <span class="cs">"latency_delta=+0.20"</span>   --stage-interval <span class="cc">30m</span>
+
+<span class="cm"># Monitor rollout</span>
+mlops rollout status
+
+<span class="cm"># Manual rollback if needed</span>
+mlops rollback --to defect-detector:v1.0</div>
+      </div>
+    </div>
+
+    <!-- CLI -->
+    <div class="doc-section" id="cli">
+      <h2 class="doc-h2">CLI reference</h2>
+      <table class="doc-table">
+        <thead><tr><th>Command</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>mlops login</td><td>Authenticate with the control plane</td></tr>
+          <tr><td>mlops push &lt;file&gt;</td><td>Register a model file in the registry</td></tr>
+          <tr><td>mlops deploy &lt;model:tag&gt;</td><td>Deploy a model version to fleet</td></tr>
+          <tr><td>mlops rollback</td><td>Roll back fleet or device to previous version</td></tr>
+          <tr><td>mlops status</td><td>Show fleet health, device list, model versions</td></tr>
+          <tr><td>mlops devices list</td><td>List all registered devices</td></tr>
+          <tr><td>mlops drift</td><td>Show drift scores across fleet</td></tr>
+          <tr><td>mlops logs &lt;device-id&gt;</td><td>Stream device event log</td></tr>
+          <tr><td>mlops config set</td><td>Update agent configuration</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CONFIG -->
+    <div class="doc-section" id="config">
+      <h2 class="doc-h2">Agent configuration</h2>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">/etc/mlops/mlops.yaml</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body">agent:
+  device_id: <span class="cs">""</span>              <span class="cm"># auto-generated on first run</span>
+  api_endpoint: <span class="cs">"https://api.mlops.dev"</span>
+  api_key: <span class="cs">""</span>               <span class="cm"># from dashboard → Settings</span>
+  heartbeat_interval: <span class="cc">30s</span>
+  sync_interval: <span class="cc">30s</span>
+  telemetry_buffer_mb: <span class="cc">500</span>
+
+models:
+  runtime: <span class="cs">auto</span>              <span class="cm"># auto | onnx | tflite | tensorrt</span>
+  model_dir: <span class="cs">/opt/mlops/models</span>
+
+drift:
+  enabled: <span class="cs">true</span>
+  warn_threshold: <span class="cc">0.4</span>
+  alert_threshold: <span class="cc">0.7</span>
+
+logging:
+  level: <span class="cs">info</span>               <span class="cm"># debug | info | warn | error</span>
+  output: <span class="cs">journald</span>           <span class="cm"># journald | file | stdout</span></div>
+      </div>
+    </div>
+
+    <!-- HARDWARE -->
+    <div class="doc-section" id="hardware">
+      <h2 class="doc-h2">Supported hardware</h2>
+      <table class="doc-table">
+        <thead><tr><th>Device</th><th>Class tag</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>NVIDIA Jetson Orin NX/AGX</td><td>jetson_orin</td><td>TensorRT INT8 recommended</td></tr>
+          <tr><td>NVIDIA Jetson Nano</td><td>jetson_nano</td><td>TFLite FP32 or ONNX</td></tr>
+          <tr><td>Raspberry Pi 5 / 4B</td><td>rpi5 / rpi4</td><td>TFLite INT8 recommended</td></tr>
+          <tr><td>Raspberry Pi Zero 2W</td><td>rpi_zero</td><td>Minimal mode, 6MB agent</td></tr>
+          <tr><td>Google Coral Dev Board</td><td>coral</td><td>Edge TPU delegate</td></tr>
+          <tr><td>x86-64 industrial PC</td><td>x86_64</td><td>Full feature set</td></tr>
+          <tr><td>Custom ARM Cortex-A</td><td>arm_custom</td><td>Requires Linux kernel 4.9+</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODEL FORMATS -->
+    <div class="doc-section" id="formats">
+      <h2 class="doc-h2">Model formats</h2>
+      <table class="doc-table">
+        <thead><tr><th>Format</th><th>Best for</th><th>Latency (Jetson Orin)</th></tr></thead>
+        <tbody>
+          <tr><td>TensorRT INT8</td><td>Jetson GPU — maximum throughput</td><td>3.8ms · 263fps</td></tr>
+          <tr><td>TensorRT FP16</td><td>Jetson GPU — accuracy-critical</td><td>6.1ms · 163fps</td></tr>
+          <tr><td>ONNX (CUDA)</td><td>Jetson GPU — cross-platform</td><td>11.4ms · 87fps</td></tr>
+          <tr><td>TFLite INT8</td><td>CPU-only ARM, bandwidth constrained</td><td>19.2ms · 52fps</td></tr>
+          <tr><td>ONNX (CPU)</td><td>Mixed fleet, single file</td><td>48.2ms · 20fps</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <div class="callout-body"><strong>TensorRT engines are device-specific.</strong> A TRT engine compiled for Jetson Orin will not run on Jetson Nano. Register hardware-specific variants using <code>mlops push --variant</code> and the agent selects the correct file automatically.</div>
+      </div>
+    </div>
+
+    <!-- COMPLIANCE -->
+    <div class="doc-section" id="compliance">
+      <h2 class="doc-h2">Compliance &amp; audit logs</h2>
+      <p class="doc-p">Every deployment event, drift alert, and rollback is recorded in an immutable audit log. Required for <strong>FDA SaMD (21 CFR Part 11)</strong>, <strong>ISO 13485</strong>, and <strong>CE MDR Article 10</strong>.</p>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">BASH — Export audit log</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body"><span class="cm"># Export audit log for a device (JSON or CSV)</span>
+mlops audit export   --device jetson-prod-01   --from 2025-01-01   --to 2025-07-15   --format csv   --output audit-q1q2.csv</div>
+      </div>
+
+      <p class="doc-p">Enterprise customers receive IQ/OQ/PQ documentation templates and a dedicated ML infrastructure engineer for FDA/CE submission support. Email <a href="mailto:hello@mlops.dev">hello@mlops.dev</a>.</p>
+    </div>
+
+    <!-- API -->
+    <div class="doc-section" id="api">
+      <h2 class="doc-h2">REST API</h2>
+      <p class="doc-p">Base URL: <code>https://api.mlops.dev/v1</code>. All requests require <code>Authorization: Bearer &lt;api_key&gt;</code>.</p>
+      <table class="doc-table">
+        <thead><tr><th>Endpoint</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>GET /devices</td><td>List all registered devices</td></tr>
+          <tr><td>GET /devices/:id</td><td>Device status, model version, drift score</td></tr>
+          <tr><td>GET /models</td><td>List model registry</td></tr>
+          <tr><td>POST /models</td><td>Register a new model version</td></tr>
+          <tr><td>POST /deployments</td><td>Create a deployment</td></tr>
+          <tr><td>GET /deployments/:id</td><td>Deployment status and stage progress</td></tr>
+          <tr><td>POST /deployments/:id/rollback</td><td>Trigger rollback</td></tr>
+          <tr><td>GET /drift</td><td>Drift scores across fleet</td></tr>
+          <tr><td>GET /audit</td><td>Audit log (paginated)</td></tr>
+          <tr><td>GET /health</td><td>API health check</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ</span>
+        <div class="callout-body">Full API reference with request/response schemas is available to waitlist members. <a href="index.html#wl">Join the waitlist →</a></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a></div>
+  <div style="display:flex;justify-content:center;gap:1.3rem;margin-top:.5rem;flex-wrap:wrap">
+    <a href="index.html">Home</a><a href="faq.html">FAQ</a><a href="changelog.html">Changelog</a>
+    <a href="blog.html">Blog</a><a href="status.html">Status</a><a href="privacy.html">Privacy</a>
+  </div>
+</footer>
+
+<script>
+(function(){var p=document.getElementById('sp');window.addEventListener('scroll',function(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;if(p)p.style.width=(d>0?s/d*100:0)+'%';},{passive:true});})();
+function scrollTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});}
+function copyCode(btn){
+  var code=btn.closest('.code-wrap').querySelector('.code-body').innerText;
+  navigator.clipboard.writeText(code).then(function(){
+    btn.textContent='copied!';
+    setTimeout(function(){btn.textContent='copy';},1800);
+  }).catch(function(){btn.textContent='copy';});
+}
+// Active sidebar on scroll
+(function(){
+  var sections=['quickstart','install','first-deploy','agent','sync','drift','canary','cli','config','hardware','formats','compliance','api'];
+  var links=document.querySelectorAll('.sb-link');
+  window.addEventListener('scroll',function(){
+    var cur='';
+    sections.forEach(function(id){var el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-100)cur=id;});
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('onclick')==="scrollTo('"+cur+"')");});
+  },{passive:true});
+})();
+(function(){if(localStorage.getItem('cookie_consent'))return;setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('show');},2200);})();
+function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
+function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
+</script>
+</body>
+</html>

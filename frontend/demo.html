@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});
+gtag('js',new Date());
+gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
+</script>
+
+
+
+
+<link rel="canonical" href="https://www.mlops.dev/demo"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235B8AF0'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Cline x1='16' y1='4' x2='16' y2='28' stroke='%23fff' stroke-width='1.2' stroke-opacity='.5'/%3E%3Cline x1='4' y1='10.5' x2='28' y2='21.5' stroke='%23fff' stroke-width='1.2' stroke-opacity='.5'/%3E%3Cline x1='28' y1='10.5' x2='4' y2='21.5' stroke='%23fff' stroke-width='1.2' stroke-opacity='.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2300FFB3'/%3E%3C/svg%3E"/>
+<title>MLOps.dev — Interactive Demo</title>
+<meta property="og:title" content="MLOps.dev by Raghunathareddy GR — Interactive Demo"/>
+<meta property="og:description" content="See MLOps.dev in action — 4-chapter cinematic walkthrough plus hands-on deploy, drift detection and rollback demo."/>
+<meta property="og:image" content="https://www.mlops.dev/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:image" content="https://www.mlops.dev/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta property="og:url" content="https://www.mlops.dev/demo"/>
+<meta name="author" content="Raghunathareddy GR"/>
+<meta name="theme-color" content="#5B8AF0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#060810;--bg1:#0A0E1A;--bg2:#0F1628;--bg3:#141C32;
+  --blue:#5B8AF0;--blue2:#4A73D4;--green:#00FFB3;--red:#FF4560;--amber:#F5A623;
+  --snow:#E8EDF8;--muted:#8896B3;--dim:#4A5568;
+  --border:rgba(91,138,240,.15);--border2:rgba(91,138,240,.3);
+  --fh:'Space Grotesk',sans-serif;--fm:'IBM Plex Mono',monospace;--fb:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.6;overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+
+/* ── NAV ── */
+.demo-nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:54px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 4%;background:rgba(6,8,16,.96);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.dnav-logo{display:flex;align-items:center;gap:9px;font-family:var(--fh);font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none;color:var(--snow)}
+.dnav-logo em{font-style:normal;font-family:var(--fm);color:var(--blue);font-size:.85rem}
+.dnav-right{display:flex;align-items:center;gap:.7rem}
+.dnav-pill{font-family:var(--fm);font-size:.68rem;color:var(--green);border:1px solid rgba(0,255,179,.2);background:rgba(0,255,179,.04);border-radius:4px;padding:.22rem .65rem;display:flex;align-items:center;gap:.4rem}
+.dnav-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pls 2s infinite}
+@keyframes pls{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.btn-sm{padding:.35rem .85rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:var(--fh);border:none;transition:all .2s}
+.btn-sm-ghost{background:none;border:1px solid var(--border2);color:var(--snow)}
+.btn-sm-ghost:hover{background:rgba(91,138,240,.1)}
+.btn-sm-solid{background:var(--blue);color:#fff;box-shadow:0 0 14px rgba(91,138,240,.3)}
+.btn-sm-solid:hover{background:var(--blue2);transform:translateY(-1px)}
+
+/* ── HERO BAND ── */
+.demo-hero{
+  padding:90px 4% 0;max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;
+  min-height:calc(100vh - 200px);
+}
+.dh-tag{font-family:var(--fm);font-size:.7rem;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;display:block}
+.dh-h{font-family:var(--fh);font-size:clamp(2rem,3.8vw,3.2rem);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:var(--snow);margin-bottom:.9rem}
+.dh-h em{font-style:normal;color:var(--green)}
+.dh-p{font-size:.97rem;color:var(--muted);line-height:1.72;max-width:420px;margin-bottom:1.8rem;font-weight:300}
+.dh-steps{display:flex;flex-direction:column;gap:.6rem}
+.dh-step{display:flex;align-items:center;gap:.7rem;font-size:.87rem;color:var(--muted)}
+.dh-step-n{width:22px;height:22px;border-radius:50%;border:1px solid var(--blue);display:grid;place-items:center;font-family:var(--fm);font-size:.62rem;color:var(--blue);flex-shrink:0;transition:all .3s}
+.dh-step-n.done{background:var(--blue);border-color:var(--blue);color:#fff}
+.dh-step-n.active{background:rgba(91,138,240,.15);box-shadow:0 0 12px rgba(91,138,240,.4)}
+.dh-step span{transition:color .3s}
+.dh-step.active-step span{color:var(--snow);font-weight:500}
+.dh-step.done-step span{color:var(--green)}
+
+/* ── DEMO PLAYER (right side hero) ── */
+.demo-player-wrap{
+  background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6);
+}
+.demo-player-bar{
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem;
+}
+.dpb-dot{width:9px;height:9px;border-radius:50%}
+.dpb-title{font-family:var(--fm);font-size:.67rem;color:var(--dim);flex:1;margin-left:.3rem}
+.dpb-status{font-family:var(--fm);font-size:.64rem;color:var(--green);display:flex;align-items:center;gap:.35rem}
+.dpb-dot2{width:4px;height:4px;background:var(--green);border-radius:50%;animation:pls 1.5s infinite}
+/* The "screen" inside the player */
+.demo-screen{height:340px;position:relative;overflow:hidden;background:var(--bg)}
+/* Chapters render here via canvas */
+#demo-canvas{width:100%;height:100%;display:block}
+/* Controls */
+.demo-controls{padding:.7rem 1rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.8rem}
+.demo-play-btn{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--blue);border:none;display:grid;place-items:center;cursor:pointer;
+  transition:all .2s;flex-shrink:0;
+}
+.demo-play-btn:hover{background:var(--blue2);transform:scale(1.08)}
+.demo-play-btn svg{fill:#fff;width:10px;height:10px}
+.demo-progress-wrap{flex:1;position:relative;height:4px;background:rgba(255,255,255,.08);border-radius:2px;cursor:pointer}
+.demo-progress-fill{height:100%;border-radius:2px;background:var(--blue);transition:width .1s linear}
+.demo-progress-handle{position:absolute;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;background:var(--snow);border-radius:50%;pointer-events:none;transition:left .1s linear}
+.demo-time{font-family:var(--fm);font-size:.67rem;color:var(--dim);white-space:nowrap}
+.demo-chapters{display:flex;gap:.4rem}
+.demo-chapter-btn{background:none;border:1px solid var(--border);border-radius:4px;padding:.18rem .5rem;font-family:var(--fm);font-size:.6rem;color:var(--dim);cursor:pointer;transition:all .2s}
+.demo-chapter-btn:hover{color:var(--snow);border-color:var(--border2)}
+.demo-chapter-btn.active{color:var(--blue);border-color:var(--blue);background:rgba(91,138,240,.08)}
+
+/* ── INTERACTIVE DEMO SECTION ── */
+.demo-section{padding:5rem 4%;max-width:1100px;margin:0 auto}
+.section-label{font-family:var(--fm);font-size:.7rem;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:block}
+.section-h{font-family:var(--fh);font-size:clamp(1.7rem,2.8vw,2.4rem);font-weight:700;letter-spacing:-.04em;color:var(--snow);margin-bottom:.5rem}
+.section-p{font-size:.93rem;color:var(--muted);font-weight:300;line-height:1.7;max-width:500px;margin-bottom:2.5rem}
+
+/* Step tabs */
+.step-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:2rem;gap:0}
+.step-tab{
+  padding:.7rem 1.4rem;font-family:var(--fh);font-size:.85rem;font-weight:500;
+  color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;
+  transition:all .2s;border-top:none;border-left:none;border-right:none;
+  background:none;display:flex;align-items:center;gap:.55rem;margin-bottom:-1px;
+}
+.step-tab:hover{color:var(--snow)}
+.step-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.step-tab-n{width:18px;height:18px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;font-family:var(--fm);font-size:.58rem;flex-shrink:0}
+.step-tab.done .step-tab-n{background:var(--green);border-color:var(--green);color:var(--bg)}
+
+/* Step panels */
+.step-panel{display:none}.step-panel.active{display:block}
+.step-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+.step-desc h3{font-family:var(--fh);font-size:1.05rem;font-weight:600;color:var(--snow);margin-bottom:.5rem}
+.step-desc p{font-size:.87rem;color:var(--muted);line-height:1.68;font-weight:300;margin-bottom:1rem}
+.step-desc .note{font-family:var(--fm);font-size:.72rem;color:var(--blue);background:rgba(91,138,240,.07);border:1px solid var(--border);border-radius:5px;padding:.5rem .8rem;display:block}
+
+/* Terminal emulator */
+.terminal{
+  background:#0A0D16;border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  font-family:var(--fm);font-size:.78rem;
+}
+.term-bar{background:var(--bg3);padding:.5rem .85rem;display:flex;align-items:center;gap:.45rem;border-bottom:1px solid var(--border)}
+.term-dot{width:8px;height:8px;border-radius:50%}
+.term-title{font-size:.65rem;color:var(--dim);flex:1;margin-left:.3rem}
+.term-body{padding:.85rem 1rem;min-height:140px;max-height:220px;overflow-y:auto;line-height:1.9}
+.term-body::-webkit-scrollbar{width:2px}
+.term-body::-webkit-scrollbar-thumb{background:var(--dim)}
+.term-line{display:flex;gap:.5rem;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.term-prompt{color:var(--blue);flex-shrink:0}
+.term-cmd{color:var(--snow)}
+.term-out{color:var(--muted)}
+.term-ok{color:var(--green)}
+.term-err{color:var(--red)}
+.term-info{color:var(--amber)}
+.term-cursor{display:inline-block;width:7px;height:14px;background:var(--blue);vertical-align:middle;animation:blink .9s infinite;margin-left:2px}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* Input row */
+.term-input-row{display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-top:1px solid var(--border);background:rgba(0,0,0,.2)}
+.term-input-prompt{color:var(--blue);font-family:var(--fm);font-size:.78rem;flex-shrink:0}
+.term-input{background:none;border:none;outline:none;color:var(--snow);font-family:var(--fm);font-size:.78rem;flex:1}
+.term-input::placeholder{color:var(--dim)}
+.term-run-btn{background:var(--blue);border:none;border-radius:4px;color:#fff;font-family:var(--fm);font-size:.7rem;padding:.28rem .65rem;cursor:pointer;transition:all .2s;flex-shrink:0}
+.term-run-btn:hover{background:var(--blue2)}
+.term-run-btn:disabled{opacity:.5;cursor:default}
+
+/* Form inside step */
+.demo-form{display:flex;flex-direction:column;gap:.75rem}
+.demo-fg label{display:block;font-family:var(--fh);font-size:.77rem;font-weight:500;color:var(--muted);margin-bottom:.32rem;letter-spacing:.01em}
+.demo-fg input,.demo-fg select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.55rem .8rem;color:var(--snow);font-size:.86rem;outline:none;transition:border-color .2s,box-shadow .2s;font-family:var(--fb)}
+.demo-fg input:focus,.demo-fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,138,240,.12)}
+.demo-fg input::placeholder{color:var(--dim)}
+.demo-fg select option{background:var(--bg3)}
+
+/* Result cards */
+.result-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.2rem}
+.rc-label{font-family:var(--fm);font-size:.64rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.7rem}
+.rc-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(91,138,240,.06)}
+.rc-row:last-child{border-bottom:none}
+.rc-key{font-size:.82rem;color:var(--muted)}
+.rc-val{font-family:var(--fm);font-size:.78rem;color:var(--snow)}
+.rc-val.green{color:var(--green)}.rc-val.amber{color:var(--amber)}.rc-val.red{color:var(--red)}.rc-val.blue{color:var(--blue)}
+
+/* Progress bar */
+.prog-wrap{margin-top:1rem}
+.prog-label{font-size:.8rem;color:var(--muted);margin-bottom:.35rem;display:flex;justify-content:space-between}
+.prog-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;background:var(--blue);transition:width .4s ease}
+.prog-fill.green{background:var(--green)}
+
+/* Drift chart */
+.drift-chart{margin-top:.8rem}
+.drift-bar-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
+.drift-label{font-family:var(--fm);font-size:.67rem;color:var(--muted);width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drift-bar-bg{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.drift-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.drift-pct{font-family:var(--fm);font-size:.67rem;width:32px;text-align:right;flex-shrink:0}
+
+/* Alert card */
+.alert-card{
+  background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.25);
+  border-radius:8px;padding:1rem 1.1rem;
+  display:flex;align-items:flex-start;gap:.75rem;
+  animation:alertPulse 2s ease-in-out infinite;
+}
+@keyframes alertPulse{0%,100%{border-color:rgba(255,69,96,.25)}50%{border-color:rgba(255,69,96,.5)}}
+.alert-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,69,96,.15);display:grid;place-items:center;flex-shrink:0}
+.alert-icon svg{width:13px;height:13px;stroke:var(--red);fill:none;stroke-width:2.2;stroke-linecap:round}
+.alert-title{font-family:var(--fh);font-size:.88rem;font-weight:600;color:var(--red);margin-bottom:.2rem}
+.alert-body{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.55}
+.alert-actions{display:flex;gap:.5rem;margin-top:.65rem}
+.alert-btn{font-family:var(--fm);font-size:.68rem;padding:.28rem .65rem;border-radius:4px;cursor:pointer;border:1px solid;transition:all .2s}
+.alert-btn-rb{background:rgba(255,69,96,.12);border-color:rgba(255,69,96,.3);color:var(--red)}
+.alert-btn-rb:hover{background:rgba(255,69,96,.22)}
+.alert-btn-ig{background:rgba(255,255,255,.04);border-color:var(--border);color:var(--muted)}
+.alert-btn-ig:hover{color:var(--snow)}
+
+/* Completion state */
+.completion-wrap{
+  text-align:center;padding:2.5rem 1rem;
+  animation:fadeIn .5s ease;
+}
+.completion-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,255,179,.1);border:1px solid rgba(0,255,179,.3);display:grid;place-items:center;margin:0 auto 1.2rem}
+.completion-icon svg{width:28px;height:28px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.completion-h{font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--snow);margin-bottom:.4rem}
+.completion-p{font-size:.9rem;color:var(--muted);font-weight:300;line-height:1.65;max-width:380px;margin:0 auto 1.6rem}
+.completion-btns{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.1rem;display:flex;align-items:center;gap:.6rem;font-size:.83rem;box-shadow:0 8px 40px rgba(0,0,0,.6);transform:translateY(130%);transition:transform .3s cubic-bezier(.22,1,.36,1);max-width:300px}
+.toast.show{transform:translateY(0)}
+.toast.ok{border-color:rgba(0,255,179,.25)}.toast.er{border-color:rgba(255,69,96,.25)}.toast.info{border-color:rgba(91,138,240,.35)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .demo-hero{grid-template-columns:1fr;min-height:auto;padding-top:74px}
+  .step-grid{grid-template-columns:1fr}
+  .step-tabs{overflow-x:auto;padding-bottom:.5rem}
+  .step-tab{white-space:nowrap}
+}
+
+/* ── SHARED FOOTER ── */
+.site-footer{padding:3.5rem 5% 2rem;border-top:1px solid var(--border);background:var(--bg1);font-family:var(--fb)}
+.sf-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;max-width:1200px;margin:0 auto 2.5rem}
+.sf-brand-logo{display:flex;align-items:center;gap:.6rem;font-family:var(--fh);font-weight:700;font-size:1rem;margin-bottom:.8rem;cursor:pointer;color:var(--snow);text-decoration:none}
+.sf-brand-logo em{font-style:normal;font-family:var(--fm);color:var(--blue);font-size:.85rem}
+.sf-brand-p{font-size:.83rem;color:var(--dim);line-height:1.65;max-width:220px;font-weight:300;margin-bottom:.5rem}
+.sf-brand-domain{font-family:var(--fm);font-size:.7rem;color:var(--blue);opacity:.7;display:block;text-decoration:none}
+.sf-brand-domain:hover{opacity:1}
+.sf-col h4{font-family:var(--fh);font-size:.82rem;font-weight:600;color:var(--snow);margin-bottom:1rem;letter-spacing:.01em}
+.sf-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.sf-col li a{font-size:.83rem;color:var(--dim);cursor:pointer;transition:color .18s;font-weight:300;background:none;border:none;padding:0;font-family:var(--fb);text-align:left;display:block}
+.sf-col li a:hover{color:var(--snow)}
+.sf-bot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:1.5rem;font-size:.76rem;color:var(--dim);flex-wrap:wrap;gap:.5rem;max-width:1200px;margin:0 auto}
+.sf-legal{display:flex;gap:1.5rem}
+.sf-legal a{color:var(--dim);cursor:pointer;transition:color .18s;background:none;border:none;padding:0;font-size:.76rem;font-family:var(--fb)}
+.sf-legal a:hover{color:var(--snow)}
+.sf-domain-tag{font-family:var(--fm);font-size:.72rem;color:var(--blue);opacity:.7;margin-left:.3rem}
+@media(max-width:900px){.sf-top{grid-template-columns:1fr 1fr;gap:2rem}}
+@media(max-width:560px){.sf-top{grid-template-columns:1fr}.sf-bot{flex-direction:column;text-align:center}.sf-legal{justify-content:center}}
+
+
+.cb-actions{width:100%}}
+
+</style>
+<style>
+:focus-visible{outline:2px solid #5B8AF0;outline-offset:3px;border-radius:3px}
+body{animation:pgInD .45s ease both}
+@keyframes pgInD{from{opacity:0}to{opacity:1}}
+#scroll-prog-d{position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#5B8AF0,#00FFB3);pointer-events:none}
+
+/* ── COOKIE CONSENT ── */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;line-height:1.55;max-width:580px;font-weight:300}
+.cb-text a{color:#4F7FEF;text-decoration:none}.cb-text a:hover{text-decoration:underline}
+.cb-actions{display:flex;gap:.6rem;flex-shrink:0;flex-wrap:wrap}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-accept:hover{background:#3D65CC}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-decline:hover{color:#CDD6F0;border-color:rgba(255,255,255,.2)}
+</style>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
+</head>
+<div id="scroll-prog-d" style="position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#5B8AF0,#00FFB3);pointer-events:none;transition:width .06s linear;" aria-hidden="true"></div>
+<body>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev and to improve the product. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="ti"></span><span id="tm"></span></div>
+
+<!-- NAV -->
+<nav class="demo-nav">
+  <a href="index.html" class="dnav-logo">MLOps<em>.dev</em></a>
+  <div class="dnav-pill"><span class="dnav-dot"></span>LIVE DEMO</div>
+  <div class="dnav-right">
+    <button class="btn-sm btn-sm-ghost" onclick="location.href='index.html'">← Back to site</button>
+    <button class="btn-sm btn-sm-solid" onclick="location.href='dashboard.html'">Open dashboard</button>
+  </div>
+</nav>
+
+<!-- HERO BAND -->
+<div class="demo-hero">
+  <div>
+    <span class="dh-tag">Interactive demo — www.mlops.dev</span>
+    <h1 class="dh-h">Deploy a model to your<br/><em>edge fleet</em> in 4 steps.</h1>
+    <p class="dh-p">This is a real, working demo. Use the steps to register a model, install the agent, run a canary deployment, and watch drift alerts fire — all wired to the actual MLOps.dev backend.</p>
+    <div class="dh-steps">
+      <div class="dh-step" id="nav-step-0"><div class="dh-step-n active" id="nav-n-0">01</div><span>Register your model</span></div>
+      <div class="dh-step" id="nav-step-1"><div class="dh-step-n" id="nav-n-1">02</div><span>Install the agent</span></div>
+      <div class="dh-step" id="nav-step-2"><div class="dh-step-n" id="nav-n-2">03</div><span>Deploy canary rollout</span></div>
+      <div class="dh-step" id="nav-step-3"><div class="dh-step-n" id="nav-n-3">04</div><span>Watch drift detection fire</span></div>
+    </div>
+  </div>
+
+  <!-- CINEMATIC DEMO PLAYER -->
+  <div>
+    <div class="demo-player-wrap">
+      <div class="demo-player-bar">
+        <div class="dpb-dot" style="background:#FF5F57"></div>
+        <div class="dpb-dot" style="background:#FEBC2E"></div>
+        <div class="dpb-dot" style="background:#28C840"></div>
+        <span class="dpb-title">mlops.dev — product walkthrough</span>
+        <div class="dpb-status"><span class="dpb-dot2"></span>3 min</div>
+      </div>
+      <div class="demo-screen">
+        <canvas id="demo-canvas"></canvas>
+      </div>
+      <div class="demo-controls">
+        <button class="demo-play-btn" id="play-btn" title="Play / Pause" onclick="togglePlay()">
+          <svg id="play-icon" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+        </button>
+        <div class="demo-progress-wrap" id="progress-wrap" onclick="seekDemo(event)">
+          <div class="demo-progress-fill" id="progress-fill" style="width:0%"></div>
+          <div class="demo-progress-handle" id="progress-handle" style="left:0%"></div>
+        </div>
+        <div class="demo-time" id="demo-time">0:00 / 3:00</div>
+        <div class="demo-chapters">
+          <button class="demo-chapter-btn active" id="ch-0" onclick="gotoChapter(0)">Intro</button>
+          <button class="demo-chapter-btn" id="ch-1" onclick="gotoChapter(1)">Deploy</button>
+          <button class="demo-chapter-btn" id="ch-2" onclick="gotoChapter(2)">Fleet</button>
+          <button class="demo-chapter-btn" id="ch-3" onclick="gotoChapter(3)">Drift</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     INTERACTIVE DEMO STEPS
+═══════════════════════════════════ -->
+<div class="demo-section" id="demo-start">
+  <span class="section-label">Interactive walkthrough</span>
+  <h2 class="section-h">Try it yourself — step by step.</h2>
+  <p class="section-p">Each step below is interactive and connected to the real MLOps.dev API. When the backend is offline you'll see realistic mock responses so you can still feel the product.</p>
+
+  <!-- STEP TABS -->
+  <div class="step-tabs">
+    <button class="step-tab active" id="tab-0" onclick="gotoStep(0)"><div class="step-tab-n">01</div>Register model</button>
+    <button class="step-tab" id="tab-1" onclick="gotoStep(1)"><div class="step-tab-n">02</div>Install agent</button>
+    <button class="step-tab" id="tab-2" onclick="gotoStep(2)"><div class="step-tab-n">03</div>Deploy canary</button>
+    <button class="step-tab" id="tab-3" onclick="gotoStep(3)"><div class="step-tab-n">04</div>Watch drift fire</button>
+  </div>
+
+  <!-- STEP 0: Register model -->
+  <div class="step-panel active" id="panel-0">
+    <div class="step-grid">
+      <div class="step-desc">
+        <h3>Register your ML model</h3>
+        <p>Give the model a name and pick a format. MLOps.dev stores it in the registry with full version history and hardware compatibility metadata.</p>
+        <span class="note">→ Supports TFLite, ONNX, TensorRT, PyTorch TorchScript</span>
+        <div class="demo-form" style="margin-top:1.2rem" id="reg-form">
+          <div class="demo-fg"><label>Model name</label><input id="reg-name" type="text" value="defect-detector" placeholder="e.g. object-detector"/></div>
+          <div class="demo-fg"><label>Version tag</label><input id="reg-ver" type="text" value="v4.0" placeholder="e.g. v1.0"/></div>
+          <div class="demo-fg"><label>Format</label>
+            <select id="reg-fmt">
+              <option value="onnx" selected>ONNX</option>
+              <option value="tflite">TFLite</option>
+              <option value="tensorrt">TensorRT</option>
+              <option value="torchscript">TorchScript</option>
+            </select>
+          </div>
+          <div class="demo-fg"><label>Target hardware</label>
+            <select id="reg-hw">
+              <option value="jetson">NVIDIA Jetson (any)</option>
+              <option value="rpi">Raspberry Pi 4 / 5</option>
+              <option value="coral">Google Coral</option>
+              <option value="arm">Generic ARM64</option>
+            </select>
+          </div>
+          <button class="btn-sm btn-sm-solid" style="width:100%;padding:.55rem;font-size:.88rem" onclick="runRegister()">
+            Push model to registry →
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="terminal">
+          <div class="term-bar">
+            <div class="term-dot" style="background:#FF5F57"></div>
+            <div class="term-dot" style="background:#FEBC2E"></div>
+            <div class="term-dot" style="background:#28C840"></div>
+            <span class="term-title">mlops.dev CLI</span>
+          </div>
+          <div class="term-body" id="term-0">
+            <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd"> mlops login --token &lt;your-api-key&gt;</span></div>
+            <div class="term-line"><span class="term-out"> Authenticated as you@company.com</span></div>
+            <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd"> mlops model push ./model.onnx \</span></div>
+            <div class="term-line"><span class="term-cmd">&nbsp;&nbsp;&nbsp;&nbsp;--name defect-detector \</span></div>
+            <div class="term-line"><span class="term-cmd">&nbsp;&nbsp;&nbsp;&nbsp;--tag v4.0 --hw jetson</span></div>
+            <div class="term-line"><span class="term-out"> Compressing… <span class="term-cursor"></span></span></div>
+          </div>
+        </div>
+        <div class="result-card" id="reg-result" style="display:none;margin-top:.8rem">
+          <div class="rc-label">Registry entry created</div>
+          <div class="rc-row"><div class="rc-key">Name</div><div class="rc-val blue" id="rr-name">—</div></div>
+          <div class="rc-row"><div class="rc-key">Version</div><div class="rc-val" id="rr-ver">—</div></div>
+          <div class="rc-row"><div class="rc-key">Format</div><div class="rc-val" id="rr-fmt">—</div></div>
+          <div class="rc-row"><div class="rc-key">Size</div><div class="rc-val" id="rr-size">—</div></div>
+          <div class="rc-row"><div class="rc-key">Status</div><div class="rc-val green">ready</div></div>
+        </div>
+        <div style="margin-top:1rem;display:flex;justify-content:flex-end">
+          <button class="btn-sm btn-sm-solid" id="next-0" style="display:none" onclick="gotoStep(1)">Next: Install agent →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1: Install agent -->
+  <div class="step-panel" id="panel-1">
+    <div class="step-grid">
+      <div class="step-desc">
+        <h3>Install the edge agent</h3>
+        <p>One command on your edge device. The open-source agent pulls the latest model from the registry, starts local inference, and begins streaming telemetry to the control plane.</p>
+        <span class="note">→ &lt;8MB binary. Runs on any Linux ARM device with 256MB RAM.</span>
+        <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:.7rem">
+          <div class="demo-fg"><label>Device hostname (for the demo)</label><input id="agent-host" type="text" value="jetson-prod-01" placeholder="device hostname"/></div>
+          <div class="demo-fg"><label>Hardware platform</label>
+            <select id="agent-hw">
+              <option value="NVIDIA Jetson Orin">NVIDIA Jetson Orin</option>
+              <option value="NVIDIA Jetson Nano">NVIDIA Jetson Nano</option>
+              <option value="Raspberry Pi 5">Raspberry Pi 5</option>
+              <option value="Google Coral">Google Coral</option>
+              <option value="ARM Cortex-A55">ARM Cortex-A55</option>
+            </select>
+          </div>
+          <button class="btn-sm btn-sm-solid" style="width:100%;padding:.55rem;font-size:.88rem" onclick="runInstall()">
+            Register device →
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="terminal">
+          <div class="term-bar">
+            <div class="term-dot" style="background:#FF5F57"></div>
+            <div class="term-dot" style="background:#FEBC2E"></div>
+            <div class="term-dot" style="background:#28C840"></div>
+            <span class="term-title">jetson-prod-01 — SSH</span>
+          </div>
+          <div class="term-body" id="term-1">
+            <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd"> curl -fsSL get.mlops.dev | sh</span></div>
+            <div class="term-line"><span class="term-out"> Detecting architecture… arm64</span></div>
+            <div class="term-line"><span class="term-out"> Downloading mlops-agent v3.2 (7.4MB)…</span></div>
+            <div class="term-line"><span class="term-out"> Installing to /usr/local/bin/mlops-agent</span></div>
+            <div class="term-line"><span class="term-ok"> Agent installed successfully</span></div>
+            <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd"> mlops-agent start --token $MLOPS_TOKEN <span class="term-cursor"></span></span></div>
+          </div>
+        </div>
+        <div class="result-card" id="agent-result" style="display:none;margin-top:.8rem">
+          <div class="rc-label">Device registered</div>
+          <div class="rc-row"><div class="rc-key">Device ID</div><div class="rc-val blue" id="ar-id">—</div></div>
+          <div class="rc-row"><div class="rc-key">Hardware</div><div class="rc-val" id="ar-hw">—</div></div>
+          <div class="rc-row"><div class="rc-key">Agent version</div><div class="rc-val">v3.2.1</div></div>
+          <div class="rc-row"><div class="rc-key">Status</div><div class="rc-val green">online</div></div>
+          <div class="rc-row"><div class="rc-key">Heartbeat</div><div class="rc-val green" id="ar-hb">just now</div></div>
+        </div>
+        <div style="margin-top:1rem;display:flex;justify-content:flex-end">
+          <button class="btn-sm btn-sm-solid" id="next-1" style="display:none" onclick="gotoStep(2)">Next: Deploy model →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Deploy canary -->
+  <div class="step-panel" id="panel-2">
+    <div class="step-grid">
+      <div class="step-desc">
+        <h3>Run a canary deployment</h3>
+        <p>Deploy the new model to a slice of your fleet first. MLOps.dev monitors each device's health metrics before opening the rollout to the full fleet.</p>
+        <span class="note">→ Health gate: if accuracy drops &gt;5% or latency spikes &gt;2× the rollout halts automatically.</span>
+        <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:.7rem">
+          <div class="demo-fg"><label>Model</label>
+            <select id="dep-model">
+              <option>defect-detector v4.0</option>
+              <option>object-classifier v2.1</option>
+            </select>
+          </div>
+          <div class="demo-fg"><label>Rollout strategy</label>
+            <select id="dep-strategy">
+              <option value="canary_10">Canary — 10% first</option>
+              <option value="canary_25">Canary — 25% first</option>
+              <option value="staged">Staged — 10% → 50% → 100%</option>
+              <option value="full">Full fleet (immediate)</option>
+            </select>
+          </div>
+          <button class="btn-sm btn-sm-solid" style="width:100%;padding:.55rem;font-size:.88rem" id="dep-btn" onclick="runDeploy()">
+            Launch deployment →
+          </button>
+        </div>
+      </div>
+      <div>
+        <div class="terminal" id="dep-terminal">
+          <div class="term-bar">
+            <div class="term-dot" style="background:#FF5F57"></div>
+            <div class="term-dot" style="background:#FEBC2E"></div>
+            <div class="term-dot" style="background:#28C840"></div>
+            <span class="term-title">mlops.dev — deployment log</span>
+          </div>
+          <div class="term-body" id="term-2">
+            <div class="term-line"><span class="term-prompt">$</span><span class="term-cmd"> mlops deploy defect-detector:v4.0 \</span></div>
+            <div class="term-line"><span class="term-cmd">&nbsp;&nbsp;&nbsp;&nbsp;--strategy canary --canary-pct 10</span></div>
+            <div class="term-line"><span class="term-out"> Awaiting launch… <span class="term-cursor"></span></span></div>
+          </div>
+        </div>
+        <div id="dep-progress-wrap" style="display:none;margin-top:.8rem">
+          <div class="result-card">
+            <div class="rc-label">Deployment progress</div>
+            <div class="rc-row"><div class="rc-key">Model</div><div class="rc-val blue">defect-detector v4.0</div></div>
+            <div class="rc-row"><div class="rc-key">Strategy</div><div class="rc-val" id="dep-strat-lbl">canary 10%</div></div>
+            <div class="rc-row"><div class="rc-key">Devices updated</div><div class="rc-val" id="dep-cnt">0 / 6</div></div>
+            <div class="rc-row"><div class="rc-key">Health gate</div><div class="rc-val green" id="dep-gate">passing</div></div>
+          </div>
+          <div class="prog-wrap">
+            <div class="prog-label"><span>Rollout progress</span><span id="dep-pct">0%</span></div>
+            <div class="prog-bar"><div class="prog-fill" id="dep-prog-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;display:flex;justify-content:flex-end">
+          <button class="btn-sm btn-sm-solid" id="next-2" style="display:none" onclick="gotoStep(3)">Next: Watch drift → </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Drift detection -->
+  <div class="step-panel" id="panel-3">
+    <div class="step-grid">
+      <div class="step-desc">
+        <h3>Live drift detection</h3>
+        <p>MLOps.dev monitors your model's input distributions and output confidence in real-time. When drift crosses the configured threshold, it fires an alert — and can trigger an automatic rollback.</p>
+        <span class="note">→ Threshold: warn at 40%, auto-rollback at 70%</span>
+        <div style="margin-top:1.2rem">
+          <div class="drift-chart" id="drift-chart">
+            <!-- populated by JS -->
+          </div>
+          <div style="margin-top:1.2rem;display:flex;gap:.6rem">
+            <button class="btn-sm btn-sm-ghost" style="flex:1;padding:.5rem;font-size:.83rem" onclick="simulateDrift()">Simulate drift spike →</button>
+            <button class="btn-sm btn-sm-solid" style="flex:1;padding:.5rem;font-size:.83rem" onclick="simulateRollback()">Trigger rollback</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div id="drift-alert-wrap" style="display:none">
+          <div class="alert-card">
+            <div class="alert-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div>
+              <div class="alert-title" id="alert-title">DRIFT ALERT — arm-wh-11</div>
+              <div class="alert-body" id="alert-body">Input distribution drift detected at 71%. Threshold: 70%. Auto-rollback triggered.</div>
+              <div class="alert-actions">
+                <button class="alert-btn alert-btn-rb" onclick="doRollback()">Rollback now</button>
+                <button class="alert-btn alert-btn-ig" onclick="dismissAlert()">Acknowledge</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="terminal" style="margin-top:.8rem">
+          <div class="term-bar">
+            <div class="term-dot" style="background:#FF5F57"></div>
+            <div class="term-dot" style="background:#FEBC2E"></div>
+            <div class="term-dot" style="background:#28C840"></div>
+            <span class="term-title">mlops.dev — drift monitor</span>
+          </div>
+          <div class="term-body" id="term-3">
+            <div class="term-line"><span class="term-ok"> Fleet drift scan running…</span></div>
+            <div class="term-line"><span class="term-out"> [jetson-prod-01] drift=12%  OK</span></div>
+            <div class="term-line"><span class="term-out"> [coral-ret-03]   drift=8%   OK</span></div>
+            <div class="term-line"><span class="term-info"> [rpi5-fac-07]    drift=48%  WARN</span></div>
+            <div class="term-line"><span class="term-out"> [arm-wh-11]      drift=19%  OK <span class="term-cursor"></span></span></div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;display:flex;justify-content:flex-end">
+          <button class="btn-sm btn-sm-solid" onclick="showCompletion()">Complete demo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLETION -->
+  <div class="step-panel" id="panel-done">
+    <div class="completion-wrap">
+      <div class="completion-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="completion-h">Demo complete. 🎉</div>
+      <p class="completion-p">You just saw the full MLOps.dev workflow — model registry, agent install, canary deployment, and drift alerting. This is what every team deploying ML to edge devices needs.</p>
+      <div class="completion-btns">
+        <button class="btn-sm btn-sm-solid" style="padding:.6rem 1.3rem;font-size:.9rem" onclick="location.href='index.html#wl'">Join the waitlist →</button>
+        <button class="btn-sm btn-sm-ghost" style="padding:.6rem 1.3rem;font-size:.9rem" onclick="location.href='dashboard.html'">Open live dashboard</button>
+        <button class="btn-sm btn-sm-ghost" style="padding:.6rem 1.3rem;font-size:.9rem" onclick="resetDemo()">Start over</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /demo-section -->
+
+
+<footer class="site-footer">
+  <div class="sf-top">
+    <div>
+      <a href="index.html" class="sf-brand-logo">MLOps<em>.dev</em></a>
+      <p class="sf-brand-p">The MLOps platform for the real world.</p>
+      <a href="https://www.mlops.dev" class="sf-brand-domain" target="_blank" rel="noopener">www.mlops.dev</a>
+    </div>
+    <div class="sf-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a onclick="sfNav('platform')">Platform</a></li>
+        <li><a onclick="sfNav('pricing')">Pricing</a></li>
+        <li><a onclick="sfModal('Changelog','Release notes at changelog.mlops.dev','https://changelog.mlops.dev')">Changelog</a></li>
+        <li><a onclick="sfModal('Roadmap','Public roadmap at roadmap.mlops.dev','roadmap.html')">Roadmap</a></li>
+        <li><a onclick="location.href='status.html'">Status</a> · <a href='changelog.html' style='color:#4F7FEF;text-decoration:none'>Changelog</a> · <a href='faq.html' style='color:#4F7FEF;text-decoration:none'>FAQ</a></li>
+      </ul>
+    </div>
+    <div class="sf-col">
+      <h4>Developers</h4>
+      <ul>
+        <li><a onclick="sfModal('Documentation','Full API reference, agent guides, and SDK docs at docs.mlops.dev.','https://docs.mlops.dev')">Documentation</a></li>
+        <li><a onclick="sfModal('GitHub','Open-source edge agent at github.com/Raghunath2604/Raghunath2604-mlops-dev. Launching at beta.','https://github.com/Raghunath2604/Raghunath2604-mlops-dev')">GitHub</a></li>
+        <li><a onclick="sfModal('Python SDK','pip install mlops-dev — SDK launching at beta. Join the waitlist.','https://pypi.org/project/mlops-dev')">Python SDK</a></li>
+        <li><a onclick="sfModal('REST API','Full REST API reference at docs.mlops.dev/api','api-reference.html')">REST API</a></li>
+        <li><a onclick="sfModal('Community','Join the MLOps.dev community on Discord','https://discord.gg/Tb47N9NaPk')">Community</a></li>
+      </ul>
+    </div>
+    <div class="sf-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a onclick="location.href='about.html'">About</a></li>
+        <li><a onclick="location.href='blog.html'">Blog</a></li>
+        <li><a onclick="sfModal('Careers','Open roles at MLOps.dev — we are hiring edge ML engineers.','https://www.mlops.dev/careers')">Careers</a></li>
+        <li><a onclick="sfContact()">Contact</a></li>
+        <li><a onclick="sfModal('Press','Press kit and media resources for MLOps.dev.','https://www.mlops.dev/press')">Press</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="sf-bot">
+    <span>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR<span class="sf-domain-tag">www.mlops.dev</span></span>
+    <div class="sf-legal">
+      <a onclick="sfModal('Privacy Policy','Privacy policy for www.mlops.dev — coming soon.','https://www.mlops.dev/privacy')">Privacy</a>
+      <a onclick="sfModal('Terms of Service','Terms of service for www.mlops.dev — coming soon.','https://www.mlops.dev/terms')">Terms</a>
+      <a onclick="sfModal('Security','Security policy and responsible disclosure at www.mlops.dev.','https://www.mlops.dev/security')">Security</a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+'use strict';
+const API = 'https://api.mlopsde.me/api';
+const $ = id => document.getElementById(id);
+const lerp = (a,b,t) => a+(b-a)*t;
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+
+/* ── TOAST ── */
+let toastT;
+function toast(msg, type='ok'){
+  clearTimeout(toastT);
+  const t=$('toast');
+  $('ti').textContent = type==='ok'?'✓':type==='er'?'✕':'ℹ';
+  $('tm').textContent = msg;
+  t.className = `toast ${type} show`;
+  toastT = setTimeout(()=>t.classList.remove('show'), 4000);
+}
+
+/* ── API ── */
+async function apiFetch(path, opts){
+  opts = opts||{};
+  const h = {'Content-Type':'application/json'};
+  const tk = localStorage.getItem('np_token');
+  if(tk) h['Authorization'] = 'Bearer '+tk;
+  if(opts.headers) Object.assign(h, opts.headers);
+  try {
+    const res = await fetch(API+path, Object.assign({}, opts, {headers:h}));
+    const d = await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(d.error||'Request failed');
+    return d;
+  } catch(e) {
+    if(e.name==='TypeError') throw new Error('API offline');
+    throw e;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   CINEMATIC DEMO PLAYER
+   4 chapters rendered frame-by-frame on canvas.
+   Each chapter is a scene function that draws to ctx.
+   Timeline: 180 seconds total (3 min), 60fps target.
+══════════════════════════════════════════════════════ */
+const DEMO_DURATION = 180; // seconds
+const CHAPTERS = [
+  {t:0,   label:'Intro',  title:'The edge ML problem'},
+  {t:30,  label:'Deploy', title:'Push to fleet'},
+  {t:90,  label:'Fleet',  title:'Live fleet view'},
+  {t:145, label:'Drift',  title:'Drift alert fires'},
+];
+
+let demoTime = 0;
+let demoPlaying = false;
+let demoRaf = null;
+let demoLastTs = null;
+
+// Canvas
+const dCanvas = $('demo-canvas');
+const dCtx = dCanvas ? dCanvas.getContext('2d') : null;
+let dW, dH, dDpr;
+
+function resizeDemoCanvas(){
+  if(!dCanvas) return;
+  const rect = dCanvas.parentElement.getBoundingClientRect();
+  dDpr = window.devicePixelRatio||1;
+  dW = rect.width; dH = rect.height;
+  dCanvas.width = dW*dDpr;
+  dCanvas.height = dH*dDpr;
+  dCanvas.style.width = dW+'px';
+  dCanvas.style.height = dH+'px';
+  dCtx.resetTransform();
+  dCtx.scale(dDpr, dDpr);
+}
+
+function updateDemoUI(){
+  const pct = demoTime/DEMO_DURATION;
+  $('progress-fill').style.width = (pct*100)+'%';
+  $('progress-handle').style.left = (pct*100)+'%';
+  const m = Math.floor(demoTime/60);
+  const s = Math.floor(demoTime%60);
+  const tm = Math.floor(DEMO_DURATION/60);
+  const ts = DEMO_DURATION%60;
+  $('demo-time').textContent = m+':'+(s<10?'0':'')+s+' / '+tm+':'+(ts<10?'0':'')+ts;
+  // Chapter buttons
+  let cur = 0;
+  CHAPTERS.forEach((c,i)=>{ if(demoTime>=c.t) cur=i; });
+  CHAPTERS.forEach((c,i)=>$('ch-'+i).classList.toggle('active', i===cur));
+  // Play icon
+  const pi = $('play-icon');
+  if(pi){
+    pi.innerHTML = demoPlaying
+      ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+      : '<path d="M5 3l14 9-14 9V3z"/>';
+  }
+}
+
+/* ── Scene rendering ── */
+function easeOut(t){ return 1-Math.pow(1-t,3); }
+function easeInOut(t){ return t<.5?2*t*t:1-((-2*t+2)*(-2*t+2))/2; }
+
+function drawText(txt, x, y, size, weight, color, align){
+  dCtx.font = weight+' '+size+'px "Space Grotesk", sans-serif';
+  dCtx.fillStyle = color;
+  dCtx.textAlign = align||'left';
+  dCtx.fillText(txt, x, y);
+}
+function drawMono(txt, x, y, size, color){
+  dCtx.font = '400 '+size+'px "IBM Plex Mono", monospace';
+  dCtx.fillStyle = color;
+  dCtx.textAlign = 'left';
+  dCtx.fillText(txt, x, y);
+}
+
+// Scene 0: Problem statement (0-30s)
+function sceneIntro(lt){
+  const p = clamp(lt/30, 0, 1);
+  dCtx.clearRect(0,0,dW,dH);
+
+  // Dark bg with grid
+  dCtx.fillStyle = '#060810';
+  dCtx.fillRect(0,0,dW,dH);
+  dCtx.strokeStyle = 'rgba(91,138,240,.05)';
+  dCtx.lineWidth = 1;
+  const gs = 36;
+  for(let x=0;x<dW;x+=gs){dCtx.beginPath();dCtx.moveTo(x,0);dCtx.lineTo(x,dH);dCtx.stroke();}
+  for(let y=0;y<dH;y+=gs){dCtx.beginPath();dCtx.moveTo(0,y);dCtx.lineTo(dW,y);dCtx.stroke();}
+
+  // Broken device icon — animated shake
+  const shk = p>0.3 ? Math.sin(lt*18)*(1-Math.min(1,(lt-9)/3))*5 : 0;
+  const cx = dW*0.38, cy = dH*0.42;
+  const op = easeOut(Math.min(1,lt/1.2));
+
+  // Device rect
+  dCtx.globalAlpha = op;
+  dCtx.strokeStyle = p>0.5?'#FF4560':'#4A5568';
+  dCtx.lineWidth = 1.5;
+  dCtx.beginPath();
+  dCtx.roundRect(cx-50+shk, cy-30, 100, 60, 6);
+  dCtx.stroke();
+
+  // Screen inside
+  dCtx.fillStyle = p>0.5?'rgba(255,69,96,.08)':'rgba(91,138,240,.06)';
+  dCtx.beginPath();
+  dCtx.roundRect(cx-42+shk, cy-22, 84, 44, 3);
+  dCtx.fill();
+
+  // Status line
+  if(p>0.15){
+    const so = easeOut(Math.min(1,(lt-4)/1.5));
+    drawMono(p>0.5?'ERR: drift=71%':'status: OK', cx-38+shk, cy+4, 9, p>0.5?'#FF4560':'#00FFB3');
+    dCtx.globalAlpha = op*so;
+  }
+
+  // Problem text
+  const tp = easeOut(clamp((lt-5)/3, 0, 1));
+  dCtx.globalAlpha = tp;
+  drawText('87% of ML projects', dW*0.55, cy-28, 14, '600', '#E8EDF8', 'left');
+  drawText('fail in production.', dW*0.55, cy-10, 14, '300', '#8896B3', 'left');
+  drawText('Yours doesn\'t have to.', dW*0.55, cy+12, 14, '600', '#5B8AF0', 'left');
+
+  // Arrow pointing right → mlops.dev
+  if(p>0.6){
+    const ap = easeOut(clamp((lt-18)/4, 0, 1));
+    dCtx.globalAlpha = ap;
+    dCtx.strokeStyle = '#5B8AF0';
+    dCtx.lineWidth = 1.5;
+    const ax = dW*0.5;
+    dCtx.beginPath();
+    dCtx.moveTo(ax-20, dH*0.72);
+    dCtx.lineTo(ax+20, dH*0.72);
+    dCtx.moveTo(ax+14, dH*0.72-5);
+    dCtx.lineTo(ax+20, dH*0.72);
+    dCtx.lineTo(ax+14, dH*0.72+5);
+    dCtx.stroke();
+    drawMono('mlops.dev fixes this', ax+28, dH*0.72+4, 10, '#5B8AF0');
+  }
+
+  dCtx.globalAlpha = 1;
+}
+
+// Scene 1: Deploy animation (30-90s)
+function sceneDeploy(lt){
+  dCtx.clearRect(0,0,dW,dH);
+  dCtx.fillStyle='#060810';dCtx.fillRect(0,0,dW,dH);
+
+  // Terminal window
+  const tw=dW*0.82, th=dH*0.75;
+  const tx=(dW-tw)/2, ty=(dH-th)/2;
+  dCtx.fillStyle='#0A0D16';
+  dCtx.strokeStyle='rgba(91,138,240,.25)';
+  dCtx.lineWidth=1;
+  dCtx.beginPath();dCtx.roundRect(tx,ty,tw,th,8);dCtx.fill();dCtx.stroke();
+
+  // Terminal top bar
+  dCtx.fillStyle='#141C32';
+  dCtx.beginPath();dCtx.roundRect(tx,ty,tw,26,{upperLeft:8,upperRight:8,lowerLeft:0,lowerRight:0});
+  dCtx.fill();
+  [[0,'#FF5F57'],[14,'#FEBC2E'],[28,'#28C840']].forEach(([ox,c])=>{
+    dCtx.fillStyle=c;dCtx.beginPath();dCtx.arc(tx+12+ox,ty+13,4,0,Math.PI*2);dCtx.fill();
+  });
+  drawMono('mlops.dev CLI — defect-detector:v4.0',tx+52,ty+17,9,'#4A5568');
+
+  // Animated terminal lines
+  const lines = [
+    {t:0,  type:'cmd', txt:'$ mlops login --token sk-...'},
+    {t:1,  type:'ok',  txt:' Authenticated as you@company.com'},
+    {t:2.5,type:'cmd', txt:'$ mlops model push ./defect.onnx --tag v4.0'},
+    {t:4,  type:'out', txt:' Compressing model (42MB → 7.4MB)…'},
+    {t:6,  type:'out', txt:' Uploading to registry…  ████████░░  80%'},
+    {t:8,  type:'ok',  txt:' defect-detector:v4.0 registered ✓'},
+    {t:10, type:'cmd', txt:'$ mlops deploy defect-detector:v4.0 \\'},
+    {t:11, type:'cmd', txt:'      --strategy canary --pct 10'},
+    {t:13, type:'out', txt:' Targeting canary slice (1 of 6 devices)…'},
+    {t:15, type:'ok',  txt:' jetson-prod-01 → updating… ✓'},
+    {t:17, type:'out', txt:' Health gate: latency 14ms ✓  accuracy 97.2% ✓'},
+    {t:20, type:'ok',  txt:' Canary healthy. Opening to full fleet…'},
+    {t:24, type:'ok',  txt:' 5/6 devices updated to v4.0 ✓'},
+    {t:26, type:'ok',  txt:' Deployment complete in 28s ✓'},
+  ];
+  const colors = {cmd:'#E8EDF8', ok:'#00FFB3', out:'#8896B3', err:'#FF4560'};
+  const lineH = 18;
+  const lx = tx+20, ly = ty+44;
+  lines.forEach((l,i)=>{
+    if(lt<l.t) return;
+    const fade = Math.min(1,(lt-l.t)*4);
+    dCtx.globalAlpha = fade;
+    drawMono(l.txt, lx, ly+i*lineH, 10, colors[l.type]||'#8896B3');
+  });
+
+  // Cursor blink
+  const lastVisible = lines.filter(l=>lt>=l.t);
+  if(lastVisible.length>0 && lt<28){
+    const li = lines.indexOf(lastVisible[lastVisible.length-1]);
+    if(Math.floor(lt*2)%2===0){
+      dCtx.globalAlpha=1;
+      dCtx.fillStyle='#5B8AF0';
+      const cursorY = ly+li*lineH;
+      const m = dCtx.measureText(lines[li].txt);
+      dCtx.fillRect(lx+m.width+2, cursorY-11, 6, 13);
+    }
+  }
+
+  dCtx.globalAlpha=1;
+
+  // Progress bar overlay at bottom of terminal during upload (t 4-8)
+  if(lt>4 && lt<10){
+    const pp = clamp((lt-4)/4, 0, 1);
+    const bw=tw*0.7, bh=6, bx=tx+(tw-bw)/2, by=ty+th-28;
+    dCtx.fillStyle='rgba(255,255,255,.06)';
+    dCtx.beginPath();dCtx.roundRect(bx,by,bw,bh,3);dCtx.fill();
+    dCtx.fillStyle='#5B8AF0';
+    dCtx.beginPath();dCtx.roundRect(bx,by,bw*easeInOut(pp),bh,3);dCtx.fill();
+  }
+}
+
+// Scene 2: Fleet view (90-145s)
+function sceneFleet(lt){
+  dCtx.clearRect(0,0,dW,dH);
+  dCtx.fillStyle='#060810';dCtx.fillRect(0,0,dW,dH);
+
+  const devices=[
+    {name:'jetson-prod-01',status:'online', drift:12, lat:'14ms', v:'v4.0'},
+    {name:'rpi5-fac-07',   status:'updating',drift:48,lat:'28ms', v:'v4.0↑'},
+    {name:'coral-ret-03',  status:'online', drift:8,  lat:'11ms', v:'v4.0'},
+    {name:'arm-wh-11',     status:'offline',drift:Math.min(80,19+lt*0.8),lat:'—',v:'v2.9'},
+    {name:'jetson-p-02',   status:'online', drift:5,  lat:'16ms', v:'v4.0'},
+    {name:'snap-cam-04',   status:'online', drift:19, lat:'22ms', v:'v4.0'},
+  ];
+  const statCol={online:'#00FFB3', offline:'#FF4560', updating:'#F5A623'};
+
+  // Panel
+  const pw=dW*0.9, ph=dH*0.88;
+  const px=(dW-pw)/2, py=(dH-ph)/2;
+  dCtx.fillStyle='#0A0E1A';
+  dCtx.strokeStyle='rgba(91,138,240,.2)';
+  dCtx.lineWidth=1;
+  dCtx.beginPath();dCtx.roundRect(px,py,pw,ph,10);dCtx.fill();dCtx.stroke();
+
+  // Header
+  drawText('Fleet dashboard — mlops.dev', px+16, py+22, 11, '600', '#E8EDF8', 'left');
+  drawMono('LIVE', px+pw-50, py+22, 9, '#00FFB3');
+
+  // KPI row
+  const kpis=[['TOTAL','6'],['ONLINE','4'],['UPDATING','1'],['DRIFT >50%','1']];
+  const kw=(pw-32)/kpis.length;
+  kpis.forEach(([l,v],i)=>{
+    const kx=px+16+i*kw, ky=py+38;
+    dCtx.fillStyle='#141C32';
+    dCtx.beginPath();dCtx.roundRect(kx,ky,kw-8,40,4);dCtx.fill();
+    drawMono(l,kx+8,ky+12,7,'#4A5568');
+    const vc=i===1?'#00FFB3':i===3?'#F5A623':'#E8EDF8';
+    drawText(v,kx+8,ky+30,15,'700',vc,'left');
+  });
+
+  // Table header
+  const tableY=py+100;
+  const cols=[80,70,60,90,60,55];
+  const heads=['DEVICE','STATE','MODEL','DRIFT','LATENCY','VER'];
+  let cx2=px+16;
+  heads.forEach((h,i)=>{
+    drawMono(h,cx2,tableY,7.5,'#4A5568');
+    cx2+=cols[i];
+  });
+
+  // Divider
+  dCtx.strokeStyle='rgba(91,138,240,.12)';
+  dCtx.lineWidth=1;
+  dCtx.beginPath();dCtx.moveTo(px+8,tableY+6);dCtx.lineTo(px+pw-8,tableY+6);dCtx.stroke();
+
+  // Table rows — animate in one by one
+  devices.forEach((d,i)=>{
+    const rp = easeOut(clamp((lt-i*0.8)/1.5, 0, 1));
+    dCtx.globalAlpha=rp;
+    const ry=tableY+18+i*28;
+    if(i%2===0){
+      dCtx.fillStyle='rgba(91,138,240,.025)';
+      dCtx.beginPath();dCtx.roundRect(px+8,ry-13,pw-16,26,3);dCtx.fill();
+    }
+    let cx3=px+16;
+    drawMono(d.name,cx3,ry,8.5,'#8896B3');cx3+=cols[0];
+    // Status pill
+    const sc=statCol[d.status]||'#8896B3';
+    dCtx.fillStyle=sc+'22';
+    dCtx.beginPath();dCtx.roundRect(cx3,ry-10,50,16,3);dCtx.fill();
+    drawMono(d.status,cx3+4,ry,8,sc);cx3+=cols[1];
+    drawMono(d.v,cx3,ry,8,'#8896B3');cx3+=cols[2];
+    // Drift bar
+    const driftColor=d.drift>60?'#FF4560':d.drift>40?'#F5A623':'#00FFB3';
+    const bw2=60;
+    dCtx.fillStyle='rgba(255,255,255,.06)';
+    dCtx.beginPath();dCtx.roundRect(cx3,ry-5,bw2,4,2);dCtx.fill();
+    dCtx.fillStyle=driftColor;
+    dCtx.beginPath();dCtx.roundRect(cx3,ry-5,bw2*d.drift/100,4,2);dCtx.fill();
+    drawMono(d.drift+'%',cx3+bw2+4,ry,8,driftColor);cx3+=cols[3];
+    drawMono(d.lat,cx3,ry,8,'#8896B3');cx3+=cols[4];
+    drawMono(d.v,cx3,ry,8,'#5B8AF0');
+  });
+  dCtx.globalAlpha=1;
+}
+
+// Scene 3: Drift alert fires (145-180s)
+function sceneDrift(lt){
+  dCtx.clearRect(0,0,dW,dH);
+  dCtx.fillStyle='#060810';dCtx.fillRect(0,0,dW,dH);
+
+  // Background flush red when alert fires
+  const alertFired = lt>5;
+  if(alertFired){
+    const alertP = clamp((lt-5)/2, 0, 1)*0.06;
+    dCtx.fillStyle=`rgba(255,69,96,${alertP})`;
+    dCtx.fillRect(0,0,dW,dH);
+  }
+
+  // Drift graph — arm-wh-11 spiking
+  const graphW=dW*0.55, graphH=dH*0.45;
+  const gx=(dW-graphW-80)/2, gy=(dH-graphH)/2-20;
+
+  // Axes
+  dCtx.strokeStyle='rgba(91,138,240,.2)';
+  dCtx.lineWidth=1;
+  dCtx.beginPath();dCtx.moveTo(gx,gy);dCtx.lineTo(gx,gy+graphH);dCtx.lineTo(gx+graphW,gy+graphH);dCtx.stroke();
+  drawMono('Input drift %',gx,gy-12,9,'#4A5568');
+  drawMono('Time →',gx+graphW,gy+graphH+14,9,'#4A5568');
+
+  // Threshold lines
+  [40,70].forEach(pct=>{
+    const ty2=gy+graphH-graphH*(pct/100);
+    dCtx.setLineDash([4,4]);
+    dCtx.strokeStyle=pct===70?'rgba(255,69,96,.4)':'rgba(245,166,35,.35)';
+    dCtx.beginPath();dCtx.moveTo(gx,ty2);dCtx.lineTo(gx+graphW,ty2);dCtx.stroke();
+    dCtx.setLineDash([]);
+    drawMono((pct==='70'||pct===70?'CRITICAL ':'WARN ')+pct+'%',gx+graphW+4,ty2+3,8,pct===70?'#FF4560':'#F5A623');
+  });
+
+  // Draw drift line
+  const pts=20;
+  const baseVals=[12,14,11,13,15,18,22,28,35,42,51,62,71,71,69,66,35,20,15,12];
+  dCtx.beginPath();
+  for(let i=0;i<pts;i++){
+    const progress=Math.min(1, lt/10);
+    const shown=Math.floor(progress*pts);
+    if(i>shown) break;
+    const fx=gx+(i/(pts-1))*graphW;
+    const fy=gy+graphH-graphH*(baseVals[i]/100);
+    if(i===0) dCtx.moveTo(fx,fy); else dCtx.lineTo(fx,fy);
+  }
+  dCtx.strokeStyle='#5B8AF0';
+  dCtx.lineWidth=2;
+  dCtx.stroke();
+
+  // Fill under line
+  const lastShown=Math.floor(Math.min(1,lt/10)*pts);
+  if(lastShown>1){
+    dCtx.beginPath();
+    for(let i=0;i<lastShown;i++){
+      const fx=gx+(i/(pts-1))*graphW;
+      const fy=gy+graphH-graphH*(baseVals[i]/100);
+      if(i===0){dCtx.moveTo(gx,gy+graphH);dCtx.lineTo(fx,fy);}else dCtx.lineTo(fx,fy);
+    }
+    const lastX=gx+((lastShown-1)/(pts-1))*graphW;
+    dCtx.lineTo(lastX,gy+graphH);dCtx.closePath();
+    dCtx.fillStyle='rgba(91,138,240,.07)';dCtx.fill();
+  }
+
+  // Device label
+  drawMono('arm-wh-11',gx,gy+graphH+26,9,'#8896B3');
+
+  // Alert box
+  if(alertFired){
+    const ap=easeOut(clamp((lt-5)/1.5,0,1));
+    dCtx.globalAlpha=ap;
+    const aw=dW*0.38,ah=90;
+    const ax=dW-aw-16, ay=gy;
+    dCtx.fillStyle='rgba(255,69,96,.1)';
+    dCtx.strokeStyle='rgba(255,69,96,0.5)';
+    dCtx.lineWidth=1;
+    dCtx.beginPath();dCtx.roundRect(ax,ay,aw,ah,7);dCtx.fill();dCtx.stroke();
+    drawMono('⚠ DRIFT ALERT',ax+14,ay+20,10,'#FF4560');
+    drawText('arm-wh-11',ax+14,ay+38,12,'600','#E8EDF8','left');
+    drawMono('drift=71% > threshold 70%',ax+14,ay+54,9,'#8896B3');
+    drawMono('Auto-rollback triggered ✓',ax+14,ay+68,9,'#00FFB3');
+    dCtx.globalAlpha=1;
+  }
+}
+
+function renderDemoFrame(){
+  if(!dCtx||!dW) return;
+  const lt = demoTime; // local time in seconds
+  if(lt<30) sceneIntro(lt);
+  else if(lt<90) sceneDeploy(lt-30);
+  else if(lt<145) sceneFleet(lt-90);
+  else sceneDrift(lt-145);
+}
+
+function demoClock(ts){
+  if(!demoPlaying){ demoLastTs=null; return; }
+  if(!demoLastTs) demoLastTs=ts;
+  const dt=(ts-demoLastTs)/1000;
+  demoLastTs=ts;
+  demoTime=Math.min(DEMO_DURATION, demoTime+dt);
+  renderDemoFrame();
+  updateDemoUI();
+  if(demoTime>=DEMO_DURATION){ demoPlaying=false; demoTime=DEMO_DURATION; updateDemoUI(); return; }
+  demoRaf=requestAnimationFrame(demoClock);
+}
+
+function togglePlay(){
+  demoPlaying=!demoPlaying;
+  if(demoPlaying){ demoLastTs=null; demoRaf=requestAnimationFrame(demoClock); }
+  updateDemoUI();
+}
+function gotoChapter(i){
+  demoTime=CHAPTERS[i].t;
+  renderDemoFrame();
+  updateDemoUI();
+  if(!demoPlaying){ renderDemoFrame(); }
+}
+function seekDemo(e){
+  const rect=$('progress-wrap').getBoundingClientRect();
+  const pct=clamp((e.clientX-rect.left)/rect.width,0,1);
+  demoTime=pct*DEMO_DURATION;
+  renderDemoFrame();
+  updateDemoUI();
+}
+
+/* ══════════════════════════════════════════════════════
+   INTERACTIVE DEMO STEPS
+══════════════════════════════════════════════════════ */
+let currentStep=0;
+const TOTAL_STEPS=4;
+
+function gotoStep(n){
+  document.querySelectorAll('.step-panel').forEach((p,i)=>p.classList.toggle('active',i===n||(i===TOTAL_STEPS&&n===TOTAL_STEPS)));
+  document.querySelectorAll('.step-tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  currentStep=n;
+  // Update hero nav
+  for(let i=0;i<TOTAL_STEPS;i++){
+    const nEl=$('nav-n-'+i), sEl=$('nav-step-'+i);
+    if(!nEl||!sEl) continue;
+    if(i<n){ nEl.classList.add('done'); nEl.textContent='✓'; sEl.classList.add('done-step'); sEl.classList.remove('active-step'); }
+    else if(i===n){ nEl.classList.remove('done'); nEl.textContent='0'+(i+1); nEl.classList.add('active'); sEl.classList.add('active-step'); sEl.classList.remove('done-step'); }
+    else { nEl.classList.remove('done','active'); nEl.textContent='0'+(i+1); sEl.classList.remove('active-step','done-step'); }
+  }
+  if(n===3) initDriftChart();
+  window.scrollTo({top:document.getElementById('demo-start').offsetTop-20,behavior:'smooth'});
+}
+
+/* ── STEP 0: Register ── */
+async function runRegister(){
+  const name=$('reg-name').value.trim()||'defect-detector';
+  const ver=$('reg-ver').value.trim()||'v4.0';
+  const fmt=$('reg-fmt').value;
+  const hw=$('reg-hw').value;
+  const term=$('term-0');
+
+  // Animate terminal
+  const newLines=[
+    {type:'cmd', txt:'$ mlops model push ./'+name+'.'+fmt+' --tag '+ver+' --hw '+hw},
+    {type:'out', txt:' Compressing… (42MB → 7.4MB)'},
+    {type:'out', txt:' Uploading to registry…'},
+  ];
+  newLines.forEach(l=>{
+    const d=document.createElement('div');
+    d.className='term-line';
+    d.innerHTML='<span class="term-'+(l.type==='cmd'?'prompt">$':'out">')+'</span><span class="term-cmd"> '+l.txt+'</span>';
+    term.appendChild(d);
+  });
+  term.scrollTop=term.scrollHeight;
+
+  await new Promise(r=>setTimeout(r,1400));
+
+  try{
+    // Try real API first — use deployments endpoint as a proxy
+    await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:name,model_ver:ver})});
+  }catch(_){/* fall through to mock */}
+
+  // Show success regardless (demo experience)
+  const okLine=document.createElement('div');
+  okLine.className='term-line';
+  okLine.innerHTML='<span class="term-ok"> '+name+':'+ver+' registered ✓</span>';
+  term.appendChild(okLine);
+  term.scrollTop=term.scrollHeight;
+
+  // Show result card
+  $('rr-name').textContent=name;
+  $('rr-ver').textContent=ver;
+  $('rr-fmt').textContent=fmt.toUpperCase();
+  $('rr-size').textContent='7.4MB (compressed)';
+  $('reg-result').style.display='block';
+  $('next-0').style.display='inline-flex';
+  $('tab-0').classList.add('done');
+  toast('Model registered: '+name+':'+ver,'ok');
+
+  // Mark tab 0 done
+  const t0=$('tab-0');
+  if(t0) t0.querySelector('.step-tab-n').textContent='✓';
+}
+
+/* ── STEP 1: Install agent ── */
+async function runInstall(){
+  const host=$('agent-host').value.trim()||'jetson-prod-01';
+  const hw=$('agent-hw').value;
+  const term=$('term-1');
+
+  const lines=[
+    {type:'cmd', txt:'$ mlops-agent start --token $MLOPS_TOKEN'},
+    {type:'out', txt:' Connecting to fleet.mlops.dev…'},
+    {type:'out', txt:' Registering device: '+host},
+    {type:'out', txt:' Hardware detected: '+hw},
+    {type:'out', txt:' Pulling latest model from registry…'},
+  ];
+  for(const l of lines){
+    const d=document.createElement('div');
+    d.className='term-line';
+    d.innerHTML='<span class="term-'+(l.type==='cmd'?'prompt">$':'out">')+'</span><span class="term-cmd"> '+l.txt+'</span>';
+    term.appendChild(d);
+    term.scrollTop=term.scrollHeight;
+    await new Promise(r=>setTimeout(r,600));
+  }
+
+  try{
+    const r=await apiFetch('/devices',{method:'POST',body:JSON.stringify({name:host,hardware:hw})});
+    const ok=document.createElement('div');
+    ok.className='term-line';
+    ok.innerHTML='<span class="term-ok"> Agent online — heartbeat active ✓</span>';
+    term.appendChild(ok);
+    term.scrollTop=term.scrollHeight;
+    $('ar-id').textContent=r.data.id.slice(0,8)+'…';
+  }catch(_){
+    const ok=document.createElement('div');
+    ok.className='term-line';
+    ok.innerHTML='<span class="term-ok"> Agent online — heartbeat active ✓ (mock)</span>';
+    term.appendChild(ok);
+    term.scrollTop=term.scrollHeight;
+    $('ar-id').textContent='dev_demo_'+Math.random().toString(36).slice(2,7);
+  }
+
+  $('ar-hw').textContent=hw;
+  $('agent-result').style.display='block';
+  $('next-1').style.display='inline-flex';
+  const t=$('tab-1');if(t)t.querySelector('.step-tab-n').textContent='✓';
+  t.classList.add('done');
+  toast(host+' registered and online','ok');
+
+  // Live heartbeat update
+  setInterval(()=>{
+    const hb=$('ar-hb');
+    if(hb) hb.textContent='just now';
+    setTimeout(()=>{if(hb)hb.textContent='2s ago';},2000);
+    setTimeout(()=>{if(hb)hb.textContent='4s ago';},4000);
+  },5000);
+}
+
+/* ── STEP 2: Deploy ── */
+let deployInterval=null;
+async function runDeploy(){
+  const btn=$('dep-btn');
+  btn.disabled=true;btn.textContent='Deploying…';
+
+  const strat=$('dep-strategy').value;
+  const stratLabel={'canary_10':'Canary 10%','canary_25':'Canary 25%','staged':'Staged','full':'Full fleet'}[strat]||strat;
+  $('dep-strat-lbl').textContent=stratLabel;
+
+  const term=$('term-2');
+  const logLines=[
+    {type:'out', txt:' Initializing '+stratLabel+' rollout…'},
+    {type:'out', txt:' Sending update signal to fleet…'},
+    {type:'cmd', txt:' [1/6] jetson-prod-01 — downloading…'},
+    {type:'ok',  txt:' [1/6] jetson-prod-01 — updated ✓'},
+    {type:'cmd', txt:' [2/6] coral-ret-03 — downloading…'},
+    {type:'ok',  txt:' [2/6] coral-ret-03 — updated ✓'},
+    {type:'out', txt:' Health gate check: latency OK, accuracy OK'},
+    {type:'cmd', txt:' [3/6] jetson-p-02 — downloading…'},
+    {type:'ok',  txt:' [3/6] jetson-p-02 — updated ✓'},
+    {type:'cmd', txt:' [4/6] snap-cam-04 — downloading…'},
+    {type:'ok',  txt:' [4/6] snap-cam-04 — updated ✓'},
+    {type:'cmd', txt:' [5/6] rpi5-fac-07 — downloading…'},
+    {type:'ok',  txt:' [5/6] rpi5-fac-07 — updated ✓'},
+    {type:'info',txt:' [6/6] arm-wh-11 — OFFLINE, queued for sync'},
+    {type:'ok',  txt:' Deployment complete: 5/6 online ✓  (1 queued)'},
+  ];
+
+  $('dep-progress-wrap').style.display='block';
+
+  try{
+    await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:'defect-detector',model_ver:'v4.0'})});
+  }catch(_){}
+
+  let li=0;
+  clearInterval(deployInterval);
+  deployInterval=setInterval(async ()=>{
+    if(li>=logLines.length){ clearInterval(deployInterval); return; }
+    const l=logLines[li];
+    const d=document.createElement('div');
+    d.className='term-line';
+    d.innerHTML='<span class="term-'+l.type+'"> '+l.txt+'</span>';
+    term.appendChild(d);
+    term.scrollTop=term.scrollHeight;
+
+    const pct=Math.min(100,Math.round((li/logLines.length)*100));
+    $('dep-pct').textContent=pct+'%';
+    $('dep-prog-fill').style.width=pct+'%';
+    const cnt=Math.min(5,Math.round((li/logLines.length)*6));
+    $('dep-cnt').textContent=cnt+' / 6';
+
+    li++;
+    if(li>=logLines.length){
+      $('dep-pct').textContent='100%';
+      $('dep-prog-fill').style.width='100%';
+      $('dep-prog-fill').classList.add('green');
+      $('dep-cnt').textContent='5 / 6';
+      $('dep-gate').textContent='passed ✓';
+      $('next-2').style.display='inline-flex';
+      btn.disabled=false;btn.textContent='Launch deployment →';
+      const t=$('tab-2');if(t){t.querySelector('.step-tab-n').textContent='✓';t.classList.add('done');}
+      toast('Deployment complete — 5/6 devices updated','ok');
+    }
+  },800);
+}
+
+/* ── STEP 3: Drift ── */
+const DRIFT_DEVICES=[
+  {name:'jetson-prod-01',drift:12},{name:'rpi5-fac-07',drift:48},
+  {name:'coral-ret-03',drift:8},{name:'arm-wh-11',drift:19},
+  {name:'jetson-p-02',drift:5},{name:'snap-cam-04',drift:19},
+];
+
+function getDriftColor(d){ return d>60?'#FF4560':d>40?'#F5A623':'#00FFB3'; }
+
+function renderDriftChart(){
+  const el=$('drift-chart');if(!el)return;
+  el.innerHTML=DRIFT_DEVICES.map(d=>`
+    <div class="drift-bar-row">
+      <div class="drift-label">${d.name}</div>
+      <div class="drift-bar-bg"><div class="drift-bar-fill" style="width:${d.drift}%;background:${getDriftColor(d.drift)}"></div></div>
+      <div class="drift-pct" style="color:${getDriftColor(d.drift)}">${d.drift}%</div>
+    </div>`).join('');
+}
+
+function initDriftChart(){ renderDriftChart(); }
+
+let driftInterval=null;
+function simulateDrift(){
+  // Spike arm-wh-11 to 75%
+  clearInterval(driftInterval);
+  let v=19;
+  const target=75;
+  driftInterval=setInterval(()=>{
+    v=Math.min(target,v+Math.random()*8+3);
+    const d=DRIFT_DEVICES.find(x=>x.name==='arm-wh-11');
+    if(d) d.drift=Math.round(v);
+    renderDriftChart();
+    if(v>=target){
+      clearInterval(driftInterval);
+      fireDriftAlert('arm-wh-11',Math.round(v));
+    }
+  },200);
+}
+
+function fireDriftAlert(device,pct){
+  $('drift-alert-wrap').style.display='block';
+  $('alert-title').textContent='DRIFT ALERT — '+device;
+  $('alert-body').textContent='Input distribution drift at '+pct+'%. Threshold: 70%. Auto-rollback queued.';
+  // Add terminal line
+  const term=$('term-3');
+  const lines=[
+    {type:'err',txt:' ['+device+'] drift='+pct+'% > threshold 70%'},
+    {type:'err',txt:' ALERT fired → Slack #ml-alerts + PagerDuty'},
+    {type:'info',txt:' Auto-rollback queued…'},
+  ];
+  lines.forEach(l=>{
+    const d2=document.createElement('div');
+    d2.className='term-line';
+    d2.innerHTML='<span class="term-'+l.type+'"> '+l.txt+'</span>';
+    term.appendChild(d2);
+    term.scrollTop=term.scrollHeight;
+  });
+  toast('Drift alert fired for '+device+' ('+pct+'%)','er');
+}
+
+function simulateRollback(){
+  const d=DRIFT_DEVICES.find(x=>x.name==='arm-wh-11');
+  if(!d)return;
+  clearInterval(driftInterval);
+  let v=d.drift;
+  driftInterval=setInterval(()=>{
+    v=Math.max(15,v-Math.random()*6-3);
+    d.drift=Math.round(v);
+    renderDriftChart();
+    const term=$('term-3');
+    if(v<=20){
+      clearInterval(driftInterval);
+      const ok=document.createElement('div');
+      ok.className='term-line';
+      ok.innerHTML='<span class="term-ok"> arm-wh-11 rolled back to v3.2 — drift='+Math.round(v)+'% ✓</span>';
+      term.appendChild(ok);term.scrollTop=term.scrollHeight;
+      $('drift-alert-wrap').style.display='none';
+      toast('Rollback complete — arm-wh-11 restored','ok');
+    }
+  },200);
+}
+
+function doRollback(){ simulateRollback(); }
+function dismissAlert(){ $('drift-alert-wrap').style.display='none'; toast('Alert acknowledged','info'); }
+
+function showCompletion(){
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  $('panel-done').classList.add('active');
+  document.querySelectorAll('.step-tab').forEach(t=>{t.classList.remove('active');t.querySelector('.step-tab-n').textContent='✓';t.classList.add('done');});
+  for(let i=0;i<TOTAL_STEPS;i++){
+    const nEl=$('nav-n-'+i),sEl=$('nav-step-'+i);
+    if(!nEl||!sEl)continue;
+    nEl.classList.add('done');nEl.textContent='✓';sEl.classList.add('done-step');sEl.classList.remove('active-step');
+  }
+  toast('Demo complete! 🎉','ok');
+}
+
+function resetDemo(){
+  currentStep=0;
+  DRIFT_DEVICES.forEach((d,i)=>{d.drift=[12,48,8,19,5,19][i];});
+  gotoStep(0);
+  demoTime=0;demoPlaying=false;
+  renderDemoFrame();updateDemoUI();
+  document.querySelectorAll('.step-tab').forEach(t=>{t.classList.remove('done','active');const n=t.querySelector('.step-tab-n');if(n)n.textContent=t.id.replace('tab-','0'+(parseInt(t.id.replace('tab-',''))+1));});
+  $('tab-0').classList.add('active');
+  $('reg-result').style.display='none';$('next-0').style.display='none';
+  $('agent-result').style.display='none';$('next-1').style.display='none';
+  $('dep-progress-wrap').style.display='none';$('next-2').style.display='none';
+  $('drift-alert-wrap').style.display='none';
+}
+
+/* ── INIT ── */
+window.addEventListener('resize',()=>{resizeDemoCanvas();renderDemoFrame();});
+document.addEventListener('DOMContentLoaded',()=>{
+  resizeDemoCanvas();
+  renderDemoFrame();
+  updateDemoUI();
+  initDriftChart();
+  // Auto-play after 1.5s
+  setTimeout(()=>{ demoPlaying=true; demoLastTs=null; requestAnimationFrame(demoClock); updateDemoUI(); },1500);
+});
+
+/* ── SHARED FOOTER HELPERS ── */
+(function(){
+  // Create modal if not already present
+  if(!document.getElementById('sf-modal')){
+    const ov = document.createElement('div');
+    ov.id = 'sf-modal';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px)';
+    ov.innerHTML = `
+      <div style="background:#0F1628;border:1px solid rgba(91,138,240,.3);border-radius:12px;width:100%;max-width:440px;padding:2rem;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.7)">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#5B8AF0,transparent);border-radius:12px 12px 0 0"></div>
+        <button onclick="document.getElementById('sf-modal').style.display='none';document.body.style.overflow=''"
+          style="position:absolute;top:.9rem;right:.9rem;background:none;border:none;color:#4A5568;font-size:1.2rem;cursor:pointer;padding:.2rem .4rem;border-radius:4px;transition:color .2s;font-family:inherit"
+          onmouseover="this.style.color='#E8EDF8'" onmouseout="this.style.color='#4A5568'">×</button>
+        <div id="sf-modal-title" style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:#E8EDF8;margin-bottom:.45rem"></div>
+        <div id="sf-modal-body" style="font-size:.88rem;color:#8896B3;margin-bottom:1rem;font-weight:300;line-height:1.65"></div>
+        <a id="sf-modal-url" href="#" target="_blank" rel="noopener"
+          style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:#5B8AF0;background:rgba(91,138,240,.07);border:1px solid rgba(91,138,240,.2);border-radius:5px;padding:.45rem .8rem;display:block;margin-bottom:1.1rem;word-break:break-all;text-decoration:none;transition:background .2s"
+          onmouseover="this.style.background='rgba(91,138,240,.14)'" onmouseout="this.style.background='rgba(91,138,240,.07)'"></a>
+        <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+          <button onclick="document.getElementById('sf-modal').style.display='none';document.body.style.overflow=''"
+            style="background:#5B8AF0;border:none;border-radius:6px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:600;padding:.52rem 1.1rem;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.background='#4A73D4'" onmouseout="this.style.background='#5B8AF0'">Close</button>
+          <button id="sf-modal-wl-btn"
+            style="background:none;border:1px solid rgba(91,138,240,.3);border-radius:6px;color:#E8EDF8;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:500;padding:.52rem 1.1rem;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.background='rgba(91,138,240,.1)'" onmouseout="this.style.background='none'">Join waitlist</button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', e=>{ if(e.target===ov){ov.style.display='none';document.body.style.overflow='';} });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ov.style.display='none';document.body.style.overflow='';} });
+    document.getElementById('sf-modal-wl-btn').addEventListener('click',()=>{
+      document.getElementById('sf-modal').style.display='none';
+      document.body.style.overflow='';
+      const wl=document.getElementById('wl');
+      if(wl) wl.scrollIntoView({behavior:'smooth'});
+      else window.location.href='index.html#wl';
+    });
+  }
+
+  window.sfModal = function(title, body, url){
+    document.getElementById('sf-modal-title').textContent = title;
+    document.getElementById('sf-modal-body').textContent = body;
+    const u = document.getElementById('sf-modal-url');
+    u.textContent = url||'https://www.mlops.dev';
+    u.href = url||'https://www.mlops.dev';
+    document.getElementById('sf-modal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.sfNav = function(section){
+    // If section exists on page, scroll to it; else go to index with hash
+    const el = document.getElementById(section);
+    if(el){ el.scrollIntoView({behavior:'smooth'}); }
+    else { window.location.href='index.html#'+section; }
+  };
+
+  window.sfContact = function(){
+    const el = document.getElementById('contact')||document.getElementById('wl');
+    if(el){ el.scrollIntoView({behavior:'smooth'}); }
+    else { window.location.href='index.html#wl'; }
+  };
+})();
+
+</script>
+<script>
+(function(){
+  var p=document.getElementById('scroll-prog-d');
+  if(!p)return;
+  window.addEventListener('scroll',function(){
+    var st=window.scrollY,dh=document.documentElement.scrollHeight-window.innerHeight;
+    p.style.width=(dh>0?(st/dh*100):0)+'%';
+  },{passive:true});
+})();</script>
+<script>
+/* ── COOKIE CONSENT ── */
+(function(){
+  if(localStorage.getItem('cookie_consent')) return;
+  setTimeout(function(){
+    var b = document.getElementById('cookie-banner');
+    if(b) b.classList.add('show');
+  }, 2000);
+})();
+function acceptCookies(){
+  localStorage.setItem('cookie_consent','accepted');
+  var b = document.getElementById('cookie-banner');
+  if(b){b.style.transform='translateY(100%)';}
+  // Enable GA4 if present
+  if(typeof gtag !== 'undefined'){
+    gtag('consent','update',{'analytics_storage':'granted'});
+  }
+}
+function declineCookies(){
+  localStorage.setItem('cookie_consent','declined');
+  var b = document.getElementById('cookie-banner');
+  if(b){b.style.transform='translateY(100%)';}
+}
+</script>
+</body>
+</html>

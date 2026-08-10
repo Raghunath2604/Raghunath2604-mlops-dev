@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="canonical" href="https://www.mlops.dev/faq"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FAQ — MLOps.dev</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%234F7FEF' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300E5A0'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23080C16'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="description" content="Answers to the most common questions about MLOps.dev — edge ML deployment, drift detection, hardware support, pricing, and the open-source agent."/>
+<meta property="og:title" content="FAQ — MLOps.dev"/>
+<meta property="og:description" content="Everything engineers ask before deploying ML models to edge devices with MLOps.dev."/>
+<meta property="og:image" content="https://www.mlops.dev/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:image" content="https://www.mlops.dev/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="author" content="Raghunathareddy GR"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});
+gtag('js',new Date());
+gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03050A;--bg1:#080C16;--bg2:#0D1220;--blue:#4F7FEF;--green:#00E5A0;--snow:#CDD6F0;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12);--border2:rgba(79,127,239,.25)}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-height:1.65;animation:pgIn .4s ease both}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:1px}
+#sp{position:fixed;top:0;left:0;height:1px;z-index:9999;background:linear-gradient(90deg,#4F7FEF,#00E5A0);pointer-events:none;transition:width .05s linear}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(3,5,10,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;font-size:.93rem;font-weight:600;text-decoration:none;color:var(--snow);letter-spacing:-.01em}
+.lm{width:24px;height:24px;border-radius:5px;background:#4F7FEF;display:grid;place-items:center;flex-shrink:0}
+.lm svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo em{font-style:normal;font-family:monospace;color:#4F7FEF;font-size:.8rem}
+.nav-r{display:flex;gap:.6rem}
+.nav-ghost{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:.78rem;padding:.3rem .75rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.nav-ghost:hover{color:var(--snow);border-color:rgba(79,127,239,.5)}
+.nav-cta{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.78rem;font-weight:600;padding:.32rem .9rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.nav-cta:hover{background:#3D65CC}
+/* HERO */
+.hero{padding:90px 5% 3rem;max-width:800px;margin:0 auto;text-align:center}
+.hero-ey{font-family:monospace;font-size:.68rem;color:#4F7FEF;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;display:block}
+.hero-h{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.7rem;line-height:1.1}
+.hero-p{font-size:.97rem;color:var(--muted);line-height:1.72;max-width:520px;margin:0 auto 2rem;font-weight:300}
+/* SEARCH */
+.faq-search-wrap{max-width:520px;margin:0 auto 3rem;position:relative}
+.faq-search{width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:.65rem 1rem .65rem 2.6rem;color:var(--snow);font-size:.9rem;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+.faq-search:focus{border-color:rgba(79,127,239,.6);box-shadow:0 0 0 3px rgba(79,127,239,.1)}
+.faq-search::placeholder{color:var(--dim)}
+.search-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--dim);fill:none;stroke-width:2;stroke-linecap:round;pointer-events:none}
+.search-clear{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--dim);cursor:pointer;font-size:1rem;display:none;transition:color .2s;line-height:1}
+.search-clear:hover{color:var(--snow)}
+/* CATEGORIES */
+.faq-cats{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
+.faq-cat{background:none;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:.78rem;font-weight:500;padding:.3rem .85rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.faq-cat:hover{border-color:var(--border2);color:var(--snow)}
+.faq-cat.active{background:rgba(79,127,239,.1);border-color:rgba(79,127,239,.4);color:#4F7FEF}
+/* FAQ MAIN */
+.faq-main{max-width:800px;margin:0 auto;padding:0 5% 6rem}
+.faq-group{margin-bottom:2.5rem}
+.faq-group-title{font-size:.68rem;font-family:monospace;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px solid var(--border)}
+.faq-item{border:1px solid var(--border);border-radius:8px;margin-bottom:6px;overflow:hidden;transition:border-color .2s}
+.faq-item:hover{border-color:var(--border2)}
+.faq-item.open{border-color:rgba(79,127,239,.3)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;cursor:pointer;gap:1rem;background:none;border:none;width:100%;text-align:left;font-family:'Inter',sans-serif}
+.faq-q-text{font-size:.92rem;font-weight:600;color:var(--snow);line-height:1.4}
+.faq-item.open .faq-q-text{color:#4F7FEF}
+.faq-chevron{width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0;transition:transform .3s}
+.faq-item.open .faq-chevron{transform:rotate(180deg);stroke:#4F7FEF}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.22,1,.36,1)}
+.faq-item.open .faq-a{max-height:400px}
+.faq-a-inner{padding:.2rem 1.2rem 1.2rem;font-size:.88rem;color:var(--muted);line-height:1.72;font-weight:300}
+.faq-a-inner strong{color:#9AAAC8;font-weight:500}
+.faq-a-inner code{font-family:monospace;font-size:.83em;background:rgba(79,127,239,.08);border:1px solid rgba(79,127,239,.15);border-radius:3px;padding:.1em .35em;color:var(--snow)}
+.faq-a-inner a{color:#4F7FEF;text-decoration:none}
+.faq-a-inner a:hover{text-decoration:underline}
+.faq-a-inner ul{margin:.4rem 0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.35rem;list-style:none}
+.faq-a-inner ul li{position:relative;padding-left:.8rem}
+.faq-a-inner ul li::before{content:'→';position:absolute;left:0;color:#4F7FEF;font-family:monospace;font-size:.72rem;top:.12em}
+/* NO RESULTS */
+.faq-empty{text-align:center;padding:3rem;color:var(--muted);font-size:.9rem;display:none}
+.faq-empty strong{color:var(--snow)}
+/* CTA STRIP */
+.faq-cta{background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center;max-width:800px;margin:0 auto 4rem;position:relative;overflow:hidden}
+.faq-cta::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,#00E5A0,transparent)}
+.faq-cta h2{font-size:1.15rem;font-weight:700;color:var(--snow);margin-bottom:.4rem;letter-spacing:-.02em}
+.faq-cta p{font-size:.88rem;color:var(--muted);margin-bottom:1.1rem;font-weight:300}
+.faq-cta-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.btn-p{background:#4F7FEF;border:none;border-radius:7px;color:#fff;font-size:.88rem;font-weight:600;padding:.62rem 1.4rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
+.btn-p:hover{background:#3D65CC;transform:translateY(-1px)}
+.btn-g{background:none;border:1px solid rgba(79,127,239,.25);border-radius:7px;color:var(--snow);font-size:.88rem;font-weight:500;padding:.62rem 1.2rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;text-decoration:none}
+.btn-g:hover{border-color:rgba(79,127,239,.5);background:rgba(79,127,239,.06)}
+/* COOKIE */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;line-height:1.55;max-width:580px;font-weight:300}
+.cb-text a{color:#4F7FEF;text-decoration:none}
+.cb-actions{display:flex;gap:.6rem;flex-shrink:0}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;font-family:monospace;font-size:.7rem;color:var(--dim);background:var(--bg1)}
+footer a{color:#4F7FEF;text-decoration:none}
+.foot-links{display:flex;justify-content:center;gap:1.3rem;margin-top:.5rem;flex-wrap:wrap}
+/* REVEALS */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1)}
+.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}
+@media(max-width:600px){.faq-cats{gap:.4rem}.hero-h{font-size:1.8rem}}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does the edge agent work when the device is offline?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The agent uses a pull-based sync protocol and buffers telemetry locally in SQLite during outages. We have tested 6-hour outages on 2G connections with zero data loss."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which edge devices are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Any Linux device with ARM or x86-64 CPU. Tested on NVIDIA Jetson Orin/Nano/AGX, Raspberry Pi 5/4B/Zero 2W, Google Coral, and custom ARM Cortex-A platforms. Minimum: 256MB RAM, Linux kernel 4.9+."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How small is the edge agent binary?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "7.4MB for the standard ARM64 build. It installs with a single curl command and uses 14MB of RAM at steady state."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the edge agent open-source?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The agent is Apache 2.0 licensed. Source code is at github.com/Raghunath2604/Raghunath2604-mlops-dev."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is included in the free Starter tier?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Starter tier includes up to 10 edge devices, the full open-source agent, basic fleet dashboard, 7-day telemetry history, and community support. It is free forever."
+      }
+    }
+  ]
+}
+</script>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
+</head>
+<body>
+<div id="sp"></div>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="lm"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg></div>
+    MLOps<em>.dev</em>
+  </a>
+  <div class="nav-r">
+    <button class="nav-ghost" onclick="location.href='index.html'">← Home</button>
+    <button class="nav-cta" onclick="location.href='index.html#wl'">Join waitlist</button>
+  </div>
+</nav>
+
+<div class="hero rv">
+  <span class="hero-ey">Frequently asked questions</span>
+  <h1 class="hero-h">Everything engineers ask<br/>before signing up.</h1>
+  <p class="hero-p">12 questions, real answers. If yours isn't here, email <a href="mailto:hello@mlops.dev" style="color:#4F7FEF">hello@mlops.dev</a> — Raghunathareddy GR replies personally.</p>
+</div>
+
+<div class="faq-main">
+  <!-- Search -->
+  <div class="faq-search-wrap rv d1">
+    <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="faq-search" id="faq-search" type="text" placeholder="Search questions…" autocomplete="off" oninput="filterFAQ(this.value)"/>
+    <button class="search-clear" id="search-clear" onclick="clearSearch()">×</button>
+  </div>
+
+  <!-- Category filters -->
+  <div class="faq-cats rv d2" id="faq-cats">
+    <button class="faq-cat active" onclick="filterCat('all',this)">All questions</button>
+    <button class="faq-cat" onclick="filterCat('product',this)">Product</button>
+    <button class="faq-cat" onclick="filterCat('technical',this)">Technical</button>
+    <button class="faq-cat" onclick="filterCat('pricing',this)">Pricing</button>
+    <button class="faq-cat" onclick="filterCat('hardware',this)">Hardware</button>
+    <button class="faq-cat" onclick="filterCat('security',this)">Security</button>
+  </div>
+
+  <!-- FAQ items -->
+  <div id="faq-list" class="rv d3"></div>
+  <div class="faq-empty" id="faq-empty">No questions match <strong id="faq-empty-q"></strong>. <a href="mailto:hello@mlops.dev" style="color:#4F7FEF">Ask us directly →</a></div>
+
+  <!-- CTA -->
+  <div class="faq-cta rv">
+    <h2>Still have questions?</h2>
+    <p>We respond within a few hours. Raghunathareddy GR reads every email.</p>
+    <div class="faq-cta-btns">
+      <a href="mailto:hello@mlops.dev" class="btn-p">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email hello@mlops.dev
+      </a>
+      <a href="index.html#wl" class="btn-g">Join the waitlist →</a>
+      <a href="https://discord.gg/Tb47N9NaPk" target="_blank" rel="noopener" class="btn-g">Discord community →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a></div>
+  <div class="foot-links">
+    <a href="index.html">Home</a><a href="about.html">About</a><a href="blog.html">Blog</a>
+    <a href="careers.html">Careers</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
+  <a href="faq.html">FAQ</a><a href="changelog.html">Changelog</a></div>
+<div style="display:none"><a href="https://pypi.org/project/mlops-dev">pypi</a></div>
+<div style="display:none"><a href="roadmap.html">roadmap</a></div>
+</footer>
+
+<script>
+'use strict';
+var FAQS = [
+  {cat:'product', q:'Does the edge agent work when the device is offline?',
+   a:'Yes — this is the core design principle. The agent uses a pull-based sync protocol: it buffers telemetry locally in SQLite during outages and flushes to the control plane when connectivity resumes. Model deployments queue on the control plane and are pulled by the agent when it reconnects. We have tested 6-hour outages on 2G connections with zero data loss.'},
+  {cat:'technical', q:'How is drift detection computed on the device?',
+   a:'We use KL divergence (Kullback-Leibler) comparing the current input distribution against a baseline captured at deployment time. The computation runs every 100 inferences using a sliding circular buffer and integer arithmetic — optimised to run in under 2ms on a Cortex-A57. When KL divergence exceeds 0.4 (warning) or 0.7 (alert), the agent sends an upstream notification. See our blog post <a href="blog.html">Statistical drift detection without the cloud</a> for the full implementation.'},
+  {cat:'technical', q:'How small is the edge agent binary?',
+   a:'7.4MB for the standard ARM64 build. We got there by: stripping debug symbols (−12MB), using musl libc for a genuinely static binary (−8MB), UPX compression (−14MB), build tags to exclude optional features like Prometheus export (−4MB), and replacing heavy dependencies like logrus with zerolog (−1.6MB). The agent starts in under 200ms and uses 14MB of RAM at steady state.'},
+  {cat:'hardware', q:'Which edge devices are supported?',
+   a:'Any Linux device with an ARM or x86-64 CPU. Tested on: <ul><li>NVIDIA Jetson Orin, Orin NX, AGX Orin, Nano</li><li>Raspberry Pi 5, 4B, 3B+, Zero 2W</li><li>Google Coral Dev Board (Mini and standard)</li><li>Qualcomm Snapdragon-based platforms</li><li>Custom ARM Cortex-A platforms running any Linux distro</li><li>x86-64 industrial PCs running embedded Linux</li></ul>Minimum: 256MB RAM, Linux kernel 4.9+, any storage.'},
+  {cat:'technical', q:'Which ML model formats does MLOps.dev support?',
+   a:'ONNX, TFLite, and TensorRT engines. You can register multiple variants under one deployment — the agent selects the right format based on the hardware fingerprint of each device. A Jetson Orin gets the TensorRT engine, a Google Coral gets the TFLite model, a Raspberry Pi gets the ONNX model. One version number, one deployment event, one health gate, three different files.'},
+  {cat:'technical', q:'How do canary deployments work across a mixed-hardware fleet?',
+   a:'You define stages by hardware class, not just percentage. For example: Stage 1 → 1 Jetson Orin, Stage 2 → all Jetson Orins, Stage 3 → 25% of Jetson Nanos, Stage 4 → full fleet. Between each stage, a health gate measures accuracy delta and latency delta. If accuracy drops more than your threshold (default 3%) or latency increases more than 20%, the rollout halts and devices that already received the update roll back automatically.'},
+  {cat:'product', q:'Is the edge agent open-source?',
+   a:'Yes. The agent is Apache 2.0 licensed. You can audit every line, fork it, modify it, and build on top of it. The source is at <a href="https://https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank" rel="noopener">github.com/Raghunath2604/Raghunath2604-mlops-dev</a>. The cloud control plane and fleet dashboard are proprietary — that is what you are paying for on the Team and Enterprise tiers.'},
+  {cat:'pricing', q:'What is included in the free Starter tier?',
+   a:'The Starter tier includes: up to 10 edge devices, the full open-source agent, the basic fleet dashboard, 7-day telemetry history, and community support. It is free forever — not a 14-day trial. The first 100 teams to join the waitlist get lifetime Starter access regardless of future pricing changes.'},
+  {cat:'pricing', q:'How does the Team tier pricing work?',
+   a:'Team is $499/month for up to 500 devices. That includes canary deployments with health gates, drift detection and alerting, 90-day telemetry history, Slack and PagerDuty integrations, and email support with a 24-hour SLA. There is a 14-day free trial with no credit card required for waitlist members.'},
+  {cat:'security', q:'Where is my data stored and who can access it?',
+   a:'Telemetry and model metadata are stored in a secured database hosted in India. We apply TLS in transit and encryption at rest. Only you can access your fleet data — we do not share it with third parties for any purpose other than providing the service. Enterprise customers can run the entire control plane on-premise; in that case no data leaves your infrastructure.'},
+  {cat:'security', q:'Is MLOps.dev suitable for regulated industries like healthcare or medical devices?',
+   a:'Yes, and we have designed for it. The Enterprise tier includes immutable audit logs (required for FDA SaMD submissions), SSO and RBAC for access control, on-premise deployment (no data leaves your network), and a dedicated ML infrastructure engineer for compliance support. We are working toward ISO 42001 alignment. Email <a href="mailto:hello@mlops.dev">hello@mlops.dev</a> with your compliance requirements before signing up.'},
+  {cat:'product', q:'How long does a deployment take from CLI push to devices running the new model?',
+   a:'Under 90 seconds on a typical connection. The flow: you push the model to the registry (<code>mlops push model.onnx --tag v3.2</code>), the control plane computes a binary delta against the previous version, connected devices pull the delta on their next sync cycle (default 30s), the agent applies and verifies the checksum, activates the model, and reports back. Offline devices receive the update on their next reconnection.'},
+];
+
+var currentCat = 'all';
+var currentSearch = '';
+
+function renderFAQs(items) {
+  var list = document.getElementById('faq-list');
+  var empty = document.getElementById('faq-empty');
+  if (!items.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('faq-empty-q').textContent = '"' + currentSearch + '"';
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = items.map(function(f, i) {
+    return '<div class="faq-item" id="faq-' + i + '">'
+      + '<button class="faq-q" onclick="toggleFAQ(' + i + ')" aria-expanded="false">'
+      + '<span class="faq-q-text">' + f.q + '</span>'
+      + '<svg class="faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>'
+      + '</button>'
+      + '<div class="faq-a"><div class="faq-a-inner">' + f.a + '</div></div>'
+      + '</div>';
+  }).join('');
+}
+
+function getFiltered() {
+  return FAQS.filter(function(f) {
+    var catMatch = currentCat === 'all' || f.cat === currentCat;
+    var searchMatch = !currentSearch ||
+      f.q.toLowerCase().includes(currentSearch.toLowerCase()) ||
+      f.a.toLowerCase().includes(currentSearch.toLowerCase());
+    return catMatch && searchMatch;
+  });
+}
+
+function toggleFAQ(i) {
+  var item = document.getElementById('faq-' + i);
+  var btn = item.querySelector('.faq-q');
+  var wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) {
+    el.classList.remove('open');
+    el.querySelector('.faq-q').setAttribute('aria-expanded','false');
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+    if (typeof gtag !== 'undefined') gtag('event','faq_open',{'question':FAQS[i] ? FAQS[i].q.slice(0,60) : i});
+  }
+}
+
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.faq-cat').forEach(function(b) { b.classList.remove('active'); });
+  el.classList.add('active');
+  renderFAQs(getFiltered());
+}
+
+function filterFAQ(q) {
+  currentSearch = q;
+  var clear = document.getElementById('search-clear');
+  if (clear) clear.style.display = q ? 'block' : 'none';
+  renderFAQs(getFiltered());
+}
+
+function clearSearch() {
+  var inp = document.getElementById('faq-search');
+  if (inp) inp.value = '';
+  filterFAQ('');
+}
+
+// Scroll progress
+(function() {
+  var p = document.getElementById('sp');
+  window.addEventListener('scroll', function() {
+    var s = window.scrollY, d = document.documentElement.scrollHeight - window.innerHeight;
+    if (p) p.style.width = (d > 0 ? s / d * 100 : 0) + '%';
+  }, {passive:true});
+})();
+
+// Reveals
+(function() {
+  var els = document.querySelectorAll('.rv');
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, {threshold:.1});
+  els.forEach(function(el) { io.observe(el); });
+})();
+
+// Cookie consent
+(function() {
+  if (localStorage.getItem('cookie_consent')) return;
+  setTimeout(function() {
+    var b = document.getElementById('cookie-banner');
+    if (b) b.classList.add('show');
+  }, 2200);
+})();
+function acceptCookies() {
+  localStorage.setItem('cookie_consent','accepted');
+  var b = document.getElementById('cookie-banner');
+  if (b) b.style.transform = 'translateY(100%)';
+  if (typeof gtag !== 'undefined') gtag('consent','update',{'analytics_storage':'granted'});
+}
+function declineCookies() {
+  localStorage.setItem('cookie_consent','declined');
+  var b = document.getElementById('cookie-banner');
+  if (b) b.style.transform = 'translateY(100%)';
+}
+
+// Init
+renderFAQs(FAQS);
+// Open first item by default
+setTimeout(function() { toggleFAQ(0); }, 400);
+</script>
+</body>
+</html>

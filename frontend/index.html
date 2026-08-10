@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});
+gtag('js',new Date());
+gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
+</script>
+
+
+
+
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MLOps.dev — Deploy ML models to edge devices at scale</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F7FEF'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://www.mlops.dev"/>
+<meta property="og:title" content="MLOps.dev by Raghunathareddy GR — CEO &amp; Founder — Deploy ML models to edge devices at scale"/>
+<meta property="og:description" content="The only MLOps platform built for the real world. Offline-first sync. Drift detection. Canary deployments. Built for Jetson, Raspberry Pi, Coral."/>
+<meta property="og:image" content="https://www.mlops.dev/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:image" content="https://www.mlops.dev/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="author" content="Raghunathareddy GR"/>
+<meta name="theme-color" content="#4F7FEF"/>
+<link rel="canonical" href="https://www.mlops.dev"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ══ RESET ══ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:#03050A;color:#CDD6F0;font-family:'Inter',sans-serif;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:#4F7FEF;border-radius:1px}
+:focus-visible{outline:2px solid #4F7FEF;outline-offset:3px;border-radius:3px}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+::selection{background:rgba(79,127,239,.3)}
+
+/* ══ SCROLL PROGRESS ══ */
+#sp{position:fixed;top:0;left:0;height:1px;z-index:9999;
+  background:linear-gradient(90deg,#4F7FEF,#00E5A0);
+  pointer-events:none;transition:width .05s linear}
+
+/* ══ CURSOR SPOTLIGHT ══ */
+#spotlight{
+  position:fixed;pointer-events:none;z-index:1;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,127,239,.08) 0%,transparent 70%);
+  transform:translate(-50%,-50%);
+  transition:opacity .3s;
+}
+
+/* ══ CUSTOM CURSOR ══ */
+#cur-dot{position:fixed;pointer-events:none;z-index:9998;
+  width:5px;height:5px;background:#4F7FEF;border-radius:50%;
+  transform:translate(-50%,-50%);transition:transform .05s}
+#cur-ring{position:fixed;pointer-events:none;z-index:9997;
+  width:28px;height:28px;border:1px solid rgba(79,127,239,.5);
+  border-radius:50%;transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,border-color .2s}
+.is-hovering #cur-ring{width:44px;height:44px;border-color:rgba(79,127,239,.9)}
+.is-clicking #cur-ring{width:20px;height:20px;border-color:rgba(0,229,160,.9)}
+@media(pointer:coarse){#cur-dot,#cur-ring{display:none}}
+
+/* ══ NAV ══ */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:800;
+  height:52px;display:flex;align-items:center;
+  padding:0 clamp(1.5rem,4%,3rem);gap:2rem;
+  transition:background .3s,border-color .3s,backdrop-filter .3s;
+  border-bottom:1px solid transparent;
+}
+#nav.scrolled{
+  background:rgba(3,5,10,.85);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-color:rgba(255,255,255,.06);
+}
+.nav-logo{display:flex;align-items:center;gap:8px;font-size:.95rem;font-weight:600;letter-spacing:-.02em;color:#CDD6F0;cursor:pointer;flex-shrink:0}
+.nav-logo-mark{width:24px;height:24px;flex-shrink:0}
+.nav-logo-mark svg{width:100%;height:100%}
+.nav-logo em{font-style:normal;font-family:'Courier New',monospace;color:#4F7FEF;font-size:.8rem}
+.nav-links{display:flex;align-items:center;gap:1.6rem;margin-left:1.5rem}
+.nav-links a{font-size:.82rem;color:#5A6A8A;font-weight:500;cursor:pointer;transition:color .15s}
+.nav-links a:hover{color:#CDD6F0}
+.nav-right{display:flex;align-items:center;gap:.6rem;margin-left:auto}
+.nav-tag{font-family:'Courier New',monospace;font-size:.62rem;color:#00E5A0;border:1px solid rgba(0,229,160,.25);border-radius:999px;padding:.18rem .6rem;letter-spacing:.03em;cursor:default}
+.nav-ghost{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#CDD6F0;font-size:.8rem;font-weight:500;padding:.32rem .8rem;transition:all .15s}
+.nav-ghost:hover{border-color:rgba(79,127,239,.5);background:rgba(79,127,239,.06)}
+.nav-cta{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.8rem;font-weight:600;padding:.35rem .9rem;transition:all .2s;position:relative;overflow:hidden}
+.nav-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .2s}
+.nav-cta:hover{background:#3D65CC;transform:translateY(-1px)}
+.nav-cta:hover::before{opacity:1}
+.nav-mob-btn{display:none;background:none;border:none;flex-direction:column;gap:4px;padding:4px}
+.nav-mob-btn span{width:18px;height:1px;background:#CDD6F0;display:block;transition:.25s}
+
+/* ══ HERO ══ */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+/* Mesh gradient background */
+.hero-mesh{
+  position:absolute;inset:0;z-index:0;overflow:hidden;
+}
+.hero-mesh canvas{position:absolute;inset:0;width:100%;height:100%}
+/* Grid overlay */
+.hero-grid{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(79,127,239,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(79,127,239,.04) 1px,transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 0%,transparent 100%);
+}
+/* Glow orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.orb-1{width:700px;height:700px;background:rgba(79,127,239,.12);top:-200px;left:-100px;animation:orbFloat1 18s ease-in-out infinite}
+.orb-2{width:500px;height:500px;background:rgba(0,229,160,.08);bottom:-100px;right:-100px;animation:orbFloat2 14s ease-in-out infinite}
+.orb-3{width:300px;height:300px;background:rgba(79,127,239,.06);top:30%;right:20%;animation:orbFloat3 22s ease-in-out infinite}
+@keyframes orbFloat1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-40px) scale(1.08)}66%{transform:translate(-30px,60px) scale(.95)}}
+@keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,-60px)}}
+@keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,40px)}}
+
+.hero-content{
+  position:relative;z-index:10;
+  width:100%;max-width:1280px;margin:0 auto;
+  padding:100px clamp(1.5rem,5%,4rem) 80px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(2rem,5vw,6rem);align-items:center;
+}
+
+/* ── LEFT: HEADLINE ── */
+.hero-left{}
+/* Live badge */
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.72rem;font-family:'Courier New',monospace;
+  color:#00E5A0;letter-spacing:.06em;
+  background:rgba(0,229,160,.06);
+  border:1px solid rgba(0,229,160,.2);
+  border-radius:999px;padding:.28rem .8rem;
+  margin-bottom:1.6rem;cursor:default;
+}
+.badge-dot{width:5px;height:5px;background:#00E5A0;border-radius:50%;
+  box-shadow:0 0 8px #00E5A0;animation:bdot 2s infinite}
+@keyframes bdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.5)}}
+
+/* Headline */
+.hero-h{
+  font-size:clamp(2.6rem,5.5vw,5rem);
+  font-weight:700;
+  letter-spacing:-.04em;
+  line-height:1.0;
+  color:#E8EDF8;
+  margin-bottom:1.4rem;
+}
+.hero-h .word{display:inline-block;overflow:hidden;vertical-align:bottom}
+.hero-h .char{display:inline-block;transform:translateY(110%);animation:charIn .6s cubic-bezier(.22,1,.36,1) both}
+@keyframes charIn{to{transform:translateY(0)}}
+.hero-h .line2{
+  display:block;
+  background:linear-gradient(135deg,#4F7FEF 0%,#00E5A0 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-h .line3{display:block;color:#2A3450}
+
+/* Sub */
+.hero-sub{
+  font-size:1.05rem;color:#5A6A8A;line-height:1.72;
+  max-width:420px;margin-bottom:2.2rem;font-weight:400;
+}
+.hero-sub strong{color:#9AAAC8;font-weight:500}
+
+/* CTA row */
+.hero-ctas{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:3rem}
+.cta-primary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:#4F7FEF;border:none;border-radius:8px;color:#fff;
+  font-size:.9rem;font-weight:600;padding:.72rem 1.6rem;
+  transition:all .2s;position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(79,127,239,.5),0 4px 20px rgba(79,127,239,.3);
+}
+.cta-primary::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.18),transparent);
+}
+.cta-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(79,127,239,.8),0 8px 32px rgba(79,127,239,.45)}
+.cta-ghost{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;color:#9AAAC8;font-size:.9rem;font-weight:500;
+  padding:.72rem 1.4rem;transition:all .2s;
+}
+.cta-ghost:hover{background:rgba(255,255,255,.07);border-color:rgba(79,127,239,.4);color:#CDD6F0}
+
+/* Metrics strip */
+.hero-metrics{display:flex;gap:0;border:1px solid rgba(255,255,255,.06);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.02)}
+.hmet{flex:1;padding:.9rem 1.1rem;border-right:1px solid rgba(255,255,255,.06);position:relative}
+.hmet:last-child{border-right:none}
+.hmet::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(79,127,239,.3),transparent);opacity:0;transition:opacity .3s}
+.hmet:hover::before{opacity:1}
+.hmet-val{font-size:1.4rem;font-weight:700;color:#E8EDF8;letter-spacing:-.03em;line-height:1;font-family:'Courier New',monospace}
+.hmet-val.live{color:#00E5A0}
+.hmet-lbl{font-size:.68rem;color:#5A6A8A;margin-top:.25rem;letter-spacing:.02em}
+
+/* ── RIGHT: LIVE FLEET TERMINAL ── */
+.hero-right{position:relative}
+.fleet-window{
+  background:#080C16;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px rgba(79,127,239,.08),
+    0 32px 80px rgba(0,0,0,.6),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  position:relative;
+}
+.fleet-window::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(79,127,239,.6),rgba(0,229,160,.4),transparent);
+  z-index:2;
+}
+/* Window chrome */
+.fw-chrome{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.7rem 1rem;
+  background:rgba(255,255,255,.03);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.fw-dot{width:10px;height:10px;border-radius:50%}
+.fw-title{font-size:.68rem;font-family:'Courier New',monospace;color:#2A3450;flex:1;margin-left:.4rem}
+.fw-live{display:flex;align-items:center;gap:.35rem;font-size:.62rem;font-family:'Courier New',monospace;color:#00E5A0}
+.fw-live-dot{width:4px;height:4px;background:#00E5A0;border-radius:50%;box-shadow:0 0 6px #00E5A0;animation:bdot 1.5s infinite}
+
+/* KPI bar */
+.fw-kpis{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(255,255,255,.05)}
+.fw-kpi{padding:.65rem .75rem;border-right:1px solid rgba(255,255,255,.04)}
+.fw-kpi:last-child{border-right:none}
+.fw-kpi-l{font-size:.56rem;font-family:'Courier New',monospace;color:#2A3450;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.2rem}
+.fw-kpi-v{font-size:1.1rem;font-weight:700;font-family:'Courier New',monospace;color:#CDD6F0;line-height:1}
+.fw-kpi-v.g{color:#00E5A0}.fw-kpi-v.r{color:#E84040}.fw-kpi-v.a{color:#E8A020}
+
+/* Device rows */
+.fw-devices{padding:.5rem 0}
+.fw-device{
+  display:grid;
+  grid-template-columns:10px 130px 65px 75px 1fr 54px;
+  gap:.5rem;align-items:center;
+  padding:.45rem .85rem;
+  transition:background .15s;
+  cursor:default;
+}
+.fw-device:hover{background:rgba(255,255,255,.025)}
+.fw-dev-indicator{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ind-on{background:#00E5A0;box-shadow:0 0 6px #00E5A0;animation:bdot 2s infinite}
+.ind-off{background:#E84040}
+.ind-up{background:#E8A020;animation:bdot 1s infinite}
+.fw-dev-name{font-size:.7rem;font-family:'Courier New',monospace;color:#9AAAC8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fw-dev-status{font-size:.62rem;font-family:'Courier New',monospace;color:#5A6A8A}
+.fw-dev-status.s-on{color:#00E5A0}.fw-dev-status.s-off{color:#E84040}.fw-dev-status.s-up{color:#E8A020}
+.fw-dev-model{font-size:.62rem;font-family:'Courier New',monospace;color:#2A3450}
+.fw-dev-drift{display:flex;align-items:center;gap:.4rem}
+.drift-track{flex:1;height:2px;background:rgba(255,255,255,.06);border-radius:1px;overflow:hidden}
+.drift-fill{height:100%;border-radius:1px;transition:width 1.5s ease}
+.df-ok{background:#00E5A0}.df-warn{background:#E8A020}.df-bad{background:#E84040}
+.drift-num{font-size:.58rem;font-family:'Courier New',monospace;color:#5A6A8A;width:26px;text-align:right;flex-shrink:0}
+.fw-dev-lat{font-size:.62rem;font-family:'Courier New',monospace;color:#2A3450;text-align:right}
+
+/* Log stream */
+.fw-log{
+  border-top:1px solid rgba(255,255,255,.05);
+  padding:.6rem .85rem;
+  height:88px;overflow:hidden;position:relative;
+}
+.fw-log::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:20px;
+  background:linear-gradient(to bottom,#080C16,transparent);z-index:1;pointer-events:none;
+}
+.log-line{
+  font-size:.62rem;font-family:'Courier New',monospace;
+  color:#2A3450;line-height:1.9;display:flex;gap:.5rem;
+  animation:logSlide .3s ease;
+}
+@keyframes logSlide{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.ll-time{color:#1A2236;flex-shrink:0;user-select:none}
+.ll-ok{color:#00E5A0}.ll-warn{color:#E8A020}.ll-err{color:#E84040}.ll-info{color:#4F7FEF}
+.ll-dim{color:#2A3450}
+
+/* Floating decoration */
+.fleet-deco{position:absolute;top:-24px;right:-24px;width:100px;height:100px;border-radius:50%;border:1px solid rgba(79,127,239,.1);pointer-events:none}
+.fleet-deco-2{position:absolute;bottom:-16px;left:-16px;width:64px;height:64px;border-radius:50%;border:1px solid rgba(0,229,160,.08);pointer-events:none}
+
+/* ══ TICKER ══ */
+.ticker-wrap{
+  position:relative;z-index:10;
+  border-top:1px solid rgba(255,255,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.02);
+  padding:.6rem 0;overflow:hidden;
+}
+.ticker-inner{display:flex;gap:2.5rem;animation:tick 30s linear infinite;white-space:nowrap}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick-item{display:flex;align-items:center;gap:.5rem;font-size:.7rem;font-family:'Courier New',monospace;color:#2A3450;flex-shrink:0}
+.tick-item .val{color:#5A6A8A}.tick-item .up{color:#00E5A0}
+.tick-fade-l,.tick-fade-r{position:absolute;top:0;bottom:0;width:60px;z-index:1;pointer-events:none}
+.tick-fade-l{left:0;background:linear-gradient(90deg,rgba(3,5,10,1),transparent)}
+.tick-fade-r{right:0;background:linear-gradient(-90deg,rgba(3,5,10,1),transparent)}
+
+/* ══ SECTION BASE ══ */
+.sec{padding:clamp(4rem,8vw,7rem) clamp(1.5rem,5%,4rem);max-width:1280px;margin:0 auto}
+.sec-ey{font-size:.68rem;font-family:'Courier New',monospace;color:#4F7FEF;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem;display:block}
+.sec-h{font-size:clamp(1.9rem,3.2vw,2.8rem);font-weight:700;letter-spacing:-.04em;line-height:1.1;color:#E8EDF8;margin-bottom:.8rem}
+.sec-p{font-size:.97rem;color:#5A6A8A;line-height:1.75;max-width:500px;font-weight:400}
+
+/* ══ PROBLEM — SPLIT EDITORIAL ══ */
+.prob-wrap{
+  border-top:1px solid rgba(255,255,255,.05);
+  background:#080C16;
+}
+.prob-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;max-width:1280px;margin:0 auto;
+}
+.prob-left{
+  padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5%,4rem);
+  border-right:1px solid rgba(255,255,255,.05);
+}
+.prob-stmt{
+  font-size:clamp(1.6rem,2.8vw,2.4rem);
+  font-weight:700;letter-spacing:-.04em;line-height:1.2;
+  color:#E8EDF8;
+}
+.prob-stmt .st{
+  position:relative;color:#2A3450;
+  display:inline;
+}
+.prob-stmt .st::after{
+  content:'';position:absolute;left:0;right:0;
+  top:50%;height:1px;background:#E84040;
+  transform:scaleX(0);transform-origin:left;
+  animation:strikeIn 1s cubic-bezier(.22,1,.36,1) 1.5s both;
+}
+@keyframes strikeIn{to{transform:scaleX(1)}}
+.prob-stmt .fix{color:#4F7FEF}
+.prob-right{padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5%,4rem)}
+.prob-cards{display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,.04)}
+.prob-card{background:#080C16;padding:1.3rem 1.5rem;transition:background .2s;cursor:default}
+.prob-card:hover{background:#0D1220}
+.prob-card-n{font-size:.6rem;font-family:'Courier New',monospace;color:#2A3450;margin-bottom:.4rem;letter-spacing:.06em}
+.prob-card-t{font-size:.92rem;font-weight:600;color:#9AAAC8;margin-bottom:.3rem}
+.prob-card-d{font-size:.83rem;color:#5A6A8A;line-height:1.6;font-weight:300}
+
+/* ══ PLATFORM — SPEC SHEET ══ */
+.spec-wrap{border-top:1px solid rgba(255,255,255,.05)}
+.spec-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(1.5rem,3vw,2.5rem) clamp(1.5rem,5%,4rem);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  max-width:1280px;margin:0 auto;
+}
+.spec-badge-live{
+  font-size:.65rem;font-family:'Courier New',monospace;color:#00E5A0;
+  border:1px solid rgba(0,229,160,.2);border-radius:4px;
+  padding:.28rem .65rem;letter-spacing:.04em;
+  display:flex;align-items:center;gap:.4rem;
+}
+.spec-numbers{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  max-width:1280px;margin:0 auto;
+}
+.spec-num{
+  padding:clamp(1.5rem,3vw,2.5rem) clamp(1rem,2.5vw,2rem);
+  border-right:1px solid rgba(255,255,255,.05);
+  transition:background .2s;cursor:default;
+}
+.spec-num:last-child{border-right:none}
+.spec-num:hover{background:rgba(79,127,239,.03)}
+.spec-num-l{font-size:.6rem;font-family:'Courier New',monospace;color:#2A3450;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
+.spec-num-v{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;color:#E8EDF8;letter-spacing:-.04em;line-height:1;font-family:'Courier New',monospace}
+.spec-num-v .unit{font-size:1rem;color:#5A6A8A;font-weight:400}
+.spec-num-s{font-size:.73rem;color:#5A6A8A;margin-top:.3rem;font-weight:300}
+.spec-features{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid rgba(255,255,255,.04);
+  max-width:1280px;margin:0 auto;
+}
+.spec-feat{
+  padding:clamp(1.5rem,3vw,2rem) clamp(1rem,2.5vw,2rem);
+  border-right:1px solid rgba(255,255,255,.04);
+  display:flex;gap:1rem;align-items:flex-start;
+  transition:background .2s;cursor:default;
+}
+.spec-feat:last-child{border-right:none}
+.spec-feat:hover{background:rgba(79,127,239,.025)}
+.sf-icon{
+  width:34px;height:34px;border-radius:7px;flex-shrink:0;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(79,127,239,.07);
+  display:grid;place-items:center;margin-top:.1rem;
+}
+.sf-icon svg{width:15px;height:15px;stroke:#4F7FEF;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sf-title{font-size:.88rem;font-weight:600;color:#CDD6F0;margin-bottom:.3rem}
+.sf-desc{font-size:.8rem;color:#5A6A8A;line-height:1.62;font-weight:300}
+
+/* ══ HOW IT WORKS ══ */
+.how-wrap{background:#080C16;border-top:1px solid rgba(255,255,255,.05)}
+.how-steps{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:rgba(255,255,255,.04);
+  margin-top:clamp(2rem,4vw,3.5rem);
+}
+.how-step{
+  background:#080C16;padding:clamp(1.5rem,3vw,2rem);
+  position:relative;overflow:hidden;transition:background .2s;
+}
+.how-step::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:transparent;transition:background .3s;
+}
+.how-step:hover{background:#0D1220}
+.how-step:hover::before{background:var(--sig)}
+.how-step-n{
+  font-size:2rem;font-weight:700;font-family:'Courier New',monospace;
+  color:rgba(79,127,239,.12);line-height:1;margin-bottom:1rem;
+  letter-spacing:-.04em;
+}
+.how-step-t{font-size:.92rem;font-weight:600;color:#9AAAC8;margin-bottom:.4rem}
+.how-step-d{font-size:.8rem;color:#5A6A8A;line-height:1.6;font-weight:300}
+.how-step-code{
+  margin-top:.9rem;font-size:.66rem;font-family:'Courier New',monospace;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:5px;padding:.5rem .7rem;color:#00E5A0;line-height:1.8;
+}
+.how-step-code .cmd{color:#2A3450}
+
+/* ══ SOCIAL PROOF ══ */
+.testimonials-wrap{border-top:1px solid rgba(255,255,255,.05)}
+.tcard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:clamp(2rem,4vw,3.5rem)}
+.tcard{background:#03050A;padding:clamp(1.5rem,3vw,2rem);transition:background .2s;cursor:default}
+.tcard:hover{background:#080C16}
+.tcard-q{
+  font-size:.9rem;color:#9AAAC8;line-height:1.7;
+  margin-bottom:1.3rem;font-weight:400;position:relative;
+  padding-left:1.2rem;
+}
+.tcard-q::before{
+  content:'"';position:absolute;left:0;top:-.15em;
+  font-size:1.4rem;color:rgba(79,127,239,.5);line-height:1;
+}
+.tcard-author{display:flex;align-items:center;gap:.7rem}
+.tcard-av{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(79,127,239,.12);border:1px solid rgba(79,127,239,.2);
+  display:grid;place-items:center;
+  font-size:.7rem;font-weight:700;color:#4F7FEF;flex-shrink:0;
+}
+.tcard-name{font-size:.82rem;font-weight:600;color:#9AAAC8}
+.tcard-role{font-size:.72rem;color:#5A6A8A;margin-top:.05rem}
+
+/* ══ PRICING ══ */
+.pricing-wrap{background:#080C16;border-top:1px solid rgba(255,255,255,.05)}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:clamp(2rem,4vw,3.5rem)}
+.plan{background:#080C16;padding:clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .2s}
+.plan.featured{background:#0D1220}
+.plan.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,transparent)}
+.plan-ey{font-size:.62rem;font-family:'Courier New',monospace;color:#4F7FEF;letter-spacing:.08em;margin-bottom:.8rem;display:block}
+.plan-name{font-size:.95rem;font-weight:700;color:#E8EDF8;margin-bottom:.3rem}
+.plan-desc{font-size:.8rem;color:#5A6A8A;margin-bottom:1.4rem;font-weight:300;line-height:1.6}
+.plan-price{font-size:2.2rem;font-weight:700;color:#E8EDF8;letter-spacing:-.04em;line-height:1;font-family:'Courier New',monospace}
+.plan-price sup{font-size:1rem}
+.plan-per{font-size:.72rem;color:#5A6A8A;margin-bottom:1.4rem;margin-top:.15rem}
+.plan-div{height:1px;background:rgba(255,255,255,.05);margin-bottom:1.3rem}
+.plan-features{list-style:none;flex:1;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.6rem}
+.plan-features li{display:flex;gap:.5rem;font-size:.8rem;color:#5A6A8A;line-height:1.5;font-weight:300}
+.plan-features li::before{content:'—';color:#4F7FEF;font-family:'Courier New',monospace;font-size:.7rem;flex-shrink:0;margin-top:.12rem}
+.plan-btn{
+  width:100%;padding:.6rem;border-radius:6px;font-size:.84rem;font-weight:600;
+  cursor:pointer;transition:all .2s;border:1px solid;text-align:center;
+}
+.plan-btn-solid{background:#4F7FEF;border-color:#4F7FEF;color:#fff}
+.plan-btn-solid:hover{background:#3D65CC}
+.plan-btn-ghost{background:none;border-color:rgba(255,255,255,.1);color:#9AAAC8}
+.plan-btn-ghost:hover{border-color:rgba(79,127,239,.4);color:#CDD6F0}
+
+/* ══ WAITLIST ══ */
+.wl-wrap{border-top:1px solid rgba(255,255,255,.05)}
+.wl-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(3rem,6vw,6rem);align-items:start;
+}
+.wl-proof{display:flex;flex-direction:column;gap:.7rem;margin-top:1.8rem}
+.wl-proof-item{display:flex;align-items:center;gap:.7rem;font-size:.83rem;color:#5A6A8A}
+.wl-proof-icon{
+  width:18px;height:18px;border-radius:50%;flex-shrink:0;
+  background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);
+  display:grid;place-items:center;
+}
+.wl-proof-icon svg{width:9px;height:9px;stroke:#00E5A0;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.wl-form-box{
+  background:#080C16;border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:clamp(1.5rem,3vw,2rem);
+  position:relative;overflow:hidden;
+}
+.wl-form-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(79,127,239,.5),transparent);
+}
+.fg{margin-bottom:.8rem}
+.fg label{display:block;font-size:.75rem;font-weight:500;color:#5A6A8A;margin-bottom:.3rem;letter-spacing:.02em}
+.fg input,.fg select,.fg textarea{
+  width:100%;background:#0D1220;
+  border:1px solid rgba(255,255,255,.07);border-radius:6px;
+  padding:.55rem .8rem;color:#CDD6F0;font-size:.85rem;
+  outline:none;transition:border-color .15s,box-shadow .15s;font-family:inherit;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  border-color:rgba(79,127,239,.5);
+  box-shadow:0 0 0 3px rgba(79,127,239,.1);
+}
+.fg input::placeholder{color:#2A3450}
+.fg select option{background:#0D1220}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.wl-submit{
+  width:100%;background:#4F7FEF;border:none;border-radius:7px;color:#fff;
+  font-size:.88rem;font-weight:600;padding:.68rem;cursor:pointer;
+  transition:all .2s;margin-top:.3rem;
+  box-shadow:0 0 0 1px rgba(79,127,239,.4),0 4px 16px rgba(79,127,239,.25);
+}
+.wl-submit:hover{background:#3D65CC;transform:translateY(-1px)}
+.wl-submit:disabled{opacity:.5;cursor:default;transform:none}
+.fmsg{font-size:.78rem;margin-top:.5rem;border-radius:5px;padding:.4rem .7rem;display:none}
+.fmsg.ok{background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.2);color:#00E5A0;display:block}
+.fmsg.er{background:rgba(232,64,64,.07);border:1px solid rgba(232,64,64,.2);color:#E84040;display:block}
+.wl-count{text-align:center;font-size:.72rem;color:#2A3450;margin-top:.75rem;font-family:'Courier New',monospace}
+.wl-count strong{color:#5A6A8A}
+
+/* ══ CTA STRIP ══ */
+.cta-strip{
+  border-top:1px solid rgba(255,255,255,.05);
+  background:#4F7FEF;
+  padding:clamp(3.5rem,7vw,5.5rem) clamp(1.5rem,5%,4rem);
+  text-align:center;position:relative;overflow:hidden;
+}
+.cta-strip::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 120% at 50% 50%,rgba(255,255,255,.06),transparent);
+}
+.cta-strip-bg-text{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:clamp(5rem,15vw,12rem);font-weight:700;
+  color:rgba(255,255,255,.06);letter-spacing:-.05em;
+  white-space:nowrap;pointer-events:none;user-select:none;
+  font-family:'Courier New',monospace;
+}
+.cta-strip-inner{position:relative;z-index:1}
+.cta-strip-h{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;letter-spacing:-.04em;color:#fff;margin-bottom:.5rem}
+.cta-strip-p{font-size:.97rem;color:rgba(255,255,255,.7);margin-bottom:2rem;font-weight:300}
+.cta-strip-btns{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap}
+.cta-btn-white{background:#fff;border:none;border-radius:8px;color:#4F7FEF;font-size:.92rem;font-weight:700;padding:.72rem 1.8rem;cursor:pointer;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem}
+.cta-btn-white:hover{background:rgba(255,255,255,.92);transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,0,0,.25)}
+.cta-btn-outline{background:none;border:1.5px solid rgba(255,255,255,.45);border-radius:8px;color:#fff;font-size:.92rem;font-weight:500;padding:.72rem 1.6rem;cursor:pointer;transition:all .25s}
+.cta-btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+
+/* ══ FOOTER ══ */
+.footer{padding:clamp(2.5rem,5vw,3.5rem) clamp(1.5rem,5%,4rem) 1.8rem;background:#080C16;border-top:1px solid rgba(255,255,255,.05)}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;max-width:1280px;margin:0 auto 2.5rem}
+.footer-brand{}.footer-brand-logo{display:flex;align-items:center;gap:7px;font-size:.95rem;font-weight:600;color:#CDD6F0;margin-bottom:.7rem;cursor:pointer;letter-spacing:-.01em}
+.footer-brand-logo em{font-style:normal;font-family:'Courier New',monospace;color:#4F7FEF;font-size:.8rem}
+.footer-brand-p{font-size:.78rem;color:#2A3450;line-height:1.65;max-width:210px;font-weight:300}
+.footer-brand-url{font-size:.68rem;font-family:'Courier New',monospace;color:#4F7FEF;opacity:.5;margin-top:.5rem;display:block;text-decoration:none;transition:opacity .2s}
+.footer-brand-url:hover{opacity:.8}
+.footer-col h4{font-size:.75rem;font-weight:600;color:#5A6A8A;margin-bottom:.9rem;letter-spacing:.04em}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.footer-col li a{font-size:.78rem;color:#2A3450;cursor:pointer;transition:color .15s;background:none;border:none;padding:0;font-family:inherit;text-align:left;display:block}
+.footer-col li a:hover{color:#9AAAC8}
+.footer-bot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.04);padding-top:1.3rem;font-size:.72rem;color:#2A3450;flex-wrap:wrap;gap:.5rem;max-width:1280px;margin:0 auto}
+.footer-legal{display:flex;gap:1.3rem}
+.footer-legal a{color:#2A3450;cursor:pointer;transition:color .15s;background:none;border:none;padding:0;font-size:.72rem;font-family:inherit}
+.footer-legal a:hover{color:#9AAAC8}
+.footer-domain{font-family:'Courier New',monospace;font-size:.68rem;color:#4F7FEF;opacity:.4;margin-left:.3rem}
+
+/* ══ MODALS + TOAST ══ */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:#080C16;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.7rem 1rem;display:flex;align-items:center;gap:.55rem;font-size:.8rem;box-shadow:0 8px 40px rgba(0,0,0,.7);transform:translateY(120%);transition:transform .3s cubic-bezier(.22,1,.36,1);max-width:280px}
+#toast.show{transform:translateY(0)}
+#toast.ok{border-color:rgba(0,229,160,.25);}#toast.er{border-color:rgba(232,64,64,.25)}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);z-index:2000;display:none;align-items:center;justify-content:center;padding:1.5rem}
+#modal.open{display:flex}
+.modal-box{background:#0D1220;border:1px solid rgba(79,127,239,.2);border-radius:12px;width:100%;max-width:420px;padding:1.8rem;position:relative}
+.modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,transparent);border-radius:12px 12px 0 0}
+.modal-close{position:absolute;top:.8rem;right:.8rem;background:none;border:none;color:#2A3450;font-size:1.1rem;cursor:pointer;padding:.2rem .4rem;border-radius:4px;transition:color .15s}
+.modal-close:hover{color:#CDD6F0}
+.modal-title{font-size:.97rem;font-weight:700;color:#CDD6F0;margin-bottom:.35rem}
+.modal-body{font-size:.84rem;color:#5A6A8A;line-height:1.62;margin-bottom:.9rem;font-weight:300}
+.modal-url{font-family:'Courier New',monospace;font-size:.74rem;color:#4F7FEF;background:rgba(79,127,239,.06);border:1px solid rgba(79,127,239,.15);border-radius:5px;padding:.4rem .7rem;display:block;margin-bottom:1rem;text-decoration:none;word-break:break-all;transition:background .15s}
+.modal-url:hover{background:rgba(79,127,239,.12)}
+.modal-btns{display:flex;gap:.6rem}
+.modal-btn{padding:.5rem 1rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;border:none}
+.modal-btn-p{background:#4F7FEF;color:#fff}.modal-btn-p:hover{background:#3D65CC}
+.modal-btn-g{background:none;border:1px solid rgba(255,255,255,.1);color:#9AAAC8}.modal-btn-g:hover{border-color:rgba(79,127,239,.4)}
+
+/* ══ CMD PALETTE ══ */
+#cmd-ov{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.8);backdrop-filter:blur(16px);display:none;align-items:flex-start;justify-content:center;padding-top:16vh}
+#cmd-ov.open{display:flex}
+#cmd-box{background:#0D1220;border:1px solid rgba(79,127,239,.25);border-radius:12px;width:100%;max-width:560px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.8);animation:cmdIn .18s cubic-bezier(.22,1,.36,1)}
+@keyframes cmdIn{from{opacity:0;transform:scale(.96) translateY(-8px)}to{opacity:1;transform:none}}
+.cmd-search-row{display:flex;align-items:center;gap:.75rem;padding:.85rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.cmd-search-row svg{width:15px;height:15px;stroke:#2A3450;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.cmd-input{flex:1;background:none;border:none;outline:none;color:#CDD6F0;font-size:.92rem;font-weight:500;font-family:inherit}
+.cmd-input::placeholder{color:#2A3450}
+.cmd-esc{font-family:'Courier New',monospace;font-size:.62rem;color:#2A3450;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:3px;padding:.1rem .35rem}
+.cmd-results{max-height:320px;overflow-y:auto;padding:.4rem 0}
+.cmd-grp{font-size:.6rem;font-family:'Courier New',monospace;color:#2A3450;letter-spacing:.1em;text-transform:uppercase;padding:.6rem 1.1rem .2rem}
+.cmd-item{display:flex;align-items:center;gap:.75rem;padding:.6rem 1.1rem;cursor:pointer;transition:background .1s}
+.cmd-item:hover,.cmd-item.sel{background:rgba(79,127,239,.08)}
+.cmd-item-icon{width:28px;height:28px;border-radius:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);display:grid;place-items:center;flex-shrink:0}
+.cmd-item-icon svg{width:12px;height:12px;stroke:#4F7FEF;fill:none;stroke-width:1.8;stroke-linecap:round}
+.cmd-item-t{font-size:.85rem;font-weight:600;color:#CDD6F0}
+.cmd-item-s{font-size:.72rem;color:#5A6A8A;margin-top:.05rem}
+.cmd-footer{display:flex;gap:1.2rem;padding:.55rem 1.1rem;border-top:1px solid rgba(255,255,255,.04);font-family:'Courier New',monospace;font-size:.6rem;color:#2A3450}
+.cmd-footer kbd{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:3px;padding:.08rem .3rem;margin-right:.2rem}
+
+/* ══ STICKY CTA ══ */
+#sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:800;background:rgba(3,5,10,.92);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:.65rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1);flex-wrap:wrap}
+#sticky-cta.show{transform:translateY(0)}
+.scta-t{font-size:.83rem;color:#9AAAC8;display:flex;align-items:center;gap:.6rem}
+.scta-t strong{color:#00E5A0}
+.scta-dot{width:5px;height:5px;background:#00E5A0;border-radius:50%;animation:bdot 2s infinite;flex-shrink:0}
+.scta-r{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.scta-btn{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.82rem;font-weight:600;padding:.38rem .95rem;cursor:pointer;transition:all .2s}
+.scta-btn:hover{background:#3D65CC;transform:translateY(-1px)}
+.scta-x{background:none;border:none;color:#2A3450;cursor:pointer;font-size:.9rem;padding:.2rem;transition:color .15s;line-height:1}
+.scta-x:hover{color:#CDD6F0}
+
+/* ══ MOBILE NAV ══ */
+#mob-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:490;display:none;backdrop-filter:blur(4px)}
+#mob-backdrop.show{display:block}
+#mob-nav{position:fixed;top:52px;left:0;right:0;z-index:495;background:rgba(3,5,10,.97);border-bottom:1px solid rgba(255,255,255,.06);padding:1rem clamp(1.5rem,5%,3rem);display:none;flex-direction:column;gap:0;backdrop-filter:blur(20px);animation:mnIn .22s cubic-bezier(.22,1,.36,1)}
+@keyframes mnIn{from{transform:translateY(-6px);opacity:0}to{transform:none;opacity:1}}
+#mob-nav.open{display:flex}
+.mn-link{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;color:#5A6A8A;font-size:.92rem;font-weight:500;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:color .15s;background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;font-family:inherit}
+.mn-link:last-of-type{border-bottom:none}
+.mn-link:hover{color:#CDD6F0}
+.mn-link svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;opacity:.35}
+.mn-cta{margin-top:.9rem;background:#4F7FEF;border:none;border-radius:7px;color:#fff;font-size:.9rem;font-weight:600;padding:.72rem;cursor:pointer;width:100%;transition:all .2s;font-family:inherit}
+.mn-cta:hover{background:#3D65CC}
+
+/* ══ EXIT NUDGE ══ */
+#exit-nudge{position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:1.5rem}
+#exit-nudge.open{display:flex}
+.en-box{background:#0D1220;border:1px solid rgba(79,127,239,.25);border-radius:14px;width:100%;max-width:440px;padding:2rem;position:relative;text-align:center;animation:cmdIn .25s cubic-bezier(.22,1,.36,1)}
+.en-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,#00E5A0,transparent);border-radius:14px 14px 0 0}
+.en-close{position:absolute;top:.85rem;right:.85rem;background:none;border:none;color:#2A3450;font-size:1.05rem;cursor:pointer;padding:.2rem .4rem;border-radius:4px;transition:color .15s}
+.en-close:hover{color:#CDD6F0}
+.en-spot{display:inline-block;font-family:'Courier New',monospace;font-size:.68rem;color:#00E5A0;background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.18);border-radius:999px;padding:.2rem .7rem;margin-bottom:.9rem;letter-spacing:.03em}
+.en-h{font-size:1.1rem;font-weight:700;color:#E8EDF8;letter-spacing:-.03em;margin-bottom:.4rem}
+.en-p{font-size:.84rem;color:#5A6A8A;line-height:1.65;margin-bottom:1.2rem;font-weight:300}
+.en-row{display:flex;gap:.5rem}
+.en-input{flex:1;background:#080C16;border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:.58rem .8rem;color:#CDD6F0;font-size:.85rem;outline:none;font-family:inherit;transition:border-color .15s}
+.en-input:focus{border-color:rgba(79,127,239,.5)}
+.en-input::placeholder{color:#2A3450}
+.en-btn{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.85rem;font-weight:600;padding:.58rem 1.1rem;cursor:pointer;white-space:nowrap;transition:all .2s}
+.en-btn:hover{background:#3D65CC;transform:translateY(-1px)}
+.en-skip{display:block;margin-top:.75rem;font-size:.75rem;color:#2A3450;cursor:pointer;background:none;border:none;font-family:inherit;transition:color .15s}
+.en-skip:hover{color:#5A6A8A}
+.en-msg{font-size:.78rem;margin-top:.5rem;display:none}
+.en-msg.ok{color:#00E5A0;display:block}.en-msg.er{color:#E84040;display:block}
+
+/* ══ REVEALS ══ */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1);will-change:transform,opacity}
+.rv.on{opacity:1;transform:none}
+.rvl{opacity:0;transform:translateX(-28px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
+.rvl.on{opacity:1;transform:none}
+.rvr{opacity:0;transform:translateX(28px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
+.rvr.on{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1024px){
+  .hero-content{grid-template-columns:1fr;padding-top:80px}
+  .prob-inner{grid-template-columns:1fr}
+  .prob-left{border-right:none;border-bottom:1px solid rgba(255,255,255,.05)}
+  .spec-numbers{grid-template-columns:1fr 1fr}
+  .spec-features{grid-template-columns:1fr}
+  .how-steps{grid-template-columns:1fr 1fr}
+  .tcard-grid{grid-template-columns:1fr}
+  .plans-grid{grid-template-columns:1fr}
+  .wl-inner{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr;gap:2rem}
+  .nav-links{display:none}
+  .nav-mob-btn{display:flex}
+  .nav-ghost{display:none}
+}
+@media(max-width:640px){
+  .hero-h{font-size:clamp(2.2rem,9vw,3rem)}
+  .hero-metrics{flex-direction:column;border:none;gap:.5rem}
+  .hmet{border:1px solid rgba(255,255,255,.06);border-radius:8px;border-right:1px solid rgba(255,255,255,.06)!important}
+  .spec-numbers{grid-template-columns:1fr 1fr}
+  .how-steps{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bot{flex-direction:column;text-align:center}
+  .footer-legal{justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .ticker-inner{animation:none}
+  .rv,.rvl,.rvr{opacity:1;transform:none}
+}
+
+.cb-actions{width:100%}}
+
+
+/* ── COOKIE CONSENT ── */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;line-height:1.55;max-width:580px;font-weight:300}
+.cb-text a{color:#4F7FEF;text-decoration:none}.cb-text a:hover{text-decoration:underline}
+.cb-actions{display:flex;gap:.6rem;flex-shrink:0;flex-wrap:wrap}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-accept:hover{background:#3D65CC}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-decline:hover{color:#CDD6F0;border-color:rgba(255,255,255,.2)}
+
+/* ── COMMUNITY STRIP ── */
+.community-strip{border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);padding:1.5rem clamp(1.5rem,5%,4rem)}
+.community-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+.community-label{font-family:monospace;font-size:.7rem;color:#2A3450;letter-spacing:.08em;flex-shrink:0}
+.community-links{display:flex;gap:.7rem;flex-wrap:wrap}
+.comm-link{display:inline-flex;align-items:center;gap:.45rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:.38rem .85rem;font-size:.78rem;color:#5A6A8A;text-decoration:none;transition:all .2s;font-family:'Inter',sans-serif}
+.comm-link:hover{border-color:rgba(79,127,239,.35);color:#CDD6F0;background:rgba(79,127,239,.06)}
+.comm-link svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+.comm-link .cl-count{font-family:monospace;font-size:.7rem;color:#4F7FEF;margin-left:.2rem}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "MLOps.dev",
+      "url": "https://www.mlops.dev",
+      "logo": "https://www.mlops.dev/og-image.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "hello@mlops.dev",
+        "contactType": "customer support"
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Raghunathareddy GR",
+        "jobTitle": "CEO & Founder",
+        "email": "hello@mlops.dev"
+      },
+      "foundingLocation": {
+        "@type": "Place",
+        "name": "Bengaluru, India"
+      },
+      "sameAs": [
+        "https://github.com/Raghunath2604/Raghunath2604-mlops-dev"
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "MLOps.dev Edge Agent",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Linux",
+      "description": "Deploy, monitor, and heal ML models on edge devices. Offline-first sync, drift detection, canary deployments.",
+      "url": "https://www.mlops.dev",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Starter",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free forever for up to 10 devices"
+        },
+        {
+          "@type": "Offer",
+          "name": "Team",
+          "price": "499",
+          "priceCurrency": "USD",
+          "billingIncrement": "monthly",
+          "description": "Up to 500 devices with drift detection and canary deployments"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
+</head>
+<body>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev and to improve the product. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<!-- SCROLL PROGRESS -->
+<div id="sp" aria-hidden="true"></div>
+<!-- SPOTLIGHT -->
+<div id="spotlight" aria-hidden="true"></div>
+<!-- CUSTOM CURSOR -->
+<div id="cur-dot" aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
+
+<!-- TOAST -->
+<div id="toast" role="alert" aria-live="polite"><span id="ti"></span><span id="tm" style="margin-left:.35rem"></span></div>
+
+<!-- MODAL -->
+<div id="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <a class="modal-url" id="modal-url" href="#" target="_blank" rel="noopener"></a>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-p" onclick="closeModal()">Close</button>
+      <button class="modal-btn modal-btn-g" onclick="smoothTo('wl');closeModal()">Join waitlist</button>
+    </div>
+  </div>
+</div>
+
+<!-- CMD PALETTE -->
+<div id="cmd-ov" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div id="cmd-box">
+    <div class="cmd-search-row">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="cmd-input" id="cmd-input" type="text" placeholder="Search pages, actions…" autocomplete="off" spellcheck="false"/>
+      <span class="cmd-esc">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmd-results"></div>
+    <div class="cmd-footer">
+      <span><kbd>↑↓</kbd>Navigate</span>
+      <span><kbd>↵</kbd>Open</span>
+      <span><kbd>ESC</kbd>Close</span>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY CTA -->
+<div id="sticky-cta">
+  <div class="scta-t"><div class="scta-dot"></div><strong id="scta-n">50+</strong> teams already building on mlops.dev — free for fleets under 10 devices.</div>
+  <div class="scta-r">
+    <button class="scta-btn" onclick="smoothTo('wl');document.getElementById('sticky-cta').classList.remove('show')">Get early access</button>
+    <button class="scta-x" onclick="document.getElementById('sticky-cta').classList.remove('show');localStorage.setItem('scta_d','1')" aria-label="Dismiss">×</button>
+  </div>
+</div>
+
+<!-- EXIT NUDGE -->
+<div id="exit-nudge" role="dialog" aria-modal="true">
+  <div class="en-box">
+    <button class="en-close" onclick="closeNudge()" aria-label="Close">×</button>
+    <div class="en-spot" id="en-spot">🔒 Limited early access spots</div>
+    <div class="en-h">Before you leave — grab your spot.</div>
+    <div class="en-p">Free forever for fleets under 10 devices. The first 100 teams get lifetime free access. You're close.</div>
+    <div class="en-row">
+      <input class="en-input" id="en-email" type="email" placeholder="you@company.com" autocomplete="email"/>
+      <button class="en-btn" onclick="submitNudge()">Claim spot</button>
+    </div>
+    <div class="en-msg" id="en-msg"></div>
+    <button class="en-skip" onclick="closeNudge()">No thanks, I'll pass on the free tier</button>
+  </div>
+</div>
+
+<!-- MOB NAV -->
+<div id="mob-backdrop" onclick="closeMobNav()" aria-hidden="true"></div>
+<div id="mob-nav" aria-label="Mobile navigation">
+  <button class="mn-link" onclick="smoothTo('platform');closeMobNav()">Platform<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="smoothTo('how');closeMobNav()">How it works<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="smoothTo('pricing');closeMobNav()">Pricing<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="location.href='about.html';closeMobNav()">About<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="location.href='blog.html';closeMobNav()">Blog<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="location.href='demo.html';closeMobNav()">Watch demo<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg></button>
+  <button class="mn-cta" onclick="smoothTo('wl');closeMobNav()">Get early access — free</button>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo" onclick="scrollToTop()" role="button" tabindex="0">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect width="24" height="24" rx="5" fill="#4F7FEF" fill-opacity=".15"/>
+        <polygon points="12,3 3,7.5 3,16.5 12,21 21,16.5 21,7.5" stroke="#4F7FEF" stroke-width="1.5" stroke-linejoin="round"/>
+        <circle cx="12" cy="12" r="2" fill="#00E5A0"/>
+      </svg>
+    </div>
+    MLOps<em>.dev</em>
+  </div>
+  <div class="nav-links">
+    <a onclick="smoothTo('platform')" data-s="platform">Platform</a>
+    <a onclick="smoothTo('how')" data-s="how">How it works</a>
+    <a onclick="smoothTo('pricing')" data-s="pricing">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="blog.html">Blog</a>
+    <a href="docs.html">Docs</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-tag" aria-label="Live status">● LIVE</div>
+    <button class="nav-ghost" onclick="location.href='demo.html'">Watch demo</button>
+    <button class="nav-ghost" onclick="openCmd()" title="Command palette (⌘K)" style="font-family:'Courier New',monospace;font-size:.7rem;letter-spacing:.02em">⌘K</button>
+    <button class="nav-cta" onclick="smoothTo('wl')">Get early access</button>
+    <button class="nav-mob-btn" id="mob-btn" aria-label="Menu" aria-expanded="false" onclick="toggleMobNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero" id="home">
+  <div class="hero-mesh"><canvas id="mesh-canvas"></canvas></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <!-- LEFT -->
+    <div class="hero-left">
+      <div class="hero-badge" aria-label="Status: 4 devices online">
+        <span class="badge-dot"></span>
+        <span id="hero-badge-text">4 devices online — fleet healthy</span>
+      </div>
+
+      <h1 class="hero-h" id="hero-h" aria-label="ML models, at the edge, in production">
+        <span class="word"><span class="char" style="animation-delay:.05s">M</span><span class="char" style="animation-delay:.08s">L</span></span>
+        <span> </span>
+        <span class="word"><span class="char" style="animation-delay:.11s">m</span><span class="char" style="animation-delay:.14s">o</span><span class="char" style="animation-delay:.17s">d</span><span class="char" style="animation-delay:.20s">e</span><span class="char" style="animation-delay:.23s">l</span><span class="char" style="animation-delay:.26s">s</span><span class="char" style="animation-delay:.29s">.</span></span>
+        <span class="line2">At the edge.</span>
+        <span class="line3">In production.</span>
+      </h1>
+
+      <p class="hero-sub">
+        <strong>Deploy, monitor, and heal ML models</strong> across Jetson boards, Raspberry Pis, and custom ARM hardware — even when the internet is gone. The MLOps platform built for the real world.
+      </p>
+
+      <div class="hero-ctas">
+        <button class="cta-primary" onclick="smoothTo('wl')">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
+          Start for free
+        </button>
+        <button class="cta-ghost" onclick="location.href='demo.html'">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
+          Watch 3-min demo
+        </button>
+        <button class="cta-ghost" onclick="location.href='dashboard.html'" style="border-color:rgba(0,229,160,.2);color:#00E5A0">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Live dashboard
+        </button>
+      </div>
+
+      <div class="hero-metrics">
+        <div class="hmet">
+          <div class="hmet-val live" id="m-online">4</div>
+          <div class="hmet-lbl">devices online</div>
+        </div>
+        <div class="hmet">
+          <div class="hmet-val">&lt;8MB</div>
+          <div class="hmet-lbl">agent binary</div>
+        </div>
+        <div class="hmet">
+          <div class="hmet-val">99.7%</div>
+          <div class="hmet-lbl">sync uptime</div>
+        </div>
+        <div class="hmet">
+          <div class="hmet-val">&lt;90s</div>
+          <div class="hmet-lbl">deploy latency</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: LIVE FLEET WINDOW -->
+    <div class="hero-right">
+      <div class="fleet-deco" aria-hidden="true"></div>
+      <div class="fleet-deco-2" aria-hidden="true"></div>
+      <div class="fleet-window" role="region" aria-label="Live fleet status">
+        <div class="fw-chrome">
+          <div class="fw-dot" style="background:#FF5F57"></div>
+          <div class="fw-dot" style="background:#FEBC2E"></div>
+          <div class="fw-dot" style="background:#28C840"></div>
+          <span class="fw-title">mlops.dev — fleet monitor</span>
+          <span class="fw-live"><span class="fw-live-dot"></span>LIVE</span>
+        </div>
+        <div class="fw-kpis">
+          <div class="fw-kpi"><div class="fw-kpi-l">TOTAL</div><div class="fw-kpi-v">6</div></div>
+          <div class="fw-kpi"><div class="fw-kpi-l">ONLINE</div><div class="fw-kpi-v g" id="fw-online">4</div></div>
+          <div class="fw-kpi"><div class="fw-kpi-l">OFFLINE</div><div class="fw-kpi-v r">1</div></div>
+          <div class="fw-kpi"><div class="fw-kpi-l">DRIFT⚠</div><div class="fw-kpi-v a">1</div></div>
+        </div>
+        <div class="fw-devices" id="fw-devices" aria-label="Device list"></div>
+        <div class="fw-log" id="fw-log" aria-label="Event log" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="tick-fade-l"></div>
+  <div class="ticker-inner" id="ticker"></div>
+  <div class="tick-fade-r"></div>
+</div>
+
+<!-- PROBLEM -->
+<div class="prob-wrap" id="problem">
+  <div class="prob-inner">
+    <div class="prob-left rv">
+      <span class="sec-ey">The problem</span>
+      <div class="prob-stmt">
+        Your CI/CD pipeline<br/>
+        <span class="st">works perfectly</span><br/>
+        until the Jetson<br/>
+        goes offline.<br/>
+        <span class="fix">We built for that.</span>
+      </div>
+    </div>
+    <div class="prob-right rv d1">
+      <div class="prob-cards">
+        <div class="prob-card">
+          <div class="prob-card-n">PROBLEM 01</div>
+          <div class="prob-card-t">Offline devices, stale models</div>
+          <div class="prob-card-d">Traditional CI/CD fails silently when devices lose connectivity. Models drift for weeks — no alert, no rollback, no visibility.</div>
+        </div>
+        <div class="prob-card">
+          <div class="prob-card-n">PROBLEM 02</div>
+          <div class="prob-card-t">SSH scripts aren't operations</div>
+          <div class="prob-card-d">Bash loops and cron jobs get you to 10 devices. They collapse at 100. No audit trail, no rollback, no canary.</div>
+        </div>
+        <div class="prob-card">
+          <div class="prob-card-n">PROBLEM 03</div>
+          <div class="prob-card-t">Flying blind in production</div>
+          <div class="prob-card-d">W&B tracks training. MLflow tracks experiments. Nothing tells you what's actually running on 3,000 boards right now.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLATFORM SPEC SHEET -->
+<div class="spec-wrap" id="platform">
+  <div class="spec-header rv">
+    <div>
+      <span class="sec-ey">Platform specification</span>
+      <div class="sec-h" style="margin-bottom:0;font-size:1.4rem">MLOps.dev Edge Runtime</div>
+    </div>
+    <div class="spec-badge-live"><span class="badge-dot"></span>REV 3.2 · PRODUCTION</div>
+  </div>
+  <div class="spec-numbers">
+    <div class="spec-num rv d1">
+      <div class="spec-num-l">Agent binary</div>
+      <div class="spec-num-v">&lt;8<span class="unit">MB</span></div>
+      <div class="spec-num-s">ARM64 / ARMv7 / x86_64</div>
+    </div>
+    <div class="spec-num rv d2">
+      <div class="spec-num-l">Fleet scale</div>
+      <div class="spec-num-v">10K<span class="unit">+</span></div>
+      <div class="spec-num-s">devices per deployment</div>
+    </div>
+    <div class="spec-num rv d3">
+      <div class="spec-num-l">Sync uptime</div>
+      <div class="spec-num-v">99.7<span class="unit">%</span></div>
+      <div class="spec-num-s">tested on 2G cellular</div>
+    </div>
+    <div class="spec-num rv d4">
+      <div class="spec-num-l">Deploy latency</div>
+      <div class="spec-num-v">&lt;90<span class="unit">s</span></div>
+      <div class="spec-num-s">edge to production</div>
+    </div>
+  </div>
+  <div class="spec-features">
+    <div class="spec-feat rv d1">
+      <div class="sf-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div>
+        <div class="sf-title">Drift detection</div>
+        <div class="sf-desc">Statistical monitoring on input distributions. Fires Slack, PagerDuty, or any webhook before users notice degradation.</div>
+      </div>
+    </div>
+    <div class="spec-feat rv d2">
+      <div class="sf-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div>
+        <div class="sf-title">Canary deployments</div>
+        <div class="sf-desc">Roll to 1%, 10%, or any device group first. Automatic health gate blocks rollout if accuracy drops.</div>
+      </div>
+    </div>
+    <div class="spec-feat rv d3">
+      <div class="sf-icon"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0"/><path d="M3.6 9h16.8M3.6 15h16.8"/><path d="M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18"/></svg></div>
+      <div>
+        <div class="sf-title">Offline-first sync</div>
+        <div class="sf-desc">Devices buffer telemetry locally during outages. Delta-compressed sync reconvenes on reconnect. No data loss, ever.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-wrap" id="how">
+  <div class="sec">
+    <span class="sec-ey rv">Getting started</span>
+    <h2 class="sec-h rv d1">From training to fleet in under 10 minutes.</h2>
+    <div class="how-steps">
+      <div class="how-step rv d1">
+        <div class="how-step-n">01</div>
+        <div class="how-step-t">Push your model</div>
+        <div class="how-step-d">Register any TFLite, ONNX, or TensorRT model. CLI or Python SDK. One command.</div>
+        <div class="how-step-code"><span class="cmd">$ </span>mlops push ./model.onnx --tag v3.2</div>
+      </div>
+      <div class="how-step rv d2">
+        <div class="how-step-n">02</div>
+        <div class="how-step-t">Install the agent</div>
+        <div class="how-step-d">One-line install on any Linux ARM device. Open-source agent handles everything autonomously.</div>
+        <div class="how-step-code"><span class="cmd">$ </span>curl -fsSL get.mlops.dev | sh</div>
+      </div>
+      <div class="how-step rv d3">
+        <div class="how-step-n">03</div>
+        <div class="how-step-t">Deploy to fleet</div>
+        <div class="how-step-d">Target by hardware type, location, or device group. Canary rollout with health checks before full fleet.</div>
+        <div class="how-step-code"><span class="cmd">$ </span>mlops deploy v3.2 --canary 10%</div>
+      </div>
+      <div class="how-step rv d4">
+        <div class="how-step-n">04</div>
+        <div class="how-step-t">Monitor everything</div>
+        <div class="how-step-d">Drift, latency, accuracy — live. Roll back in one click. Sleep through the night.</div>
+        <div class="how-step-code"><span class="cmd">$ </span>mlops status --fleet production</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials-wrap" id="social">
+  <div class="sec">
+    <span class="sec-ey rv">What teams say</span>
+    <h2 class="sec-h rv d1">Engineers who've shipped models to the edge.</h2>
+    <div class="tcard-grid">
+      <div class="tcard rv d1">
+        <div class="tcard-q">We were managing 800 factory cameras with SSH scripts. MLOps.dev replaced that in 10 minutes. The offline sync works on our factory floor where Wi-Fi cuts out constantly.</div>
+        <div class="tcard-author">
+          <div class="tcard-av">AK</div>
+          <div><div class="tcard-name">Ananya K.</div><div class="tcard-role">ML Lead · Manufacturing</div></div>
+        </div>
+      </div>
+      <div class="tcard rv d2">
+        <div class="tcard-q">Drift alerting caught a data pipeline regression before it hit accuracy on our shelf cameras. That would have been a retailer SLA breach. This is the tool that was missing.</div>
+        <div class="tcard-author">
+          <div class="tcard-av">TR</div>
+          <div><div class="tcard-name">Tom R.</div><div class="tcard-role">VP Engineering · Retail AI</div></div>
+        </div>
+      </div>
+      <div class="tcard rv d3">
+        <div class="tcard-q">We're a medical device company. Our FDA submission needed immutable audit logs. MLOps.dev was the only platform that had a real answer to that question.</div>
+        <div class="tcard-author">
+          <div class="tcard-av">SP</div>
+          <div><div class="tcard-name">Sarah P.</div><div class="tcard-role">CTO · MedTech AI</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="pricing-wrap" id="pricing">
+  <div class="sec">
+    <span class="sec-ey rv">Pricing</span>
+    <h2 class="sec-h rv d1">Start free. Scale when it matters.</h2>
+    <div class="plans-grid">
+      <div class="plan rv d1">
+        <span class="plan-ey">OPEN SOURCE</span>
+        <div class="plan-name">Starter</div>
+        <div class="plan-desc">For your first edge deployment. The agent is free, forever.</div>
+        <div class="plan-price"><sup>$</sup>0</div>
+        <div class="plan-per">Free forever · up to 10 devices</div>
+        <div class="plan-div"></div>
+        <ul class="plan-features">
+          <li>Up to 10 edge devices</li>
+          <li>Open-source agent SDK</li>
+          <li>Basic fleet dashboard</li>
+          <li>7-day telemetry history</li>
+          <li>Community support</li>
+        </ul>
+        <button class="plan-btn plan-btn-ghost" onclick="smoothTo('wl')">Get started free</button>
+      </div>
+      <div class="plan featured rv d2">
+        <span class="plan-ey">MOST POPULAR</span>
+        <div class="plan-name">Team</div>
+        <div class="plan-desc">For production fleets that need real monitoring and deployment controls.</div>
+        <div class="plan-price"><sup>$</sup>499</div>
+        <div class="plan-per">per month · up to 500 devices</div>
+        <div class="plan-div"></div>
+        <ul class="plan-features">
+          <li>Up to 500 edge devices</li>
+          <li>Canary deployments + health gates</li>
+          <li>Drift detection + alerting</li>
+          <li>90-day telemetry history</li>
+          <li>Slack + PagerDuty integration</li>
+          <li>Email support — 24h SLA</li>
+        </ul>
+        <button class="plan-btn plan-btn-solid" onclick="smoothTo('wl')">Start 14-day trial</button>
+      </div>
+      <div class="plan rv d3">
+        <span class="plan-ey">ENTERPRISE</span>
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-desc">For regulated industries that need to stay on-premise.</div>
+        <div class="plan-price">Custom</div>
+        <div class="plan-per">Unlimited devices · on-premise</div>
+        <div class="plan-div"></div>
+        <ul class="plan-features">
+          <li>Unlimited devices</li>
+          <li>On-premise control plane</li>
+          <li>FDA SaMD / ISO 42001 compliance</li>
+          <li>SSO + RBAC</li>
+          <li>Dedicated ML infrastructure engineer</li>
+        </ul>
+        <button class="plan-btn plan-btn-ghost" onclick="smoothTo('wl')">Talk to the founders</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WAITLIST -->
+<div id="wl" style="border-top:1px solid rgba(255,255,255,.05)">
+  <div class="sec">
+    <div class="wl-inner">
+      <div class="rvl">
+        <span class="sec-ey">Early access</span>
+        <h2 class="sec-h">50 teams are already building on mlops.dev.</h2>
+        <p class="sec-p">We're onboarding design partners — teams deploying their first or fiftieth edge models who will co-build the platform with us. First 100 get lifetime Starter free.</p>
+        <div class="wl-proof">
+          <div class="wl-proof-item"><div class="wl-proof-icon"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div><span>Free forever for fleets under 10 devices</span></div>
+          <div class="wl-proof-item"><div class="wl-proof-icon"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div><span>No credit card required</span></div>
+          <div class="wl-proof-item"><div class="wl-proof-icon"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div><span>Open-source agent — audit every line</span></div>
+          <div class="wl-proof-item"><div class="wl-proof-icon"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div><span>Direct access to founders for setup</span></div>
+        </div>
+      </div>
+      <div class="rvr">
+        <div class="wl-form-box">
+          <div style="font-size:.95rem;font-weight:700;color:#CDD6F0;margin-bottom:.25rem">Request early access</div>
+          <div style="font-size:.8rem;color:#5A6A8A;margin-bottom:1.4rem;font-weight:300">We'll reply within 24 hours with onboarding instructions.</div>
+          <form id="wl-form" novalidate>
+            <div class="fg2">
+              <div class="fg"><label for="wl-name">Name</label><input id="wl-name" type="text" placeholder="Full name" autocomplete="name"/></div>
+              <div class="fg"><label for="wl-email">Work email *</label><input id="wl-email" type="email" placeholder="you@company.com" required autocomplete="email"/></div>
+            </div>
+            <div class="fg"><label for="wl-co">Company</label><input id="wl-co" type="text" placeholder="Company name"/></div>
+            <div class="fg"><label for="wl-uc">Use case</label>
+              <select id="wl-uc">
+                <option value="">Select your use case</option>
+                <option value="manufacturing">Manufacturing / Industrial IoT</option>
+                <option value="retail">Retail / Smart cameras</option>
+                <option value="healthcare">Healthcare / Medical devices</option>
+                <option value="robotics">Robotics / Autonomous systems</option>
+                <option value="agriculture">Precision agriculture</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <button type="submit" class="wl-submit" id="wl-btn">Join the waitlist →</button>
+            <div class="fmsg" id="wl-msg" role="status"></div>
+          </form>
+          <div class="wl-count" id="wl-count">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div class="cta-strip-bg-text" aria-hidden="true">EDGE</div>
+  <div class="cta-strip-inner">
+    <h2 class="cta-strip-h">Your models are at the edge.<br/>Start managing them.</h2>
+    <p class="cta-strip-p">Free for small fleets. No credit card. Open-source agent.</p>
+    <div class="cta-strip-btns">
+      <button class="cta-btn-white" onclick="smoothTo('wl')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+        Get early access — free
+      </button>
+      <button class="cta-btn-outline" onclick="location.href='demo.html'">Watch the demo</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" id="contact">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-logo" onclick="scrollToTop()">MLOps<em>.dev</em></div>
+      <p class="footer-brand-p">The MLOps platform for the real world.</p>
+      <a href="https://www.mlops.dev" class="footer-brand-url" target="_blank" rel="noopener">www.mlops.dev</a>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a onclick="smoothTo('platform')">Platform</a></li>
+        <li><a onclick="smoothTo('pricing')">Pricing</a></li>
+        <li><a onclick="location.href='changelog.html'">Changelog</a></li>
+        <li><a onclick="window.open('roadmap.html','_blank')">Roadmap</a></li>
+        <li><a onclick="location.href='status.html'">Status</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <ul>
+        <li><a onclick="location.href='faq.html'">Documentation</a></li>
+        <li><a onclick="window.open('https://github.com/Raghunath2604/Raghunath2604-mlops-dev','_blank')">GitHub</a></li>
+        <li><a onclick="window.open('https://pypi.org/project/mlops-dev','_blank')">Python SDK</a></li>
+        <li><a onclick="window.open('api-reference.html','_blank')">REST API</a></li>
+        <li><a onclick="window.open('https://discord.gg/Tb47N9NaPk','_blank')">Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a onclick="location.href='about.html'">About</a></li>
+        <li><a onclick="location.href='blog.html'">Blog</a></li>
+        <li><a onclick="location.href='careers.html'">Careers</a></li>
+        <li><a onclick="smoothTo('wl')">Contact</a></li>
+        <li><a onclick="location.href='poster.html'">Motion poster</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR<span class="footer-domain">www.mlops.dev</span></span>
+    <div class="footer-legal">
+      <a onclick="location.href='privacy.html'">Privacy</a>
+      <a onclick="location.href='terms.html'">Terms</a>
+      <a onclick="comingSoon('Security','Security policy for www.mlops.dev','https://www.mlops.dev/security')">Security</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const API='https://api.mlopsde.me/api';
+const $=id=>document.getElementById(id);
+const smoothTo=id=>{const el=$(id);if(el)el.scrollIntoView({behavior:'smooth'});};
+const scrollToTop=()=>window.scrollTo({top:0,behavior:'smooth'});
+
+/* ── TOAST ── */
+let _tt;
+function toast(msg,type='ok'){
+  clearTimeout(_tt);
+  const t=$('toast');
+  $('ti').textContent=type==='ok'?'✓':type==='er'?'✕':'ℹ';
+  $('tm').textContent=msg;
+  t.className=`toast ${type} show`;
+  _tt=setTimeout(()=>t.classList.remove('show'),4200);
+}
+
+/* ── MODAL ── */
+function closeModal(){$('modal').classList.remove('open');document.body.style.overflow='';}
+function comingSoon(title,body,url){
+  $('modal-title').textContent=title;
+  $('modal-body').textContent=body||'Coming soon.';
+  const u=$('modal-url');u.textContent=url||'https://www.mlops.dev';u.href=url||'https://www.mlops.dev';
+  $('modal').classList.add('open');document.body.style.overflow='hidden';
+}
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal();});
+
+/* ── API ── */
+async function api(path,opts={}){
+  const h={'Content-Type':'application/json'};
+  const tk=localStorage.getItem('np_token');if(tk)h['Authorization']='Bearer '+tk;
+  if(opts.headers)Object.assign(h,opts.headers);
+  try{
+    const r=await fetch(API+path,{...opts,headers:h});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.error||'Request failed');
+    return d;
+  }catch(e){
+    if(e.name==='TypeError')throw new Error('API offline');
+    throw e;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   MESH GRADIENT CANVAS
+   Smooth aurora of signal-blue and pulse-green
+   shifting slowly behind the hero.
+══════════════════════════════════════════════════ */
+(function(){
+  const c=$('mesh-canvas');if(!c)return;
+  const ctx=c.getContext('2d');
+  let W,H,dpr,t=0;
+  const mouse={x:-1000,y:-1000};
+
+  function resize(){
+    dpr=window.devicePixelRatio||1;
+    const r=c.parentElement.getBoundingClientRect();
+    W=r.width;H=r.height;
+    c.width=W*dpr;c.height=H*dpr;
+    c.style.width=W+'px';c.style.height=H+'px';
+    ctx.scale(dpr,dpr);
+  }
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  function drawMesh(){
+    t+=.004;
+    ctx.clearRect(0,0,W,H);
+
+    // Deep void base
+    ctx.fillStyle='#03050A';
+    ctx.fillRect(0,0,W,H);
+
+    // Moving aurora blobs
+    const blobs=[
+      {x:lerp(.15,.35,(Math.sin(t*.7)+1)*.5),y:lerp(.2,.5,(Math.cos(t*.5)+1)*.5),r:.55,c:'rgba(79,127,239,'},
+      {x:lerp(.6,.9,(Math.sin(t*.4+1)+1)*.5),y:lerp(.3,.7,(Math.cos(t*.6+2)+1)*.5),r:.45,c:'rgba(0,229,160,'},
+      {x:lerp(.3,.7,(Math.sin(t*.35+2)+1)*.5),y:lerp(.05,.35,(Math.cos(t*.45+1)+1)*.5),r:.4,c:'rgba(79,127,239,'},
+      {x:lerp(.1,.4,(Math.sin(t*.55+3)+1)*.5),y:lerp(.5,.9,(Math.cos(t*.3+3)+1)*.5),r:.35,c:'rgba(0,229,160,'},
+    ];
+
+    blobs.forEach(b=>{
+      const bx=W*b.x,by=H*b.y,br=Math.max(W,H)*b.r;
+      const g=ctx.createRadialGradient(bx,by,0,bx,by,br);
+      g.addColorStop(0,b.c+'0.09)');
+      g.addColorStop(.4,b.c+'0.04)');
+      g.addColorStop(1,b.c+'0)');
+      ctx.fillStyle=g;
+      ctx.fillRect(0,0,W,H);
+    });
+
+    // Mouse interactive glow
+    if(mouse.x>0){
+      const mg=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,280);
+      mg.addColorStop(0,'rgba(79,127,239,0.07)');
+      mg.addColorStop(1,'rgba(79,127,239,0)');
+      ctx.fillStyle=mg;ctx.fillRect(0,0,W,H);
+    }
+
+    // Subtle noise grain overlay (dithered dots)
+    ctx.fillStyle='rgba(3,5,10,0.4)';
+    ctx.fillRect(0,0,W,H);
+  }
+
+  let raf;
+  function frame(){raf=requestAnimationFrame(frame);drawMesh();}
+
+  window.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect();
+    mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;
+  });
+  window.addEventListener('resize',()=>{
+    ctx.resetTransform();resize();
+  });
+  resize();frame();
+
+  // Pause when tab hidden
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){cancelAnimationFrame(raf);}
+    else{raf=requestAnimationFrame(frame);}
+  });
+})();
+
+/* ══════════════════════════════════════════════════
+   SPOTLIGHT EFFECT
+   Cursor illuminates the page background
+══════════════════════════════════════════════════ */
+(function(){
+  const sl=$('spotlight');if(!sl)return;
+  let mx=window.innerWidth/2,my=window.innerHeight/2;
+  let cx=mx,cy=my;
+  function anim(){
+    cx+=(mx-cx)*.08;cy+=(my-cy)*.08;
+    sl.style.left=cx+'px';sl.style.top=cy+'px';
+    requestAnimationFrame(anim);
+  }
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  anim();
+})();
+
+/* ══════════════════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════════════════ */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches)return;
+  const dot=$('cur-dot'),ring=$('cur-ring');
+  if(!dot||!ring)return;
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+  });
+  function lerpRing(){
+    rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(lerpRing);
+  }
+  lerpRing();
+  document.querySelectorAll('button,a,[onclick],[role=button]').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('is-hovering'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('is-hovering'));
+  });
+  document.addEventListener('mousedown',()=>document.body.classList.add('is-clicking'));
+  document.addEventListener('mouseup',()=>document.body.classList.remove('is-clicking'));
+})();
+
+/* ══════════════════════════════════════════════════
+   FLEET WINDOW — LIVE DEVICE TABLE + LOG STREAM
+══════════════════════════════════════════════════ */
+const FLEET=[
+  {id:'jetson-prod-01',hw:'Jetson Orin',   s:'online',  v:'v3.2',d:12,l:'14ms'},
+  {id:'rpi5-factory-07',hw:'Raspberry Pi 5',s:'updating',v:'v3.1',d:48,l:'28ms'},
+  {id:'coral-retail-03',hw:'Google Coral',  s:'online',  v:'v3.2',d:8, l:'11ms'},
+  {id:'arm-wh-11',       hw:'ARM Custom',   s:'offline', v:'v2.9',d:71,l:'—'},
+  {id:'jetson-prod-02', hw:'Jetson Nano',  s:'online',  v:'v3.2',d:5, l:'16ms'},
+  {id:'snap-cam-04',    hw:'Snapdragon',   s:'online',  v:'v3.2',d:19,l:'22ms'},
+];
+const S_COL={online:'#00E5A0',offline:'#E84040',updating:'#E8A020'};
+
+function renderFleet(){
+  const el=$('fw-devices');if(!el)return;
+  el.innerHTML=FLEET.map(d=>{
+    const sc=d.s==='online'?'ind-on':d.s==='offline'?'ind-off':'ind-up';
+    const ss=d.s==='online'?'s-on':d.s==='offline'?'s-off':'s-up';
+    const dc=d.d>60?'df-bad':d.d>40?'df-warn':'df-ok';
+    return `<div class="fw-device">
+      <div class="fw-dev-indicator ${sc}"></div>
+      <div class="fw-dev-name">${d.id}</div>
+      <div class="fw-dev-status ${ss}">${d.s}</div>
+      <div class="fw-dev-model">${d.v}</div>
+      <div class="fw-dev-drift">
+        <div class="drift-track"><div class="drift-fill ${dc}" style="width:${d.d}%"></div></div>
+        <span class="drift-num">${d.d}%</span>
+      </div>
+      <div class="fw-dev-lat">${d.l}</div>
+    </div>`;
+  }).join('');
+}
+
+(function(){
+  const el=$('fw-log');if(!el)return;
+  const LOGS=[
+    {cls:'ll-ok', txt:' jetson-prod-01 — heartbeat OK · latency 14ms'},
+    {cls:'ll-info',txt:' coral-retail-03 — model v3.2 active'},
+    {cls:'ll-warn',txt:' rpi5-factory-07 — update in progress 68%'},
+    {cls:'ll-ok', txt:' jetson-prod-02 — drift=5% · well within threshold'},
+    {cls:'ll-err', txt:' arm-wh-11 — offline · last seen 4h ago'},
+    {cls:'ll-warn',txt:' snap-cam-04 — drift=19% · monitoring'},
+    {cls:'ll-ok', txt:' fleet sync complete · 5/6 devices current'},
+    {cls:'ll-info',txt:' drift scan running · next check in 30s'},
+  ];
+  let li=0;
+  const pad=n=>String(n).padStart(2,'0');
+  function tn(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
+  function push(){
+    const l=LOGS[li%LOGS.length];
+    const row=document.createElement('div');
+    row.className='log-line';
+    row.innerHTML=`<span class="ll-time">${tn()}</span><span class="${l.cls}">${l.txt}</span>`;
+    el.appendChild(row);
+    if(el.children.length>4)el.removeChild(el.children[0]);
+    li++;
+  }
+  push();push();push();
+  setInterval(push,2800);
+  $('m-online').textContent=FLEET.filter(d=>d.s==='online').length;
+  $('fw-online').textContent=FLEET.filter(d=>d.s==='online').length;
+})();
+
+/* ── TICKER ── */
+(function(){
+  const tk=$('ticker');if(!tk)return;
+  const items=[
+    ['FLEET HEALTH','83%','↑'],['DEVICES ONLINE','5/6',''],
+    ['SYNC UPTIME','99.7%','↑'],['AVG LATENCY','18ms',''],
+    ['DRIFT ALERTS','1',''],['DEPLOYS TODAY','2','↑'],
+    ['TELEMETRY','24K events','↑'],['ROLLBACKS','0','↑'],
+    ['AGENT SIZE','<8MB',''],['WAITLIST','50+','↑'],
+  ];
+  const doubled=[...items,...items];
+  tk.innerHTML=doubled.map(([k,v,u])=>
+    `<div class="tick-item">${k} <span class="val">${v}</span>${u?`<span class="up">${u}</span>`:''}</div>`
+  ).join('');
+})();
+
+/* ── NAV SCROLL ── */
+(function(){
+  const nav=$('nav');
+  const links=document.querySelectorAll('.nav-links a[data-s]');
+  const secs=['home','problem','platform','how','social','pricing','wl'].map(id=>$(id));
+  window.addEventListener('scroll',()=>{
+    const sy=window.scrollY;
+    nav.classList.toggle('scrolled',sy>40);
+    // Sticky CTA
+    if(sy>window.innerHeight&&!localStorage.getItem('scta_d')){
+      $('sticky-cta').classList.add('show');
+    }else if(sy<=window.innerHeight){
+      $('sticky-cta').classList.remove('show');
+    }
+    // Active nav
+    let cur='';
+    secs.forEach((s,i)=>{if(s&&sy>=s.offsetTop-100)cur=['home','problem','platform','how','social','pricing','wl'][i];});
+    links.forEach(a=>a.classList.toggle('act',a.dataset.s===cur));
+  },{passive:true});
+})();
+
+/* ── MOBILE NAV ── */
+function toggleMobNav(){
+  const n=$('mob-nav'),b=$('mob-backdrop'),btn=$('mob-btn');
+  const open=n.classList.contains('open');
+  n.classList.toggle('open',!open);
+  b.classList.toggle('show',!open);
+  btn.setAttribute('aria-expanded',String(!open));
+  document.body.style.overflow=open?'':'hidden';
+}
+function closeMobNav(){
+  $('mob-nav').classList.remove('open');
+  $('mob-backdrop').classList.remove('show');
+  $('mob-btn').setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
+
+/* ── SCROLL PROGRESS ── */
+(function(){
+  const p=$('sp');
+  window.addEventListener('scroll',()=>{
+    const s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;
+    if(p)p.style.width=(d>0?s/d*100:0)+'%';
+  },{passive:true});
+})();
+
+/* ── SCROLL REVEALS ── */
+(function(){
+  const els=document.querySelectorAll('.rv,.rvl,.rvr');
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
+  },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(el=>io.observe(el));
+})();
+
+/* ── EXIT NUDGE ── */
+(function(){
+  if(localStorage.getItem('exit_done'))return;
+  let shown=false;
+  const n=$('exit-nudge');
+  if(!n)return;
+  document.addEventListener('mouseleave',e=>{
+    if(e.clientY<=0&&!shown){shown=true;n.classList.add('open');document.body.style.overflow='hidden';}
+  });
+  setTimeout(()=>{
+    if(!shown&&!localStorage.getItem('exit_done')){shown=true;n.classList.add('open');document.body.style.overflow='hidden';}
+  },50000);
+  n.addEventListener('click',e=>{if(e.target===n)closeNudge();});
+})();
+function closeNudge(){
+  const n=$('exit-nudge');
+  if(n){n.classList.remove('open');document.body.style.overflow='';}
+  localStorage.setItem('exit_done','1');
+}
+async function submitNudge(){
+  const email=$('en-email').value.trim();
+  const msg=$('en-msg'),btn=document.querySelector('.en-btn');
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Please enter a valid email.';msg.className='en-msg er';return;}
+  btn.disabled=true;btn.textContent='Claiming…';
+  try{
+    const r=await api('/waitlist',{method:'POST',body:JSON.stringify({email,source:'exit_nudge'})});
+    msg.textContent='✓ You are #'+r.data.position+' on the list!';msg.className='en-msg ok';
+    localStorage.setItem('exit_done','1');setTimeout(closeNudge,2200);
+  }catch{
+    localStorage.setItem('pending_wl',email);
+    msg.textContent='✓ Saved — we will be in touch!';msg.className='en-msg ok';
+    setTimeout(closeNudge,2200);
+  }
+  btn.disabled=false;btn.textContent='Claim spot';
+}
+
+/* ── WAITLIST FORM ── */
+async function loadWLCount(){
+  try{
+    const d=await api('/waitlist/count');
+    const el=$('wl-count');
+    if(el)el.innerHTML='<strong>'+(d.data.count+50)+'</strong> teams already on the waitlist';
+    const sc=$('scta-n');
+    if(sc)sc.textContent=(d.data.count+50)+'+';
+  }catch{
+    const el=$('wl-count');
+    if(el)el.innerHTML='Join <strong>50+</strong> teams on the waitlist';
+  }
+}
+$('wl-form').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=$('wl-btn');
+  const email=$('wl-email').value.trim();
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    const m=$('wl-msg');m.textContent='Please enter a valid work email.';m.className='fmsg er';return;
+  }
+  btn.disabled=true;btn.textContent='Joining…';
+  $('wl-msg').className='fmsg';
+  try{
+    const r=await api('/waitlist',{method:'POST',body:JSON.stringify({
+      email,name:$('wl-name').value.trim(),
+      company:$('wl-co').value.trim(),use_case:$('wl-uc').value
+    })});
+    const m=$('wl-msg');m.textContent='You are #'+r.data.position+' on the mlops.dev waitlist!';m.className='fmsg ok';
+    $('wl-form').reset();loadWLCount();
+    toast("Welcome! You're #"+r.data.position,'ok');
+    setTimeout(function(){location.href='thankyou.html';},1200);
+  }catch(err){
+    const m=$('wl-msg');
+    m.textContent=err.message.includes('already')?'This email is already on the waitlist!':err.message||'Something went wrong';
+    m.className='fmsg er';toast(m.textContent,'er');
+  }finally{btn.disabled=false;btn.textContent='Join the waitlist →';}
+});
+
+/* ── COMMAND PALETTE ── */
+(function(){
+  const ICONS={
+    home:'<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',
+    user:'<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    play:'<circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>',
+    mon:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+    edit:'<path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+    brief:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>',
+    act:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    film:'<rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/>',
+    arr:'<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+    mail:'<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+    tag:'<path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+    code:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    lay:'<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+    gh:'<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>',
+  };
+  const ITEMS=[
+    {g:'Pages',ic:'home',t:'Home',s:'Marketing site',a:()=>scrollToTop()},
+    {g:'Pages',ic:'user',t:'About',s:'Founder story, mission, values',a:()=>location.href='about.html'},
+    {g:'Pages',ic:'play',t:'Interactive Demo',s:'4-step product walkthrough',a:()=>location.href='demo.html'},
+    {g:'Pages',ic:'mon',t:'Fleet Dashboard',s:'Live device management',a:()=>location.href='dashboard.html'},
+    {g:'Pages',ic:'edit',t:'Engineering Blog',s:'6 articles from the team',a:()=>location.href='blog.html'},
+    {g:'Pages',ic:'brief',t:'Careers',s:'3 open roles',a:()=>location.href='careers.html'},
+    {g:'Pages',ic:'act',t:'System Status',s:'All systems operational',a:()=>location.href='status.html'},
+    {g:'Pages',ic:'film',t:'Motion Poster',s:'Cinematic brand experience',a:()=>location.href='poster.html'},
+    {g:'Actions',ic:'arr',t:'Join Waitlist',s:'Get early access — free',a:()=>smoothTo('wl')},
+    {g:'Actions',ic:'mail',t:'Email the Founder',s:'hello@mlops.dev',a:()=>location.href='mailto:hello@mlops.dev'},
+    {g:'Actions',ic:'gh',t:'GitHub',s:'Open-source edge agent',a:()=>comingSoon('GitHub','github.com/Raghunath2604/Raghunath2604-mlops-dev','https://github.com/Raghunath2604/Raghunath2604-mlops-dev')},
+    {g:'Sections',ic:'lay',t:'Platform',s:'Spec sheet — jump to section',a:()=>smoothTo('platform')},
+    {g:'Sections',ic:'tag',t:'Pricing',s:'Plans and pricing',a:()=>smoothTo('pricing')},
+    {g:'Sections',ic:'code',t:'How it works',s:'4-step deployment flow',a:()=>smoothTo('how')},
+  ];
+
+  const ov=$('cmd-ov'),inp=$('cmd-input'),res=$('cmd-results');
+  let sel=0,filtered=ITEMS;
+
+  function icon(k){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${ICONS[k]||ICONS.arr}</svg>`;}
+
+  function render(q=''){
+    filtered=q?ITEMS.filter(i=>i.t.toLowerCase().includes(q.toLowerCase())||i.s.toLowerCase().includes(q.toLowerCase())||i.g.toLowerCase().includes(q.toLowerCase())):ITEMS;
+    const groups={};
+    filtered.forEach(i=>{if(!groups[i.g])groups[i.g]=[];groups[i.g].push(i);});
+    let html='';
+    Object.keys(groups).forEach(g=>{
+      html+=`<div class="cmd-grp">${g}</div>`;
+      groups[g].forEach(item=>{
+        const idx=filtered.indexOf(item);
+        html+=`<div class="cmd-item${idx===sel?' sel':''}" data-i="${idx}" onclick="cmdRun(${idx})" onmouseover="cmdSel(${idx})">
+          <div class="cmd-item-icon">${icon(item.ic)}</div>
+          <div><div class="cmd-item-t">${item.t}</div><div class="cmd-item-s">${item.s}</div></div>
+        </div>`;
+      });
+    });
+    if(!filtered.length)html=`<div style="padding:2rem;text-align:center;font-size:.82rem;color:#2A3450">No results for "${q}"</div>`;
+    res.innerHTML=html;
+  }
+
+  window.openCmd=function(){
+    ov.classList.add('open');document.body.style.overflow='hidden';
+    inp.value='';sel=0;render('');
+    setTimeout(()=>inp.focus(),50);
+  };
+  function closeCmd(){ov.classList.remove('open');document.body.style.overflow='';}
+  window.cmdRun=function(i){const item=filtered[i];if(item){closeCmd();item.a();}};
+  window.cmdSel=function(i){sel=i;render(inp.value);};
+  inp.addEventListener('input',function(){sel=0;render(this.value);});
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,filtered.length-1);render(inp.value);res.querySelector('.sel')?.scrollIntoView({block:'nearest'});}
+    else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,0);render(inp.value);res.querySelector('.sel')?.scrollIntoView({block:'nearest'});}
+    else if(e.key==='Enter'){e.preventDefault();cmdRun(sel);}
+  });
+  ov.addEventListener('click',e=>{if(e.target===ov)closeCmd();});
+  document.addEventListener('keydown',e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();ov.classList.contains('open')?closeCmd():openCmd();}
+    else if(e.key==='Escape'){
+      if(ov.classList.contains('open'))closeCmd();
+      else if($('exit-nudge').classList.contains('open'))closeNudge();
+      else if($('modal').classList.contains('open'))closeModal();
+      else if($('mob-nav').classList.contains('open'))closeMobNav();
+    }
+  });
+})();
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',function(){
+  renderFleet();
+  loadWLCount();
+});
+
+// Pending sync
+(function(){
+  const p=localStorage.getItem('pending_wl');
+  if(!p)return;
+  api('/waitlist',{method:'POST',body:JSON.stringify({email:p,source:'offline_sync'})})
+    .then(()=>localStorage.removeItem('pending_wl')).catch(()=>{});
+})();
+</script>
+<script>
+/* ── COOKIE CONSENT ── */
+(function(){
+  if(localStorage.getItem('cookie_consent')) return;
+  setTimeout(function(){
+    var b = document.getElementById('cookie-banner');
+    if(b) b.classList.add('show');
+  }, 2000);
+})();
+function acceptCookies(){
+  localStorage.setItem('cookie_consent','accepted');
+  var b = document.getElementById('cookie-banner');
+  if(b){b.style.transform='translateY(100%)';}
+  // Enable GA4 if present
+  if(typeof gtag !== 'undefined'){
+    gtag('consent','update',{'analytics_storage':'granted'});
+  }
+}
+function declineCookies(){
+  localStorage.setItem('cookie_consent','declined');
+  var b = document.getElementById('cookie-banner');
+  if(b){b.style.transform='translateY(100%)';}
+}
+</script>
+</body>
+</html>

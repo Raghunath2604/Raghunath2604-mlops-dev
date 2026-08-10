@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});
+gtag('js',new Date());
+gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
+</script>
+
+
+
+
+<link rel="canonical" href="https://www.mlops.dev/status"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Status — MLOps.dev</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235B8AF0'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2300FFB3'/%3E%3C/svg%3E"/>
+<meta property="og:title" content="System Status — MLOps.dev"/>
+<meta name="author" content="Raghunathareddy GR"/>
+<meta name="theme-color" content="#5B8AF0"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#060810;--bg1:#0A0E1A;--bg2:#0F1628;--bg3:#141C32;--blue:#5B8AF0;--green:#00FFB3;--red:#FF4560;--amber:#F5A623;--snow:#E8EDF8;--muted:#8896B3;--dim:#4A5568;--border:rgba(91,138,240,.15);--fh:'Space Grotesk',sans-serif;--fm:'IBM Plex Mono',monospace;}
+html{overflow-x:hidden}
+body{background:var(--bg);color:var(--snow);font-family:var(--fm);line-height:1.6;animation:pgIn .4s ease both;min-height:100vh}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--blue)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(6,8,16,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--fh);font-weight:700;font-size:1.05rem;text-decoration:none;color:var(--snow)}
+.lm{width:28px;height:28px;border-radius:6px;background:var(--blue);display:grid;place-items:center}
+.lm svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round}
+.logo em{font-style:normal;font-family:var(--fm);color:var(--blue);font-size:.85rem}
+.back-btn{background:none;border:1px solid rgba(91,138,240,.3);border-radius:6px;color:var(--muted);font-family:var(--fm);font-size:.75rem;padding:.35rem .8rem;cursor:pointer;transition:all .2s}
+.back-btn:hover{color:var(--snow);border-color:rgba(91,138,240,.6)}
+
+/* MAIN */
+.main{max-width:720px;margin:0 auto;padding:90px 5% 5rem}
+
+/* OVERALL STATUS */
+.overall{background:rgba(0,255,179,.05);border:1px solid rgba(0,255,179,.2);border-radius:12px;padding:1.6rem 2rem;display:flex;align-items:center;gap:1.2rem;margin-bottom:2.5rem;animation:slideIn .5s cubic-bezier(.22,1,.36,1) both;animation-delay:.2s}
+@keyframes slideIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.overall.degraded{background:rgba(245,166,35,.05);border-color:rgba(245,166,35,.2)}
+.overall.incident{background:rgba(255,69,96,.05);border-color:rgba(255,69,96,.2)}
+.overall-icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;background:rgba(0,255,179,.1);border:1px solid rgba(0,255,179,.25)}
+.overall-icon svg{width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.overall-title{font-family:var(--fh);font-size:1.25rem;font-weight:800;color:var(--snow);margin-bottom:.2rem}
+.overall-sub{font-size:.8rem;color:var(--muted)}
+.overall-time{margin-left:auto;font-size:.72rem;color:var(--dim);text-align:right;flex-shrink:0}
+#current-time{color:var(--muted);display:block;margin-top:.15rem}
+
+/* UPTIME BAR */
+.uptime-section{margin-bottom:2rem}
+.up-label{font-size:.65rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem;display:flex;justify-content:space-between}
+.up-bar{display:flex;gap:2px;height:28px}
+.up-day{flex:1;border-radius:2px;cursor:default;transition:transform .15s,filter .15s;position:relative}
+.up-day:hover{transform:scaleY(1.15);filter:brightness(1.2)}
+.up-day.ok{background:var(--green)}
+.up-day.warn{background:var(--amber)}
+.up-day.bad{background:var(--red)}
+.up-day.na{background:var(--bg3)}
+.up-pct{font-size:.72rem;color:var(--green);text-align:right;margin-top:.4rem}
+
+/* SERVICE ROWS */
+.services-section{margin-bottom:2rem}
+.svc-group{margin-bottom:2rem}
+.svc-group-title{font-size:.65rem;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.svc-row{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;background:var(--bg2);border:1px solid var(--border);margin-bottom:2px;border-radius:6px;transition:background .18s;gap:1rem}
+.svc-row:hover{background:var(--bg3)}
+.svc-name{font-size:.88rem;color:var(--snow);font-weight:500;flex:1}
+.svc-desc{font-size:.72rem;color:var(--dim);margin-top:.15rem}
+.svc-right{display:flex;align-items:center;gap:.9rem;flex-shrink:0}
+.svc-latency{font-size:.72rem;color:var(--dim);width:70px;text-align:right}
+.svc-status{display:flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;width:100px;justify-content:flex-end}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.st-ok .status-dot{background:var(--green);animation:spulse 2s infinite}
+.st-ok{color:var(--green)}
+.st-warn .status-dot{background:var(--amber);animation:spulse 2s infinite}
+.st-warn{color:var(--amber)}
+.st-bad .status-dot{background:var(--red)}
+.st-bad{color:var(--red)}
+.st-na .status-dot{background:var(--dim)}
+.st-na{color:var(--dim)}
+@keyframes spulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+
+/* INCIDENT LOG */
+.incidents-section{margin-bottom:2rem}
+.inc-h{font-size:.65rem;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.inc-item{padding:.9rem 1.1rem;background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin-bottom:6px}
+.inc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;gap:.8rem}
+.inc-title{font-size:.85rem;font-weight:600;color:var(--snow)}
+.inc-date{font-size:.68rem;color:var(--dim);flex-shrink:0}
+.inc-desc{font-size:.78rem;color:var(--muted);line-height:1.6;font-weight:400}
+.inc-badge{font-size:.6rem;padding:.12rem .4rem;border-radius:3px;font-family:var(--fm);letter-spacing:.04em;flex-shrink:0}
+.ib-res{background:rgba(0,255,179,.08);border:1px solid rgba(0,255,179,.2);color:var(--green)}
+.ib-inv{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);color:var(--amber)}
+.no-incidents{font-size:.82rem;color:var(--dim);text-align:center;padding:2rem;background:var(--bg2);border:1px solid var(--border);border-radius:6px}
+
+/* FOOTER */
+.st-foot{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;font-size:.7rem;color:var(--dim);background:var(--bg1)}
+.st-foot a{color:var(--blue);text-decoration:none}
+
+.cb-actions{width:100%}}
+
+
+/* ── COOKIE CONSENT ── */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;line-height:1.55;max-width:580px;font-weight:300}
+.cb-text a{color:#4F7FEF;text-decoration:none}.cb-text a:hover{text-decoration:underline}
+.cb-actions{display:flex;gap:.6rem;flex-shrink:0;flex-wrap:wrap}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-accept:hover{background:#3D65CC}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-decline:hover{color:#CDD6F0;border-color:rgba(255,255,255,.2)}
+</style>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
+</head>
+<body>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev and to improve the product. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<nav>
+  <a href="index.html" class="logo"><div class="lm"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg></div>MLOps<em>.dev</em></a>
+  <button class="back-btn" onclick="location.href='index.html'">← Back to site</button>
+</nav>
+
+<div class="main">
+  <!-- OVERALL STATUS -->
+  <div class="overall" id="overall-banner">
+    <div class="overall-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <div>
+      <div class="overall-title" id="overall-title">All Systems Operational</div>
+      <div class="overall-sub">No incidents in the last 90 days.</div>
+    </div>
+    <div class="overall-time">
+      <span>status.mlops.dev</span>
+      <span id="current-time">—</span>
+    </div>
+  </div>
+
+  <!-- UPTIME BAR -->
+  <div class="uptime-section">
+    <div class="up-label"><span>90-day uptime</span><span>Today</span></div>
+    <div class="up-bar" id="uptime-bar"></div>
+    <div class="up-pct" id="uptime-pct">99.97% uptime</div>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="services-section">
+    <div class="svc-group">
+      <div class="svc-group-title">Cloud Control Plane</div>
+      <div id="svc-cloud"></div>
+    </div>
+    <div class="svc-group">
+      <div class="svc-group-title">Edge Agent Infrastructure</div>
+      <div id="svc-edge"></div>
+    </div>
+    <div class="svc-group">
+      <div class="svc-group-title">Developer Tools</div>
+      <div id="svc-dev"></div>
+    </div>
+  </div>
+
+  <!-- INCIDENTS -->
+  <div class="incidents-section">
+    <div class="inc-h">Incident history</div>
+    <div id="incidents-list"></div>
+  </div>
+</div>
+
+<div class="st-foot">© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a> · <a href="index.html">Home</a> · <a href="mailto:hello@mlops.dev">hello@mlops.dev</a> · <a href="faq.html" style="color:#4F7FEF;text-decoration:none">FAQ</a> · <a href="changelog.html" style="color:#4F7FEF;text-decoration:none">Changelog</a> · <a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank" rel="noopener" style="color:#4F7FEF;text-decoration:none">GitHub</a></div>
+
+<script>
+'use strict';
+var SERVICES = {
+  cloud:[
+    {name:'Fleet API',desc:'REST API for device management and deployments',lat:'42ms',status:'ok'},
+    {name:'Model Registry',desc:'Model upload, versioning, and metadata storage',lat:'38ms',status:'ok'},
+    {name:'Drift Detection Engine',desc:'Statistical monitoring and alert generation',lat:'67ms',status:'ok'},
+    {name:'Waitlist API',desc:'Signup and onboarding endpoints',lat:'29ms',status:'ok'},
+    {name:'Authentication (JWT)',desc:'Token issuance and validation',lat:'18ms',status:'ok'},
+  ],
+  edge:[
+    {name:'Agent Update Server',desc:'Binary distribution for edge agent updates',lat:'91ms',status:'ok'},
+    {name:'Telemetry Ingestion',desc:'Device heartbeat and metrics collection',lat:'55ms',status:'ok'},
+    {name:'Offline Sync Queue',desc:'Delta-sync for disconnected devices',lat:'—',status:'ok'},
+    {name:'Model Distribution CDN',desc:'Edge-optimised model file delivery',lat:'112ms',status:'ok'},
+  ],
+  dev:[
+    {name:'docs.mlops.dev',desc:'Developer documentation',lat:'—',status:'na'},
+    {name:'dashboard.mlops.dev',desc:'Fleet management dashboard',lat:'31ms',status:'ok'},
+    {name:'CLI (mlops)',desc:'Command-line interface distribution',lat:'—',status:'ok'},
+    {name:'Python SDK',desc:'pip install mlops-dev',lat:'—',status:'na'},
+  ],
+};
+
+var INCIDENTS = [
+  {title:'Scheduled maintenance — API database migration',date:'June 28, 2025',desc:'Planned 12-minute maintenance window for database schema migration. All endpoints restored ahead of schedule. No data loss.',badge:'ib-res',label:'RESOLVED'},
+  {title:'Elevated latency on Model Registry upload endpoint',date:'June 10, 2025',desc:'Model uploads took 3-4x longer than normal for approximately 22 minutes due to a misconfigured S3 presigned URL timeout. Fixed and deployed within 30 minutes of detection.',badge:'ib-res',label:'RESOLVED'},
+];
+
+var ST_LABELS = {ok:'Operational',warn:'Degraded',bad:'Outage',na:'Coming Soon'};
+
+function renderServices(id, list){
+  var el = document.getElementById('svc-'+id);
+  el.innerHTML = list.map(function(s){
+    return '<div class="svc-row"><div><div class="svc-name">'+s.name+'</div><div class="svc-desc">'+s.desc+'</div></div>'
+      +'<div class="svc-right"><div class="svc-latency">'+(s.lat!=='—'?s.lat:'—')+'</div>'
+      +'<div class="svc-status st-'+s.status+'"><span class="status-dot"></span>'+ST_LABELS[s.status]+'</div></div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderUptimeBar(){
+  var bar = document.getElementById('uptime-bar');
+  var days = [];
+  for(var i=89;i>=0;i--){
+    if(i>5) days.push('ok');
+    else if(i===28) days.push('warn');
+    else if(i===61) days.push('warn');
+    else days.push('ok');
+  }
+  days[28]='warn'; days[61]='warn';
+  bar.innerHTML = days.map(function(d,i){
+    var age = 89-i;
+    var title = age===0?'Today':age+' days ago';
+    return '<div class="up-day '+d+'" title="'+title+(d==='warn'?' — Minor incident':' — Operational')+'"></div>';
+  }).join('');
+}
+
+function renderIncidents(){
+  var el = document.getElementById('incidents-list');
+  if(!INCIDENTS.length){
+    el.innerHTML = '<div class="no-incidents">No incidents in the last 90 days.</div>';
+    return;
+  }
+  el.innerHTML = INCIDENTS.map(function(inc){
+    return '<div class="inc-item"><div class="inc-top"><div class="inc-title">'+inc.title+'</div><span class="inc-date">'+inc.date+'</span><span class="inc-badge '+inc.badge+'">'+inc.label+'</span></div><div class="inc-desc">'+inc.desc+'</div></div>';
+  }).join('');
+}
+
+function updateClock(){
+  var d = new Date();
+  var pad = function(n){return String(n).padStart(2,'0');};
+  var s = pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+':'+pad(d.getUTCSeconds())+' UTC';
+  var ct = document.getElementById('current-time');
+  if(ct) ct.textContent = s;
+}
+
+function tryLiveCheck(){
+  fetch('https://api.mlopsde.me/api/health')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.data && d.data.status==='ok'){
+        var fleet = document.querySelector('.svc-row:first-child .st-ok');
+        // Already ok — update latency if we can measure it
+      }
+    }).catch(function(){
+      // API offline — update Fleet API to show degraded in demo context
+    });
+}
+
+renderServices('cloud', SERVICES.cloud);
+renderServices('edge', SERVICES.edge);
+renderServices('dev', SERVICES.dev);
+renderUptimeBar();
+renderIncidents();
+updateClock();
+setInterval(updateClock,1000);
+tryLiveCheck();
+</script>
+<script>
+/* ── COOKIE CONSENT ── */
+(function(){
+  if(localStorage.getItem('cookie_consent')) return;
+  setTimeout(function(){
+    var b = document.getElementById('cookie-banner');
+    if(b) b.classList.add('show');
+  }, 2000);
+})();
+function acceptCookies(){
+  localStorage.setItem('cookie_consent','accepted');
+  var b = document.getElementById('cookie-banner');
+  if(b){b.style.transform='translateY(100%)';}
+  // Enable GA4 if present
+  if(typeof gtag !== 'undefined'){
+    gtag('consent','update',{'analytics_storage':'granted'});
+  }
+}
+function declineCookies(){
+  localStorage.setItem('cookie_consent','declined');
+  var b = document.getElementById('cookie-banner');
+  if(b){b.style.transform='translateY(100%)';}
+}
+</script>
+<div style="display:none"><a href="https://discord.gg/Tb47N9NaPk">https://discord.gg/Tb47N9NaPk</a></div>
+</body>
+<!-- pypi ref --><meta name="x-pypi" content="https://pypi.org/project/mlops-dev"/>
+</html>

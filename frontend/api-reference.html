@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>API Reference — MLOps.dev</title>
+<link rel="canonical" href="api-reference.html"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%234F7FEF' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300E5A0'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23080C16'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="description" content="MLOps.dev REST API reference — deploy, monitor, and manage ML models on edge devices."/>
+<meta name="author" content="Raghunathareddy GR"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});gtag('js',new Date());gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03050A;--bg1:#080C16;--bg2:#0D1220;--blue:#4F7FEF;--green:#00E5A0;--snow:#CDD6F0;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12);--border2:rgba(79,127,239,.25)}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-height:1.65}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--blue)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;padding:0 5%;gap:1rem;background:rgba(3,5,10,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;font-size:.93rem;font-weight:600;text-decoration:none;color:var(--snow)}
+.lm{width:24px;height:24px;border-radius:5px;background:#4F7FEF;display:grid;place-items:center}
+.lm svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo em{font-style:normal;font-family:monospace;color:#4F7FEF;font-size:.8rem}
+.nav-slash{color:var(--dim);font-size:.85rem}
+.nav-doc{font-size:.82rem;color:var(--muted)}
+.nav-r{display:flex;gap:.6rem;margin-left:auto}
+.nav-ghost{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:.78rem;padding:.3rem .75rem;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center}
+.nav-ghost:hover{color:var(--snow)}
+.nav-cta{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.78rem;font-weight:600;padding:.32rem .9rem;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh;padding-top:52px}
+.sidebar{position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;border-right:1px solid var(--border);padding:1.5rem 0;background:var(--bg1)}
+.sb-section{margin-bottom:1.5rem}
+.sb-section-title{font-size:.62rem;font-family:monospace;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;padding:.4rem 1.2rem;display:block}
+.sb-link{display:block;padding:.42rem 1.2rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .15s;text-decoration:none;border-left:2px solid transparent}
+.sb-link:hover{color:var(--snow);background:rgba(79,127,239,.05);border-left-color:var(--dim)}
+.sb-link.active{color:#4F7FEF;background:rgba(79,127,239,.08);border-left-color:#4F7FEF}
+.sb-method{font-family:monospace;font-size:.6rem;padding:.1rem .35rem;border-radius:3px;margin-right:.4rem;font-weight:600}
+.m-get{background:rgba(0,229,160,.1);color:#00E5A0}
+.m-post{background:rgba(79,127,239,.1);color:#4F7FEF}
+.m-del{background:rgba(232,64,64,.1);color:#E84040}
+.content{padding:3rem 4rem 6rem;max-width:820px}
+.api-section{margin-bottom:4rem;scroll-margin-top:80px}
+.doc-eyebrow{font-family:monospace;font-size:.65rem;color:#4F7FEF;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;display:block}
+.doc-h1{font-size:clamp(1.8rem,3vw,2.4rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.7rem;line-height:1.1}
+.doc-h2{font-size:1.15rem;font-weight:700;color:#E8EDF8;margin:2.5rem 0 .6rem;padding-top:2rem;border-top:1px solid var(--border);letter-spacing:-.02em}
+.doc-p{font-size:.9rem;color:var(--muted);line-height:1.78;margin-bottom:.8rem;font-weight:300}
+.doc-p a{color:#4F7FEF;text-decoration:none}
+.doc-p strong{color:#9AAAC8;font-weight:500}
+.endpoint{background:var(--bg1);border:1px solid var(--border);border-radius:8px;margin:1rem 0;overflow:hidden}
+.ep-header{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.ep-header:hover{background:rgba(79,127,239,.04)}
+.ep-method{font-family:monospace;font-size:.72rem;font-weight:700;padding:.22rem .6rem;border-radius:4px;flex-shrink:0}
+.ep-path{font-family:monospace;font-size:.85rem;color:var(--snow);flex:1}
+.ep-desc{font-size:.78rem;color:var(--muted);margin-left:auto;font-style:italic}
+.ep-body{padding:1rem;display:none}
+.ep-body.open{display:block}
+.param-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:.6rem 0}
+.param-table th{font-family:monospace;font-size:.6rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding:.4rem .7rem;text-align:left;border-bottom:1px solid var(--border);font-weight:400}
+.param-table td{padding:.55rem .7rem;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted);vertical-align:top;line-height:1.5;font-weight:300}
+.param-table td:first-child{font-family:monospace;color:#4F7FEF;font-size:.78rem}
+.param-table td:nth-child(2){color:#9AAAC8;font-size:.78rem}
+.req{color:#E84040;font-size:.6rem;font-family:monospace;margin-left:.3rem}
+.code-wrap{background:rgba(0,0,0,.3);border:1px solid rgba(79,127,239,.12);border-radius:6px;margin:.7rem 0;overflow:hidden}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:.4rem .8rem;background:rgba(79,127,239,.04);border-bottom:1px solid rgba(79,127,239,.08)}
+.code-lang{font-family:monospace;font-size:.6rem;color:var(--dim)}
+.code-copy{background:none;border:1px solid var(--border);border-radius:3px;color:var(--dim);font-size:.6rem;padding:.15rem .45rem;cursor:pointer;font-family:monospace;transition:all .2s}
+.code-copy:hover{color:var(--snow)}
+.code-body{padding:.8rem;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.7;color:#8899BB;overflow-x:auto}
+.cm{color:var(--dim)}.ck{color:#4F7FEF}.cs{color:#00E5A0}.cc{color:#E8A020}.cr{color:#E84040}
+.badge{display:inline-block;font-family:monospace;font-size:.6rem;padding:.12rem .4rem;border-radius:3px;margin-left:.4rem}
+.b-v1{background:rgba(0,229,160,.1);color:#00E5A0;border:1px solid rgba(0,229,160,.2)}
+.callout{border-radius:7px;padding:.8rem 1rem;margin:.8rem 0;display:flex;gap:.7rem;font-size:.84rem;color:var(--muted);line-height:1.6;font-weight:300}
+.callout-info{background:rgba(79,127,239,.06);border:1px solid rgba(79,127,239,.18)}
+.callout-tip{background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.15)}
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;max-width:580px;font-weight:300}.cb-text a{color:#4F7FEF;text-decoration:none}
+.cb-actions{display:flex;gap:.6rem}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
+footer{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;font-family:monospace;font-size:.7rem;color:var(--dim);background:var(--bg1)}
+footer a{color:#4F7FEF;text-decoration:none}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{display:none}.content{padding:2rem 1.5rem 4rem}}
+</style>
+</head>
+<body>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="lm"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg></div>
+    MLOps<em>.dev</em>
+  </a>
+  <span class="nav-slash">/</span>
+  <span class="nav-doc">API Reference</span>
+  <div class="nav-r">
+    <a href="docs.html" class="nav-ghost">Docs</a>
+    <a href="https://discord.gg/Tb47N9NaPk" target="_blank" rel="noopener" class="nav-ghost">Discord</a>
+    <a href="index.html#wl" class="nav-cta">Join waitlist</a>
+  </div>
+</nav>
+
+<div class="layout">
+<nav class="sidebar" aria-label="API reference navigation">
+  <div class="sb-section">
+    <span class="sb-section-title">Overview</span>
+    <a class="sb-link active" href="#overview">Introduction</a>
+    <a class="sb-link" href="#auth">Authentication</a>
+    <a class="sb-link" href="#errors">Errors</a>
+    <a class="sb-link" href="#pagination">Pagination</a>
+  </div>
+  <div class="sb-section">
+    <span class="sb-section-title">Devices</span>
+    <a class="sb-link" href="#devices-list"><span class="sb-method m-get">GET</span>List devices</a>
+    <a class="sb-link" href="#devices-get"><span class="sb-method m-get">GET</span>Get device</a>
+    <a class="sb-link" href="#devices-logs"><span class="sb-method m-get">GET</span>Device logs</a>
+    <a class="sb-link" href="#devices-delete"><span class="sb-method m-del">DEL</span>Deregister</a>
+  </div>
+  <div class="sb-section">
+    <span class="sb-section-title">Models</span>
+    <a class="sb-link" href="#models-list"><span class="sb-method m-get">GET</span>List models</a>
+    <a class="sb-link" href="#models-push"><span class="sb-method m-post">POST</span>Push model</a>
+    <a class="sb-link" href="#models-delete"><span class="sb-method m-del">DEL</span>Delete version</a>
+  </div>
+  <div class="sb-section">
+    <span class="sb-section-title">Deployments</span>
+    <a class="sb-link" href="#deploy-create"><span class="sb-method m-post">POST</span>Create deployment</a>
+    <a class="sb-link" href="#deploy-get"><span class="sb-method m-get">GET</span>Get deployment</a>
+    <a class="sb-link" href="#deploy-rollback"><span class="sb-method m-post">POST</span>Rollback</a>
+  </div>
+  <div class="sb-section">
+    <span class="sb-section-title">Drift</span>
+    <a class="sb-link" href="#drift-report"><span class="sb-method m-get">GET</span>Fleet report</a>
+    <a class="sb-link" href="#drift-alerts"><span class="sb-method m-get">GET</span>Alerts</a>
+    <a class="sb-link" href="#drift-reset"><span class="sb-method m-post">POST</span>Reset baseline</a>
+  </div>
+  <div class="sb-section">
+    <span class="sb-section-title">Other</span>
+    <a class="sb-link" href="#audit">Audit log</a>
+    <a class="sb-link" href="#status">Status</a>
+    <a class="sb-link" href="#health">Health check</a>
+  </div>
+  <div class="sb-section">
+    <span class="sb-section-title">SDKs</span>
+    <a class="sb-link" href="https://pypi.org/project/mlops-dev" target="_blank">Python SDK ↗</a>
+    <a class="sb-link" href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank">GitHub ↗</a>
+    <a class="sb-link" href="https://discord.gg/Tb47N9NaPk" target="_blank">Discord ↗</a>
+  </div>
+</nav>
+
+<main class="content">
+
+<div class="api-section" id="overview">
+  <span class="doc-eyebrow">MLOps.dev REST API</span>
+  <h1 class="doc-h1">API Reference <span class="badge b-v1">v1</span></h1>
+  <p class="doc-p">Base URL: <code>https://api.mlops.dev/v1</code><br/>
+  All requests require <code>Authorization: Bearer &lt;api_key&gt;</code>.<br/>
+  All responses are JSON. All timestamps are ISO 8601 UTC.</p>
+  <div class="callout callout-tip">
+    <div>The Python SDK wraps this API: <code>pip install mlops-dev</code>. See <a href="https://pypi.org/project/mlops-dev" target="_blank">PyPI →</a> or <a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank">GitHub →</a></div>
+  </div>
+</div>
+
+<div class="api-section" id="auth">
+  <h2 class="doc-h2">Authentication</h2>
+  <p class="doc-p">All API requests require an API key. Get yours from <strong>Dashboard → Settings → API Keys</strong>.</p>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-lang">HTTP HEADER</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+    <div class="code-body">Authorization: Bearer mlops_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-lang">CURL EXAMPLE</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+    <div class="code-body">curl https://api.mlops.dev/v1/devices \
+  -H <span class="cs">"Authorization: Bearer $MLOPS_API_KEY"</span></div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-lang">PYTHON SDK</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+    <div class="code-body"><span class="ck">import</span> mlops
+<span class="cm"># From env variable MLOPS_API_KEY</span>
+client = mlops.Client()
+<span class="cm"># Or explicit</span>
+client = mlops.Client(api_key=<span class="cs">"mlops_live_xxx"</span>)</div>
+  </div>
+</div>
+
+<div class="api-section" id="errors">
+  <h2 class="doc-h2">Errors</h2>
+  <p class="doc-p">Standard HTTP status codes. Error responses include a JSON body with <code>error</code> and optional <code>code</code> fields.</p>
+  <table class="param-table">
+    <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>200</td><td>Success</td></tr>
+      <tr><td>400</td><td>Bad request — invalid parameters</td></tr>
+      <tr><td>401</td><td>Unauthorized — invalid or missing API key</td></tr>
+      <tr><td>404</td><td>Not found — device, model, or deployment does not exist</td></tr>
+      <tr><td>429</td><td>Rate limited — check Retry-After header</td></tr>
+      <tr><td>500</td><td>Internal server error — contact hello@mlops.dev</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="api-section" id="devices-list">
+  <h2 class="doc-h2">List devices</h2>
+  <div class="endpoint">
+    <div class="ep-header" onclick="toggleEp(this)">
+      <span class="ep-method m-get" style="background:rgba(0,229,160,.1);color:#00E5A0;font-family:monospace;font-size:.72rem;padding:.22rem .6rem;border-radius:4px;">GET</span>
+      <span class="ep-path">/devices</span>
+      <span class="ep-desc">List all registered devices</span>
+    </div>
+    <div class="ep-body open">
+      <table class="param-table">
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>status</td><td>string</td><td>Filter: online | offline | drift | error</td></tr>
+          <tr><td>hw_class</td><td>string</td><td>Filter by hardware class e.g. jetson_orin</td></tr>
+          <tr><td>limit</td><td>integer</td><td>Page size (default 100, max 500)</td></tr>
+          <tr><td>offset</td><td>integer</td><td>Pagination offset</td></tr>
+        </tbody>
+      </table>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">RESPONSE</span></div>
+        <div class="code-body">{
+  <span class="cs">"data"</span>: [
+    {
+      <span class="cs">"id"</span>:            <span class="cs">"jetson-prod-01"</span>,
+      <span class="cs">"name"</span>:          <span class="cs">"Factory Floor A — Camera 1"</span>,
+      <span class="cs">"status"</span>:        <span class="cs">"online"</span>,
+      <span class="cs">"hw_class"</span>:      <span class="cs">"jetson_orin"</span>,
+      <span class="cs">"arch"</span>:          <span class="cs">"arm64"</span>,
+      <span class="cs">"model_name"</span>:    <span class="cs">"defect-detector"</span>,
+      <span class="cs">"model_tag"</span>:     <span class="cs">"v2.0"</span>,
+      <span class="cs">"model_format"</span>:  <span class="cs">"tensorrt"</span>,
+      <span class="cs">"drift_score"</span>:   <span class="cc">0.12</span>,
+      <span class="cs">"latency_ms"</span>:    <span class="cc">3.8</span>,
+      <span class="cs">"last_seen"</span>:     <span class="cs">"2025-07-15T10:42:00Z"</span>,
+      <span class="cs">"agent_version"</span>: <span class="cs">"0.6.0"</span>,
+      <span class="cs">"ram_mb"</span>:        <span class="cc">14</span>
+    }
+  ],
+  <span class="cs">"total"</span>: <span class="cc">842</span>,
+  <span class="cs">"limit"</span>: <span class="cc">100</span>,
+  <span class="cs">"offset"</span>: <span class="cc">0</span>
+}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="api-section" id="deploy-create">
+  <h2 class="doc-h2">Create deployment</h2>
+  <div class="endpoint">
+    <div class="ep-header" onclick="toggleEp(this)">
+      <span class="ep-method m-post" style="background:rgba(79,127,239,.1);color:#4F7FEF;font-family:monospace;font-size:.72rem;padding:.22rem .6rem;border-radius:4px;">POST</span>
+      <span class="ep-path">/deployments</span>
+      <span class="ep-desc">Deploy a model to device(s)</span>
+    </div>
+    <div class="ep-body open">
+      <table class="param-table">
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>model_name<span class="req">*</span></td><td>string</td><td>Model name e.g. defect-detector</td></tr>
+          <tr><td>model_tag<span class="req">*</span></td><td>string</td><td>Version tag e.g. v2.0</td></tr>
+          <tr><td>target<span class="req">*</span></td><td>string</td><td>Device ID, hw_class, or "all"</td></tr>
+          <tr><td>stages</td><td>array</td><td>Staged rollout config (optional)</td></tr>
+          <tr><td>health_gate</td><td>object</td><td>accuracy_delta, latency_delta thresholds</td></tr>
+          <tr><td>stage_interval</td><td>string</td><td>Time between stages e.g. "30m"</td></tr>
+        </tbody>
+      </table>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">REQUEST BODY — canary rollout</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body">{
+  <span class="cs">"model_name"</span>: <span class="cs">"defect-detector"</span>,
+  <span class="cs">"model_tag"</span>:  <span class="cs">"v2.0"</span>,
+  <span class="cs">"target"</span>:     <span class="cs">"all"</span>,
+  <span class="cs">"stages"</span>: [
+    { <span class="cs">"hw_class"</span>: <span class="cs">"jetson_orin"</span>, <span class="cs">"count"</span>: <span class="cc">1</span> },
+    { <span class="cs">"hw_class"</span>: <span class="cs">"jetson_orin"</span>, <span class="cs">"pct"</span>: <span class="cc">100</span> },
+    { <span class="cs">"hw_class"</span>: <span class="cs">"jetson_nano"</span>, <span class="cs">"pct"</span>: <span class="cc">25</span> },
+    { <span class="cs">"hw_class"</span>: <span class="cs">"all"</span>,         <span class="cs">"pct"</span>: <span class="cc">100</span> }
+  ],
+  <span class="cs">"health_gate"</span>: {
+    <span class="cs">"accuracy_delta"</span>: <span class="cc">-0.03</span>,
+    <span class="cs">"latency_delta"</span>:  <span class="cc">0.20</span>
+  },
+  <span class="cs">"stage_interval"</span>: <span class="cs">"30m"</span>
+}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="api-section" id="drift-report">
+  <h2 class="doc-h2">Fleet drift report</h2>
+  <div class="endpoint">
+    <div class="ep-header" onclick="toggleEp(this)">
+      <span class="ep-method m-get" style="background:rgba(0,229,160,.1);color:#00E5A0;font-family:monospace;font-size:.72rem;padding:.22rem .6rem;border-radius:4px;">GET</span>
+      <span class="ep-path">/drift</span>
+      <span class="ep-desc">Fleet-wide drift summary</span>
+    </div>
+    <div class="ep-body open">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">RESPONSE</span></div>
+        <div class="code-body">{
+  <span class="cs">"data"</span>: {
+    <span class="cs">"total_devices"</span>:   <span class="cc">842</span>,
+    <span class="cs">"healthy"</span>:         <span class="cc">819</span>,
+    <span class="cs">"warning"</span>:         <span class="cc">18</span>,
+    <span class="cs">"drifting"</span>:        <span class="cc">5</span>,
+    <span class="cs">"offline"</span>:         <span class="cc">0</span>,
+    <span class="cs">"fleet_avg_kl"</span>:    <span class="cc">0.087</span>,
+    <span class="cs">"worst_device_id"</span>: <span class="cs">"jetson-floor-b-12"</span>,
+    <span class="cs">"worst_kl"</span>:        <span class="cc">0.72</span>,
+    <span class="cs">"alerts"</span>: [
+      {
+        <span class="cs">"device_id"</span>:   <span class="cs">"jetson-floor-b-12"</span>,
+        <span class="cs">"kl_score"</span>:   <span class="cc">0.72</span>,
+        <span class="cs">"severity"</span>:   <span class="cs">"alert"</span>,
+        <span class="cs">"monitor"</span>:    <span class="cs">"input_distribution"</span>,
+        <span class="cs">"detected_at"</span>: <span class="cs">"2025-07-15T09:14:32Z"</span>
+      }
+    ]
+  }
+}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="api-section" id="audit">
+  <h2 class="doc-h2">Audit log</h2>
+  <div class="endpoint">
+    <div class="ep-header" onclick="toggleEp(this)">
+      <span class="ep-method m-get" style="background:rgba(0,229,160,.1);color:#00E5A0;font-family:monospace;font-size:.72rem;padding:.22rem .6rem;border-radius:4px;">GET</span>
+      <span class="ep-path">/audit</span>
+      <span class="ep-desc">Immutable deployment audit log</span>
+    </div>
+    <div class="ep-body open">
+      <p class="doc-p">Returns paginated, immutable audit records. Required for FDA 21 CFR Part 11 and ISO 13485 compliance.</p>
+      <table class="param-table">
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>device_id</td><td>string</td><td>Filter by device</td></tr>
+          <tr><td>from</td><td>string</td><td>ISO 8601 start date</td></tr>
+          <tr><td>to</td><td>string</td><td>ISO 8601 end date</td></tr>
+          <tr><td>event_type</td><td>string</td><td>deployment | drift | rollback | auth</td></tr>
+          <tr><td>format</td><td>string</td><td>json | csv (default: json)</td></tr>
+          <tr><td>limit</td><td>integer</td><td>Max records (default 100)</td></tr>
+        </tbody>
+      </table>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">CURL — export CSV for FDA audit</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body">curl "https://api.mlops.dev/v1/audit?device_id=jetson-prod-01&from=2025-01-01&to=2025-07-15&format=csv" \
+  -H "Authorization: Bearer $MLOPS_API_KEY" \
+  -o audit-q1q2-2025.csv</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="api-section" id="health">
+  <h2 class="doc-h2">Health check</h2>
+  <div class="endpoint">
+    <div class="ep-header" onclick="toggleEp(this)">
+      <span class="ep-method m-get" style="background:rgba(0,229,160,.1);color:#00E5A0;font-family:monospace;font-size:.72rem;padding:.22rem .6rem;border-radius:4px;">GET</span>
+      <span class="ep-path">/health</span>
+      <span class="ep-desc">No auth required</span>
+    </div>
+    <div class="ep-body open">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">RESPONSE</span></div>
+        <div class="code-body">{ <span class="cs">"status"</span>: <span class="cs">"ok"</span>, <span class="cs">"version"</span>: <span class="cs">"1.0.0"</span>, <span class="cs">"uptime_s"</span>: <span class="cc">8472930</span> }</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<footer>
+  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a></div>
+  <div style="display:flex;justify-content:center;gap:1.3rem;margin-top:.5rem;flex-wrap:wrap">
+    <a href="index.html">Home</a><a href="docs.html">Docs</a><a href="faq.html">FAQ</a>
+    <a href="https://pypi.org/project/mlops-dev" target="_blank">PyPI</a>
+    <a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank">GitHub</a>
+    <a href="https://discord.gg/Tb47N9NaPk" target="_blank">Discord</a>
+  </div>
+<div style="display:none"><a href="roadmap.html">roadmap</a></div>
+</footer>
+
+<script>
+function toggleEp(header){var body=header.nextElementSibling;body.classList.toggle('open');}
+function copyCode(btn){
+  var code=btn.closest('.code-wrap').querySelector('.code-body').innerText;
+  navigator.clipboard.writeText(code).then(function(){
+    btn.textContent='copied!';setTimeout(function(){btn.textContent='copy';},1800);
+  });
+}
+(function(){if(localStorage.getItem('cookie_consent'))return;setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('show');},2200);})();
+function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
+function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
+</script>
+</body>
+</html>

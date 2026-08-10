@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Roadmap — MLOps.dev</title>
+<link rel="canonical" href="roadmap.html"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%234F7FEF' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300E5A0'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23080C16'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<meta name="description" content="MLOps.dev public roadmap — what we're building next for edge ML deployment."/>
+<meta name="author" content="Raghunathareddy GR"/>
+<!-- Google Analytics 4 | MLOps.dev | G-T4N00SB1DN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4N00SB1DN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'analytics_storage':'denied','wait_for_update':500});gtag('js',new Date());gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03050A;--bg1:#080C16;--bg2:#0D1220;--blue:#4F7FEF;--green:#00E5A0;--amber:#E8A020;--red:#E84040;--purple:#A064FF;--snow:#CDD6F0;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12);--border2:rgba(79,127,239,.25)}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-height:1.65;animation:pgIn .4s ease both}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--blue)}
+#sp{position:fixed;top:0;left:0;height:1px;z-index:9999;background:linear-gradient(90deg,#4F7FEF,#00E5A0);pointer-events:none;transition:width .05s linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(3,5,10,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:8px;font-size:.93rem;font-weight:600;text-decoration:none;color:var(--snow)}
+.lm{width:24px;height:24px;border-radius:5px;background:#4F7FEF;display:grid;place-items:center}
+.lm svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo em{font-style:normal;font-family:monospace;color:#4F7FEF;font-size:.8rem}
+.nav-r{display:flex;gap:.6rem}
+.nav-ghost{background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:.78rem;padding:.3rem .75rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.nav-ghost:hover{color:var(--snow)}
+.nav-cta{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.78rem;font-weight:600;padding:.32rem .9rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.nav-cta:hover{background:#3D65CC}
+/* HERO */
+.hero{padding:90px 5% 3rem;max-width:1100px;margin:0 auto;text-align:center}
+.hero-ey{font-family:monospace;font-size:.68rem;color:#4F7FEF;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;display:block}
+.hero-h{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.65rem;line-height:1.1}
+.hero-p{font-size:.95rem;color:var(--muted);line-height:1.72;max-width:520px;margin:0 auto 2rem;font-weight:300}
+.hero-note{display:inline-flex;align-items:center;gap:.5rem;font-family:monospace;font-size:.72rem;color:#00E5A0;background:rgba(0,229,160,.07);border:1px solid rgba(0,229,160,.2);border-radius:999px;padding:.28rem .9rem}
+.hn-dot{width:5px;height:5px;background:#00E5A0;border-radius:50%;box-shadow:0 0 6px #00E5A0;animation:pd 2s infinite}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:0 5% 2.5rem}
+.ftab{background:none;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:.78rem;font-weight:500;padding:.3rem .85rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.ftab:hover{border-color:var(--border2);color:var(--snow)}
+.ftab.active{background:rgba(79,127,239,.1);border-color:rgba(79,127,239,.4);color:#4F7FEF}
+/* ROADMAP BOARD */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.04);max-width:1100px;margin:0 auto 4rem}
+.col{background:var(--bg);padding:1.2rem}
+.col-header{margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.col-title{font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.2rem}
+.col-count{font-family:monospace;font-size:.65rem;color:var(--dim)}
+.col-shipped .col-title{color:#00E5A0}
+.col-progress .col-title{color:#4F7FEF}
+.col-planned .col-title{color:#E8A020}
+.col-future .col-title{color:#A064FF}
+/* CARDS */
+.rcard{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:.9rem;margin-bottom:.6rem;cursor:default;transition:all .2s;position:relative;overflow:hidden}
+.rcard:hover{border-color:var(--border2);transform:translateY(-1px)}
+.rcard::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:8px 0 0 8px}
+.col-shipped .rcard::before{background:#00E5A0}
+.col-progress .rcard::before{background:#4F7FEF}
+.col-planned .rcard::before{background:#E8A020}
+.col-future .rcard::before{background:#A064FF}
+.rcard-version{font-family:monospace;font-size:.6rem;color:var(--dim);letter-spacing:.06em;margin-bottom:.3rem;display:block}
+.rcard-title{font-size:.88rem;font-weight:600;color:var(--snow);margin-bottom:.3rem;line-height:1.3}
+.rcard-desc{font-size:.77rem;color:var(--muted);line-height:1.55;font-weight:300}
+.rcard-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.6rem}
+.rtag{font-family:monospace;font-size:.58rem;padding:.12rem .38rem;border-radius:3px;letter-spacing:.04em}
+.rt-agent{background:rgba(79,127,239,.1);border:1px solid rgba(79,127,239,.2);color:#4F7FEF}
+.rt-platform{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.18);color:#00E5A0}
+.rt-sdk{background:rgba(160,100,255,.08);border:1px solid rgba(160,100,255,.18);color:#A064FF}
+.rt-enterprise{background:rgba(232,160,32,.08);border:1px solid rgba(232,160,32,.18);color:#E8A020}
+.rt-infra{background:rgba(90,106,138,.1);border:1px solid rgba(90,106,138,.2);color:#5A6A8A}
+/* PROGRESS BAR on in-progress cards */
+.rcard-progress{margin-top:.7rem}
+.rcard-progress-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.rcard-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#4F7FEF,#00E5A0);transition:width 1s ease}
+.rcard-progress-label{font-family:monospace;font-size:.6rem;color:var(--dim);margin-top:.25rem;display:flex;justify-content:space-between}
+/* VOTE BUTTON */
+.rcard-vote{display:flex;align-items:center;gap:.3rem;margin-top:.6rem;background:none;border:1px solid var(--border);border-radius:5px;color:var(--muted);font-family:monospace;font-size:.65rem;padding:.22rem .55rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.rcard-vote:hover{border-color:var(--border2);color:#4F7FEF}
+.rcard-vote.voted{border-color:rgba(79,127,239,.4);color:#4F7FEF;background:rgba(79,127,239,.06)}
+.rcard-vote svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+/* SUGGEST */
+.suggest-strip{max-width:1100px;margin:0 auto 4rem;padding:0 5%}
+.suggest-box{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:1.4rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;position:relative;overflow:hidden}
+.suggest-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,transparent)}
+.suggest-left h3{font-size:.95rem;font-weight:700;color:var(--snow);margin-bottom:.2rem}
+.suggest-left p{font-size:.82rem;color:var(--muted);font-weight:300}
+.suggest-form{display:flex;gap:.5rem;flex-shrink:0}
+.suggest-input{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:.45rem .8rem;color:var(--snow);font-size:.84rem;outline:none;font-family:'Inter',sans-serif;width:260px;transition:border-color .2s}
+.suggest-input:focus{border-color:rgba(79,127,239,.5)}
+.suggest-input::placeholder{color:var(--dim)}
+.suggest-btn{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.84rem;font-weight:600;padding:.45rem 1rem;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;transition:all .2s}
+.suggest-btn:hover{background:#3D65CC}
+.suggest-msg{font-size:.78rem;margin-top:.4rem;color:#00E5A0;display:none}
+/* COOKIE */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner.show{transform:translateY(0)}
+.cb-text{font-size:.78rem;color:#5A6A8A;max-width:580px;font-weight:300}.cb-text a{color:#4F7FEF;text-decoration:none}
+.cb-actions{display:flex;gap:.6rem}
+.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
+.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
+footer{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;font-family:monospace;font-size:.7rem;color:var(--dim);background:var(--bg1)}
+footer a{color:#4F7FEF;text-decoration:none}
+.foot-links{display:flex;justify-content:center;gap:1.3rem;margin-top:.5rem;flex-wrap:wrap}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1)}
+.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}
+@media(max-width:900px){.board{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.board{grid-template-columns:1fr}.suggest-form{flex-direction:column;width:100%}.suggest-input{width:100%}}
+</style>
+</head>
+<body>
+<div id="sp"></div>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <div class="cb-text">We use cookies to understand how people use MLOps.dev. See our <a href="privacy.html">Privacy Policy</a>.</div>
+  <div class="cb-actions">
+    <button class="cb-accept" onclick="acceptCookies()">Accept</button>
+    <button class="cb-decline" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="lm"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg></div>
+    MLOps<em>.dev</em>
+  </a>
+  <div class="nav-r">
+    <button class="nav-ghost" onclick="location.href='changelog.html'">Changelog</button>
+    <button class="nav-ghost" onclick="location.href='index.html'">← Site</button>
+    <button class="nav-cta" onclick="location.href='index.html#wl'">Join waitlist</button>
+  </div>
+</nav>
+
+<div class="hero rv">
+  <span class="hero-ey">Public roadmap</span>
+  <h1 class="hero-h">What we're building next.</h1>
+  <p class="hero-p">We build in public. Vote on what matters to you. Suggest features. Everything here is real — no vaporware, no roadmap theater.</p>
+  <span class="hero-note"><span class="hn-dot"></span>Last updated July 2025 · Raghunathareddy GR</span>
+</div>
+
+<div class="filter-tabs rv d1">
+  <button class="ftab active" onclick="filterBoard('all',this)">All</button>
+  <button class="ftab" onclick="filterBoard('agent',this)">Agent</button>
+  <button class="ftab" onclick="filterBoard('platform',this)">Platform</button>
+  <button class="ftab" onclick="filterBoard('sdk',this)">SDK</button>
+  <button class="ftab" onclick="filterBoard('enterprise',this)">Enterprise</button>
+</div>
+
+<div class="board rv d2" id="roadmap-board">
+  <!-- SHIPPED -->
+  <div class="col col-shipped">
+    <div class="col-header">
+      <div class="col-title">Shipped ✓</div>
+      <div class="col-count" id="count-shipped">6 items</div>
+    </div>
+    <div class="rcard" data-tags="agent">
+      <span class="rcard-version">v0.1.0 · Jan 2025</span>
+      <div class="rcard-title">Edge agent — Go binary, ARM64</div>
+      <div class="rcard-desc">Single static binary. One curl command install. ONNX Runtime inference. JWT auth.</div>
+      <div class="rcard-tags"><span class="rtag rt-agent">AGENT</span></div>
+    </div>
+    <div class="rcard" data-tags="agent">
+      <span class="rcard-version">v0.2.0 · Mar 2025</span>
+      <div class="rcard-title">Binary size 47MB → 7.4MB</div>
+      <div class="rcard-desc">musl libc, UPX compression, feature build tags, dep surgery. Runs on Pi Zero 2W.</div>
+      <div class="rcard-tags"><span class="rtag rt-agent">AGENT</span></div>
+    </div>
+    <div class="rcard" data-tags="agent">
+      <span class="rcard-version">v0.3.0 · Apr 2025</span>
+      <div class="rcard-title">Offline-first sync + delta compression</div>
+      <div class="rcard-desc">Pull-based idempotent sync. SQLite telemetry buffer. bsdiff delta — 95.7% smaller updates.</div>
+      <div class="rcard-tags"><span class="rtag rt-agent">AGENT</span></div>
+    </div>
+    <div class="rcard" data-tags="agent">
+      <span class="rcard-version">v0.4.0 · May 2025</span>
+      <div class="rcard-title">Canary deployments by hardware class</div>
+      <div class="rcard-desc">Stage by hw_class, health gates on accuracy delta. Multi-variant model registration.</div>
+      <div class="rcard-tags"><span class="rtag rt-agent">AGENT</span><span class="rtag rt-platform">PLATFORM</span></div>
+    </div>
+    <div class="rcard" data-tags="agent">
+      <span class="rcard-version">v0.5.0 · Jun 2025</span>
+      <div class="rcard-title">KL drift detection — on-device</div>
+      <div class="rcard-desc">Under 2ms on Cortex-A57. Sliding window, int32 arithmetic, log lookup tables.</div>
+      <div class="rcard-tags"><span class="rtag rt-agent">AGENT</span></div>
+    </div>
+    <div class="rcard" data-tags="platform">
+      <span class="rcard-version">v0.6.0 · Jul 2025</span>
+      <div class="rcard-title">Fleet dashboard + SSE live streaming</div>
+      <div class="rcard-desc">JWT auth, 6 pages, real-time device telemetry, deployment controls, drift monitor.</div>
+      <div class="rcard-tags"><span class="rtag rt-platform">PLATFORM</span></div>
+    </div>
+  </div>
+
+  <!-- IN PROGRESS -->
+  <div class="col col-progress">
+    <div class="col-header">
+      <div class="col-title">In progress →</div>
+      <div class="col-count" id="count-progress">3 items</div>
+    </div>
+    <div class="rcard" data-tags="sdk">
+      <span class="rcard-version">v0.7.0 · Target Q3 2025</span>
+      <div class="rcard-title">Python SDK — pip install mlops-dev</div>
+      <div class="rcard-desc">Full Python client: model push, deployment management, drift queries, fleet status. Async support.</div>
+      <div class="rcard-tags"><span class="rtag rt-sdk">SDK</span></div>
+      <div class="rcard-progress">
+        <div class="rcard-progress-bar"><div class="rcard-progress-fill" style="width:65%"></div></div>
+        <div class="rcard-progress-label"><span>API client</span><span>65%</span></div>
+      </div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">24</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="platform">
+      <span class="rcard-version">v0.7.0 · Target Q3 2025</span>
+      <div class="rcard-title">Prometheus metrics export</div>
+      <div class="rcard-desc">Expose fleet telemetry as Prometheus metrics. Grafana dashboard template included.</div>
+      <div class="rcard-tags"><span class="rtag rt-platform">PLATFORM</span><span class="rtag rt-infra">INFRA</span></div>
+      <div class="rcard-progress">
+        <div class="rcard-progress-bar"><div class="rcard-progress-fill" style="width:40%"></div></div>
+        <div class="rcard-progress-label"><span>Exporter</span><span>40%</span></div>
+      </div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">18</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="platform">
+      <span class="rcard-version">v0.7.0 · Target Q3 2025</span>
+      <div class="rcard-title">Slack + PagerDuty alerting</div>
+      <div class="rcard-desc">Native integrations for drift alerts and deployment events. Webhook support for any provider.</div>
+      <div class="rcard-tags"><span class="rtag rt-platform">PLATFORM</span></div>
+      <div class="rcard-progress">
+        <div class="rcard-progress-bar"><div class="rcard-progress-fill" style="width:55%"></div></div>
+        <div class="rcard-progress-label"><span>Slack done</span><span>55%</span></div>
+      </div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">31</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- PLANNED -->
+  <div class="col col-planned">
+    <div class="col-header">
+      <div class="col-title">Planned ◎</div>
+      <div class="col-count" id="count-planned">5 items</div>
+    </div>
+    <div class="rcard" data-tags="platform">
+      <span class="rcard-version">v1.0.0 · Q4 2025</span>
+      <div class="rcard-title">Stripe billing integration</div>
+      <div class="rcard-desc">Self-serve subscription management. Team and Enterprise tier checkout. Usage-based metering.</div>
+      <div class="rcard-tags"><span class="rtag rt-platform">PLATFORM</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">42</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="platform">
+      <span class="rcard-version">v1.1.0 · Q4 2025</span>
+      <div class="rcard-title">Multi-tenant team management</div>
+      <div class="rcard-desc">Invite team members, role-based access (admin/engineer/viewer), per-team fleet isolation.</div>
+      <div class="rcard-tags"><span class="rtag rt-platform">PLATFORM</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">38</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="agent">
+      <span class="rcard-version">v1.2.0 · Q1 2026</span>
+      <div class="rcard-title">ONNX auto-quantisation pipeline</div>
+      <div class="rcard-desc">Push FP32 ONNX, MLOps.dev automatically generates INT8 variant. Hardware-aware quantisation.</div>
+      <div class="rcard-tags"><span class="rtag rt-agent">AGENT</span><span class="rtag rt-platform">PLATFORM</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">57</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="sdk">
+      <span class="rcard-version">v1.2.0 · Q1 2026</span>
+      <div class="rcard-title">REST API — public v1</div>
+      <div class="rcard-desc">Stable, versioned REST API. OpenAPI 3.0 spec. All fleet management operations. Pagination, webhooks.</div>
+      <div class="rcard-tags"><span class="rtag rt-sdk">SDK</span><span class="rtag rt-platform">PLATFORM</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">29</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="enterprise">
+      <span class="rcard-version">v1.3.0 · Q1 2026</span>
+      <div class="rcard-title">SSO — SAML 2.0 + OIDC</div>
+      <div class="rcard-desc">Enterprise SSO with Okta, Azure AD, Google Workspace. Just-in-time provisioning.</div>
+      <div class="rcard-tags"><span class="rtag rt-enterprise">ENTERPRISE</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">21</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- FUTURE -->
+  <div class="col col-future">
+    <div class="col-header">
+      <div class="col-title">Future ◇</div>
+      <div class="col-count" id="count-future">4 items</div>
+    </div>
+    <div class="rcard" data-tags="enterprise">
+      <span class="rcard-version">v2.0.0 · 2026</span>
+      <div class="rcard-title">On-premise control plane GA</div>
+      <div class="rcard-desc">Full on-premise deployment. Docker Compose + Helm chart. Air-gapped environments. FDA/ISO compliance.</div>
+      <div class="rcard-tags"><span class="rtag rt-enterprise">ENTERPRISE</span><span class="rtag rt-infra">INFRA</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">63</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="agent">
+      <span class="rcard-version">v2.1.0 · 2026</span>
+      <div class="rcard-title">Federated learning support</div>
+      <div class="rcard-desc">Aggregate model updates from edge devices without centralising data. Privacy-preserving fleet learning.</div>
+      <div class="rcard-tags"><span class="rtag rt-agent">AGENT</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">44</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="platform">
+      <span class="rcard-version">v2.2.0 · 2026</span>
+      <div class="rcard-title">A/B model testing at the edge</div>
+      <div class="rcard-desc">Run two model versions simultaneously on the same device. Statistical significance testing built in.</div>
+      <div class="rcard-tags"><span class="rtag rt-platform">PLATFORM</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">35</span>
+      </button>
+    </div>
+    <div class="rcard" data-tags="sdk">
+      <span class="rcard-version">v2.3.0 · 2026</span>
+      <div class="rcard-title">JavaScript / TypeScript SDK</div>
+      <div class="rcard-desc">npm package for Node.js environments. Same API surface as Python SDK. Browser-safe subset.</div>
+      <div class="rcard-tags"><span class="rtag rt-sdk">SDK</span></div>
+      <button class="rcard-vote" onclick="vote(this)">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <span class="vote-count">19</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SUGGEST FEATURE -->
+<div class="suggest-strip rv">
+  <div class="suggest-box">
+    <div class="suggest-left">
+      <h3>Suggest a feature</h3>
+      <p>Something missing? Tell Raghunathareddy GR directly. We read every suggestion.</p>
+    </div>
+    <div>
+      <div class="suggest-form">
+        <input class="suggest-input" id="suggest-input" type="text" placeholder="e.g. Windows ARM agent support…"/>
+        <button class="suggest-btn" onclick="submitSuggestion()">Send →</button>
+      </div>
+      <div class="suggest-msg" id="suggest-msg">✓ Sent! Raghunath will review it.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a></div>
+  <div class="foot-links">
+    <a href="index.html">Home</a><a href="changelog.html">Changelog</a><a href="docs.html">Docs</a>
+    <a href="faq.html">FAQ</a><a href="https://discord.gg/Tb47N9NaPk" target="_blank" rel="noopener">Discord</a>
+    <a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev" target="_blank" rel="noopener">GitHub</a>
+  </div>
+<div style="display:none"><a href="https://pypi.org/project/mlops-dev">pypi</a></div>
+</footer>
+
+<script>
+'use strict';
+(function(){var p=document.getElementById('sp');window.addEventListener('scroll',function(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;if(p)p.style.width=(d>0?s/d*100:0)+'%';},{passive:true});})();
+(function(){var els=document.querySelectorAll('.rv');var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('on');});},{threshold:.1});els.forEach(function(el){io.observe(el);});})();
+
+// Animate progress bars on scroll
+(function(){
+  var bars = document.querySelectorAll('.rcard-progress-fill');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.style.width = e.target.style.width; // trigger reflow
+      }
+    });
+  },{threshold:.5});
+  bars.forEach(function(b){
+    var w = b.style.width;
+    b.style.width = '0%';
+    setTimeout(function(){b.style.width = w;}, 300);
+    io.observe(b);
+  });
+})();
+
+function vote(btn){
+  var voted = btn.classList.contains('voted');
+  var countEl = btn.querySelector('.vote-count');
+  var count = parseInt(countEl.textContent);
+  if(voted){
+    btn.classList.remove('voted');
+    countEl.textContent = count - 1;
+  } else {
+    btn.classList.add('voted');
+    countEl.textContent = count + 1;
+    if(typeof gtag!=='undefined') gtag('event','roadmap_vote',{'item':btn.closest('.rcard').querySelector('.rcard-title').textContent});
+  }
+}
+
+function filterBoard(tag, el){
+  document.querySelectorAll('.ftab').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  document.querySelectorAll('.rcard').forEach(function(card){
+    var tags = card.dataset.tags || '';
+    card.style.display = (tag === 'all' || tags.includes(tag)) ? '' : 'none';
+  });
+}
+
+function submitSuggestion(){
+  var val = document.getElementById('suggest-input').value.trim();
+  if(!val) return;
+  fetch('https://api.mlopsde.me/api/waitlist',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email:'suggestion@roadmap',source:'roadmap_suggestion',use_case:val})
+  }).catch(function(){
+    localStorage.setItem('roadmap_suggestion_'+Date.now(), val);
+  });
+  document.getElementById('suggest-msg').style.display='block';
+  document.getElementById('suggest-input').value='';
+  if(typeof gtag!=='undefined') gtag('event','roadmap_suggestion',{'feature':val});
+  setTimeout(function(){document.getElementById('suggest-msg').style.display='none';},3000);
+}
+
+(function(){if(localStorage.getItem('cookie_consent'))return;setTimeout(function(){var b=document.getElementById('cookie-banner');if(b)b.classList.add('show');},2200);})();
+function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
+function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
+</script>
+</body>
+</html>
