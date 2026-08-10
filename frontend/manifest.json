@@ -1,0 +1,27 @@
+{
+  "name": "MLOps.dev",
+  "short_name": "MLOps.dev",
+  "description": "Deploy ML models to edge devices at scale. Offline-first sync, drift detection, canary deployments.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#03050A",
+  "theme_color": "#4F7FEF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 192 192' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='192' height='192' rx='42' fill='%23080C16'/%3E%3Cpolygon points='96,24 30,57 30,135 96,168 162,135 162,57' fill='none' stroke='%234F7FEF' stroke-width='9' stroke-linejoin='round'/%3E%3Ccircle cx='96' cy='96' r='21' fill='%2300E5A0'/%3E%3Ccircle cx='96' cy='96' r='12' fill='%23080C16'/%3E%3Ccircle cx='96' cy='96' r='6' fill='%2300E5A0'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "developer-tools",
+    "productivity",
+    "utilities"
+  ],
+  "lang": "en-IN",
+  "dir": "ltr",
+  "related_applications": [],
+  "prefer_related_applications": false
+}

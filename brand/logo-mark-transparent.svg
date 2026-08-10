@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- No background rect — transparent, use on any dark surface -->
+  <polygon points="32,4 8,15.5 8,48.5 32,60 56,48.5 56,15.5" fill="none" stroke="#4F7FEF" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="32" y1="4" x2="32" y2="60" stroke="#4F7FEF" stroke-width="1" opacity=".25"/>
+  <line x1="8" y1="15.5" x2="56" y2="48.5" stroke="#4F7FEF" stroke-width="1" opacity=".25"/>
+  <line x1="56" y1="15.5" x2="8" y2="48.5" stroke="#4F7FEF" stroke-width="1" opacity=".25"/>
+  <circle cx="32" cy="4" r="2" fill="#4F7FEF" opacity=".5"/>
+  <circle cx="8" cy="15.5" r="2" fill="#4F7FEF" opacity=".5"/>
+  <circle cx="8" cy="48.5" r="2" fill="#4F7FEF" opacity=".5"/>
+  <circle cx="32" cy="60" r="2" fill="#4F7FEF" opacity=".5"/>
+  <circle cx="56" cy="48.5" r="2" fill="#4F7FEF" opacity=".5"/>
+  <circle cx="56" cy="15.5" r="2" fill="#4F7FEF" opacity=".5"/>
+  <circle cx="32" cy="32" r="8" fill="none" stroke="#00E5A0" stroke-width="1" opacity=".25"/>
+  <circle cx="32" cy="32" r="5" fill="#00E5A0"/>
+  <circle cx="32" cy="32" r="3" fill="rgba(0,0,0,.6)"/>
+  <circle cx="32" cy="32" r="1.5" fill="#00E5A0"/>
+</svg>

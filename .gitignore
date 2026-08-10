@@ -1,0 +1,25 @@
+# Ignore Vercel CLI directories
+.vercel/
+
+# Ignore Python build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv/
+
+# Ignore SDK build artifacts
+sdk/dist/
+sdk/build/
+sdk/*.egg-info/
+
+# Ignore the entire backend server directory since it is hosted in a separate repo and contains the database!
+sdk/server/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

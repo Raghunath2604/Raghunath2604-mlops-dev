@@ -1,0 +1,20 @@
+# MLOps.dev — Netlify redirects
+/about          /about.html          200
+/demo           /demo.html           200
+/dashboard      /dashboard.html      200
+/blog           /blog.html           200
+/careers        /careers.html        200
+/status         /status.html         200
+/privacy        /privacy.html        200
+/terms          /terms.html          200
+/faq            /faq.html            200
+/changelog      /changelog.html      200
+/docs           /docs.html           200
+/roadmap        /roadmap.html        200
+/api-reference  /api-reference.html  200
+/discord        /discord.html        200
+/poster         /poster.html         200
+/use-cases/manufacturing  /use-cases/manufacturing.html  200
+/use-cases/medical        /use-cases/medical.html        200
+/use-cases/retail         /use-cases/retail.html         200
+/*              /index.html          200

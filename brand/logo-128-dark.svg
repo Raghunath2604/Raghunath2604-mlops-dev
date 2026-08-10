@@ -1,0 +1,20 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="28" fill="#080C16"/>
+  <rect width="128" height="128" rx="28" fill="none" stroke="#4F7FEF" stroke-width=".5" opacity=".25"/>
+  <polygon points="64,12 20,34 20,94 64,116 108,94 108,34" fill="none" stroke="#4F7FEF" stroke-width="2.5" stroke-linejoin="round"/>
+  <line x1="64" y1="12" x2="64" y2="116" stroke="#4F7FEF" stroke-width="1" opacity=".2"/>
+  <line x1="20" y1="34" x2="108" y2="94" stroke="#4F7FEF" stroke-width="1" opacity=".2"/>
+  <line x1="108" y1="34" x2="20" y2="94" stroke="#4F7FEF" stroke-width="1" opacity=".2"/>
+  <polygon points="64,30 38,44 38,72 64,86 90,72 90,44" fill="none" stroke="#4F7FEF" stroke-width="1" stroke-linejoin="round" opacity=".3"/>
+  <circle cx="64" cy="12" r="3" fill="#4F7FEF" opacity=".6"/>
+  <circle cx="20" cy="34" r="3" fill="#4F7FEF" opacity=".6"/>
+  <circle cx="20" cy="94" r="3" fill="#4F7FEF" opacity=".6"/>
+  <circle cx="64" cy="116" r="3" fill="#4F7FEF" opacity=".6"/>
+  <circle cx="108" cy="94" r="3" fill="#4F7FEF" opacity=".6"/>
+  <circle cx="108" cy="34" r="3" fill="#4F7FEF" opacity=".6"/>
+  <circle cx="64" cy="64" r="16" fill="none" stroke="#00E5A0" stroke-width="1" opacity=".2"/>
+  <circle cx="64" cy="64" r="10" fill="#00E5A0" opacity=".12"/>
+  <circle cx="64" cy="64" r="7" fill="#00E5A0"/>
+  <circle cx="64" cy="64" r="4" fill="#080C16"/>
+  <circle cx="64" cy="64" r="2" fill="#00E5A0"/>
+</svg>

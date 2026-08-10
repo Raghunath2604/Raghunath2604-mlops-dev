@@ -1,0 +1,18 @@
+# MLOps.dev Security Policy
+# https://www.mlops.dev/.well-known/security.txt
+# Format: https://securitytxt.org/
+
+Contact: mailto:hello@mlops.dev
+Contact: https://www.mlops.dev/security
+
+Preferred-Languages: en
+
+Expires: 2026-07-15T00:00:00.000Z
+
+Policy: https://www.mlops.dev/security
+
+Acknowledgments: https://www.mlops.dev/security#acknowledgments
+
+# We take security seriously. Responsible disclosure is appreciated.
+# Expected response time: 48 hours.
+# We do not pursue legal action against good-faith security researchers.
