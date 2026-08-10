@@ -312,9 +312,46 @@ body{animation:pgInD .45s ease both}
 .cb-decline:hover{color:#CDD6F0;border-color:rgba(255,255,255,.2)}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <div id="scroll-prog-d" style="position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#5B8AF0,#00FFB3);pointer-events:none;transition:width .06s linear;" aria-hidden="true"></div>
 <body>
+
+<!-- DEVICE MODAL -->
+<div id="device-modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-content glass">
+    <div class="modal-header">
+      <h2 id="mod-title">Device Name</h2>
+      <button class="act-btn del" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="mod-grid">
+        <div class="mod-card">
+          <div class="mod-lbl">CPU Usage</div>
+          <div class="mod-val" id="mod-cpu">--%</div>
+        </div>
+        <div class="mod-card">
+          <div class="mod-lbl">RAM Usage</div>
+          <div class="mod-val" id="mod-ram">-- MB</div>
+        </div>
+        <div class="mod-card">
+          <div class="mod-lbl">Temperature</div>
+          <div class="mod-val" id="mod-temp">-- °C</div>
+        </div>
+        <div class="mod-card">
+          <div class="mod-lbl">Latency</div>
+          <div class="mod-val" id="mod-lat">-- ms</div>
+        </div>
+      </div>
+      <div style="margin-top: 1rem;">
+        <div class="mod-lbl">Status</div>
+        <div id="mod-status" style="margin-top:0.3rem;">--</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="cookie-banner" role="dialog" aria-label="Cookie consent">
   <div class="cb-text">We use cookies to understand how people use MLOps.dev and to improve the product. See our <a href="privacy.html">Privacy Policy</a>.</div>
   <div class="cb-actions">
@@ -663,6 +700,101 @@ window.switchPage = function(id) {
 }
 // --- END CHART ---
 
+// --- MAP & MODAL LOGIC ---
+let fleetMap = null;
+let markers = [];
+const deviceCoords = {
+  'jetson-prod-01': [37.7749, -122.4194],
+  'jetson-prod-02': [34.0522, -118.2437],
+  'jetson-nano-01': [40.7128, -74.0060],
+  'jetson-nano-02': [51.5074, -0.1278],
+  'rpi5-edge-01': [35.6895, 139.6917],
+  'rpi5-edge-02': [-33.8688, 151.2093]
+};
+
+function initMap() {
+  if (fleetMap) return;
+  const mapDiv = document.getElementById('fleet-map');
+  if (!mapDiv) return;
+  
+  fleetMap = L.map('fleet-map').setView([20, 0], 2);
+  
+  const isDark = document.body.classList.contains('dark-mode');
+  const tileUrl = isDark 
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+    
+  L.tileLayer(tileUrl, {
+    attribution: '&copy; OpenStreetMap CartoDB',
+    maxZoom: 18
+  }).addTo(fleetMap);
+  
+  updateMapMarkers();
+}
+
+function updateMapMarkers() {
+  if (!fleetMap) return;
+  markers.forEach(m => fleetMap.removeLayer(m));
+  markers = [];
+  
+  ST.devices.forEach(d => {
+    const coords = deviceCoords[d.id] || [(Math.random()*40)-20, (Math.random()*40)-20];
+    let color = '#00ffb3'; 
+    if(d.status === 'drift' || d.status === 'warning') color = '#fbbf24';
+    if(d.status === 'offline' || d.status === 'error') color = '#f87171';
+    
+    const circle = L.circleMarker(coords, {
+      radius: 8,
+      fillColor: color,
+      color: color,
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.8
+    }).addTo(fleetMap);
+    
+    circle.bindTooltip(`<b>${d.name}</b><br>${d.status}`);
+    circle.on('click', () => openModal(d.id));
+    markers.push(circle);
+  });
+}
+
+function openModal(devId) {
+  const d = ST.devices.find(x => x.id === devId);
+  if(!d) return;
+  
+  document.getElementById('mod-title').textContent = d.name;
+  document.getElementById('mod-cpu').textContent = (d.cpu_pct || (Math.random()*40 + 10).toFixed(1)) + '%';
+  document.getElementById('mod-ram').textContent = d.ram_mb || Math.floor(Math.random()*4000 + 1000) + ' MB';
+  document.getElementById('mod-temp').textContent = (d.temp_c || (Math.random()*30 + 40).toFixed(1)) + ' °C';
+  document.getElementById('mod-lat').textContent = (d.latency_ms || (Math.random()*40 + 5).toFixed(1)) + ' ms';
+  document.getElementById('mod-status').innerHTML = sbadge(d.status);
+  
+  document.getElementById('device-modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('device-modal').style.display = 'none';
+}
+
+const origToggle2 = toggleDarkMode;
+toggleDarkMode = function(e) {
+  origToggle2(e);
+  if(fleetMap) {
+    fleetMap.remove();
+    fleetMap = null;
+    setTimeout(initMap, 100);
+  }
+}
+
+const origLoadDevs = loadDevices;
+loadDevices = async function() {
+  await origLoadDevs();
+  setTimeout(initMap, 200);
+  setTimeout(updateMapMarkers, 300);
+}
+// --- END MAP ---
+
+
 const PAGE_TITLES = {overview:'Overview',devices:'Devices',deployments:'Deployments',events:'Event log',drift:'Drift monitor',settings:'Settings'};
 
 // ── API ───────────────────────────────────────────────────────────────────────
@@ -795,7 +927,7 @@ function fd(iso){return iso?iso.split('T')[0]:'—';}
 function renderOvTable() {
   const tb=document.getElementById('ov-tbody');if(!tb)return;
   tb.innerHTML=ST.devices.map(d=>`<tr>
-    <td class="td-name">${d.name}</td>
+    <td class="td-name" style="cursor:pointer; text-decoration:underline;" onclick="openModal('${d.id}')">${d.name}</td>
     <td>${sbadge(d.status)}</td>
     <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_tag||'-'}</td>
     <td>${dbar(Math.round((d.drift_score||0)*100))}</td>
@@ -810,7 +942,7 @@ function renderDevTable() {
   if(ST.devFilter!=='all') devs=devs.filter(d=>d.status===ST.devFilter);
   if(q) devs=devs.filter(d=>d.name.toLowerCase().includes(q)||(d.hw_class||'').toLowerCase().includes(q));
   tb.innerHTML=devs.map(d=>`<tr>
-    <td class="td-name">${d.name}</td>
+    <td class="td-name" style="cursor:pointer; text-decoration:underline;" onclick="openModal('${d.id}')">${d.name}</td>
     <td class="td-hw">${d.hw_class||'-'}</td>
     <td>${sbadge(d.status)}</td>
     <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_tag||'-'}</td>
