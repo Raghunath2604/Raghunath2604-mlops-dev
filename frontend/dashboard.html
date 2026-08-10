@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -314,6 +314,7 @@ body{animation:pgInD .45s ease both}
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="index.css?v=5">
 </head>
 <div id="scroll-prog-d" style="position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#5B8AF0,#00FFB3);pointer-events:none;transition:width .06s linear;" aria-hidden="true"></div>
 <body>
@@ -441,6 +442,28 @@ body{animation:pgInD .45s ease both}
           <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Offline</div><div class="kpi-val red" id="k-offline">—</div><div class="kpi-sub" id="k-updating">— updating</div></div>
           <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>High Drift</div><div class="kpi-val amber" id="k-drift">—</div><div class="kpi-sub">devices &gt;50% threshold</div></div>
         </div>
+          <!-- CHART AND DARK MODE -->
+          <div class="panel" style="margin-bottom: 1.5rem; position: relative;">
+            <div class="ph" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3>Live Fleet Drift History (24h)</h3>
+              <div class="theme-switch-wrapper" style="display:flex; align-items:center;">
+                <label class="theme-switch" for="checkbox">
+                  <input type="checkbox" id="checkbox" onchange="toggleDarkMode(this)"/>
+                  <div class="slider round"></div>
+                </label>
+                <em style="margin-left: 10px; font-size: 0.8rem; color: var(--muted);">Dark Mode</em>
+              </div>
+            </div>
+            <div style="height: 250px; width: 100%;">
+              <canvas id="driftChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- MAP PANEL -->
+          <div class="panel" style="margin-bottom: 1.5rem; position: relative;">
+            <div class="ph"><h3>Global Edge Fleet</h3></div>
+            <div id="fleet-map" style="height: 300px; width: 100%; border-radius: 8px; z-index: 1;"></div>
+          </div>
         <div class="two-col">
           <div class="panel">
             <div class="ph"><h3>Live fleet status</h3><div class="ph-right"><span class="ph-tag" id="ov-sync">just now</span></div></div>
