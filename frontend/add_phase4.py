@@ -1,166 +1,150 @@
 import re
 
-with open("dashboard.html", "r", encoding="utf-8") as f:
-    html = f.read()
+path = "c:/Users/raghu/Downloads/mlopsdev-phase1-launch/mlops-dev/sdk/server/api.py"
 
-# 1. Add Leaflet CSS and JS to head
-html = html.replace('</head>', 
-    '  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />\n'
-    '  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>\n</head>')
+with open(path, "r", encoding="utf-8") as f:
+    content = f.read()
 
-# 2. Add Modal HTML to the body (right after <body>)
-modal_html = """
-<!-- DEVICE MODAL -->
-<div id="device-modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal-content glass">
-    <div class="modal-header">
-      <h2 id="mod-title">Device Name</h2>
-      <button class="act-btn del" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="mod-grid">
-        <div class="mod-card">
-          <div class="mod-lbl">CPU Usage</div>
-          <div class="mod-val" id="mod-cpu">--%</div>
-        </div>
-        <div class="mod-card">
-          <div class="mod-lbl">RAM Usage</div>
-          <div class="mod-val" id="mod-ram">-- MB</div>
-        </div>
-        <div class="mod-card">
-          <div class="mod-lbl">Temperature</div>
-          <div class="mod-val" id="mod-temp">-- °C</div>
-        </div>
-        <div class="mod-card">
-          <div class="mod-lbl">Latency</div>
-          <div class="mod-val" id="mod-lat">-- ms</div>
-        </div>
-      </div>
-      <div style="margin-top: 1rem;">
-        <div class="mod-lbl">Status</div>
-        <div id="mod-status" style="margin-top:0.3rem;">--</div>
-      </div>
-    </div>
-  </div>
-</div>
+# 1. Update init_db schema
+new_schema = """
+            CREATE TABLE IF NOT EXISTS api_keys (
+                id TEXT PRIMARY KEY,
+                key_hash TEXT UNIQUE NOT NULL,
+                name TEXT,
+                stripe_customer_id TEXT,
+                subscription_tier TEXT DEFAULT 'free',
+                subscription_status TEXT DEFAULT 'active',
+                device_limit INTEGER DEFAULT 10,
+                role TEXT DEFAULT 'user',
+                approval_status TEXT DEFAULT 'pending',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 """
-html = html.replace('<body>', f'<body>\n{modal_html}')
+content = re.sub(r'CREATE TABLE IF NOT EXISTS api_keys \([\s\S]*?created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\s*\);', new_schema.strip(), content)
 
-# 3. Add Map container next to the Chart
-map_html = """
-          </div>
-          <!-- MAP PANEL -->
-          <div class="panel" style="margin-bottom: 1.5rem; position: relative;">
-            <div class="ph"><h3>Global Edge Fleet</h3></div>
-            <div id="fleet-map" style="height: 300px; width: 100%; border-radius: 8px; z-index: 1;"></div>
-          </div>
-          <div class="two-col">
+# Update demo insert
+demo_insert_pg = """
+                INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
+                VALUES ('key_demo', %s, 'Demo Admin', 'free', 10, 'admin', 'approved')
 """
-html = html.replace("          </div>\n          <div class=\"two-col\">", map_html)
+content = re.sub(r'INSERT INTO api_keys \(id, key_hash, name, subscription_tier, device_limit\)\s*VALUES \(\'key_demo\', %s, \'Demo key\', \'free\', 10\)', demo_insert_pg.strip(), content)
 
-# 4. Modify table rows to have an onclick event to open modal
-html = html.replace(
-    "<td class=\"td-name\">${d.name}</td>",
-    "<td class=\"td-name\" style=\"cursor:pointer; text-decoration:underline;\" onclick=\"openModal('${d.id}')\">${d.name}</td>"
-)
-
-# 5. Add Leaflet map logic and Modal JS
-js_code = """
-// --- MAP & MODAL LOGIC ---
-let fleetMap = null;
-let markers = [];
-const deviceCoords = {
-  'jetson-prod-01': [37.7749, -122.4194],
-  'jetson-prod-02': [34.0522, -118.2437],
-  'jetson-nano-01': [40.7128, -74.0060],
-  'jetson-nano-02': [51.5074, -0.1278],
-  'rpi5-edge-01': [35.6895, 139.6917],
-  'rpi5-edge-02': [-33.8688, 151.2093]
-};
-
-function initMap() {
-  if (fleetMap) return;
-  const mapDiv = document.getElementById('fleet-map');
-  if (!mapDiv) return;
-  
-  fleetMap = L.map('fleet-map').setView([20, 0], 2);
-  
-  const isDark = document.body.classList.contains('dark-mode');
-  const tileUrl = isDark 
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-    
-  L.tileLayer(tileUrl, {
-    attribution: '&copy; OpenStreetMap CartoDB',
-    maxZoom: 18
-  }).addTo(fleetMap);
-  
-  updateMapMarkers();
-}
-
-function updateMapMarkers() {
-  if (!fleetMap) return;
-  markers.forEach(m => fleetMap.removeLayer(m));
-  markers = [];
-  
-  ST.devices.forEach(d => {
-    const coords = deviceCoords[d.id] || [(Math.random()*40)-20, (Math.random()*40)-20];
-    let color = '#00ffb3'; 
-    if(d.status === 'drift' || d.status === 'warning') color = '#fbbf24';
-    if(d.status === 'offline' || d.status === 'error') color = '#f87171';
-    
-    const circle = L.circleMarker(coords, {
-      radius: 8,
-      fillColor: color,
-      color: color,
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8
-    }).addTo(fleetMap);
-    
-    circle.bindTooltip(`<b>${d.name}</b><br>${d.status}`);
-    circle.on('click', () => openModal(d.id));
-    markers.push(circle);
-  });
-}
-
-function openModal(devId) {
-  const d = ST.devices.find(x => x.id === devId);
-  if(!d) return;
-  
-  document.getElementById('mod-title').textContent = d.name;
-  document.getElementById('mod-cpu').textContent = (d.cpu_pct || (Math.random()*40 + 10).toFixed(1)) + '%';
-  document.getElementById('mod-ram').textContent = d.ram_mb || Math.floor(Math.random()*4000 + 1000) + ' MB';
-  document.getElementById('mod-temp').textContent = (d.temp_c || (Math.random()*30 + 40).toFixed(1)) + ' °C';
-  document.getElementById('mod-lat').textContent = (d.latency_ms || (Math.random()*40 + 5).toFixed(1)) + ' ms';
-  document.getElementById('mod-status').innerHTML = sbadge(d.status);
-  
-  document.getElementById('device-modal').style.display = 'flex';
-}
-
-function closeModal() {
-  document.getElementById('device-modal').style.display = 'none';
-}
-
-const origToggle2 = toggleDarkMode;
-toggleDarkMode = function(e) {
-  origToggle2(e);
-  if(fleetMap) {
-    fleetMap.remove();
-    fleetMap = null;
-    setTimeout(initMap, 100);
-  }
-}
-
-const origLoadDevs = loadDevices;
-loadDevices = async function() {
-  await origLoadDevs();
-  setTimeout(initMap, 200);
-  setTimeout(updateMapMarkers, 300);
-}
-// --- END MAP ---
+demo_insert_sq = """
+                INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
+                VALUES ('key_demo', ?, 'Demo Admin', 'free', 10, 'admin', 'approved')
 """
-html = html.replace("// --- END CHART ---", "// --- END CHART ---\n" + js_code)
+content = re.sub(r'INSERT INTO api_keys \(id, key_hash, name, subscription_tier, device_limit\)\s*VALUES \(\'key_demo\', \?, \'Demo key\', \'free\', 10\)', demo_insert_sq.strip(), content)
 
-with open("dashboard.html", "w", encoding="utf-8") as f:
-    f.write(html)
+# 2. Add require_admin decorator
+admin_decorator = """
+def require_admin(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.cookies.get('np_token')
+        if not token:
+            return jsonify({"error": "Unauthorized"}), 401
+        
+        token_hash = hashlib.sha256(token.encode()).hexdigest()
+        db = get_db()
+        row = db_query(db, "SELECT * FROM api_keys WHERE key_hash = ?", (token_hash,), fetchone=True)
+        if not row:
+            return jsonify({"error": "Unauthorized"}), 401
+        if row['role'] != 'admin':
+            return jsonify({"error": "Forbidden - Admin access required"}), 403
+        
+        request.user = row
+        return f(*args, **kwargs)
+    return decorated
+"""
+content = re.sub(r'def require_auth\(f\):', admin_decorator + "\ndef require_auth(f):", content)
+
+# 3. Update login to block pending users
+login_old = """
+    row = db_query(db, "SELECT * FROM api_keys WHERE key_hash = ?", (pw_hash,), fetchone=True)
+    if not row:
+        return jsonify({"error": "Invalid API Key"}), 401
+"""
+login_new = """
+    row = db_query(db, "SELECT * FROM api_keys WHERE key_hash = ?", (pw_hash,), fetchone=True)
+    if not row:
+        return jsonify({"error": "Invalid credentials"}), 401
+    
+    if row.get('approval_status') == 'pending':
+        return jsonify({"error": "Your account is pending admin approval"}), 403
+    elif row.get('approval_status') == 'rejected':
+        return jsonify({"error": "Your account request was rejected"}), 403
+"""
+content = content.replace(login_old, login_new)
+
+# 4. Update auth/me to return role
+me_old = """
+    return jsonify({"success": True, "user": {"id": row['id'], "email": row['name'], "tier": row['subscription_tier']}})
+"""
+me_new = """
+    return jsonify({"success": True, "user": {
+        "id": row['id'], 
+        "email": row['name'], 
+        "tier": row['subscription_tier'],
+        "role": row.get('role', 'user'),
+        "approval_status": row.get('approval_status', 'pending')
+    }})
+"""
+content = content.replace(me_old, me_new)
+
+# 5. Add register endpoint and admin endpoints
+admin_endpoints = """
+@app.route('/v1/auth/register', methods=['POST'])
+@limiter.limit("5 per minute")
+def register():
+    data = request.json
+    email = data.get('email', '').strip()
+    password = data.get('password', '').strip()
+    if not email or not password:
+        return jsonify({"error": "Email and password required"}), 400
+    
+    db = get_db()
+    pw_hash = hashlib.sha256(password.encode()).hexdigest()
+    
+    # Check if exists
+    existing = db_query(db, "SELECT id FROM api_keys WHERE key_hash = ?", (pw_hash,), fetchone=True)
+    if existing:
+        return jsonify({"error": "User already exists"}), 400
+        
+    user_id = 'user_' + os.urandom(8).hex()
+    db_query(db, '''
+        INSERT INTO api_keys (id, key_hash, name, role, approval_status)
+        VALUES (?, ?, ?, 'user', 'pending')
+    ''', (user_id, pw_hash, email), commit=True)
+    
+    # Normally we would trigger an email to admin here
+    print(f"[EMAIL MOCK] New user registration requires approval: {email}")
+    
+    return jsonify({"success": True, "message": "Registration successful, pending admin approval."})
+
+@app.route('/v1/admin/users', methods=['GET'])
+@require_admin
+def list_users():
+    db = get_db()
+    users = db_query(db, "SELECT id, name, role, approval_status, created_at FROM api_keys ORDER BY created_at DESC", fetchall=True)
+    return jsonify({"success": True, "users": users})
+
+@app.route('/v1/admin/users/<uid>/approve', methods=['POST'])
+@require_admin
+def approve_user(uid):
+    db = get_db()
+    db_query(db, "UPDATE api_keys SET approval_status = 'approved' WHERE id = ?", (uid,), commit=True)
+    return jsonify({"success": True})
+
+@app.route('/v1/admin/users/<uid>/reject', methods=['POST'])
+@require_admin
+def reject_user(uid):
+    db = get_db()
+    db_query(db, "UPDATE api_keys SET approval_status = 'rejected' WHERE id = ?", (uid,), commit=True)
+    return jsonify({"success": True})
+"""
+
+content = content + "\n" + admin_endpoints
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(content)
+print("Updated api.py successfully for Phase 4")
