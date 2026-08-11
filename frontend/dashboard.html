@@ -435,9 +435,31 @@ body{animation:pgInD .45s ease both}
     <div class="content">
 
       <!-- OVERVIEW -->
-      <div class="page active" id="page-overview">
+              <div class="page active" id="page-overview">
         <div class="kpi-row">
           <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>Total Devices</div><div class="kpi-val violet" id="k-total">—</div><div class="kpi-sub">in fleet</div></div>
+          <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>Online</div><div class="kpi-val teal" id="k-online">—</div><div class="kpi-sub kpi-trend-up" id="k-hp">—% fleet health</div></div>
+          <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Offline</div><div class="kpi-val red" id="k-offline">—</div><div class="kpi-sub" id="k-updating">— updating</div></div>
+          <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>High Drift</div><div class="kpi-val amber" id="k-drift">—</div><div class="kpi-sub">devices &gt;50% threshold</div></div>
+        </div>
+        
+        <!-- ONBOARDING CHECKLIST -->
+        <div class="panel" id="onboarding-panel" style="margin-bottom: 1.5rem; background: rgba(91, 138, 240, 0.1); border: 1px solid rgba(91, 138, 240, 0.3);">
+          <div class="ph">
+            <h3>🚀 Welcome to MLOps.dev! Get started here:</h3>
+          </div>
+          <div style="padding: 1rem 1.5rem;">
+            <label style="display:flex; align-items:center; gap: 10px; margin-bottom: 8px;">
+              <input type="checkbox" id="chk-api-key" disabled /> <span>1. Generate your API Key (Settings > API)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap: 10px; margin-bottom: 8px;">
+              <input type="checkbox" id="chk-register" disabled /> <span>2. Register your first device (<code>curl -fsSL https://get.mlops.dev | sh</code>)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap: 10px;">
+              <input type="checkbox" id="chk-deploy" disabled /> <span>3. Deploy your first model</span>
+            </label>
+          </div>
+        </div><div class="kpi-val violet" id="k-total">—</div><div class="kpi-sub">in fleet</div></div>
           <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>Online</div><div class="kpi-val teal" id="k-online">—</div><div class="kpi-sub kpi-trend-up" id="k-hp">—% fleet health</div></div>
           <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Offline</div><div class="kpi-val red" id="k-offline">—</div><div class="kpi-sub" id="k-updating">— updating</div></div>
           <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>High Drift</div><div class="kpi-val amber" id="k-drift">—</div><div class="kpi-sub">devices &gt;50% threshold</div></div>
@@ -579,8 +601,9 @@ body{animation:pgInD .45s ease both}
       <div class="page" id="page-settings">
         <div class="settings-split">
           <div class="stnav">
-            <div class="stnav-item active" onclick="showSTab('profile',this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</div>
+                        <div class="stnav-item active" onclick="showSTab('profile',this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</div>
             <div class="stnav-item" onclick="showSTab('api',this)"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>API & SDK</div>
+            <div class="stnav-item" onclick="showSTab('billing',this)"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Billing</div>
             <div class="stnav-item" onclick="showSTab('notifs',this)"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notifications</div>
             <div class="stnav-item" onclick="showSTab('security',this)"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Security</div>
           </div>
@@ -592,13 +615,31 @@ body{animation:pgInD .45s ease both}
               <div class="fg2"><label>Role</label><input id="s-role" class="st-inp" style="width:100%;opacity:.55" type="text" readonly/></div>
               <button class="btn-full" style="width:auto;padding:.5rem 1.3rem;font-size:.82rem;margin-top:.4rem">Save changes</button>
             </div>
-            <div id="stab-api" style="display:none">
+                        <div id="stab-api" style="display:none">
               <h3>API & SDK</h3>
               <div class="setting-row"><div><div class="stlabel">API base URL</div><div class="stdesc">Use in your SDK config</div></div></div>
               <input class="st-inp" style="width:100%;margin-bottom:1rem" value="https://api.mlopsde.me/api" readonly/>
+              <div class="setting-row"><div><div class="stlabel">API Key</div><div class="stdesc">Keep this secret</div></div><button class="tb-btn primary" onclick="generateApiKey()">Regenerate Key</button></div>
+              <input id="api-key-display" class="st-inp" style="width:100%;margin-bottom:1rem;background:#0d1117" value="••••••••••••••••" readonly/>
               <div class="setting-row"><div><div class="stlabel">Agent install (Linux ARM)</div><div class="stdesc">Run on your edge device</div></div></div>
               <input class="st-inp" style="width:100%;font-size:.72rem;margin-bottom:1rem" value="curl -fsSL https://get.mlops.dev | sh" readonly/>
               <div class="setting-row"><div><div class="stlabel">Python SDK</div><div class="stdesc">pip install mlops-dev-sdk</div></div><button class="tb-btn primary" onclick="navigator.clipboard.writeText('pip install mlops-dev-sdk').then(()=>showToast('Copied!'))">Copy</button></div>
+            </div>
+            
+            <div id="stab-billing" style="display:none">
+              <h3>Billing & Usage</h3>
+              <div class="setting-row" style="margin-bottom:1rem;"><div><div class="stlabel">Current Plan</div><div class="stdesc" id="b-plan">Free Tier</div></div></div>
+              <div class="kpi-row" style="grid-template-columns:1fr; margin-bottom: 2rem;">
+                <div class="kpi" style="padding:1rem;">
+                  <div class="kpi-lbl">Device Usage</div>
+                  <div class="kpi-val" id="b-usage" style="font-size:1.5rem;">0 / 10</div>
+                  <div class="kpi-sub">Active devices this month</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:1rem;">
+                <button class="btn-full" style="background:#5B8AF0; width:auto; padding:.5rem 1.3rem;" onclick="upgradePlan()">Upgrade to Team</button>
+                <button class="btn-full" style="background:#2d333b; border:1px solid #444c56; width:auto; padding:.5rem 1.3rem;" onclick="openCustomerPortal()">Manage Billing (Stripe)</button>
+              </div>
             </div>
             <div id="stab-notifs" style="display:none">
               <h3>Notifications</h3>
@@ -645,7 +686,7 @@ body{animation:pgInD .45s ease both}
 
 <script>
 'use strict';
-const API = 'https://api.mlopsde.me/v1';
+const API = 'http://127.0.0.1:8000/v1';
 let ST = { devices:[], deployments:[], events:[], summary:{}, devFilter:'all', evFilter:'all' };
 let sseSource = null;
 
@@ -775,7 +816,7 @@ function updateMapMarkers() {
       fillOpacity: 0.8
     }).addTo(fleetMap);
     
-    circle.bindTooltip(`<b>${d.name}</b><br>${d.status}`);
+    circle.bindTooltip(`<b>${escapeHTML(d.name)}</b><br>${d.status}`);
     circle.on('click', () => openModal(d.id));
     markers.push(circle);
   });
@@ -820,12 +861,20 @@ loadDevices = async function() {
 
 const PAGE_TITLES = {overview:'Overview',devices:'Devices',deployments:'Deployments',events:'Event log',drift:'Drift monitor',settings:'Settings'};
 
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // ── API ───────────────────────────────────────────────────────────────────────
 async function apiFetch(path, opts={}) {
-  const token = localStorage.getItem('np_token');
   const h = {'Content-Type':'application/json',...(opts.headers||{})};
-  if (token) h['Authorization'] = `Bearer ${token}`;
-  const res = await fetch(API+path, {...opts, headers:h});
+  const res = await fetch(API+path, {...opts, headers:h, credentials: 'include'});
   const d = await res.json().catch(()=>({}));
   if (!res.ok) throw Object.assign(new Error(d.error||'Failed'),{status:res.status});
   return d;
@@ -856,14 +905,19 @@ async function doLogin() {
   const btn=document.getElementById('li-btn');
   btn.disabled=true;btn.textContent='Verifying...';
   try {
-    localStorage.setItem('np_token', pw);
-    await apiFetch('/status');
-    const email = document.getElementById('li-email').value.trim() || "admin@mlops.dev";
-    const user = {name: "Admin", email: email, role: "admin"};
+    const resp = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({key: pw}),
+      credentials: 'include'
+    });
+    const data = await resp.json();
+    if(!resp.ok) throw new Error(data.error);
+    
+    const user = {name: data.user.email, email: data.user.email, role: data.user.tier};
     localStorage.setItem('np_user', JSON.stringify(user));
     bootApp(user);
   } catch(e){
-    localStorage.removeItem('np_token');
     showErr('login-err','Invalid API Key or Not Approved');
     btn.disabled=false;btn.textContent='Access Dashboard →';
   }
@@ -897,8 +951,9 @@ async function doRegister() {
   }
 }
 
-function doLogout() {
-  localStorage.removeItem('np_token');localStorage.removeItem('np_user');
+async function doLogout() {
+  await fetch(`${API}/auth/logout`, {method: 'POST', credentials: 'include'});
+  localStorage.removeItem('np_user');
   if(sseSource){sseSource.close();sseSource=null;}
   document.getElementById('app').classList.remove('on');
   document.getElementById('auth-screen').style.display='flex';
@@ -966,7 +1021,7 @@ function fd(iso){return iso?iso.split('T')[0]:'—';}
 function renderOvTable() {
   const tb=document.getElementById('ov-tbody');if(!tb)return;
   tb.innerHTML=ST.devices.map(d=>`<tr>
-    <td class="td-name" style="cursor:pointer; text-decoration:underline;" onclick="openModal('${d.id}')">${d.name}</td>
+    <td class="td-name" style="cursor:pointer; text-decoration:underline;" onclick="openModal('${d.id}')">${escapeHTML(d.name)}</td>
     <td>${sbadge(d.status)}</td>
     <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_tag||'-'}</td>
     <td>${dbar(Math.round((d.drift_score||0)*100))}</td>
@@ -981,14 +1036,14 @@ function renderDevTable() {
   if(ST.devFilter!=='all') devs=devs.filter(d=>d.status===ST.devFilter);
   if(q) devs=devs.filter(d=>d.name.toLowerCase().includes(q)||(d.hw_class||'').toLowerCase().includes(q));
   tb.innerHTML=devs.map(d=>`<tr>
-    <td class="td-name" style="cursor:pointer; text-decoration:underline;" onclick="openModal('${d.id}')">${d.name}</td>
+    <td class="td-name" style="cursor:pointer; text-decoration:underline;" onclick="openModal('${d.id}')">${escapeHTML(d.name)}</td>
     <td class="td-hw">${d.hw_class||'-'}</td>
     <td>${sbadge(d.status)}</td>
     <td style="font-family:var(--fm);font-size:.74rem;color:var(--muted)">${d.model_tag||'-'}</td>
     <td>${dbar(Math.round((d.drift_score||0)*100))}</td>
     <td style="font-family:var(--fm);font-size:.72rem;color:var(--muted)">${d.agent_version||'-'}</td>
     <td style="font-size:.72rem;color:var(--muted)">${fd(d.last_seen)}</td>
-    <td><button class="act-btn del" onclick="deleteDev('${d.id}','${d.name}')">×</button></td>
+    <td><button class="act-btn del" onclick="deleteDev('${d.id}','${escapeHTML(d.name)}')">×</button></td>
   </tr>`).join('');
 }
 function filterDev(s,btn){ST.devFilter=s;document.querySelectorAll('#page-devices .filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDevTable();}
@@ -997,7 +1052,7 @@ function renderDepList() {
   const el=document.getElementById('dep-list');if(!el)return;
   el.innerHTML=ST.deployments.map(d=>`
     <div class="dep-row">
-      <div><span class="dep-model">${d.model_name}</span><span class="dep-ver">${d.model_ver}</span></div>
+      <div><span class="dep-model">${escapeHTML(d.model_name)}</span><span class="dep-ver">${d.model_ver}</span></div>
       <span class="dep-st dst-${d.status}">${d.status.replace('_',' ')}</span>
       <span class="dep-devs">${d.success_count}/${d.device_count} devs</span>
     </div>`).join('')||'<p style="color:var(--muted);font-size:.84rem">No deployments yet.</p>';
@@ -1029,7 +1084,7 @@ function renderDrift() {
   const sorted=[...ST.devices].sort((a,b)=>b.drift_score-a.drift_score);
   el.innerHTML=sorted.map(d=>`
     <div class="drift-device">
-      <span class="drift-name">${d.name}</span>
+      <span class="drift-name">${escapeHTML(d.name)}</span>
       <div class="drift-bar-full"><div class="dbf-full df-full-${dc(d.drift_score)}" style="width:${d.drift_score}%"></div></div>
       <span class="drift-pct dv-${dc(d.drift_score)}" style="font-family:var(--fm);font-size:.74rem">${d.drift_score}%</span>
     </div>`).join('');
@@ -1105,9 +1160,8 @@ function showSTab(tab,el) {
 
 // ── SSE ────────────────────────────────────────────────────────────────────────
 function startSSE() {
-  const token=localStorage.getItem('np_token');
-  if(!token||sseSource)return;
-  sseSource=new EventSource(`${API}/fleet/stream?token=${encodeURIComponent(token)}`);
+  if(sseSource)return;
+  sseSource=new EventSource(`${API}/fleet/stream`, {withCredentials: true});
   sseSource.onmessage=e=>{
     try{
       const d=JSON.parse(e.data);
@@ -1121,14 +1175,65 @@ function startSSE() {
 }
 
 // ── BOOT ─────────────────────────────────────────────────────────────────────
-const _token=localStorage.getItem('np_token');
-const _user=JSON.parse(localStorage.getItem('np_user')||'null');
-if(_token&&_user){
-  bootApp(_user);
-} else {
-  document.getElementById('li-email').value='demo@nodepilot.dev';
-  document.getElementById('li-pw').value='demo1234';
+
+async function upgradePlan() {
+  try {
+    const res = await fetch(`${API.replace('/v1','')}/v1/billing/checkout`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({plan: 'team'}),
+      credentials: 'include'
+    });
+    const data = await res.json();
+    if(data.url) window.location.href = data.url;
+    else showToast(data.error || 'Failed to start checkout', 'err');
+  } catch(e) { showToast('Network error', 'err'); }
 }
+
+async function openCustomerPortal() {
+  try {
+    const res = await fetch(`${API.replace('/v1','')}/v1/billing/portal`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+    const data = await res.json();
+    if(data.url) window.location.href = data.url;
+    else showToast(data.error || 'Failed to open portal', 'err');
+  } catch(e) { showToast('Network error', 'err'); }
+}
+
+async function generateApiKey() {
+  if(!confirm('Are you sure? Your old API key will be invalidated.')) return;
+  try {
+    const res = await fetch(`${API}/keys/generate`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+    const data = await res.json();
+    if(data.key) {
+      document.getElementById('api-key-display').value = data.key;
+      showToast('API Key generated successfully! Please save it.');
+    } else {
+      showToast(data.error || 'Failed to generate key', 'err');
+    }
+  } catch(e) { showToast('Network error', 'err'); }
+}
+
+async function checkAuth() {
+  try {
+    const resp = await fetch(`${API}/auth/me`, {credentials: 'include'});
+    if(!resp.ok) throw new Error('Unauth');
+    const data = await resp.json();
+    const user = {name: data.user.email, email: data.user.email, role: data.user.tier};
+    localStorage.setItem('np_user', JSON.stringify(user));
+    bootApp(user);
+  } catch(e) {
+    document.getElementById('app').classList.remove('on');
+    document.getElementById('auth-screen').style.display='flex';
+  }
+}
+checkAuth();
+
 </script>
 
 <footer class="site-footer">

@@ -1,0 +1,102 @@
+with open("index.css", "a", encoding="utf-8") as f:
+    f.write("""
+
+/* --- DARK MODE --- */
+body.dark-mode {
+  --bg: #0f172a;
+  --bg-card: #1e293b;
+  --bg-hover: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --border: #334155;
+  --shadow: 0 4px 15px rgba(0,0,0,0.5);
+  background: var(--bg);
+  color: var(--text);
+}
+
+body.dark-mode .sidebar {
+  background: #0f172a;
+  border-right: 1px solid var(--border);
+}
+
+body.dark-mode .sb-link {
+  color: #cbd5e1;
+}
+
+body.dark-mode .sb-link:hover {
+  background: var(--bg-hover);
+  color: #fff;
+}
+
+body.dark-mode .sb-link.active {
+  background: rgba(0, 255, 179, 0.1);
+  color: #00ffb3;
+}
+
+body.dark-mode .panel, body.dark-mode .kpi {
+  background: var(--bg-card);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+body.dark-mode input, body.dark-mode select {
+  background: var(--bg);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+body.dark-mode .ftable th {
+  color: var(--muted);
+  border-bottom-color: var(--border);
+}
+body.dark-mode .ftable td {
+  border-bottom-color: var(--border);
+}
+
+/* --- THEME SWITCH --- */
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
+.theme-switch {
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  width: 44px;
+}
+.theme-switch input {
+  display: none;
+}
+.slider {
+  background-color: #cbd5e1;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+.slider:before {
+  background-color: #fff;
+  bottom: 4px;
+  content: "";
+  height: 16px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 16px;
+}
+input:checked + .slider {
+  background-color: #00ffb3;
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+.slider.round {
+  border-radius: 24px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
+""")
