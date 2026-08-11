@@ -5,6 +5,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/v1/(.*)",
+      "destination": "/api/index"
+    },
+    {
       "source": "/about",
       "destination": "/about.html"
     },
