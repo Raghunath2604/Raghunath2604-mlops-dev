@@ -168,12 +168,12 @@ def init_db():
             );
         ''')
         # Insert demo user if not exists
-        cursor.execute("SELECT id FROM api_keys WHERE id = 'key_demo'")
+        cursor.execute("SELECT id FROM api_keys WHERE id = 'admin'")
         if not cursor.fetchone():
-            demo_hash = hashlib.sha256(b'demo').hexdigest()
+            demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             cursor.execute('''
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
-                VALUES ('key_demo', %s, 'Demo Admin', 'free', 10, 'admin', 'approved')
+                VALUES ('admin', %s, 'demo@nodepilot.dev', 'enterprise', 10, 'admin', 'approved')
             ''', (demo_hash,))
     else:
         db = sqlite3.connect(str(DB_PATH))
@@ -217,14 +217,15 @@ def init_db():
             );
         ''')
         # Check and insert demo
-        row = db.execute("SELECT id FROM api_keys WHERE id = 'key_demo'").fetchone()
+        row = db.execute("SELECT id FROM api_keys WHERE id = 'admin'").fetchone()
         if not row:
-            demo_hash = hashlib.sha256(b'demo').hexdigest()
+            demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             db.execute('''
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
-                VALUES ('key_demo', ?, 'Demo Admin', 'free', 10, 'admin', 'approved')
+                VALUES ('admin', ?, 'demo@nodepilot.dev', 'enterprise', 10, 'admin', 'approved')
             ''', (demo_hash,))
             
+    if not db_url: db.commit()
     db.close()
 
 # ── Auth middleware ───────────────────────────────────────────────
@@ -1070,6 +1071,7 @@ def metering_task():
         except Exception as e:
             print(f"Metering error: {e}")
 
+init_db()
 if __name__ == "__main__":
     print("=" * 55)
     print("  MLOps.dev API Server")
