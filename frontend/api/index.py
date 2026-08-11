@@ -87,8 +87,8 @@ try:
 except ImportError as e:
     print(f"Warning: Could not import billing module: {e}")
 
-db_path = Path("/tmp/mlops.db") if os.environ.get("VERCEL") else Path(__file__).parent / "mlops.db"
-MODELS_DIR = Path(__file__).parent / "models"
+DB_PATH = Path("/tmp/mlops.db") if os.environ.get("VERCEL") else Path(__file__).parent / "mlops.db"
+MODELS_DIR = Path("/tmp/models") if os.environ.get("VERCEL") else Path(__file__).parent / "models"
 MODELS_DIR.mkdir(exist_ok=True)
 
 # ── Database ──────────────────────────────────────────────────────
