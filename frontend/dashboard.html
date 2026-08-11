@@ -725,7 +725,7 @@ body{animation:pgInD .45s ease both}
 'use strict';
 const API = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') 
     ? 'http://127.0.0.1:8000/v1' 
-    : 'https://api.mlopsde.me/v1';
+    : '/v1';
 let ST = { devices:[], deployments:[], events:[], summary:{}, devFilter:'all', evFilter:'all' };
 let sseSource = null;
 
