@@ -1311,7 +1311,7 @@ async function generateApiKey() {
 async function checkAuth() {
   try {
     const resp = await fetch(`${API}/auth/me`, {credentials: 'include'});
-    if(!resp.ok) throw new Error(\'Unauth\');
+    if(!resp.ok) throw new Error('Unauth');
     const data = await resp.json();
     const user = {name: data.user.email, email: data.user.email, role: data.user.role};
     localStorage.setItem('np_user', JSON.stringify(user));
