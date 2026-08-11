@@ -1,11 +1,11 @@
 services:
   - type: web
-    name: mlops-api
+    name: mlops-dev-server
     env: python
     region: ohio
-    plan: starter
-    buildCommand: "pip install -r sdk/server/requirements.txt"
-    startCommand: "cd sdk/server && gunicorn -b 0.0.0.0:$PORT api:app"
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -b 0.0.0.0:$PORT app:app"
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
@@ -21,6 +21,6 @@ services:
 databases:
   - name: mlops-db
     region: ohio
-    plan: starter
+    plan: free
     databaseName: mlops
     user: mlops
