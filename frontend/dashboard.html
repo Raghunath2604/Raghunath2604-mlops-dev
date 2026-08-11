@@ -990,15 +990,15 @@ async function rejectUser(id) {
 
   async function doLogin() {
   clearErr('login-err');
-  const pw=document.getElementById('li-pw').value.trim();
-  if(!pw){showErr('login-err','API Key required');return;}
+  const email=document.getElementById('li-email').value.trim(); const pw=document.getElementById('li-pw').value.trim();
+  if(!email || !pw){showErr('login-err','Email and Password required');return;}
   const btn=document.getElementById('li-btn');
   btn.disabled=true;btn.textContent='Verifying...';
   try {
     const resp = await fetch(`${API}/auth/login`, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({key: pw}),
+      body: JSON.stringify({email: email, password: pw}),
       credentials: 'include'
     });
     const data = await resp.json();

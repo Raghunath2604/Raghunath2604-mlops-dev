@@ -333,21 +333,34 @@ def status():
 @limiter.limit("5 per minute")
 def auth_login():
     data = request.get_json(silent=True) or {}
-    key = data.get("key", "").strip()
-    if not key:
-        return jsonify({"error": "Key required"}), 400
-        
-    db = get_db()
-    row = db_query(db, "SELECT id, name, subscription_tier FROM api_keys WHERE key_hash = ?", (key,), fetchone=True)
+    email = data.get("email", "").strip()
+    password = data.get("password", "").strip()
     
+    # Fallback for old API key usage
+    key = data.get("key", "").strip()
+    
+    db = get_db()
+    
+    if email and password:
+        pw_hash = hashlib.sha256(password.encode()).hexdigest()
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ? AND key_hash = ?", (email, pw_hash), fetchone=True)
+    elif key:
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE key_hash = ?", (key,), fetchone=True)
+    else:
+        return jsonify({"error": "Email and password required"}), 400
+        
     if not row:
-        return jsonify({"error": "Invalid API key or Not Approved"}), 401
+        return jsonify({"error": "Invalid credentials"}), 401
+        
+    if row["approval_status"] != 'approved':
+        return jsonify({"error": "Your account is pending admin approval."}), 403
         
     resp = make_response(jsonify({
         "success": True,
         "user": {
             "id": row["id"],
             "email": row["name"],
+            "role": row["role"],
             "tier": row["subscription_tier"]
         }
     }))
@@ -355,7 +368,7 @@ def auth_login():
     # Issue Secure HttpOnly Cookie
     resp.set_cookie(
         'np_token', 
-        key,
+        row["id"], # Use user ID instead of raw key for session
         httponly=True,
         secure=True, 
         samesite='Strict',
