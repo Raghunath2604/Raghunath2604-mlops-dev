@@ -445,7 +445,7 @@ def status():
 import requests
 
 def verify_turnstile(token):
-    secret = os.environ.get("TURNSTILE_SECRET", "1x0000000000000000000000000000000AA")
+    secret = os.environ.get("TURNSTILE_SECRET", "0x4AAAAAAEO8KzQxso6IT44sk2CVqRyxRQM")
     if not secret: return True # If no secret, skip verification
     if not token: return False
     try:
