@@ -1044,17 +1044,22 @@ async function doRegister() {
 }
 
 async function doLogout() {
-  await fetch(`${API}/auth/logout`, {method: 'POST', credentials: 'include'});
   localStorage.removeItem('np_user');
   if(sseSource){sseSource.close();sseSource=null;}
   document.getElementById('app').classList.remove('on');
-  document.getElementById('auth-screen').style.display='flex';
+  if (window.Clerk) {
+    await window.Clerk.signOut();
+    // Clerk.signOut will reload the page / re-show the SignIn modal automatically
+  } else {
+    window.location.reload();
+  }
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 async function bootApp(user) {
-  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('clerk-auth').style.display='none';
   document.getElementById('app').classList.add('on');
+  document.getElementById('app').style.display = 'flex';
   const ini=(user.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('sb-ava').textContent=ini;
   document.getElementById('sb-uname').textContent=user.name||'—';
@@ -1360,7 +1365,42 @@ async function generateApiKey() {
       window.Clerk.mountUserButton(userBtnDiv);
       
       const email = window.Clerk.user.primaryEmailAddress.emailAddress;
-      bootApp({email: email, role: "user"}); // backend will verify real role
+      const firstName = window.Clerk.user.firstName || '';
+      const lastName = window.Clerk.user.lastName || '';
+      const displayName = (firstName + ' ' + lastName).trim() || email;
+      // Try to get real role from backend, fall back gracefully
+      try {
+        const resp = await fetch(`${API}/auth/me`, {
+          headers: { 'Authorization': 'Bearer ' + await window.Clerk.session.getToken() }
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          bootApp({name: displayName, email: email, role: data.user.role || 'user'});
+        } else if (resp.status === 403) {
+          // Pending approval
+          document.getElementById('app').style.display = 'none';
+          const authScreen = document.getElementById('clerk-auth');
+          authScreen.style.display = 'flex';
+          authScreen.innerHTML = `
+            <div style="z-index:10;text-align:center;max-width:440px;padding:2rem;">
+              <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:32px;">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#5B8AF0" stroke-width="2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg>
+                <span style="font-family:'Space Grotesk',sans-serif;font-size:1.7rem;color:#E8EDF8;font-weight:700;">MLOps<span style="color:#5B8AF0;opacity:.8;font-weight:400">.dev</span></span>
+              </div>
+              <div style="background:#0F1628;border:1px solid rgba(91,138,240,0.2);border-radius:12px;padding:2rem;">
+                <div style="font-size:2rem;margin-bottom:1rem;">⏳</div>
+                <h2 style="color:#E8EDF8;font-family:'Space Grotesk',sans-serif;font-size:1.2rem;margin-bottom:.5rem;">Pending Approval</h2>
+                <p style="color:#8896B3;font-size:.9rem;line-height:1.6;">Your account request has been submitted. You'll receive an email once an admin approves your access.</p>
+                <button onclick="window.Clerk.signOut()" style="margin-top:1.5rem;background:none;border:1px solid rgba(91,138,240,0.3);border-radius:6px;color:#8896B3;padding:.5rem 1rem;cursor:pointer;font-size:.85rem;">Sign out</button>
+              </div>
+            </div>
+          `;
+        } else {
+          bootApp({name: displayName, email: email, role: 'user'});
+        }
+      } catch(e) {
+        bootApp({name: displayName, email: email, role: 'user'});
+      }
     } else {
       document.getElementById("app").style.display = "none";
       const authScreen = document.getElementById("clerk-auth");
