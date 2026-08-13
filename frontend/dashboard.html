@@ -1363,11 +1363,42 @@ async function generateApiKey() {
 </script>
 
 <script>
+  function showClerkError(msg) {
+    const authScreen = document.getElementById('clerk-auth');
+    authScreen.style.display = 'flex';
+    authScreen.style.alignItems = 'center';
+    authScreen.style.justifyContent = 'center';
+    authScreen.innerHTML = `
+      <div style="z-index:10;text-align:center;max-width:440px;padding:2rem;">
+        <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:24px;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5B8AF0" stroke-width="2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="2" y2="17"/></svg>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;color:#E8EDF8;font-weight:700;">MLOps<span style="color:#5B8AF0;opacity:.8;font-weight:400">.dev</span></span>
+        </div>
+        <div style="background:#0F1628;border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:1.5rem;">
+          <div style="font-size:1.5rem;margin-bottom:.75rem;">⚠️</div>
+          <h2 style="color:#E8EDF8;font-family:'Space Grotesk',sans-serif;font-size:1rem;margin-bottom:.5rem;">Authentication Error</h2>
+          <p style="color:#8896B3;font-size:.82rem;line-height:1.6;margin-bottom:1rem;">${msg}</p>
+          <button onclick="location.reload()" style="background:#5B8AF0;border:none;border-radius:6px;color:#fff;padding:.5rem 1.2rem;cursor:pointer;font-size:.85rem;font-family:'Space Grotesk',sans-serif;">Retry</button>
+        </div>
+      </div>
+    `;
+  }
+
   async function initClerk() {
-    await window.Clerk.load();
+    if (typeof window.Clerk === 'undefined') {
+      showClerkError('Authentication service failed to load. Please check your internet connection and refresh.');
+      return;
+    }
+    try {
+      await window.Clerk.load();
+    } catch(err) {
+      showClerkError('Auth init error: ' + (err.message || err));
+      return;
+    }
     // Remove spinner
     const loadingEl = document.getElementById('clerk-loading');
     if (loadingEl) loadingEl.remove();
+    try {
     if (window.Clerk.user) {
       document.getElementById("app").style.display = "flex";
       document.getElementById("clerk-auth").style.display = "none";
@@ -1464,12 +1495,27 @@ async function generateApiKey() {
         }
       });
     }
+    } catch(err) {
+      showClerkError('Unexpected error: ' + (err.message || err));
+    }
+  }
+
+  // Timeout fallback - if Clerk doesn't load in 10s, show error
+  const clerkTimeout = setTimeout(function() {
+    if (typeof window.Clerk === 'undefined' || !window.Clerk.loaded) {
+      showClerkError('Authentication service timed out. Please try refreshing the page.');
+    }
+  }, 10000);
+
+  async function initClerkWithTimeout() {
+    clearTimeout(clerkTimeout);
+    await initClerk();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initClerk);
+    document.addEventListener('DOMContentLoaded', initClerkWithTimeout);
   } else {
-    initClerk();
+    initClerkWithTimeout();
   }
 </script>
 
