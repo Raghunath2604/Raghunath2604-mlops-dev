@@ -138,6 +138,23 @@ MODELS_DIR = Path("/tmp/models") if os.environ.get("VERCEL") else Path(__file__)
 MODELS_DIR.mkdir(exist_ok=True)
 
 # ── Database ──────────────────────────────────────────────────────
+
+jwks_client = PyJWKClient("https://sought-anteater-96.clerk.accounts.dev/.well-known/jwks.json")
+
+def verify_clerk_token(token):
+    try:
+        signing_key = jwks_client.get_signing_key_from_jwt(token)
+        data = jwt.decode(
+            token,
+            signing_key.key,
+            algorithms=["RS256"],
+            options={"verify_aud": False}
+        )
+        return data.get("sub")
+    except Exception as e:
+        print(f"Clerk JWT Verification failed: {e}")
+        return None
+
 def get_db():
     if "db" not in g:
         db_url = os.environ.get("DATABASE_URL")
@@ -403,60 +420,67 @@ def db_query(db, query, args=(), fetchone=False, fetchall=False, commit=False):
     return res
 
 
+
+def sync_clerk_user(db, clerk_id):
+    row = db_query(db, "SELECT * FROM api_keys WHERE id = ?", (clerk_id,), fetchone=True)
+    if not row:
+        # User not in DB, insert as pending
+        # Wait, we need an email. Clerk token doesn't have email unless added. We can mock email as the clerk_id for now, 
+        # or fetch it from Clerk API. For simplicity, we just use clerk_id.
+        db_query(db, "INSERT INTO api_keys (id, key_hash, name, role, approval_status) VALUES (?, ?, ?, 'user', 'pending')", 
+                 (clerk_id, clerk_id, f"{clerk_id}@clerk.local"), commit=True)
+        # Email admin
+        admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com")
+        if admin_email:
+            send_email(admin_email, f"MLOps.dev - New Clerk User", f"A new user logged in via Clerk and is pending approval.\nID: {clerk_id}")
+        return None
+    return row
+
 def require_admin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        cookie_token = request.cookies.get('np_token')
-        bearer_token = None
         auth_header = request.headers.get("Authorization", "")
-        if auth_header.startswith("Bearer "):
-            bearer_token = auth_header.split(" ", 1)[1].strip()
-
-        if not cookie_token and not bearer_token:
+        if not auth_header.startswith("Bearer "):
             return jsonify({"error": "Unauthorized"}), 401
-        
-        db = get_db()
-        row = None
-        if cookie_token:
-            row = db_query(db, "SELECT * FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
-        elif bearer_token:
-            token_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
-            row = db_query(db, "SELECT * FROM api_keys WHERE key_hash = ?", (token_hash,), fetchone=True)
             
-        if not row:
+        token = auth_header.split(" ", 1)[1].strip()
+        clerk_id = verify_clerk_token(token)
+        if not clerk_id:
             return jsonify({"error": "Unauthorized"}), 401
+            
+        db = get_db()
+        row = sync_clerk_user(db, clerk_id)
+        if not row:
+            return jsonify({"error": "Account pending admin approval."}), 403
+            
         if row['role'] != 'admin':
-            return jsonify({"error": "Forbidden - Admin access required"}), 403
-        
-        request.user = row
+            return jsonify({"error": "Admin access required"}), 403
+            
+        g.user_id = clerk_id
         return f(*args, **kwargs)
     return decorated
 
 def require_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        cookie_token = request.cookies.get('np_token')
-        bearer_token = None
         auth_header = request.headers.get("Authorization", "")
-        if auth_header.startswith("Bearer "):
-            bearer_token = auth_header.split(" ", 1)[1].strip()
-
-        if not cookie_token and not bearer_token:
-            return jsonify({"error": "Missing Authentication (Cookie or Header)"}), 401
+        if not auth_header.startswith("Bearer "):
+            return jsonify({"error": "Missing Bearer Token"}), 401
+            
+        token = auth_header.split(" ", 1)[1].strip()
+        clerk_id = verify_clerk_token(token)
+        if not clerk_id:
+            return jsonify({"error": "Invalid Session"}), 401
             
         db = get_db()
-        row = None
-        if cookie_token:
-            row = db_query(db, "SELECT id FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
-        elif bearer_token:
-            key_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
-            row = db_query(db, "SELECT id FROM api_keys WHERE key_hash = ?", (key_hash,), fetchone=True)
-            
+        row = sync_clerk_user(db, clerk_id)
         if not row:
-            return jsonify({"error": "Invalid API key or Session. Get yours at mlops.dev/dashboard"}), 401
+            return jsonify({"error": "Your account is pending admin approval."}), 403
             
-        # Store user ID in g context for routes to access
-        g.user_id = row["id"]
+        if row['approval_status'] != 'approved':
+            return jsonify({"error": "Your account is pending admin approval."}), 403
+            
+        g.user_id = clerk_id
         return f(*args, **kwargs)
     return decorated
 
