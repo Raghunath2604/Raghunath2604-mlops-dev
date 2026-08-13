@@ -12,7 +12,10 @@ gtag('js',new Date());
 gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 </script>
 
-
+<!-- Vercel Web Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+<!-- Cloudflare Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 
 <link rel="canonical" href="https://www.mlops.dev/dashboard"/>
@@ -257,17 +260,25 @@ body{background:var(--ink);color:var(--snow);font-family:var(--fb);display:flex;
 .toast.ok{border-color:rgba(16,217,160,.28)}.toast.err{border-color:rgba(255,77,109,.28)}
 
 /* ── RESPONSIVE ── */
+.pb, .panel > div { overflow-x: auto; }
 @media(max-width:820px){
-  .sidebar{width:50px;min-width:50px}
+  .sidebar{width:65px;min-width:65px}
   .sb-link span,.sb-section,.sb-footer{display:none}
-  .sb-link{justify-content:center;padding:.65rem}
+  .sb-link{justify-content:center;padding:.8rem}
   .sb-logo span{display:none}
   .kpi-row{grid-template-columns:1fr 1fr}
   .two-col,.deploy-split,.settings-split{grid-template-columns:1fr}
 }
 @media(max-width:500px){
-  .kpi-row{grid-template-columns:1fr 1fr}
-  .content{padding:1rem}
+  #app { flex-direction: column; }
+  .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; min-width: 100%; flex-direction: row; justify-content: space-around; align-items: center; padding: 0 0.5rem; border-right: none; border-top: 1px solid var(--border); z-index: 1000; background: rgba(14,21,37,0.95); backdrop-filter: blur(10px); }
+  .sb-logo { display: none; }
+  .sb-link { flex-direction: column; padding: 0.4rem; width: auto; gap: 4px; align-items: center; }
+  .sb-link svg { margin: 0; width: 18px; height: 18px; }
+  .sb-link span { display: block !important; font-size: 0.6rem; text-align: center; }
+  .main { height: calc(100vh - 60px); flex: 0 0 calc(100vh - 60px); padding-bottom: 20px; }
+  .kpi-row{grid-template-columns:1fr}
+  .content{padding:1rem; padding-bottom: 2rem;}
 }
 
 /* ── SHARED FOOTER ── */
@@ -379,6 +390,7 @@ body{animation:pgInD .45s ease both}
       <div class="ferr" id="login-err"></div>
       <div class="fg"><label>Email</label><input id="li-email" type="email" placeholder="demo@nodepilot.dev" autocomplete="email"/></div>
       <div class="fg"><label>Password</label><input id="li-pw" type="password" placeholder="Password" autocomplete="current-password"/></div>
+      <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="margin-bottom: 20px;"></div>
       <button class="btn-full" id="li-btn" onclick="doLogin()">Sign in to dashboard →</button>
       <p class="auth-hint">Demo: <strong>demo@nodepilot.dev</strong> / <strong>demo1234</strong></p>
     </div>
@@ -390,6 +402,7 @@ body{animation:pgInD .45s ease both}
         <div class="fg"><label>Email *</label><input id="ri-email" type="email" placeholder="you@co.com" autocomplete="email"/></div>
       </div>
       <div class="fg"><label>Password *</label><input id="ri-pw" type="password" placeholder="Create a password" autocomplete="new-password"/></div>
+      <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="margin-bottom: 20px;"></div>
       <button class="btn-full" id="ri-btn" onclick="doRegister()">Request Access →</button>
     </div>
   </div>
@@ -460,11 +473,7 @@ body{animation:pgInD .45s ease both}
               <input type="checkbox" id="chk-deploy" disabled /> <span>3. Deploy your first model</span>
             </label>
           </div>
-        </div><div class="kpi-val violet" id="k-total">—</div><div class="kpi-sub">in fleet</div></div>
-          <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>Online</div><div class="kpi-val teal" id="k-online">—</div><div class="kpi-sub kpi-trend-up" id="k-hp">—% fleet health</div></div>
-          <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Offline</div><div class="kpi-val red" id="k-offline">—</div><div class="kpi-sub" id="k-updating">— updating</div></div>
-          <div class="kpi"><div class="kpi-lbl"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>High Drift</div><div class="kpi-val amber" id="k-drift">—</div><div class="kpi-sub">devices &gt;50% threshold</div></div>
-        </div>
+
           <!-- CHART AND DARK MODE -->
           <div class="panel" style="margin-bottom: 1.5rem; position: relative;">
             <div class="ph" style="display:flex; justify-content:space-between; align-items:center;">
@@ -531,6 +540,18 @@ body{animation:pgInD .45s ease both}
               <h3>Deploy a model</h3>
               <div class="fg2"><label>Model name *</label><input id="dn-name" type="text" placeholder="e.g. edge-detector"/></div>
               <div class="fg2"><label>Version *</label><input id="dn-ver" type="text" placeholder="e.g. v4.0"/></div>
+              <div class="fg2">
+                <label>Target Fleet</label>
+                <select id="dn-target">
+                  <option value="all">All Devices</option>
+                  <option value="jetson_orin">NVIDIA Jetson Orin</option>
+                  <option value="jetson_nano">NVIDIA Jetson Nano</option>
+                  <option value="rpi5">Raspberry Pi 5</option>
+                  <option value="rpi4">Raspberry Pi 4</option>
+                  <option value="x86_64">Generic x86_64</option>
+                  <option value="arm_custom">Custom ARM64</option>
+                </select>
+              </div>
               <div class="fg2">
                 <label>Rollout strategy</label>
                 <select id="dn-strat">
@@ -674,8 +695,9 @@ body{animation:pgInD .45s ease both}
                 </div>
               </div>
               <div style="display:flex; gap:1rem;">
-                <button class="btn-full" style="background:#5B8AF0; width:auto; padding:.5rem 1.3rem;" onclick="upgradePlan()">Upgrade to Team</button>
-                <button class="btn-full" style="background:#2d333b; border:1px solid #444c56; width:auto; padding:.5rem 1.3rem;" onclick="openCustomerPortal()">Manage Billing (Stripe)</button>
+                <button class="btn-full" style="background:#5B8AF0; width:auto; padding:.5rem 1.3rem;" onclick="upgradePlan('team')">Upgrade to Team</button>
+                <button class="btn-full" style="background:#00E5A0; color:#080C16; width:auto; padding:.5rem 1.3rem;" onclick="upgradePlan('enterprise')">Upgrade to Enterprise</button>
+                <button class="btn-full" style="background:#2d333b; border:1px solid #444c56; width:auto; padding:.5rem 1.3rem;" onclick="openCustomerPortal()">Cancel Subscription</button>
               </div>
             </div>
             <div id="stab-notifs" style="display:none">
@@ -710,10 +732,10 @@ body{animation:pgInD .45s ease both}
       <label>Hardware *</label>
       <select id="ad-hw">
         <option value="">Select hardware platform</option>
-        <option>NVIDIA Jetson Orin</option><option>NVIDIA Jetson Nano</option>
-        <option>Raspberry Pi 5</option><option>Raspberry Pi 4</option>
-        <option>Google Coral</option><option>Qualcomm Snapdragon</option>
-        <option>ARM Cortex-A55</option><option>Custom SoC</option>
+        <option value="jetson_orin">NVIDIA Jetson Orin</option><option value="jetson_nano">NVIDIA Jetson Nano</option>
+        <option value="rpi5">Raspberry Pi 5</option><option value="rpi4">Raspberry Pi 4</option>
+        <option value="coral">Google Coral</option><option value="snapdragon">Qualcomm Snapdragon</option>
+        <option value="a55">ARM Cortex-A55</option><option value="arm_custom">Custom SoC</option>
       </select>
     </div>
     <div class="ferr2" id="ad-err"></div>
@@ -994,24 +1016,30 @@ async function rejectUser(id) {
   if(!email || !pw){showErr('login-err','Email and Password required');return;}
   const btn=document.getElementById('li-btn');
   btn.disabled=true;btn.textContent='Verifying...';
+  
+  let turnstileResponse = '';
+  const tsInput = document.querySelector('#ap-login [name="cf-turnstile-response"]');
+  if (tsInput) turnstileResponse = tsInput.value;
+
   try {
     const resp = await fetch(`${API}/auth/login`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({email: email, password: pw}),
-      credentials: 'include'
-    });
-    const data = await resp.json();
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({email: email, password: pw, turnstile_response: turnstileResponse}),
+        credentials: 'include'
+      });
+      const data = await resp.json();
     if(!resp.ok) throw new Error(data.error);
     
     const user = {name: data.user.email, email: data.user.email, role: data.user.role};
     localStorage.setItem('np_user', JSON.stringify(user));
     bootApp(user);
-  } catch(e){
+  } catch(e) {
     showErr('login-err','Invalid API Key or Not Approved');
     btn.disabled=false;btn.textContent='Access Dashboard →';
   }
 }
+
 document.getElementById('li-pw').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
 
 async function doRegister() {
@@ -1021,11 +1049,16 @@ async function doRegister() {
   const password=document.getElementById('ri-pw').value.trim();
   if(!name||!email||!password){showErr('reg-err','Name, Email and Password required');return;}
   const btn=document.getElementById('ri-btn');btn.disabled=true;btn.textContent='Submitting...';
+  
+  let turnstileResponse = '';
+  const tsInput = document.querySelector('#ap-register [name="cf-turnstile-response"]');
+  if (tsInput) turnstileResponse = tsInput.value;
+
   try {
     const res = await fetch(`${API}/auth/register`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name, email, password})
+        body: JSON.stringify({name, email, password, turnstile_response: turnstileResponse})
     });
     const data = await res.json().catch(()=>({}));
     if (!res.ok) throw new Error(data.error || 'Failed to request access');
@@ -1059,9 +1092,18 @@ async function bootApp(user) {
   document.getElementById('s-name').value=user.name||'';
   document.getElementById('s-email').value=user.email||'';
   document.getElementById('s-role').value=user.role||'';
-  await refreshAll();
-  startSSE();
-}
+    await refreshAll();
+    startSSE();
+    
+    // Auto-trigger plan upgrade if coming from landing page
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedPlan = urlParams.get('plan');
+    if (requestedPlan && window.currentUser && window.currentUser.tier === 'free') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        showToast('Initiating checkout...', 'ok');
+        upgradePlan(requestedPlan);
+    }
+  }
 
 async function refreshAll() {
   await Promise.all([loadSummary(),loadDevices(),loadDeployments(),loadEvents()]);
@@ -1070,7 +1112,19 @@ async function refreshAll() {
 // ── LOADERS ────────────────────────────────────────────────────────────────────
 async function loadSummary() {
   try {
-    const d=await apiFetch('/status'); ST.summary=d;
+    const [st, dev] = await Promise.all([
+      fetch(`${API}/status`).then(r=>r.json()),
+      fetch(`${API}/devices`).then(r=>r.json())
+    ]);
+    if(st.total_devices !== undefined) {
+       let devLimit = 10;
+       if(window.currentUser && window.currentUser.device_limit) {
+           devLimit = window.currentUser.device_limit;
+       }
+       if (document.getElementById('b-usage')) document.getElementById('b-usage').textContent = `${st.total_devices} / ${devLimit == 99999 ? 'Unlimited' : devLimit}`;
+    }
+    const d = st;
+    ST.summary=d;
     document.getElementById('k-total').textContent=d.total_devices||0;
     document.getElementById('k-online').textContent=d.online||0;
     document.getElementById('k-offline').textContent=d.offline||0;
@@ -1183,6 +1237,7 @@ function renderDrift() {
 async function doDeploy() {
   const name=document.getElementById('dn-name').value.trim();
   const ver=document.getElementById('dn-ver').value.trim();
+  const target=document.getElementById('dn-target').value;
   const err=document.getElementById('dep-err');const suc=document.getElementById('dep-suc');
   err.classList.remove('show');suc.classList.remove('show');
   if(!name||!ver){err.textContent='Model name and version required';err.classList.add('show');return;}
@@ -1191,7 +1246,7 @@ async function doDeploy() {
   prog.style.display='block';fill.style.width='0%';
   const piv=setInterval(()=>{const c=parseInt(fill.style.width)||0;if(c<88)fill.style.width=(c+Math.floor(Math.random()*7+2))+'%';},350);
   try {
-    const res=await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:name,model_tag:ver})});
+    const res=await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:name,model_tag:ver,target:target})});
     clearInterval(piv);fill.style.width='100%';
     setTimeout(()=>{prog.style.display='none';fill.style.width='0%';},700);
     suc.textContent=`✓ ${name} ${ver} deploying to ${res.data.device_count} devices`;suc.classList.add('show');
@@ -1219,7 +1274,7 @@ async function doAddDev() {
   if(!name||!hw){err.textContent='Name and hardware required';err.classList.add('show');return;}
   const btn=document.getElementById('ad-btn');btn.disabled=true;btn.textContent='Registering…';
   try {
-    await apiFetch('/devices',{method:'POST',body:JSON.stringify({name,hardware:hw})});
+    await apiFetch('/devices/register',{method:'POST',body:JSON.stringify({name,hardware:hw})});
     closeAddDev();document.getElementById('ad-name').value='';document.getElementById('ad-hw').value='';
     showToast(`${name} registered`);await loadDevices();await loadSummary();
   } catch(e){err.textContent=e.message||'Failed';err.classList.add('show');}
@@ -1265,28 +1320,28 @@ function startSSE() {
 
 // ── BOOT ─────────────────────────────────────────────────────────────────────
 
-async function upgradePlan() {
+async function upgradePlan(planName = 'team') {
   try {
     const res = await fetch(`${API.replace('/v1','')}/v1/billing/checkout`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({plan: 'team'}),
+      body: JSON.stringify({plan: planName}),
       credentials: 'include'
     });
     const data = await res.json();
-    if(data.url) window.location.href = data.url;
+    if(data.success) { showToast('Subscription canceled.', 'ok'); setTimeout(() => window.location.reload(), 1500); }
     else showToast(data.error || 'Failed to start checkout', 'err');
   } catch(e) { showToast('Network error', 'err'); }
 }
 
 async function openCustomerPortal() {
   try {
-    const res = await fetch(`${API.replace('/v1','')}/v1/billing/portal`, {
+    const res = await fetch(`${API.replace('/v1','')}/v1/billing/cancel`, {
       method: 'POST',
       credentials: 'include'
     });
     const data = await res.json();
-    if(data.url) window.location.href = data.url;
+    if(data.success) { showToast('Subscription canceled.', 'ok'); setTimeout(() => window.location.reload(), 1500); }
     else showToast(data.error || 'Failed to open portal', 'err');
   } catch(e) { showToast('Network error', 'err'); }
 }

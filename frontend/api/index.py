@@ -442,12 +442,33 @@ def status():
     })
 
 # ── Auth ──────────────────────────────────────────────────────────
+import requests
+
+def verify_turnstile(token):
+    secret = os.environ.get("TURNSTILE_SECRET", "1x0000000000000000000000000000000AA")
+    if not secret: return True # If no secret, skip verification
+    if not token: return False
+    try:
+        r = requests.post(
+            'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+            data={'secret': secret, 'response': token},
+            timeout=5
+        )
+        return r.json().get('success', False)
+    except:
+        return False
+
 @app.route("/v1/auth/login", methods=["POST"])
 @limiter.limit("5 per minute")
 def auth_login():
     data = request.get_json(silent=True) or {}
     email = data.get("email", "").strip()
     password = data.get("password", "").strip()
+    turnstile_token = data.get("turnstile_response", "").strip()
+    
+    # Verify Turnstile
+    if not verify_turnstile(turnstile_token):
+        return jsonify({"error": "Failed CAPTCHA verification"}), 400
     
     # Fallback for old API key usage
     key = data.get("key", "").strip()
@@ -456,7 +477,8 @@ def auth_login():
     
     if email and password:
         pw_hash = hashlib.sha256(password.encode()).hexdigest()
-        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ? AND key_hash = ?", (email, pw_hash), fetchone=True)
+        salted_pw_hash = hashlib.sha256((email + password).encode()).hexdigest()
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ? AND (key_hash = ? OR key_hash = ?)", (email, pw_hash, salted_pw_hash), fetchone=True)
     elif key:
         row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE key_hash = ?", (key,), fetchone=True)
     else:
@@ -1214,16 +1236,24 @@ def register():
     data = request.json
     email = data.get('email', '').strip()
     password = data.get('password', '').strip()
+    turnstile_token = data.get("turnstile_response", "").strip()
+    
+    # Verify Turnstile
+    if not verify_turnstile(turnstile_token):
+        return jsonify({"error": "Failed CAPTCHA verification"}), 400
+
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
     
     db = get_db()
-    pw_hash = hashlib.sha256(password.encode()).hexdigest()
     
-    # Check if exists
-    existing = db_query(db, "SELECT id FROM api_keys WHERE key_hash = ?", (pw_hash,), fetchone=True)
+    # Check if exists by email
+    existing = db_query(db, "SELECT id FROM api_keys WHERE name = ?", (email,), fetchone=True)
     if existing:
-        return jsonify({"error": "User already exists"}), 400
+        return jsonify({"error": "Email already registered"}), 400
+        
+    # Salt the hash with email to avoid UNIQUE key_hash constraint on identical passwords
+    pw_hash = hashlib.sha256((email + password).encode()).hexdigest()
         
     user_id = 'user_' + os.urandom(8).hex()
     db_query(db, '''
@@ -1231,8 +1261,12 @@ def register():
         VALUES (?, ?, ?, 'user', 'pending')
     ''', (user_id, pw_hash, email), commit=True)
     
-    # Normally we would trigger an email to admin here
-    print(f"[EMAIL MOCK] New user registration requires approval: {email}")
+    # Send email to admin
+    admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com")
+    if admin_email:
+        subject = f"MLOps.dev - New User Registration: {email}"
+        body = f"A new user ({email}) has registered and is pending approval.\nLog in to the dashboard to approve them."
+        send_email(admin_email, subject, body)
     
     return jsonify({"success": True, "message": "Registration successful, pending admin approval."})
 
