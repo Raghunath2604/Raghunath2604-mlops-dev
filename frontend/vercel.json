@@ -5,6 +5,26 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "docs.mlopsde.me"
+        }
+      ],
+      "destination": "/docs.html"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "roadmap.mlopsde.me"
+        }
+      ],
+      "destination": "/roadmap.html"
+    },
+    {
       "source": "/v1/(.*)",
       "destination": "/api/index"
     },
