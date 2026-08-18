@@ -1029,13 +1029,13 @@ async function rejectUser(id) {
         credentials: 'include'
       });
       const data = await resp.json();
-    if(!resp.ok) throw new Error(data.error);
+    if(!resp.ok) throw new Error(data.error || 'Login failed');
     
     const user = {name: data.user.email, email: data.user.email, role: data.user.role};
     localStorage.setItem('np_user', JSON.stringify(user));
     bootApp(user);
   } catch(e) {
-    showErr('login-err','Invalid API Key or Not Approved');
+    showErr('login-err', e.message || 'Invalid API Key or Not Approved');
     btn.disabled=false;btn.textContent='Access Dashboard →';
   }
 }
