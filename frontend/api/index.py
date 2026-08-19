@@ -690,17 +690,7 @@ def device_ping(device_id):
 @require_auth
 def devices_list():
     db = get_db()
-    # Calculate offline status dynamically if last_seen > 60 seconds
-    q = """
-        SELECT *, 
-        CASE 
-            WHEN status = 'error' THEN 'error'
-            WHEN status = 'drift' THEN 'drift'
-            WHEN (julianday('now') - julianday(last_seen)) * 86400 > 60 THEN 'offline' 
-            ELSE 'online' 
-        END as dynamic_status
-        FROM devices WHERE 1=1
-    """
+    q = "SELECT * FROM devices WHERE 1=1"
     params = []
     
     if g.role != 'admin':
@@ -708,13 +698,9 @@ def devices_list():
         params.append(g.user_id)
         
     if request.args.get("status"):
-        if request.args["status"] == "offline":
-            q += " AND (julianday('now') - julianday(last_seen)) * 86400 > 60 AND status NOT IN ('error','drift')"
-        elif request.args["status"] == "online":
-            q += " AND (julianday('now') - julianday(last_seen)) * 86400 <= 60 AND status NOT IN ('error','drift')"
-        else:
-            q += " AND status=?"
-            params.append(request.args["status"])
+        # Since we filter in Python now, we just fetch all and filter later, OR we can filter in SQL conditionally.
+        # But for simplicity, let's fetch based on other params and filter status in Python.
+        pass
             
     if request.args.get("hw_class"):
         q += " AND hw_class=?"
@@ -722,17 +708,66 @@ def devices_list():
     if request.args.get("model"):
         q += " AND model_name=?"
         params.append(request.args["model"])
-    limit  = min(int(request.args.get("limit",  100)), 500)
-    offset = int(request.args.get("offset", 0))
-    q += f" ORDER BY id LIMIT {limit} OFFSET {offset}"
+    
+    # We fetch all matching devices because we need to calculate status in Python
+    # We will apply limit/offset after filtering
+    q += f" ORDER BY id"
     rows = [row_to_dict(r) for r in db.execute(q, params).fetchall()]
+    
+    import datetime
+    
+    filtered_rows = []
     for r in rows:
         r["metadata"] = safe_json(r.get("metadata"))
-        # Override the static status with dynamic
-        r["status"] = r.pop("dynamic_status", r["status"])
         
-    total = db.execute("SELECT COUNT(*) FROM devices").fetchone()[0]
-    return jsonify({"data": rows, "total": total, "limit": limit, "offset": offset})
+        # Calculate dynamic status
+        dynamic_status = r.get("status", "offline")
+        if dynamic_status not in ["error", "drift"]:
+            last_seen = r.get("last_seen")
+            if last_seen:
+                if isinstance(last_seen, str):
+                    try:
+                        last_seen_dt = datetime.datetime.strptime(last_seen, "%Y-%m-%d %H:%M:%S")
+                    except ValueError:
+                        try:
+                            # Handle ISO format strings
+                            last_seen_dt = datetime.datetime.fromisoformat(last_seen.replace('Z', '+00:00'))
+                        except ValueError:
+                            last_seen_dt = datetime.datetime.utcnow()
+                else:
+                    last_seen_dt = last_seen
+                
+                # Assume last_seen is UTC
+                now = datetime.datetime.utcnow()
+                # If naive, make both naive
+                if last_seen_dt.tzinfo:
+                    now = datetime.datetime.now(datetime.timezone.utc)
+                    
+                diff = (now - last_seen_dt).total_seconds()
+                if diff > 60:
+                    dynamic_status = "offline"
+                else:
+                    dynamic_status = "online"
+            else:
+                dynamic_status = "offline"
+                
+        r["status"] = dynamic_status
+        
+        # Filter by status if requested
+        req_status = request.args.get("status")
+        if req_status and r["status"] != req_status:
+            continue
+            
+        filtered_rows.append(r)
+        
+    total = len(filtered_rows)
+    
+    limit  = min(int(request.args.get("limit",  100)), 500)
+    offset = int(request.args.get("offset", 0))
+    
+    paginated = filtered_rows[offset:offset+limit]
+    
+    return jsonify({"data": paginated, "total": total, "limit": limit, "offset": offset})
 
 @app.route("/v1/devices/<device_id>")
 @require_auth
