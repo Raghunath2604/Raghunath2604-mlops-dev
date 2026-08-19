@@ -680,7 +680,7 @@ body{animation:pgInD .45s ease both}
               <div class="setting-row"><div><div class="stlabel">API Key</div><div class="stdesc">Keep this secret</div></div><button class="tb-btn primary" onclick="generateApiKey()">Regenerate Key</button></div>
               <input id="api-key-display" class="st-inp" style="width:100%;margin-bottom:1rem;background:#0d1117" value="••••••••••••••••" readonly/>
               <div class="setting-row"><div><div class="stlabel">Agent install (Linux ARM)</div><div class="stdesc">Run on your edge device</div></div></div>
-              <input class="st-inp" style="width:100%;font-size:.72rem;margin-bottom:1rem" value="curl -fsSL https://get.mlops.dev | sh" readonly/>
+              <input id="agent-install-cmd" class="st-inp" style="width:100%;font-size:.72rem;margin-bottom:1rem" value="curl -fsSL https://get.mlopsde.me | MLOPS_API_KEY=YOUR_KEY sh" readonly/>
               <div class="setting-row"><div><div class="stlabel">Python SDK</div><div class="stdesc">pip install mlops-dev-sdk</div></div><button class="tb-btn primary" onclick="navigator.clipboard.writeText('pip install mlops-dev-sdk').then(()=>showToast('Copied!'))">Copy</button></div>
             </div>
             
@@ -1356,6 +1356,7 @@ async function generateApiKey() {
     const data = await res.json();
     if(data.key) {
       document.getElementById('api-key-display').value = data.key;
+      document.getElementById('agent-install-cmd').value = `curl -fsSL https://get.mlopsde.me | MLOPS_API_KEY=${data.key} sh`;
       showToast('API Key generated successfully! Please save it.');
     } else {
       showToast(data.error || 'Failed to generate key', 'err');

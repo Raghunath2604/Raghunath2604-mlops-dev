@@ -159,7 +159,7 @@ class Client:
         stages:         Optional[List[Dict]] = None,
         health_gate:    Optional[Dict] = None,
         stage_interval: Optional[str] = None,
-    ) -> "Deployment":
+    ) -> "Any": # noqa: F821
         """
         Deploy a model version to one device, a hardware class, or your entire fleet.
 

@@ -19,6 +19,26 @@
       "has": [
         {
           "type": "host",
+          "value": "get.mlopsde.me"
+        }
+      ],
+      "destination": "/install.sh"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "get.mlops.dev"
+        }
+      ],
+      "destination": "/install.sh"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
           "value": "roadmap.mlopsde.me"
         }
       ],

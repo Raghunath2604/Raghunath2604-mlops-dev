@@ -121,6 +121,7 @@ def webhook():
     except stripe.error.SignatureVerificationError as e:
         return "Invalid signature", 400
 
+    from index import get_db
     db = get_db()
     
     if event['type'] == 'checkout.session.completed':
