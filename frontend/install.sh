@@ -70,7 +70,12 @@ def heartbeat(device_id):
 
 if __name__ == "__main__":
     print("Starting MLOps.dev Agent...")
-    dev_id = register()
+    dev_id = None
+    while not dev_id:
+        dev_id = register()
+        if not dev_id:
+            print("Retrying registration in 10s...")
+            time.sleep(10)
     while True:
         heartbeat(dev_id)
         time.sleep(30)

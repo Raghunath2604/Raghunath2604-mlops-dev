@@ -228,6 +228,7 @@ def init_db():
             );
             CREATE TABLE IF NOT EXISTS audit_log (
                 id TEXT PRIMARY KEY,
+                owner_id TEXT DEFAULT 'admin',
                 event_type TEXT,
                 device_id TEXT,
                 model_name TEXT,
@@ -332,6 +333,7 @@ def init_db():
             );
             CREATE TABLE IF NOT EXISTS audit_log (
                 id TEXT PRIMARY KEY,
+                owner_id TEXT DEFAULT 'admin',
                 event_type TEXT,
                 device_id TEXT,
                 model_name TEXT,
@@ -372,6 +374,13 @@ def init_db():
             );
 
         ''')
+        
+        # Safely migrate owner_id onto audit_log
+        try:
+            db.execute("ALTER TABLE audit_log ADD COLUMN owner_id TEXT DEFAULT 'admin'")
+        except Exception:
+            pass # Already exists or unsupported
+
         # Check and insert demo
         row = db.execute("SELECT id FROM api_keys WHERE id = 'admin'").fetchone()
         if not row:
@@ -972,9 +981,8 @@ def models_push():
 
     # Log it
     db.execute(
-        "INSERT INTO audit_log (id, event_type, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?)",
-        (str(uuid.uuid4()), "model_push", name, tag, "success",
-         f"Pushed {name}:{tag} ({variant}, {size_bytes//1024}KB)")
+        "INSERT INTO audit_log (id, owner_id, event_type, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?)",
+        (str(uuid.uuid4()), g.user_id, "model_push", name, tag, "success", f"Pushed model {name}:{tag} ({variant}, {size_bytes//1024}KB)")
     )
     
 
@@ -1060,8 +1068,8 @@ def deployments_create():
           target, json.dumps(health_gate), json.dumps(stages)))
 
     db.execute(
-        "INSERT INTO audit_log (id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?)",
-        (str(uuid.uuid4()), "deployment", target, model_name, model_tag, dep_status,
+        "INSERT INTO audit_log (id, owner_id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?,?)",
+        (str(uuid.uuid4()), g.user_id, "deployment", target, model_name, model_tag, dep_status,
          f"Deployed {model_name}:{model_tag} to {target}")
     )
     
@@ -1132,8 +1140,8 @@ def deployments_rollback():
         affected = db.execute("SELECT COUNT(*) FROM devices WHERE status != 'offline'").fetchone()[0]
 
     db.execute(
-        "INSERT INTO audit_log (id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?)",
-        (str(uuid.uuid4()), "rollback", device_id or "fleet",
+        "INSERT INTO audit_log (id, owner_id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?,?)",
+        (str(uuid.uuid4()), g.user_id, "rollback", device_id or "fleet",
          model_name or "previous", model_tag or "previous",
          "queued", f"Rollback queued for {device_id or 'fleet'}")
     )
@@ -1233,8 +1241,8 @@ def drift_reset(device_id):
         (device_id,)
     )
     db.execute(
-        "INSERT INTO audit_log (id, event_type, device_id, status, msg) VALUES (?,?,?,?,?)",
-        (str(uuid.uuid4()), "drift_reset", device_id, "success",
+        "INSERT INTO audit_log (id, owner_id, event_type, device_id, status, msg) VALUES (?,?,?,?,?,?)",
+        (str(uuid.uuid4()), g.user_id, "drift_reset", device_id, "success",
          f"Drift baseline reset for {device_id}")
     )
     
@@ -1306,6 +1314,11 @@ def audit():
     limit  = min(int(request.args.get("limit", 100)), 10000)
     q      = "SELECT * FROM audit_log WHERE 1=1"
     params = []
+    
+    if g.role != 'admin':
+        q += " AND owner_id=?"
+        params.append(g.user_id)
+        
     if request.args.get("device_id"):
         q += " AND device_id=?"; params.append(request.args["device_id"])
     if request.args.get("event_type"):

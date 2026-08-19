@@ -5,7 +5,6 @@ import hashlib
 import uuid
 import requests
 from flask import Blueprint, request, jsonify, redirect
-from index import get_db
 
 billing_bp = Blueprint('billing', __name__)
 
@@ -35,6 +34,7 @@ def phonepe_checkout():
     if not key:
         return jsonify({"error": "Missing Authentication"}), 401
     
+    from index import get_db
     db = get_db()
     user = db.execute("SELECT id, name FROM api_keys WHERE key_hash = ?", (key,)).fetchone()
     if not user:
@@ -150,6 +150,7 @@ def phonepe_webhook():
                 safe_id = parts[0]
                 device_limit = 500 if plan == 'team' else (99999 if plan == 'enterprise' else 10)
                 
+                from index import get_db
                 db = get_db()
                 user_row = db.execute("SELECT id FROM api_keys WHERE REPLACE(id, '-', '') = ?", (safe_id,)).fetchone()
                 
@@ -179,6 +180,7 @@ def cancel_subscription():
     if not key:
         return jsonify({"error": "Missing Authentication"}), 401
     
+    from index import get_db
     db = get_db()
     db.execute(
         "UPDATE api_keys SET subscription_tier='free', subscription_status='canceled', device_limit=10 WHERE key_hash=?",
