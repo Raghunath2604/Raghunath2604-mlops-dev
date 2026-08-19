@@ -52,23 +52,27 @@ def register():
     data = json.dumps({"name": DEVICE_NAME, "arch": platform.machine(), "os": platform.system()}).encode()
     req = urllib.request.Request(f"{API_URL}/devices/register", data=data, headers={"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"})
     try:
-        urllib.request.urlopen(req)
-        print("Device registered successfully.")
+        res = urllib.request.urlopen(req)
+        res_data = json.loads(res.read().decode())
+        print(f"Device registered successfully. ID: {res_data.get('device_id')}")
+        return res_data.get('device_id')
     except Exception as e:
         print(f"Failed to register: {e}")
+        return None
 
-def heartbeat():
-    req = urllib.request.Request(f"{API_URL}/devices/ping", headers={"Authorization": f"Bearer {API_KEY}"})
+def heartbeat(device_id):
+    if not device_id: return
+    req = urllib.request.Request(f"{API_URL}/devices/{device_id}/ping", method="POST", headers={"Authorization": f"Bearer {API_KEY}"})
     try:
         urllib.request.urlopen(req)
-    except Exception:
+    except Exception as e:
         pass
 
 if __name__ == "__main__":
     print("Starting MLOps.dev Agent...")
-    register()
+    dev_id = register()
     while True:
-        heartbeat()
+        heartbeat(dev_id)
         time.sleep(30)
 EOF
 chmod +x "$INSTALL_DIR/agent.py"

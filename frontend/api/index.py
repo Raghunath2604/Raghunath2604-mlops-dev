@@ -670,11 +670,37 @@ def fleet_stream():
     from flask import Response, stream_with_context
     return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
+@app.route("/v1/devices/<device_id>/ping", methods=["POST"])
+@require_auth
+def device_ping(device_id):
+    db = get_db()
+    # Ensure device belongs to user
+    owner = db.execute("SELECT owner_id FROM devices WHERE id=?", (device_id,)).fetchone()
+    if not owner or (g.role != 'admin' and owner[0] != g.user_id):
+        return jsonify({"error": "Unauthorized"}), 403
+        
+    db.execute(
+        "UPDATE devices SET last_seen=datetime('now'), uptime_s=uptime_s+30 WHERE id=?", 
+        (device_id,)
+    )
+    if hasattr(db, 'commit'): db.commit()
+    return jsonify({"success": True})
+
 @app.route("/v1/devices")
 @require_auth
 def devices_list():
     db = get_db()
-    q = "SELECT * FROM devices WHERE 1=1"
+    # Calculate offline status dynamically if last_seen > 60 seconds
+    q = """
+        SELECT *, 
+        CASE 
+            WHEN status = 'error' THEN 'error'
+            WHEN status = 'drift' THEN 'drift'
+            WHEN (julianday('now') - julianday(last_seen)) * 86400 > 60 THEN 'offline' 
+            ELSE 'online' 
+        END as dynamic_status
+        FROM devices WHERE 1=1
+    """
     params = []
     
     if g.role != 'admin':
@@ -682,8 +708,14 @@ def devices_list():
         params.append(g.user_id)
         
     if request.args.get("status"):
-        q += " AND status=?"
-        params.append(request.args["status"])
+        if request.args["status"] == "offline":
+            q += " AND (julianday('now') - julianday(last_seen)) * 86400 > 60 AND status NOT IN ('error','drift')"
+        elif request.args["status"] == "online":
+            q += " AND (julianday('now') - julianday(last_seen)) * 86400 <= 60 AND status NOT IN ('error','drift')"
+        else:
+            q += " AND status=?"
+            params.append(request.args["status"])
+            
     if request.args.get("hw_class"):
         q += " AND hw_class=?"
         params.append(request.args["hw_class"])
@@ -696,6 +728,9 @@ def devices_list():
     rows = [row_to_dict(r) for r in db.execute(q, params).fetchall()]
     for r in rows:
         r["metadata"] = safe_json(r.get("metadata"))
+        # Override the static status with dynamic
+        r["status"] = r.pop("dynamic_status", r["status"])
+        
     total = db.execute("SELECT COUNT(*) FROM devices").fetchone()[0]
     return jsonify({"data": rows, "total": total, "limit": limit, "offset": offset})
 
