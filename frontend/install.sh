@@ -68,6 +68,33 @@ def heartbeat(device_id):
     except Exception as e:
         pass
 
+def sync_model(device_id, current_state):
+    req = urllib.request.Request(f"{API_URL}/devices/{device_id}", headers={"Authorization": f"Bearer {API_KEY}"})
+    try:
+        res = urllib.request.urlopen(req)
+        data = json.loads(res.read().decode())["data"]
+        assigned_name = data.get("model_name")
+        assigned_tag = data.get("model_tag")
+        
+        if assigned_name and assigned_tag:
+            state_key = f"{assigned_name}:{assigned_tag}"
+            if current_state.get("active_model") != state_key:
+                print(f"🚀 New deployment detected! Downloading {state_key}...")
+                dl_req = urllib.request.Request(f"{API_URL}/models/{assigned_name}/{assigned_tag}/download", headers={"Authorization": f"Bearer {API_KEY}"})
+                dl_res = urllib.request.urlopen(dl_req)
+                
+                models_dir = "/opt/mlops-agent/models"
+                os.makedirs(models_dir, exist_ok=True)
+                # Parse filename from Content-Disposition if needed, or just save as model.bin
+                file_path = os.path.join(models_dir, f"{assigned_name}_{assigned_tag}.bin")
+                with open(file_path, "wb") as f:
+                    f.write(dl_res.read())
+                
+                print(f"✅ Successfully downloaded and loaded {state_key}")
+                current_state["active_model"] = state_key
+    except Exception as e:
+        print(f"Sync failed: {e}")
+
 if __name__ == "__main__":
     print("Starting MLOps.dev Agent...")
     dev_id = None
@@ -76,8 +103,11 @@ if __name__ == "__main__":
         if not dev_id:
             print("Retrying registration in 10s...")
             time.sleep(10)
+            
+    state = {"active_model": None}
     while True:
         heartbeat(dev_id)
+        sync_model(dev_id, state)
         time.sleep(30)
 EOF
 chmod +x "$INSTALL_DIR/agent.py"

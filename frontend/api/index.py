@@ -41,7 +41,7 @@ from urllib.parse import urlparse
 from pathlib import Path
 from datetime import datetime, timezone
 from functools import wraps
-from flask import Flask, request, jsonify, g, make_response
+from flask import Flask, request, jsonify, g, make_response, send_file
 from flask_cors import CORS
 from flask_talisman import Talisman
 from flask_limiter import Limiter
@@ -907,6 +907,27 @@ def models_get(name):
         d["metadata"] = safe_json(d.get("metadata"))
         versions.append(d)
     return jsonify({"data": {"id": versions[0]["id"], "name": name, "versions": versions}})
+
+@app.route("/v1/models/<name>/<tag>/download")
+@require_auth
+def models_download(name, tag):
+    db   = get_db()
+    # Find the variant. By default, pick the first one, or allow query param for variant
+    variant = request.args.get("variant", "all")
+    row = db_query(db, "SELECT * FROM models WHERE name=? AND tag=? AND variant=?", (name, tag, variant), fetchone=True)
+    if not row:
+        return jsonify({"error": f"Model binary not found: {name}:{tag} ({variant})"}), 404
+        
+    model_dir = MODELS_DIR / name / tag / variant
+    if not model_dir.exists():
+        return jsonify({"error": "Model files missing on server"}), 404
+        
+    # Send the first file in the directory
+    files = list(model_dir.iterdir())
+    if not files:
+        return jsonify({"error": "Model file missing"}), 404
+        
+    return send_file(files[0], as_attachment=True)
 
 @app.route("/v1/models", methods=["POST"])
 @require_auth
