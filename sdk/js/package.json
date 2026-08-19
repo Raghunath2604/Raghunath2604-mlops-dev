@@ -1,0 +1,23 @@
+{
+  "name": "mlops-dev-sdk",
+  "version": "1.0.0",
+  "description": "Official JavaScript/TypeScript SDK for MLOps.dev edge deployments.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raghunath2604/mlops-dev-sdk-js.git"
+  },
+  "keywords": [
+    "mlops",
+    "edge",
+    "ai",
+    "deployment",
+    "iot"
+  ],
+  "author": "MLOps.dev",
+  "license": "MIT"
+}

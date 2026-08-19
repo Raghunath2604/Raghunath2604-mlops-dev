@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -16,7 +16,20 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 
 
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>MLOps.dev — Deploy ML models to edge devices at scale</title>
+  <title>MLOps.dev — Deploy ML models to edge devices at scale</title>
+  
+  <!-- SEO & Open Graph Tags -->
+  <meta name="description" content="The only MLOps platform built for the real world. Offline-first sync. Drift detection. Canary deployments. Built for Jetson, Raspberry Pi, Coral.">
+  <meta property="og:title" content="MLOps.dev — Edge AI Deployments">
+  <meta property="og:description" content="Deploy ML models to edge devices without SSH scripts. Offline-first, drift-aware.">
+  <meta property="og:image" content="https://mlopsde.me/og-image.png">
+  <meta property="og:url" content="https://mlopsde.me">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Vercel Web Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F7FEF'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://www.mlops.dev"/>
@@ -472,9 +485,10 @@ button{cursor:pointer;font-family:inherit}
 
 /* ══ PRICING ══ */
 .pricing-wrap{background:#080C16;border-top:1px solid rgba(255,255,255,.05)}
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:clamp(2rem,4vw,3.5rem)}
-.plan{background:#080C16;padding:clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .2s}
-.plan.featured{background:#0D1220}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:clamp(2rem,4vw,3.5rem)}
+.plan{background:#080C16;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .2s, border-color .2s}
+.plan:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.25)}
+.plan.featured{background:#0D1220;border-color:rgba(79,127,239,.3)}
 .plan.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#4F7FEF,transparent)}
 .plan-ey{font-size:.62rem;font-family:'Courier New',monospace;color:#4F7FEF;letter-spacing:.08em;margin-bottom:.8rem;display:block}
 .plan-name{font-size:.95rem;font-weight:700;color:#E8EDF8;margin-bottom:.3rem}
@@ -637,7 +651,7 @@ button{cursor:pointer;font-family:inherit}
 #sticky-cta.show{transform:translateY(0)}
 .scta-t{font-size:.83rem;color:#9AAAC8;display:flex;align-items:center;gap:.6rem}
 .scta-t strong{color:#00E5A0}
-.scta-dot{width:5px;height:5px;background:#00E5A0;border-radius:50%;animation:bdot 2s infinite;flex-shrink:0}
+.scta-dot{width:5px;height:5px;background:#00E5A0;border-radius:5px;animation:bdot 2s infinite;flex-shrink:0}
 .scta-r{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
 .scta-btn{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-size:.82rem;font-weight:600;padding:.38rem .95rem;cursor:pointer;transition:all .2s}
 .scta-btn:hover{background:#3D65CC;transform:translateY(-1px)}
@@ -1086,7 +1100,7 @@ button{cursor:pointer;font-family:inherit}
       <div class="spec-num-s">edge to production</div>
     </div>
   </div>
-  <div class="spec-features">
+  <div class="spec-features" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
     <div class="spec-feat rv d1">
       <div class="sf-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
       <div>
@@ -1106,6 +1120,27 @@ button{cursor:pointer;font-family:inherit}
       <div>
         <div class="sf-title">Offline-first sync</div>
         <div class="sf-desc">Devices buffer telemetry locally during outages. Delta-compressed sync reconvenes on reconnect. No data loss, ever.</div>
+      </div>
+    </div>
+    <div class="spec-feat rv d4">
+      <div class="sf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg></div>
+      <div>
+        <div class="sf-title">Hardware-aware routing</div>
+        <div class="sf-desc">Deploy one model version. The agent automatically pulls the TensorRT engine for Orin, or TFLite for Coral.</div>
+      </div>
+    </div>
+    <div class="spec-feat rv d5">
+      <div class="sf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+      <div>
+        <div class="sf-title">Zero-trust security</div>
+        <div class="sf-desc">Models are fully encrypted at rest and in transit. Only decrypted in memory via hardware-backed TPM.</div>
+      </div>
+    </div>
+    <div class="spec-feat rv d6">
+      <div class="sf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+      <div>
+        <div class="sf-title">Immutable audit logs</div>
+        <div class="sf-desc">Every rollout, configuration change, and rollback is permanently logged. Essential for FDA SaMD compliance.</div>
       </div>
     </div>
   </div>
@@ -1196,7 +1231,7 @@ button{cursor:pointer;font-family:inherit}
           <li>7-day telemetry history</li>
           <li>Community support</li>
         </ul>
-        <button class="plan-btn plan-btn-ghost" onclick="smoothTo('wl')">Get started free</button>
+        <button class="plan-btn plan-btn-ghost" onclick="location.href='dashboard.html'">Get started free</button>
       </div>
       <div class="plan featured rv d2">
         <span class="plan-ey">MOST POPULAR</span>
@@ -1213,7 +1248,7 @@ button{cursor:pointer;font-family:inherit}
           <li>Slack + PagerDuty integration</li>
           <li>Email support — 24h SLA</li>
         </ul>
-        <button class="plan-btn plan-btn-solid" onclick="smoothTo('wl')">Start 14-day trial</button>
+        <button class="plan-btn plan-btn-solid" onclick="location.href='dashboard.html?plan=team'">Start 14-day trial</button>
       </div>
       <div class="plan rv d3">
         <span class="plan-ey">ENTERPRISE</span>
@@ -1229,7 +1264,7 @@ button{cursor:pointer;font-family:inherit}
           <li>SSO + RBAC</li>
           <li>Dedicated ML infrastructure engineer</li>
         </ul>
-        <button class="plan-btn plan-btn-ghost" onclick="smoothTo('wl')">Talk to the founders</button>
+        <button class="plan-btn plan-btn-ghost" onclick="location.href='dashboard.html?plan=enterprise'">Start Enterprise Plan</button>
       </div>
     </div>
   </div>

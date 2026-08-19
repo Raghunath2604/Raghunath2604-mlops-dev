@@ -214,6 +214,7 @@ def init_db():
             );
             CREATE TABLE IF NOT EXISTS models (
                 id TEXT PRIMARY KEY,
+                owner_id TEXT NOT NULL,
                 name TEXT NOT NULL,
                 tag TEXT NOT NULL,
                 format TEXT,
@@ -222,7 +223,8 @@ def init_db():
                 sha256 TEXT,
                 metadata TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(name, tag, variant)
+                UNIQUE(name, tag, variant),
+                FOREIGN KEY(owner_id) REFERENCES api_keys(id)
             );
             CREATE TABLE IF NOT EXISTS audit_log (
                 id TEXT PRIMARY KEY,
@@ -236,6 +238,7 @@ def init_db():
             );
             CREATE TABLE IF NOT EXISTS deployments (
                 id TEXT PRIMARY KEY,
+                owner_id TEXT NOT NULL,
                 model_name TEXT,
                 model_tag TEXT,
                 status TEXT,
@@ -244,7 +247,8 @@ def init_db():
                 target TEXT,
                 health_gate INTEGER,
                 stages TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY(owner_id) REFERENCES api_keys(id)
             );
             CREATE TABLE IF NOT EXISTS drift_alerts (
                 id TEXT PRIMARY KEY,
@@ -314,6 +318,7 @@ def init_db():
             );
             CREATE TABLE IF NOT EXISTS models (
                 id TEXT PRIMARY KEY,
+                owner_id TEXT NOT NULL,
                 name TEXT NOT NULL,
                 tag TEXT NOT NULL,
                 format TEXT,
@@ -322,7 +327,8 @@ def init_db():
                 sha256 TEXT,
                 metadata TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(name, tag, variant)
+                UNIQUE(name, tag, variant),
+                FOREIGN KEY(owner_id) REFERENCES api_keys(id)
             );
             CREATE TABLE IF NOT EXISTS audit_log (
                 id TEXT PRIMARY KEY,
@@ -336,6 +342,7 @@ def init_db():
             );
             CREATE TABLE IF NOT EXISTS deployments (
                 id TEXT PRIMARY KEY,
+                owner_id TEXT NOT NULL,
                 model_name TEXT,
                 model_tag TEXT,
                 status TEXT,
@@ -344,7 +351,8 @@ def init_db():
                 target TEXT,
                 health_gate INTEGER,
                 stages TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY(owner_id) REFERENCES api_keys(id)
             );
             CREATE TABLE IF NOT EXISTS drift_alerts (
                 id TEXT PRIMARY KEY,
@@ -636,6 +644,11 @@ def devices_list():
     db = get_db()
     q = "SELECT * FROM devices WHERE 1=1"
     params = []
+    
+    if g.role != 'admin':
+        q += " AND owner_id=?"
+        params.append(g.user_id)
+        
     if request.args.get("status"):
         q += " AND status=?"
         params.append(request.args["status"])
@@ -658,7 +671,12 @@ def devices_list():
 @require_auth
 def devices_get(device_id):
     db = get_db()
-    row = row_to_dict(db_query(db, "SELECT * FROM devices WHERE id=?", (device_id,), fetchone=True))
+    
+    if g.role == 'admin':
+        row = row_to_dict(db_query(db, "SELECT * FROM devices WHERE id=?", (device_id,), fetchone=True))
+    else:
+        row = row_to_dict(db_query(db, "SELECT * FROM devices WHERE id=? AND owner_id=?", (device_id, g.user_id), fetchone=True))
+        
     if not row:
         return jsonify({"error": f"Device not found: {device_id}"}), 404
     row["metadata"] = safe_json(row.get("metadata"))
@@ -668,6 +686,12 @@ def devices_get(device_id):
 @require_auth
 def devices_delete(device_id):
     db = get_db()
+    
+    if g.role != 'admin':
+        row = db_query(db, "SELECT id FROM devices WHERE id=? AND owner_id=?", (device_id, g.user_id), fetchone=True)
+        if not row:
+            return jsonify({"error": "Device not found or access denied"}), 404
+            
     db_query(db, "DELETE FROM devices WHERE id=?", (device_id,), commit=True)
     
     return jsonify({"deleted": device_id})
@@ -688,11 +712,21 @@ def devices_logs(device_id):
 def devices_config(device_id):
     data = request.get_json(silent=True) or {}
     db   = get_db()
-    row  = db_query(db, "SELECT id FROM devices WHERE id=?", (device_id,), fetchone=True)
+    
+    if g.role == 'admin':
+        row = db_query(db, "SELECT id FROM devices WHERE id=?", (device_id,), fetchone=True)
+    else:
+        row = db_query(db, "SELECT id FROM devices WHERE id=? AND owner_id=?", (device_id, g.user_id), fetchone=True)
+        
     if not row:
-        return jsonify({"error": "Device not found"}), 404
+        return jsonify({"error": "Device not found or access denied"}), 404
+        
     # Apply supported config fields
     allowed = ["drift_warn", "drift_alert"]
+    # Only allow known fields
+    for k in data.keys():
+        if k not in allowed:
+            return jsonify({"error": f"Invalid config field: {k}"}), 400
     if "drift_alert" in data:
         db.execute("UPDATE devices SET status='online' WHERE id=? AND drift_score < ?",
                    (device_id, data["drift_alert"]))
@@ -733,7 +767,11 @@ def generate_api_key():
 @require_auth
 def models_list():
     db   = get_db()
-    rows = db_query(db, "SELECT * FROM models ORDER BY name, created_at DESC", fetchall=True)
+    if g.role == 'admin':
+        rows = db_query(db, "SELECT * FROM models ORDER BY name, created_at DESC", fetchall=True)
+    else:
+        rows = db_query(db, "SELECT * FROM models WHERE owner_id=? ORDER BY name, created_at DESC", (g.user_id,), fetchall=True)
+        
     # Group by name
     groups = {}
     for row in rows:
@@ -773,11 +811,16 @@ def models_push():
     variant  = request.form.get("variant", "all")
     sha256   = request.form.get("sha256", "")
     metadata_raw = request.form.get("metadata", "{}")
+    
+    from pathlib import Path
+    allowed_extensions = {".onnx", ".tflite", ".engine", ".trt", ".pt", ".h5"}
+    ext = Path(file.filename).suffix.lower()
+    if ext not in allowed_extensions:
+        return jsonify({"error": f"Invalid model format. Allowed extensions: {', '.join(allowed_extensions)}"}), 400
+
     try:
         metadata = json.dumps(json.loads(metadata_raw))
     except Exception:
-        # metadata might be a Python repr dict string like "{'key': 'val'}"
-        # convert safely
         try:
             import ast
             metadata = json.dumps(ast.literal_eval(metadata_raw))
@@ -807,14 +850,14 @@ def models_push():
     db    = get_db()
     try:
         db.execute("""
-            INSERT INTO models (id, name, tag, format, variant, size_bytes, sha256, metadata)
-            VALUES (?,?,?,?,?,?,?,?)
+            INSERT INTO models (id, owner_id, name, tag, format, variant, size_bytes, sha256, metadata)
+            VALUES (?,?,?,?,?,?,?,?,?)
             ON CONFLICT(name, tag, variant) DO UPDATE SET
                 size_bytes=excluded.size_bytes,
                 sha256=excluded.sha256,
                 metadata=excluded.metadata,
                 created_at=datetime('now')
-        """, (mv_id, name, tag, fmt, variant, size_bytes, sha256, metadata))
+        """, (mv_id, g.user_id, name, tag, fmt, variant, size_bytes, sha256, metadata))
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -839,6 +882,12 @@ def models_push():
 @require_auth
 def models_delete(name, tag):
     db = get_db()
+    
+    if g.role != 'admin':
+        row = db_query(db, "SELECT id FROM models WHERE name=? AND tag=? AND owner_id=?", (name, tag, g.user_id), fetchone=True)
+        if not row:
+            return jsonify({"error": "Model not found or access denied"}), 404
+
     # Check not active
     active = db.execute(
         "SELECT COUNT(*) FROM devices WHERE model_name=? AND model_tag=?",
@@ -869,6 +918,13 @@ def deployments_create():
 
     db    = get_db()
     dep_id = f"dep_{uuid.uuid4().hex[:8]}"
+    
+    # Ownership verification
+    if g.role != 'admin':
+        m = db_query(db, "SELECT id FROM models WHERE name=? AND tag=? AND owner_id=?", (model_name, model_tag, g.user_id), fetchone=True)
+        if not m:
+            return jsonify({"error": "Model version not found or access denied"}), 403
+
     total_stages = max(len(stages), 1)
 
     # Simulate instant completion for demo
@@ -877,13 +933,13 @@ def deployments_create():
     # Apply model update to matching devices
     if target == "all":
         db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE status != 'offline'",
-            (model_name, model_tag)
+            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE status != 'offline' AND owner_id=?",
+            (model_name, model_tag, g.user_id)
         )
     elif target in ("jetson_orin","jetson_nano","rpi5","rpi4","coral","x86_64","arm_custom"):
         db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE hw_class=? AND status != 'offline'",
-            (model_name, model_tag, target)
+            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE hw_class=? AND status != 'offline' AND owner_id=?",
+            (model_name, model_tag, target, g.user_id)
         )
     else:
         # Specific device ID
@@ -896,9 +952,9 @@ def deployments_create():
         )
 
     db.execute("""
-        INSERT INTO deployments (id, model_name, model_tag, status, stage, total_stages, target, health_gate, stages)
-        VALUES (?,?,?,?,?,?,?,?,?)
-    """, (dep_id, model_name, model_tag, dep_status, total_stages, total_stages,
+        INSERT INTO deployments (id, owner_id, model_name, model_tag, status, stage, total_stages, target, health_gate, stages)
+        VALUES (?,?,?,?,?,?,?,?,?,?)
+    """, (dep_id, g.user_id, model_name, model_tag, dep_status, total_stages, total_stages,
           target, json.dumps(health_gate), json.dumps(stages)))
 
     db.execute(
@@ -919,10 +975,15 @@ def deployments_list():
     db     = get_db()
     limit  = min(int(request.args.get("limit", 20)), 100)
     status = request.args.get("status")
-    q      = "SELECT * FROM deployments"
+    q      = "SELECT * FROM deployments WHERE 1=1"
     params = []
+    
+    if g.role != 'admin':
+        q += " AND owner_id=?"
+        params.append(g.user_id)
+        
     if status:
-        q += " WHERE status=?"
+        q += " AND status=?"
         params.append(status)
     q += f" ORDER BY created_at DESC LIMIT {limit}"
     rows = []

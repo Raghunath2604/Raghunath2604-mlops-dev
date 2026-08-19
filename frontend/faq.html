@@ -270,6 +270,14 @@ var FAQS = [
    a:'Yes, and we have designed for it. The Enterprise tier includes immutable audit logs (required for FDA SaMD submissions), SSO and RBAC for access control, on-premise deployment (no data leaves your network), and a dedicated ML infrastructure engineer for compliance support. We are working toward ISO 42001 alignment. Email <a href="mailto:hello@mlops.dev">hello@mlops.dev</a> with your compliance requirements before signing up.'},
   {cat:'product', q:'How long does a deployment take from CLI push to devices running the new model?',
    a:'Under 90 seconds on a typical connection. The flow: you push the model to the registry (<code>mlops push model.onnx --tag v3.2</code>), the control plane computes a binary delta against the previous version, connected devices pull the delta on their next sync cycle (default 30s), the agent applies and verifies the checksum, activates the model, and reports back. Offline devices receive the update on their next reconnection.'},
+  {cat:'technical', q:'How is model delta compression handled for offline devices?',
+   a:'We use bsdiff to compute a binary patch between the new model and the specific version running on the edge device. When the device reconnects, the control plane sends only the delta. This reduces transfer sizes by up to 95%, making deployments feasible over 2G networks.'},
+  {cat:'product', q:'Does MLOps.dev support A/B testing on edge fleets?',
+   a:'Yes. You can target specific devices with a deployment using hardware classes, tags, or specific device IDs. For example, you can deploy a new variant to 5% of Jetson Orin devices and compare telemetry outputs directly in the dashboard before rolling out to the entire fleet.'},
+  {cat:'hardware', q:'Can I run the agent on an air-gapped network?',
+   a:'Yes, with the Enterprise tier. We offer an on-premise installation of the control plane that can be deployed entirely within your VPC or air-gapped network. The edge agents communicate directly with your private instance.'},
+  {cat:'security', q:'How does the agent secure model weights on the device?',
+   a:'The agent supports hardware-backed encryption using a TPM module. Model weights are stored encrypted on disk and only decrypted into RAM at the moment of activation, preventing unauthorized extraction of your intellectual property.'},
 ];
 
 var currentCat = 'all';

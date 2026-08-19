@@ -352,14 +352,50 @@ def cmd_drift_reset(args):
 
 
 def cmd_health(args):
-    client = get_client(args.api_key, args.url)
-    alive = client.health()
-    if alive:
-        ok("API is reachable and key is valid")
+    c = get_client(args.api_key, args.url)
+    if c.health():
+        ok("API is online and reachable")
     else:
-        err("API unreachable — check https://www.mlops.dev/status")
+        err("API is offline or unreachable")
         sys.exit(1)
     print()
+
+
+def cmd_audit(args):
+    c = get_client(args.api_key, args.url)
+    try:
+        log = c.audit(
+            device_id=args.device,
+            event_type=args.type,
+            since=args.since,
+            until=args.until,
+            format="json",
+            limit=args.limit
+        )
+    except Exception as e:
+        err(f"Audit fetch failed: {e}")
+        sys.exit(1)
+        
+    if args.json:
+        print(fmt_json(log))
+        return
+        
+    data = log.get("data", [])
+    if not data:
+        print("No audit events found.")
+        return
+        
+    headers = ["Time", "Device", "Type", "Status", "Message"]
+    rows = []
+    for d in data:
+        rows.append([
+            d.get("created_at", "")[:19],
+            d.get("device_id", "-"),
+            d.get("event_type", ""),
+            d.get("status", ""),
+            d.get("msg", "")[:50]
+        ])
+    table(headers, rows)
 
 
 def cmd_generate_cicd(args):
@@ -434,6 +470,14 @@ Discord: https://discord.gg/Tb47N9NaPk
     # health
     sub.add_parser("health", help="API health check")
 
+    # audit
+    aud = sub.add_parser("audit", help="Export immutable audit logs")
+    aud.add_argument("--device", help="Filter by device ID")
+    aud.add_argument("--type", help="Filter by event type (deployment, drift, rollback, auth)")
+    aud.add_argument("--since", help="Start date (ISO 8601)")
+    aud.add_argument("--until", help="End date (ISO 8601)")
+    aud.add_argument("--limit", type=int, default=100)
+
     # generate-cicd
     sub.add_parser("generate-cicd", help="Generate GitHub Actions CI/CD workflow")
 
@@ -501,16 +545,6 @@ Discord: https://discord.gg/Tb47N9NaPk
     drr.add_argument("--hw-class", dest="hw_class")
     drr.add_argument("--model")
 
-    # audit
-    au = sub.add_parser("audit", help="Export audit log")
-    au.add_argument("--device",     dest="device_id")
-    au.add_argument("--event-type", dest="event_type")
-    au.add_argument("--since")
-    au.add_argument("--until")
-    au.add_argument("--format",     default="json")
-    au.add_argument("--limit",      type=int, default=100)
-    au.add_argument("--output",     "-o", help="Output file path")
-
     args = parser.parse_args()
 
     if not args.command:
@@ -522,6 +556,7 @@ Discord: https://discord.gg/Tb47N9NaPk
             "status":   cmd_status,
             "health":   cmd_health,
             "generate-cicd": cmd_generate_cicd,
+            "audit": cmd_audit,
         }
         if args.command in dispatch:
             dispatch[args.command](args)
@@ -538,23 +573,7 @@ Discord: https://discord.gg/Tb47N9NaPk
         elif args.command == "drift":
             {"report": cmd_drift_report, "alerts": cmd_drift_alerts,
              "reset": cmd_drift_reset}.get(args.subcommand, lambda a: dr.print_help())(args)
-        elif args.command == "audit":
-            client = get_client(args.api_key, args.url)
-            result = client.audit(
-                device_id=getattr(args, 'device_id', None),
-                event_type=getattr(args, 'event_type', None),
-                since=getattr(args, 'since', None),
-                until=getattr(args, 'until', None),
-                format=getattr(args, 'format', 'json'),
-                limit=getattr(args, 'limit', 100),
-            )
-            output = json.dumps(result, indent=2)
-            if getattr(args, 'output', None):
-                with open(args.output, 'w') as f:
-                    f.write(output)
-                ok(f"Audit log saved to {args.output}")
-            else:
-                print(output)
+
     except KeyboardInterrupt:
         print("\n  Cancelled.")
     except Exception as e:

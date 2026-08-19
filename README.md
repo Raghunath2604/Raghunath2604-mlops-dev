@@ -132,3 +132,23 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
   <br/>
   <i>Built for the edge by Raghunathareddy GR</i>
 </div>
+
+## 🌐 Running the Edge Agent
+To run the Edge Agent on your IoT devices (Raspberry Pi, Jetson Nano, Coral), use the `MLOpsAgent` class:
+
+```python
+from mlops_dev.agent import MLOpsAgent
+
+# Initialize the agent
+agent = MLOpsAgent(
+    api_key="your_api_key_here",
+    device_name="jetson-prod-01",
+    hw_class="jetson_orin"
+)
+
+# Start background sync & heartbeats
+agent.start()
+
+# Log inferences (calculates drift on the edge!)
+agent.log_inference(input_data={"image": "camera1"}, output_data={"confidence": 0.85})
+```
