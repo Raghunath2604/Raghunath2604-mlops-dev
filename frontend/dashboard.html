@@ -1311,6 +1311,7 @@ function startSSE() {
       const d=JSON.parse(e.data);
       if(d.type==='fleet_update'){
         document.querySelectorAll('.live-chip-dot').forEach(dot=>{dot.style.opacity='.2';setTimeout(()=>dot.style.opacity='1',150);});
+        if(d.trigger_refresh) refreshAll();
       }
     } catch{}
   };

@@ -638,6 +638,38 @@ def devices_register():
     
     return jsonify({"success": True, "device_id": device_id, "name": name})
 
+@app.route("/v1/fleet/stream")
+@require_auth
+def fleet_stream():
+    user_id = g.user_id
+    role = g.role
+
+    def generate():
+        import time, json
+        # Send an initial connection ping
+        yield f"data: {json.dumps({'type': 'fleet_update', 'trigger_refresh': False})}\n\n"
+        
+        last_count = -1
+        while True:
+            time.sleep(3)
+            # Check if any new events or devices changed state
+            db = get_db()
+            current_count = db.execute("SELECT COUNT(*) FROM audit_log").fetchone()[0]
+            
+            if last_count == -1:
+                last_count = current_count
+                continue
+                
+            if current_count != last_count:
+                last_count = current_count
+                yield f"data: {json.dumps({'type': 'fleet_update', 'trigger_refresh': True})}\n\n"
+            else:
+                # Just send a heartbeat pulse without refreshing data
+                yield f"data: {json.dumps({'type': 'fleet_update', 'trigger_refresh': False})}\n\n"
+
+    from flask import Response, stream_with_context
+    return Response(stream_with_context(generate()), mimetype="text/event-stream")
+
 @app.route("/v1/devices")
 @require_auth
 def devices_list():
