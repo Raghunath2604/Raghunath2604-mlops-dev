@@ -684,13 +684,18 @@ def fleet_stream():
 def device_ping(device_id):
     db = get_db()
     # Ensure device belongs to user
-    owner = db.execute("SELECT owner_id FROM devices WHERE id=?", (device_id,)).fetchone()
+    owner = db.execute("SELECT owner_id, metadata FROM devices WHERE id=?", (device_id,)).fetchone()
     if not owner or (g.role != 'admin' and owner[0] != g.user_id):
         return jsonify({"error": "Unauthorized"}), 403
         
+    tel_data = request.get_json(silent=True) or {}
+    meta = safe_json(owner[1])
+    meta.update(tel_data)
+    meta_str = json.dumps(meta)
+    
     db.execute(
-        "UPDATE devices SET last_seen=datetime('now'), uptime_s=uptime_s+30 WHERE id=?", 
-        (device_id,)
+        "UPDATE devices SET last_seen=datetime('now'), uptime_s=uptime_s+30, metadata=? WHERE id=?", 
+        (meta_str, device_id,)
     )
     if hasattr(db, 'commit'): db.commit()
     return jsonify({"success": True})
@@ -727,7 +732,11 @@ def devices_list():
     
     filtered_rows = []
     for r in rows:
-        r["metadata"] = safe_json(r.get("metadata"))
+        meta = safe_json(r.get("metadata"))
+        r["metadata"] = meta
+        for k, v in meta.items():
+            if k not in r:
+                r[k] = v
         
         # Calculate dynamic status
         dynamic_status = r.get("status", "offline")
@@ -790,7 +799,13 @@ def devices_get(device_id):
         
     if not row:
         return jsonify({"error": f"Device not found: {device_id}"}), 404
-    row["metadata"] = safe_json(row.get("metadata"))
+        
+    meta = safe_json(row.get("metadata"))
+    row["metadata"] = meta
+    for k, v in meta.items():
+        if k not in row:
+            row[k] = v
+            
     return jsonify({"data": row})
 
 @app.route("/v1/devices/<device_id>", methods=["DELETE"])
