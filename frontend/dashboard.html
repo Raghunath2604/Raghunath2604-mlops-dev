@@ -1194,10 +1194,14 @@ function filterDev(s,btn){ST.devFilter=s;document.querySelectorAll('#page-device
 function renderDepList() {
   const el=document.getElementById('dep-list');if(!el)return;
   el.innerHTML=ST.deployments.map(d=>`
-    <div class="dep-row">
-      <div><span class="dep-model">${escapeHTML(d.model_name)}</span><span class="dep-ver">${d.model_ver}</span></div>
+    <div class="dep-row" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+      <div style="flex:1">
+        <span class="dep-model">${escapeHTML(d.model_name)}</span>
+        <span class="dep-ver">${d.model_tag}</span>
+        ${d.status === 'in_progress' ? '<span class="dep-ver" style="color:var(--amber)">Canary (Stage 1)</span>' : ''}
+      </div>
       <span class="dep-st dst-${d.status}">${d.status.replace('_',' ')}</span>
-      <span class="dep-devs">${d.success_count}/${d.device_count} devs</span>
+      ${d.status === 'in_progress' ? `<button class="btn-full" style="padding:0.2rem 0.5rem;font-size:0.75rem;width:auto" onclick="advanceDeploy('${d.id}')">Approve Rollout</button>` : ''}
     </div>`).join('')||'<p style="color:var(--muted);font-size:.84rem">No deployments yet.</p>';
 }
 
@@ -1245,8 +1249,9 @@ async function doDeploy() {
   const prog=document.getElementById('dep-prog');const fill=document.getElementById('dep-fill');
   prog.style.display='block';fill.style.width='0%';
   const piv=setInterval(()=>{const c=parseInt(fill.style.width)||0;if(c<88)fill.style.width=(c+Math.floor(Math.random()*7+2))+'%';},350);
+  const strategy = document.getElementById('dn-strat').value;
   try {
-    const res=await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:name,model_tag:ver,target:target})});
+    const res=await apiFetch('/deployments',{method:'POST',body:JSON.stringify({model_name:name,model_tag:ver,target:target,strategy:strategy})});
     clearInterval(piv);fill.style.width='100%';
     setTimeout(()=>{prog.style.display='none';fill.style.width='0%';},700);
     suc.textContent=`✓ ${name} ${ver} deploying to ${res.data.device_count} devices`;suc.classList.add('show');
@@ -1260,6 +1265,17 @@ async function doDeploy() {
   } finally {
     btn.disabled=false;
     btn.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:6px"><path d="M5 3l14 9-14 9V3z"/></svg>Start deployment';
+  }
+}
+
+async function advanceDeploy(depId) {
+  try {
+    showToast('Approving rollout...', 'info');
+    await apiFetch(`/deployments/${depId}/advance`, {method:'POST'});
+    showToast('Rollout completed', 'ok');
+    loadDeployments();
+  } catch(e) {
+    showToast(e.message || 'Failed to advance', 'err');
   }
 }
 

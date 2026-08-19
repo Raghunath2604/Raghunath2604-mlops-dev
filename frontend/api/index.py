@@ -1071,37 +1071,58 @@ def deployments_create():
         if not m:
             return jsonify({"error": "Model version not found or access denied"}), 403
 
-    total_stages = max(len(stages), 1)
+    strategy = data.get("strategy", "direct")
+    target_devices = []
 
-    # Simulate instant completion for demo
-    dep_status = "completed"
-
-    # Apply model update to matching devices
+    # Get target devices
     if target == "all":
-        db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE status != 'offline' AND owner_id=?",
-            (model_name, model_tag, g.user_id)
-        )
+        rows = db.execute("SELECT id FROM devices WHERE status != 'offline' AND owner_id=?", (g.user_id,)).fetchall()
     elif target in ("jetson_orin","jetson_nano","rpi5","rpi4","coral","x86_64","arm_custom"):
-        db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE hw_class=? AND status != 'offline' AND owner_id=?",
-            (model_name, model_tag, target, g.user_id)
-        )
+        rows = db.execute("SELECT id FROM devices WHERE hw_class=? AND status != 'offline' AND owner_id=?", (target, g.user_id)).fetchall()
     else:
-        # Specific device ID
-        row = db_query(db, "SELECT id FROM devices WHERE id=?", (target,), fetchone=True)
-        if not row:
-            return jsonify({"error": f"Device not found: {target}"}), 404
+        rows = db.execute("SELECT id FROM devices WHERE id=? AND owner_id=?", (target, g.user_id)).fetchall()
+        
+    for r in rows:
+        target_devices.append(r[0])
+        
+    if not target_devices:
+         return jsonify({"error": "No matching devices found"}), 404
+
+    pending_devices = []
+    updated_devices = []
+
+    if strategy == "canary" and len(target_devices) > 1:
+        # Select 20% (minimum 1)
+        import random
+        random.shuffle(target_devices)
+        count = max(1, int(len(target_devices) * 0.2))
+        updated_devices = target_devices[:count]
+        pending_devices = target_devices[count:]
+        dep_status = "in_progress"
+        total_stages = 2
+        stage = 1
+    else:
+        updated_devices = target_devices
+        dep_status = "completed"
+        total_stages = 1
+        stage = 1
+
+    # Apply to updated_devices
+    if updated_devices:
+        placeholders = ','.join(['?']*len(updated_devices))
         db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE id=?",
-            (model_name, model_tag, target)
+            f"UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE id IN ({placeholders})",
+            [model_name, model_tag] + updated_devices
         )
+
+    # Store pending_devices in stages JSON
+    stages_data = {"strategy": strategy, "pending_devices": pending_devices, "updated_devices": updated_devices}
 
     db.execute("""
         INSERT INTO deployments (id, owner_id, model_name, model_tag, status, stage, total_stages, target, health_gate, stages)
         VALUES (?,?,?,?,?,?,?,?,?,?)
-    """, (dep_id, g.user_id, model_name, model_tag, dep_status, total_stages, total_stages,
-          target, json.dumps(health_gate), json.dumps(stages)))
+    """, (dep_id, g.user_id, model_name, model_tag, dep_status, stage, total_stages,
+          target, json.dumps(health_gate), json.dumps(stages_data)))
 
     db.execute(
         "INSERT INTO audit_log (id, owner_id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?,?)",
@@ -1111,9 +1132,55 @@ def deployments_create():
     
 
     row = row_to_dict(db_query(db, "SELECT * FROM deployments WHERE id=?", (dep_id,), fetchone=True))
-    row["stages"]      = json.loads(row.get("stages") or "[]")
+    row["stages"]      = json.loads(row.get("stages") or "{}")
     row["health_gate"] = json.loads(row.get("health_gate") or "{}")
+    row["device_count"] = len(updated_devices)
+    if hasattr(db, 'commit'): db.commit()
     return jsonify({"data": row}), 201
+
+@app.route("/v1/deployments/<dep_id>/advance", methods=["POST"])
+@require_auth
+def deployments_advance(dep_id):
+    db = get_db()
+    
+    if g.role == 'admin':
+        row = db_query(db, "SELECT * FROM deployments WHERE id=?", (dep_id,), fetchone=True)
+    else:
+        row = db_query(db, "SELECT * FROM deployments WHERE id=? AND owner_id=?", (dep_id, g.user_id), fetchone=True)
+        
+    if not row:
+        return jsonify({"error": "Deployment not found"}), 404
+        
+    d = dict(row)
+    if d["status"] != "in_progress":
+        return jsonify({"error": "Deployment is not in progress"}), 400
+        
+    stages_data = json.loads(d.get("stages") or "{}")
+    pending_devices = stages_data.get("pending_devices", [])
+    
+    if pending_devices:
+        placeholders = ','.join(['?']*len(pending_devices))
+        db.execute(
+            f"UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE id IN ({placeholders})",
+            [d["model_name"], d["model_tag"]] + pending_devices
+        )
+        
+    stages_data["updated_devices"] = stages_data.get("updated_devices", []) + pending_devices
+    stages_data["pending_devices"] = []
+    
+    db.execute(
+        "UPDATE deployments SET status='completed', stage=2, stages=? WHERE id=?",
+        (json.dumps(stages_data), dep_id)
+    )
+    
+    db.execute(
+        "INSERT INTO audit_log (id, owner_id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?,?)",
+        (str(uuid.uuid4()), g.user_id, "deployment", d["target"], d["model_name"], d["model_tag"], "completed",
+         f"Approved canary rollout to remaining {len(pending_devices)} devices")
+    )
+    
+    if hasattr(db, 'commit'): db.commit()
+    return jsonify({"success": True})
 
 @app.route("/v1/deployments")
 @require_auth
