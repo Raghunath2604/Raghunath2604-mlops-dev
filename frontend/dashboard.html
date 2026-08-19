@@ -1330,7 +1330,10 @@ async function upgradePlan(planName = 'team') {
       credentials: 'include'
     });
     const data = await res.json();
-    if(data.success) { showToast('Subscription canceled.', 'ok'); setTimeout(() => window.location.reload(), 1500); }
+    if(data.url) { 
+        showToast('Redirecting to checkout...', 'ok'); 
+        window.location.href = data.url;
+    }
     else showToast(data.error || 'Failed to start checkout', 'err');
   } catch(e) { showToast('Network error', 'err'); }
 }
