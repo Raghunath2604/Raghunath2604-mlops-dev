@@ -490,19 +490,46 @@ def status():
 # ── Auth ──────────────────────────────────────────────────────────
 import requests
 
-def verify_turnstile(token):
+def verify_turnstile(token, expected_action=None):
     secret = os.environ.get("TURNSTILE_SECRET")
-    if not secret: return True # If no secret, skip verification
-    if not token: return False
+    if not secret:
+        # In production this should be strictly required, but fallback to pass if not set
+        return True 
+
+    expected_hostnames = set(
+        h.strip() for h in os.environ.get("TURNSTILE_HOSTNAMES", "").split(",") if h.strip()
+    )
+
+    if not isinstance(token, str) or not token or len(token) > 2048:
+        return False
+        
     try:
         r = requests.post(
             'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-            data={'secret': secret, 'response': token},
-            timeout=5
+            data={
+                'secret': secret,
+                'response': token,
+                'remoteip': request.headers.get('X-Forwarded-For', request.remote_addr)
+            },
+            timeout=10
         )
-        return r.json().get('success', False)
+        if not r.ok:
+            return False
+        result = r.json()
     except:
         return False
+
+    if not result.get('success'):
+        return False
+
+    if expected_action and result.get('action') != expected_action:
+        return False
+
+    # Never include localhost/127.0.0.1 in production TURNSTILE_HOSTNAMES
+    if expected_hostnames and result.get('hostname') not in expected_hostnames:
+        return False
+
+    return True
 
 @app.route("/v1/auth/login", methods=["POST"])
 @limiter.limit("5 per minute")
@@ -513,7 +540,7 @@ def auth_login():
     turnstile_token = data.get("turnstile_response", "").strip()
     
     # Verify Turnstile
-    if not verify_turnstile(turnstile_token):
+    if not verify_turnstile(turnstile_token, expected_action="login"):
         return jsonify({"error": "Failed CAPTCHA verification"}), 400
     
     # Fallback for old API key usage
@@ -1285,7 +1312,7 @@ def register():
     turnstile_token = data.get("turnstile_response", "").strip()
     
     # Verify Turnstile
-    if not verify_turnstile(turnstile_token):
+    if not verify_turnstile(turnstile_token, expected_action="signup"):
         return jsonify({"error": "Failed CAPTCHA verification"}), 400
 
     if not email or not password:
