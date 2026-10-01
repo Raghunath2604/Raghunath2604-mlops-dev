@@ -32,3 +32,15 @@ node_modules/
 playwright-report/
 test-results/
 *.log
+
+# Binary model files (large, should not be in git)
+models/
+sdk/server/models/
+
+# Compiled binaries
+*.exe
+*.dll
+*.so
+
+# Pytest cache
+.pytest_cache/

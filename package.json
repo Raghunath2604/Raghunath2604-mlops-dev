@@ -1,0 +1,24 @@
+{
+  "name": "mlops-dev",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">   <img src=\"https://raw.githubusercontent.com/Raghunath2604/Raghunath2604-mlops-dev/main/brand/logo-128-dark.svg\" width=\"128\" alt=\"MLOps.dev Logo\">   <h1>MLOps.dev</h1>   <p><strong>Deploy ML models to edge devices without SSH scripts. Offline-first, drift-aware.</strong></p>",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raghunath2604/Raghunath2604-mlops-dev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Raghunath2604/Raghunath2604-mlops-dev/issues"
+  },
+  "homepage": "https://github.com/Raghunath2604/Raghunath2604-mlops-dev#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  }
+}

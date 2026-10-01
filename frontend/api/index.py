@@ -332,6 +332,7 @@ def _init_postgres(db_url):
                 kl_score REAL,
                 severity TEXT,
                 model_name TEXT,
+                resolved_at TIMESTAMP,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS waitlist (
@@ -375,7 +376,9 @@ def _init_postgres(db_url):
             "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS subscription_tier TEXT DEFAULT 'enterprise'",
             "ALTER TABLE deployments ADD COLUMN IF NOT EXISTS strategy TEXT DEFAULT 'direct'",
             "ALTER TABLE deployments ADD COLUMN IF NOT EXISTS stages TEXT DEFAULT '{}'",
-            "ALTER TABLE deployments ALTER COLUMN health_gate TYPE TEXT USING health_gate::text"
+            "ALTER TABLE deployments ALTER COLUMN health_gate TYPE TEXT USING health_gate::text",
+            "ALTER TABLE drift_alerts ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMP",
+            "ALTER TABLE devices ADD COLUMN IF NOT EXISTS uptime_s INTEGER DEFAULT 0"
         ]
         for m in migrations:
             try:
@@ -538,6 +541,7 @@ def init_db():
                 kl_score REAL,
                 severity TEXT,
                 model_name TEXT,
+                resolved_at TIMESTAMP,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS waitlist (
@@ -565,11 +569,18 @@ def init_db():
             );
         ''')
         
-        # Safely migrate owner_id onto audit_log
-        try:
-            db.execute("ALTER TABLE audit_log ADD COLUMN owner_id TEXT DEFAULT 'admin'")
-        except Exception:
-            pass # Already exists or unsupported
+        # Safely migrate columns onto existing tables
+        safe_migrations = [
+            "ALTER TABLE audit_log ADD COLUMN owner_id TEXT DEFAULT 'admin'",
+            "ALTER TABLE drift_alerts ADD COLUMN resolved_at TIMESTAMP",
+            "ALTER TABLE devices ADD COLUMN metadata TEXT DEFAULT '{}'",
+            "ALTER TABLE devices ADD COLUMN uptime_s INTEGER DEFAULT 0",
+        ]
+        for migration in safe_migrations:
+            try:
+                db.execute(migration)
+            except Exception:
+                pass # Already exists or unsupported
 
         # Check and insert demo
         row = db.execute("SELECT id FROM api_keys WHERE id = 'admin'").fetchone()
@@ -1048,10 +1059,16 @@ def device_ping(device_id):
     meta.update(tel_data)
     meta_str = json.dumps(meta)
     
-    db.execute(
-        "UPDATE devices SET last_seen=CURRENT_TIMESTAMP, uptime_s=uptime_s+30, metadata=? WHERE id=?", 
-        (meta_str, device_id,)
-    )
+    try:
+        db.execute(
+            "UPDATE devices SET last_seen=CURRENT_TIMESTAMP, uptime_s=uptime_s+30, metadata=? WHERE id=?", 
+            (meta_str, device_id,)
+        )
+    except Exception:
+        db.execute(
+            "UPDATE devices SET last_seen=CURRENT_TIMESTAMP, metadata=? WHERE id=?", 
+            (meta_str, device_id,)
+        )
     if hasattr(db, 'commit'): db.commit()
     return jsonify({"success": True})
 
