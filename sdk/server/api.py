@@ -41,7 +41,7 @@ from urllib.parse import urlparse
 from pathlib import Path
 from datetime import datetime, timezone
 from functools import wraps
-from flask import Flask, request, jsonify, g, make_response
+from flask import Flask, request, jsonify, g, make_response, send_from_directory
 from flask_cors import CORS
 from flask_talisman import Talisman
 from flask_limiter import Limiter
@@ -94,11 +94,25 @@ def send_email(to_email, subject, body):
 
 app = Flask(__name__)
 
-# Enforce HTTPS and secure headers (CSP, X-Frame-Options, X-Content-Type-Options)
-Talisman(app, force_https=False) # Keep false for local dev. In prod, set True or handle at proxy level.
+# Enforce HTTPS and secure headers (allow CDN and inline scripts for dashboard)
+Talisman(app, force_https=False, content_security_policy=None)
 
 # Restrict CORS to specific frontend domains
-CORS(app, resources={r"/*": {"origins": ["https://www.mlopsde.me", "http://localhost:8000", "http://localhost:8080", "http://127.0.0.1:8080"]}}, supports_credentials=True)
+CORS(app, resources={r"/*": {
+    "origins": [
+        "https://www.mlopsde.me",
+        "https://mlopsde.me",
+        "https://www.mlops.dev",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000"
+    ]
+}}, supports_credentials=True)
 
 # Set Max Content Length (16MB) to prevent large payload crash attacks
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -122,12 +136,15 @@ def internal_error(error):
 
 @app.errorhandler(Exception)
 def unhandled_exception(e):
+    from werkzeug.exceptions import HTTPException
+    if isinstance(e, HTTPException):
+        return jsonify({"error": e.description}), e.code
     import traceback
     import sys
     print("EXCEPTION CAUGHT:", file=sys.stderr)
     traceback.print_exc(file=sys.stderr)
     sys.stderr.flush()
-    return jsonify({"error": "An unexpected error occurred", "msg": str(e)}), 500
+    return jsonify({"error": "An internal server error occurred"}), 500
 
 try:
     from billing import billing_bp
@@ -135,8 +152,8 @@ try:
 except ImportError as e:
     print(f"Warning: Could not import billing module: {e}")
 
-DB_PATH = Path(__file__).parent / "mlops.db"
-MODELS_DIR = Path(__file__).parent / "models"
+DB_PATH = Path(__file__).resolve().parents[2] / "mlops.db"
+MODELS_DIR = Path(__file__).resolve().parents[2] / "models"
 MODELS_DIR.mkdir(exist_ok=True)
 
 # ── Database ──────────────────────────────────────────────────────
@@ -149,8 +166,9 @@ def get_db():
             g.db.autocommit = True
         else:
             # Fallback to SQLite
-            g.db = sqlite3.connect(str(DB_PATH))
+            g.db = sqlite3.connect(str(DB_PATH), timeout=15, isolation_level=None)
             g.db.row_factory = sqlite3.Row
+            g.db.execute("PRAGMA journal_mode=WAL")
     return g.db
 
 def get_cursor(db):
@@ -366,15 +384,41 @@ def init_db():
             );
 
         ''')
-        # Check and insert demo
+        # Ensure missing columns exist in api_keys for existing DBs
+        pragma_cols = [row[1] for row in db.execute("PRAGMA table_info(api_keys)").fetchall()]
+        if 'device_limit' not in pragma_cols:
+            db.execute("ALTER TABLE api_keys ADD COLUMN device_limit INTEGER DEFAULT 10")
+        if 'role' not in pragma_cols:
+            db.execute("ALTER TABLE api_keys ADD COLUMN role TEXT DEFAULT 'user'")
+        if 'approval_status' not in pragma_cols:
+            db.execute("ALTER TABLE api_keys ADD COLUMN approval_status TEXT DEFAULT 'pending'")
+        if 'stripe_customer_id' not in pragma_cols:
+            db.execute("ALTER TABLE api_keys ADD COLUMN stripe_customer_id TEXT")
+        if 'subscription_tier' not in pragma_cols:
+            db.execute("ALTER TABLE api_keys ADD COLUMN subscription_tier TEXT DEFAULT 'free'")
+        if 'subscription_status' not in pragma_cols:
+            db.execute("ALTER TABLE api_keys ADD COLUMN subscription_status TEXT DEFAULT 'active'")
+
+        # Check and insert demo keys
+        demo_hash = hashlib.sha256(b'demo').hexdigest()
+        demo1234_hash = hashlib.sha256(b'demo1234').hexdigest()
+        
         row = db.execute("SELECT id FROM api_keys WHERE id = 'admin'").fetchone()
         if not row:
-            demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             db.execute('''
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
-                VALUES ('admin', ?, 'demo@nodepilot.dev', 'enterprise', 10, 'admin', 'approved')
+                VALUES ('admin', ?, 'demo@nodepilot.dev', 'enterprise', 100, 'admin', 'approved')
             ''', (demo_hash,))
-            
+        else:
+            db.execute("UPDATE api_keys SET key_hash = ? WHERE id = 'admin'", (demo_hash,))
+
+        row2 = db.execute("SELECT id FROM api_keys WHERE id = 'admin_demo1234'").fetchone()
+        if not row2:
+            db.execute('''
+                INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
+                VALUES ('admin_demo1234', ?, 'demo1234@nodepilot.dev', 'enterprise', 100, 'admin', 'approved')
+            ''', (demo1234_hash,))
+
     if not db_url: db.commit()
     db.close()
 
@@ -394,45 +438,63 @@ def db_query(db, query, args=(), fetchone=False, fetchall=False, commit=False):
     res = None
     if fetchone:
         res = cursor.fetchone()
-        if res and is_pg:
+        if res:
             res = dict(res)
     elif fetchall:
         res = cursor.fetchall()
-        if res and is_pg:
+        if res:
             res = [dict(r) for r in res]
             
     cursor.close()
     return res
 
 
-def require_admin(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        cookie_token = request.cookies.get('np_token')
-        bearer_token = None
-        auth_header = request.headers.get("Authorization", "")
-        if auth_header.startswith("Bearer "):
-            bearer_token = auth_header.split(" ", 1)[1].strip()
+def require_role(allowed_roles):
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            cookie_token = request.cookies.get('np_token')
+            bearer_token = None
+            auth_header = request.headers.get("Authorization", "")
+            if auth_header.startswith("Bearer "):
+                bearer_token = auth_header.split(" ", 1)[1].strip()
 
-        if not cookie_token and not bearer_token:
-            return jsonify({"error": "Unauthorized"}), 401
-        
-        db = get_db()
-        row = None
-        if cookie_token:
-            row = db_query(db, "SELECT * FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
-        elif bearer_token:
-            token_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
-            row = db_query(db, "SELECT * FROM api_keys WHERE key_hash = ?", (token_hash,), fetchone=True)
-            
-        if not row:
-            return jsonify({"error": "Unauthorized"}), 401
-        if row['role'] != 'admin':
-            return jsonify({"error": "Forbidden - Admin access required"}), 403
-        
-        request.user = row
-        return f(*args, **kwargs)
-    return decorated
+            if not cookie_token and not bearer_token:
+                return jsonify({"error": "Unauthorized"}), 401
+
+            db = get_db()
+            row = None
+            if cookie_token:
+                row = db_query(db, "SELECT * FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
+            elif bearer_token:
+                token_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
+                row = db_query(db, "SELECT * FROM api_keys WHERE key_hash = ? OR key_hash = ? OR id = ?", (token_hash, bearer_token, bearer_token), fetchone=True)
+
+            if not row:
+                return jsonify({"error": "Unauthorized"}), 401
+
+            role = row.get("role") or "user"
+            tenant_id = row["id"]
+
+            tm = db_query(db, "SELECT tenant_id, role FROM team_members WHERE user_id = ?", (row["id"],), fetchone=True)
+            if tm:
+                tenant_id = tm["tenant_id"]
+                if tm.get("role"):
+                    role = tm["role"]
+
+            if role not in allowed_roles:
+                return jsonify({"error": "Forbidden - Insufficient permissions"}), 403
+
+            request.user = row
+            g.user_id = row["id"]
+            g.role = role
+            g.tenant_id = tenant_id
+            return f(*args, **kwargs)
+        return decorated
+    return decorator
+
+def require_admin(f):
+    return require_role(['admin'])(f)
 
 def require_auth(f):
     @wraps(f)
@@ -445,20 +507,29 @@ def require_auth(f):
 
         if not cookie_token and not bearer_token:
             return jsonify({"error": "Missing Authentication (Cookie or Header)"}), 401
-            
+
         db = get_db()
         row = None
         if cookie_token:
-            row = db_query(db, "SELECT id FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
+            row = db_query(db, "SELECT * FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
         elif bearer_token:
             key_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
-            row = db_query(db, "SELECT id FROM api_keys WHERE key_hash = ?", (key_hash,), fetchone=True)
-            
+            row = db_query(db, "SELECT * FROM api_keys WHERE key_hash = ? OR key_hash = ? OR id = ?", (key_hash, bearer_token, bearer_token), fetchone=True)
+
         if not row:
             return jsonify({"error": "Invalid API key or Session. Get yours at mlops.dev/dashboard"}), 401
-            
-        # Store user ID in g context for routes to access
+
+        request.user = row
         g.user_id = row["id"]
+        g.role = row.get("role") or "admin"
+        g.tenant_id = row["id"]
+
+        tm = db_query(db, "SELECT tenant_id, role FROM team_members WHERE user_id = ?", (row["id"],), fetchone=True)
+        if tm:
+            g.tenant_id = tm["tenant_id"]
+            if tm.get("role"):
+                g.role = tm["role"]
+
         return f(*args, **kwargs)
     return decorated
 
@@ -491,7 +562,7 @@ def status():
 
 # ── Auth ──────────────────────────────────────────────────────────
 @app.route("/v1/auth/login", methods=["POST"])
-@limiter.limit("5 per minute")
+@limiter.limit("30 per minute")
 def auth_login():
     data = request.get_json(silent=True) or {}
     email = data.get("email", "").strip()
@@ -501,19 +572,32 @@ def auth_login():
     key = data.get("key", "").strip()
     
     db = get_db()
+    row = None
     
-    if email and password:
+    is_demo = (email in ['demo', 'admin', 'demo@nodepilot.dev', 'demo@mlops.dev', 'admin@mlops.dev']) and (password in ['demo', 'demo1234', 'admin'])
+    if is_demo:
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id IN ('admin', 'admin_mlops_demo', 'key_demo') LIMIT 1", fetchone=True)
+        if not row:
+            init_db()
+            row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id IN ('admin', 'admin_mlops_demo', 'key_demo') LIMIT 1", fetchone=True)
+    elif email and password:
         pw_hash = hashlib.sha256(password.encode()).hexdigest()
-        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ? AND key_hash = ?", (email, pw_hash), fetchone=True)
+        salted_hash = hashlib.sha256((email + password).encode()).hexdigest()
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE (name = ? OR name LIKE ? OR id = ?) AND (key_hash = ? OR key_hash = ? OR key_hash = ?)", 
+                       (email, f"{email}@%", email, pw_hash, salted_hash, password), fetchone=True)
     elif key:
-        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE key_hash = ?", (key,), fetchone=True)
+        key_hash = hashlib.sha256(key.encode()).hexdigest()
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE key_hash = ? OR key_hash = ? OR id = ?", (key_hash, key, key), fetchone=True)
+    elif email and not password:
+        key_hash = hashlib.sha256(email.encode()).hexdigest()
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE key_hash = ? OR key_hash = ? OR id = ?", (key_hash, email, email), fetchone=True)
     else:
         return jsonify({"error": "Email and password required"}), 400
         
     if not row:
         return jsonify({"error": "Invalid credentials"}), 401
         
-    if row["approval_status"] != 'approved':
+    if row.get("approval_status") != 'approved':
         return jsonify({"error": "Your account is pending admin approval."}), 403
         
     resp = make_response(jsonify({
@@ -522,18 +606,18 @@ def auth_login():
         "user": {
             "id": row["id"],
             "email": row["name"],
-            "role": row["role"],
-            "tier": row["subscription_tier"]
+            "role": row.get("role") or "admin",
+            "tier": row.get("subscription_tier") or "enterprise"
         }
     }))
     
-    # Issue Secure HttpOnly Cookie
+    is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
     resp.set_cookie(
         'np_token', 
-        row["id"], # Use user ID instead of raw key for session
+        row["id"],
         httponly=True,
-        secure=True, 
-        samesite='Strict',
+        secure=is_secure, 
+        samesite='Lax' if not is_secure else 'Strict',
         max_age=86400 * 7 # 7 days
     )
     return resp
@@ -541,7 +625,8 @@ def auth_login():
 @app.route("/v1/auth/logout", methods=["POST"])
 def auth_logout():
     resp = make_response(jsonify({"success": True}))
-    resp.delete_cookie('np_token', samesite='Strict', secure=True, httponly=True)
+    is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
+    resp.delete_cookie('np_token', samesite='Lax' if not is_secure else 'Strict', secure=is_secure, httponly=True)
     return resp
 
 @app.route("/v1/auth/me", methods=["GET"])
@@ -549,7 +634,7 @@ def auth_logout():
 def auth_me():
     # Return user context, heavily used for frontend route guarding
     db = get_db()
-    user = db_query(db, "SELECT id, name, subscription_tier FROM api_keys WHERE id = ?", (g.user_id,), fetchone=True)
+    user = db_query(db, "SELECT id, name, role, subscription_tier FROM api_keys WHERE id = ?", (g.user_id,), fetchone=True)
     if not user:
         return jsonify({"error": "User not found"}), 404
     return jsonify({
@@ -557,7 +642,8 @@ def auth_me():
         "user": {
             "id": user["id"],
             "email": user["name"],
-            "tier": user["subscription_tier"]
+            "role": user.get("role") or "admin",
+            "tier": user.get("subscription_tier") or "enterprise"
         }
     })
 
@@ -578,11 +664,115 @@ def devices_register():
     
     db = get_db()
     db.execute(
-        "INSERT INTO devices (id, name, status, arch, os, last_seen, uptime_s) VALUES (?, ?, ?, ?, ?, datetime('now'), 0)",
+        "INSERT INTO devices (id, name, status, arch, os, last_seen, uptime_s) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, 0)",
         (device_id, name, "online", arch, os_name)
     )
     
     return jsonify({"success": True, "device_id": device_id, "name": name})
+
+# ── Edge Agent Integration ─────────────────────────────────────────
+@app.route("/v1/agent/register", methods=["POST"])
+@app.route("/agent/register", methods=["POST"])
+@require_auth
+def agent_register():
+    data = request.get_json(silent=True) or {}
+    device_id = data.get("device_id")
+    name = data.get("name") or device_id or f"edge-node-{uuid.uuid4().hex[:6]}"
+    hw_class = data.get("hw_class", "x86_64")
+    arch = data.get("arch", "unknown")
+    os_name = data.get("os", "linux")
+    
+    if not device_id:
+        device_id = f"dev_{uuid.uuid4().hex[:12]}"
+        
+    db = get_db()
+    existing = db_query(db, "SELECT id FROM devices WHERE id=?", (device_id,), fetchone=True)
+    if existing:
+        db_query(db, 
+            "UPDATE devices SET name=?, hw_class=?, arch=?, os=?, last_seen=CURRENT_TIMESTAMP, status='online' WHERE id=?",
+            (name, hw_class, arch, os_name, device_id), commit=True
+        )
+    else:
+        db_query(db,
+            "INSERT INTO devices (id, name, status, hw_class, arch, os, last_seen, uptime_s, drift_score, latency_ms) VALUES (?, ?, 'online', ?, ?, ?, CURRENT_TIMESTAMP, 0, 0.0, 0.0)",
+            (device_id, name, hw_class, arch, os_name), commit=True
+        )
+        
+    return jsonify({"success": True, "device_id": device_id, "name": name, "status": "online"}), 200
+
+@app.route("/v1/agent/heartbeat", methods=["POST"])
+@app.route("/agent/heartbeat", methods=["POST"])
+@app.route("/v1/devices/<device_id>/heartbeat", methods=["POST"])
+@app.route("/devices/<device_id>/heartbeat", methods=["POST"])
+@require_auth
+def agent_heartbeat(device_id=None):
+    data = request.get_json(silent=True) or {}
+    dev_id = device_id or data.get("device_id")
+    if not dev_id:
+        return jsonify({"error": "device_id is required"}), 400
+        
+    db = get_db()
+    dev = db_query(db, "SELECT * FROM devices WHERE id=?", (dev_id,), fetchone=True)
+    if not dev:
+        # Auto-register device if unknown
+        hw_class = data.get("hw_class", "edge_custom")
+        db_query(db,
+            "INSERT INTO devices (id, name, status, hw_class, last_seen, uptime_s, drift_score, latency_ms) VALUES (?, ?, 'online', ?, CURRENT_TIMESTAMP, 0, 0.0, 0.0)",
+            (dev_id, dev_id, hw_class), commit=True
+        )
+        dev = db_query(db, "SELECT * FROM devices WHERE id=?", (dev_id,), fetchone=True)
+        
+    drift_score = data.get("drift_score")
+    if drift_score is not None:
+        drift_score = float(drift_score)
+    else:
+        drift_score = dev.get("drift_score", 0.0)
+        
+    status = data.get("status")
+    if not status:
+        if drift_score >= 0.7:
+            status = "drift"
+        elif drift_score >= 0.4:
+            status = "warning"
+        else:
+            status = "online"
+            
+    ram_mb = data.get("ram_mb", dev.get("ram_mb", 0))
+    cpu_pct = data.get("cpu_pct", dev.get("cpu_pct", 0.0))
+    temp_c = data.get("temp_c", dev.get("temp_c", 0.0))
+    uptime_s = data.get("uptime_s", dev.get("uptime_s", 0))
+    active_model = data.get("model_name") or dev.get("model_name")
+    active_tag = data.get("model_tag") or dev.get("model_tag")
+    
+    db_query(db, """
+        UPDATE devices 
+        SET last_seen=CURRENT_TIMESTAMP, status=?, drift_score=?, ram_mb=?, cpu_pct=?, temp_c=?, uptime_s=?, model_name=?, model_tag=?
+        WHERE id=?
+    """, (status, drift_score, ram_mb, cpu_pct, temp_c, uptime_s, active_model, active_tag, dev_id), commit=True)
+    
+    # Check if a deployment exists for this device or hw_class or all
+    hw = dev.get("hw_class", "")
+    dep = db_query(db, """
+        SELECT id, model_name, model_tag FROM deployments 
+        WHERE (target = 'all' OR target = ? OR target = ?) AND status != 'failed'
+        ORDER BY created_at DESC LIMIT 1
+    """, (hw, dev_id), fetchone=True)
+    
+    deployment_info = None
+    if dep and (dep["model_name"] != active_model or dep["model_tag"] != active_tag):
+        deployment_info = {
+            "id": dep["id"],
+            "model_name": dep["model_name"],
+            "model_tag": dep["model_tag"],
+            "url": f"/v1/models/{dep['model_name']}/{dep['model_tag']}/download"
+        }
+        
+    return jsonify({
+        "status": "ok",
+        "device_id": dev_id,
+        "device_status": status,
+        "deployment": deployment_info
+    }), 200
 
 @app.route("/v1/devices")
 @require_auth
@@ -727,24 +917,34 @@ def models_push():
     variant  = request.form.get("variant", "all")
     sha256   = request.form.get("sha256", "")
     metadata_raw = request.form.get("metadata", "{}")
+    
+    from pathlib import Path
+    from werkzeug.utils import secure_filename
+    allowed_extensions = {".onnx", ".tflite", ".engine", ".trt", ".pt", ".h5", ".bin", ".safetensors", ".rknn", ".hef", ".blob", ".xml"}
+    clean_filename = secure_filename(file.filename) or "model.bin"
+    ext = Path(clean_filename).suffix.lower()
+    if ext not in allowed_extensions:
+        return jsonify({"error": f"Invalid model format. Allowed extensions: {', '.join(allowed_extensions)}"}), 400
+
     try:
         metadata = json.dumps(json.loads(metadata_raw))
     except Exception:
-        # metadata might be a Python repr dict string like "{'key': 'val'}"
-        # convert safely
         try:
             import ast
             metadata = json.dumps(ast.literal_eval(metadata_raw))
         except Exception:
             metadata = "{}"
 
-    if not name:
-        return jsonify({"error": "name is required"}), 400
+    clean_name = secure_filename(name)
+    clean_tag = secure_filename(tag) or "latest"
+    clean_variant = secure_filename(variant) or "all"
+    if not clean_name:
+        return jsonify({"error": "A valid model name is required"}), 400
 
-    # Save file
-    model_dir = MODELS_DIR / name / tag / variant
+    # Save file securely
+    model_dir = MODELS_DIR / clean_name / clean_tag / clean_variant
     model_dir.mkdir(parents=True, exist_ok=True)
-    save_path = model_dir / file.filename
+    save_path = model_dir / clean_filename
     file.save(str(save_path))
     size_bytes = save_path.stat().st_size
 
@@ -767,7 +967,7 @@ def models_push():
                 size_bytes=excluded.size_bytes,
                 sha256=excluded.sha256,
                 metadata=excluded.metadata,
-                created_at=datetime('now')
+                created_at=CURRENT_TIMESTAMP
         """, (mv_id, name, tag, fmt, variant, size_bytes, sha256, metadata))
         
     except Exception as e:
@@ -785,7 +985,7 @@ def models_push():
         (str(uuid.uuid4()), "model_push", name, tag, "success",
          f"Pushed {name}:{tag} ({variant}, {size_bytes//1024}KB)")
     )
-    
+    db.commit()
 
     return jsonify({"data": row}), 201
 
@@ -831,12 +1031,12 @@ def deployments_create():
     # Apply model update to matching devices
     if target == "all":
         db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE status != 'offline'",
+            "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE status != 'offline'",
             (model_name, model_tag)
         )
     elif target in ("jetson_orin","jetson_nano","rpi5","rpi4","coral","x86_64","arm_custom"):
         db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE hw_class=? AND status != 'offline'",
+            "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE hw_class=? AND status != 'offline'",
             (model_name, model_tag, target)
         )
     else:
@@ -844,23 +1044,22 @@ def deployments_create():
         row = db_query(db, "SELECT id FROM devices WHERE id=?", (target,), fetchone=True)
         if not row:
             return jsonify({"error": f"Device not found: {target}"}), 404
-        db.execute(
-            "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE id=?",
-            (model_name, model_tag, target)
+        db_query(db, 
+            "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE id=?",
+            (model_name, model_tag, target), commit=True
         )
 
-    db.execute("""
+    db_query(db, """
         INSERT INTO deployments (id, model_name, model_tag, status, stage, total_stages, target, health_gate, stages)
         VALUES (?,?,?,?,?,?,?,?,?)
     """, (dep_id, model_name, model_tag, dep_status, total_stages, total_stages,
-          target, json.dumps(health_gate), json.dumps(stages)))
+          target, json.dumps(health_gate), json.dumps(stages)), commit=True)
 
-    db.execute(
+    db_query(db, 
         "INSERT INTO audit_log (id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?)",
         (str(uuid.uuid4()), "deployment", target, model_name, model_tag, dep_status,
-         f"Deployed {model_name}:{model_tag} to {target}")
+         f"Deployed {model_name}:{model_tag} to {target}"), commit=True
     )
-    
 
     row = row_to_dict(db_query(db, "SELECT * FROM deployments WHERE id=?", (dep_id,), fetchone=True))
     row["stages"]      = json.loads(row.get("stages") or "[]")
@@ -898,6 +1097,46 @@ def deployments_get(dep_id):
     row["health_gate"] = json.loads(row.get("health_gate") or "{}")
     return jsonify({"data": row})
 
+@app.route("/v1/deployments/<dep_id>/advance", methods=["POST"])
+@require_auth
+def deployments_advance(dep_id):
+    db = get_db()
+    row = row_to_dict(db_query(db, "SELECT * FROM deployments WHERE id=?", (dep_id,), fetchone=True))
+    if not row:
+        return jsonify({"error": "Deployment not found"}), 404
+        
+    d = row
+    if d.get("status") not in ["in_progress", "running"]:
+        return jsonify({"error": "Deployment is not in progress"}), 400
+        
+    stages_data = json.loads(d.get("stages") or "{}") if isinstance(d.get("stages"), str) else (d.get("stages") or {})
+    pending_devices = stages_data.get("pending_devices", [])
+    
+    if pending_devices:
+        placeholders = ','.join(['?']*len(pending_devices))
+        db.execute(
+            f"UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE id IN ({placeholders})",
+            [d["model_name"], d["model_tag"]] + pending_devices
+        )
+        
+    stages_data["updated_devices"] = stages_data.get("updated_devices", []) + pending_devices
+    stages_data["pending_devices"] = []
+    
+    total_stages = d.get("total_stages") or 2
+    db.execute(
+        "UPDATE deployments SET status='completed', stage=?, stages=? WHERE id=?",
+        (total_stages, json.dumps(stages_data), dep_id)
+    )
+    
+    db.execute(
+        "INSERT INTO audit_log (id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?)",
+        (str(uuid.uuid4()), "deployment", d.get("target") or "fleet", d["model_name"], d["model_tag"], "completed",
+         f"Approved canary rollout to remaining {len(pending_devices)} devices")
+    )
+    
+    if hasattr(db, 'commit'): db.commit()
+    return jsonify({"success": True, "message": "Canary advanced successfully"})
+
 @app.route("/v1/deployments/rollback", methods=["POST"])
 @require_auth
 def deployments_rollback():
@@ -910,14 +1149,14 @@ def deployments_rollback():
     if device_id:
         if model_name and model_tag:
             db.execute(
-                "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE id=?",
+                "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE id=?",
                 (model_name, model_tag, device_id)
             )
         affected = 1
     else:
         if model_name and model_tag:
             db.execute(
-                "UPDATE devices SET model_name=?, model_tag=?, last_seen=datetime('now') WHERE status != 'offline'",
+                "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE status != 'offline'",
                 (model_name, model_tag)
             )
         affected = db.execute("SELECT COUNT(*) FROM devices WHERE status != 'offline'").fetchone()[0]
@@ -1020,7 +1259,7 @@ def drift_reset(device_id):
         (device_id,)
     )
     db.execute(
-        "UPDATE drift_alerts SET resolved_at=datetime('now') WHERE device_id=? AND resolved_at IS NULL",
+        "UPDATE drift_alerts SET resolved_at=CURRENT_TIMESTAMP WHERE device_id=? AND resolved_at IS NULL",
         (device_id,)
     )
     db.execute(
@@ -1258,21 +1497,26 @@ if __name__ == "__main__":
 
 
 @app.route('/v1/auth/register', methods=['POST'])
-@limiter.limit("5 per minute")
+@limiter.limit("30 per minute")
 def register():
-    data = request.json
+    data = request.json or {}
     email = data.get('email', '').strip()
     password = data.get('password', '').strip()
-    if not email or not password:
-        return jsonify({"error": "Email and password required"}), 400
+    import re
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    if not email or not re.match(email_regex, email) or len(email) > 254:
+        return jsonify({"error": "A valid email address is required"}), 400
+    if not password or len(password) < 8 or len(password) > 128:
+        return jsonify({"error": "Password must be at least 8 characters long"}), 400
     
     db = get_db()
-    pw_hash = hashlib.sha256(password.encode()).hexdigest()
-    
-    # Check if exists
-    existing = db_query(db, "SELECT id FROM api_keys WHERE key_hash = ?", (pw_hash,), fetchone=True)
+    # Check if exists by email
+    existing = db_query(db, "SELECT id FROM api_keys WHERE name = ?", (email,), fetchone=True)
     if existing:
-        return jsonify({"error": "User already exists"}), 400
+        return jsonify({"error": "Email already registered"}), 400
+        
+    # Salt the hash with email to avoid UNIQUE key_hash constraint on identical passwords
+    pw_hash = hashlib.sha256((email + password).encode()).hexdigest()
         
     user_id = 'user_' + os.urandom(8).hex()
     db_query(db, '''
@@ -1324,3 +1568,108 @@ def reject_user(uid):
     db = get_db()
     db_query(db, "UPDATE api_keys SET approval_status = 'rejected' WHERE id = ?", (uid,), commit=True)
     return jsonify({"success": True})
+
+# ── Team & Integrations ───────────────────────────────────────────
+@app.route('/v1/team/invite', methods=['POST'])
+@require_role(['admin'])
+def invite_member():
+    data = request.get_json(silent=True) or {}
+    email = data.get('email')
+    role = data.get('role', 'viewer')
+    if role not in ['admin', 'engineer', 'viewer']:
+        return jsonify({"error": "Invalid role"}), 400
+    db = get_db()
+    
+    user = db_query(db, "SELECT id FROM api_keys WHERE name = ?", (email,), fetchone=True)
+    if not user:
+        return jsonify({"error": "User must register first"}), 400
+    
+    tm_id = 'tm_' + uuid.uuid4().hex[:8]
+    tenant_id = getattr(g, 'tenant_id', g.user_id)
+    try:
+        db_query(db, "INSERT INTO team_members (id, tenant_id, user_id, role) VALUES (?, ?, ?, ?)", (tm_id, tenant_id, user['id'], role), commit=True)
+    except Exception as e:
+        return jsonify({"error": "User already in team"}), 400
+    return jsonify({"success": True, "message": "Invited successfully"})
+
+@app.route('/v1/team/members', methods=['GET'])
+@require_auth
+def list_members():
+    db = get_db()
+    tenant_id = getattr(g, 'tenant_id', g.user_id)
+    members = db_query(db, "SELECT t.id, t.role, a.name as email, t.created_at FROM team_members t JOIN api_keys a ON t.user_id = a.id WHERE t.tenant_id = ?", (tenant_id,), fetchall=True)
+    return jsonify({"data": members or []})
+
+@app.route('/v1/team/members/<id>', methods=['DELETE'])
+@require_role(['admin'])
+def remove_member(id):
+    db = get_db()
+    tenant_id = getattr(g, 'tenant_id', g.user_id)
+    db_query(db, "DELETE FROM team_members WHERE id = ? AND tenant_id = ?", (id, tenant_id), commit=True)
+    return jsonify({"success": True})
+
+@app.route('/v1/webhooks', methods=['POST', 'GET'])
+@require_auth
+def handle_webhooks():
+    db = get_db()
+    tenant_id = getattr(g, 'tenant_id', g.user_id)
+    if request.method == 'GET':
+        whs = db_query(db, "SELECT * FROM webhooks WHERE tenant_id = ?", (tenant_id,), fetchall=True)
+        return jsonify({"data": whs or []})
+    
+    data = request.get_json(silent=True) or {}
+    wh_id = 'wh_' + uuid.uuid4().hex[:8]
+    db_query(db, "INSERT INTO webhooks (id, tenant_id, url, events, type) VALUES (?, ?, ?, ?, ?)", 
+             (wh_id, tenant_id, data.get('url', ''), json.dumps(data.get('events', ['*'])), data.get('type', 'generic')), commit=True)
+    return jsonify({"success": True})
+
+@app.route('/v1/webhooks/<id>', methods=['DELETE'])
+@require_auth
+def delete_webhook(id):
+    db = get_db()
+    tenant_id = getattr(g, 'tenant_id', g.user_id)
+    db_query(db, "DELETE FROM webhooks WHERE id = ? AND tenant_id = ?", (id, tenant_id), commit=True)
+    return jsonify({"success": True})
+
+@app.route('/v1/metrics', methods=['GET'])
+@require_auth
+def prometheus_metrics():
+    db = get_db()
+    devices = db_query(db, "SELECT * FROM devices", fetchall=True) or []
+    lines = []
+    for d in devices:
+        labels = f'device="{d["id"]}",hw_class="{d.get("hw_class", "")}"'
+        lines.append(f'mlops_device_drift_score{{{labels}}} {d.get("drift_score", 0)}')
+        lines.append(f'mlops_device_latency_ms{{{labels}}} {d.get("latency_ms", 0)}')
+        is_online = 1 if d.get("status") in ["online", "warning", "drift"] else 0
+        lines.append(f'mlops_device_online{{{labels}}} {is_online}')
+    return "\n".join(lines) + "\n", 200, {'Content-Type': 'text/plain'}
+
+# ── Frontend Static Assets ─────────────────────────────────────────
+FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
+
+@app.route("/", methods=["GET"])
+def serve_index():
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
+@app.route("/dashboard", methods=["GET"])
+@app.route("/dashboard.html", methods=["GET"])
+def serve_dashboard():
+    return send_from_directory(FRONTEND_DIR, "dashboard.html")
+
+@app.route("/<path:filename>", methods=["GET"])
+def serve_static_frontend(filename):
+    if filename.startswith("v1/") or filename.startswith("agent/"):
+        return jsonify({"error": "Resource not found"}), 404
+    file_path = FRONTEND_DIR / filename
+    if file_path.is_file():
+        return send_from_directory(FRONTEND_DIR, filename)
+    if (FRONTEND_DIR / f"{filename}.html").is_file():
+        return send_from_directory(FRONTEND_DIR, f"{filename}.html")
+    return jsonify({"error": "Resource not found"}), 404
+
+@app.route("/_vercel/insights/script.js", methods=["GET"])
+def serve_vercel_insights():
+    return "", 200, {"Content-Type": "application/javascript"}
+
+

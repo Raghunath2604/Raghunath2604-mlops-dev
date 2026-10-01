@@ -24,10 +24,41 @@
 - 📊 **Drift Detection:** Built-in statistical drift monitoring alerts you when real-world data drifts from training data.
 - ⏪ **Instant Rollbacks:** Bad deployment? Rollback a specific fleet to the previous stable model instantly.
 - 🐍 **Native Python SDK:** Manage your fleets programmatically directly from your Jupyter Notebooks or CI/CD pipelines.
+- ⚡ **17-Silicon Hardware Matrix:** Native support for NVIDIA Jetson (AGX Orin, Orin Nano, Maxwell), Raspberry Pi 5 & 4, Hailo-8L NPU, Google Coral TPU, Rockchip RK3588, Khadas VIM4, and Intel x86.
 
 ---
 
-## 📦 Installation
+## 🛠️ Physical Edge Hardware Provisioning
+
+Commission any physical Linux board (Raspberry Pi, NVIDIA Jetson, Intel NUC, or Linux PC) in under 60 seconds:
+
+```bash
+# Connects to live control plane & starts systemd service automatically:
+curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo
+```
+
+View your hardware live at: **[https://www.mlopsde.me/dashboard](https://www.mlopsde.me/dashboard)**
+
+---
+
+## 📚 Institutional Architecture & Investor Dossier
+
+| Document | Description |
+| :--- | :--- |
+| [**Implementation Plan**](implementation-plan.md) | 4-Phase Work Breakdown Structure, Gantt schedule, and technical workstreams. |
+| [**Product Requirements (PRD)**](docs-prd.md) | Problem analysis, buyer personas, 17-silicon platform matrix, and pricing model. |
+| [**System Architecture**](architecture.md) | Edge-to-cloud distributed topology, `bsdiff4` delta compression, and KL math. |
+| [**Backend Schema**](backend-schema.md) | Complete PostgreSQL/SQLite ERD, 10 table definitions, and index strategies. |
+| [**UI/UX Design System**](uiux-design.md) | Obsidian & Electric Cobalt design tokens, typography, and component specifications. |
+| [**Engineering Rules**](rules.md) | Zero-Slop standards, hardware cgroup constraints, and security directives. |
+| [**Execution Tasks**](tasks.md) | Completed Phase 1 launch deliverables and Phase 2/3 engineering roadmaps. |
+| [**Technical Requirements (TRD)**](technical-required-document.md) | Minimum hardware compute envelopes, telemetry bandwidth budgets, and TLS 1.3. |
+| [**Application & User Flow**](app-flow-and-user-flow.md) | Sequence diagrams for Provisioning, Staged Canary Rollout, and Drift Rollbacks. |
+| [**Project Memory & ADRs**](memory.md) | Architecture Decision Records, device key mappings, and environment variables. |
+
+---
+
+## 📦 Python SDK Installation
 
 Install the CLI and SDK via pip:
 

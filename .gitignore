@@ -26,3 +26,9 @@ Thumbs.db
 *.db
 .env*
 .vercel
+
+# Node & Test artifacts
+node_modules/
+playwright-report/
+test-results/
+*.log

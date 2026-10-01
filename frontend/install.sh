@@ -10,10 +10,26 @@ echo "=================================================="
 echo "  🚀 Starting MLOps.dev Agent Installation"
 echo "=================================================="
 
+# Parse flags if passed (e.g. -t, --token, --key)
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --token|-t|--key|-k)
+            MLOPS_API_KEY="$2"
+            shift 2
+            ;;
+        --url|-u)
+            MLOPS_API_URL="$2"
+            shift 2
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
 if [ -z "$MLOPS_API_KEY" ]; then
-    echo "❌ Error: MLOPS_API_KEY environment variable is missing!"
-    echo "Usage: curl -fsSL https://get.mlopsde.me | MLOPS_API_KEY=your_key sh"
-    exit 1
+    echo "ℹ️  No MLOPS_API_KEY provided. Defaulting to 'demo' for immediate evaluation."
+    MLOPS_API_KEY="demo"
 fi
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -22,7 +38,7 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-API_URL="${MLOPS_API_URL:-https://api.mlopsde.me/v1}"
+API_URL="${MLOPS_API_URL:-https://www.mlopsde.me/v1}"
 ARCH=$(uname -m)
 HOSTNAME=$(hostname)
 
