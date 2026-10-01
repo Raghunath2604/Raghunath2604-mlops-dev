@@ -212,7 +212,8 @@ def get_db():
                 print(f"Warning: PostgreSQL connection failed: {e}. Falling back to SQLite.")
         if not connected:
             import sqlite3
-            new_db = not DB_PATH.exists()
+            from pathlib import Path
+            new_db = not Path(DB_PATH).exists()
             conn = sqlite3.connect(str(DB_PATH))
             conn.row_factory = sqlite3.Row
             g.db = DBWrapper(conn, False)

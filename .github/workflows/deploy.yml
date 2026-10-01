@@ -2,7 +2,7 @@ name: Deploy to Render
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
     paths:
       - 'frontend/api/**'
       - 'requirements.txt'
@@ -16,4 +16,8 @@ jobs:
     steps:
     - name: Trigger deploy
       run: |
-        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+        if [ -n "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+          curl -sS -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+        else
+          echo "RENDER_DEPLOY_HOOK secret is not configured. Skipping deploy hook."
+        fi
