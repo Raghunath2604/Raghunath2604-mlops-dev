@@ -17,7 +17,7 @@ def test_login():
     
     try:
         print("Navigating to dashboard...")
-        driver.get("http://localhost:8080/dashboard.html")
+        driver.get("http://localhost:8000/dashboard.html")
         
         # Wait for the login screen
         WebDriverWait(driver, 10).until(
@@ -25,8 +25,13 @@ def test_login():
         )
         print("Login screen loaded.")
         
-        # Enter password
+        # Enter credentials
+        email_input = driver.find_element(By.ID, "li-email")
+        email_input.clear()
+        email_input.send_keys("demo@nodepilot.dev")
+
         pw_input = driver.find_element(By.ID, "li-pw")
+        pw_input.clear()
         pw_input.send_keys("demo")
         
         # Click login button
@@ -41,15 +46,11 @@ def test_login():
         )
         print("Dashboard loaded successfully!")
         
-        # Take screenshot of the successful login
-        driver.save_screenshot("C:/Users/raghu/.gemini/antigravity-ide/brain/48025fbf-3a82-47c3-94c0-c9da7da2d000/browser/dashboard_login_test_1786378740157_2.webp")
-        print("Screenshot saved.")
-        
     except Exception as e:
         print("Test failed:", e)
         for entry in driver.get_log('browser'):
             print(entry)
-        driver.save_screenshot("C:/Users/raghu/.gemini/antigravity-ide/brain/48025fbf-3a82-47c3-94c0-c9da7da2d000/browser/error.png")
+        raise e
     finally:
         driver.quit()
 

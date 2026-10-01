@@ -32,20 +32,25 @@ sys.path.insert(0, str(SDK_ROOT))
 import mlops_dev as mlops
 from mlops_dev.exceptions import AuthenticationError, NetworkError, MLOpsError
 
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 # ── Config ────────────────────────────────────────────────────────
 API_KEY = os.environ.get("MLOPS_API_KEY", "demo")
 API_URL = os.environ.get("MLOPS_API_URL", "http://localhost:8000/v1")
 
 def sep(title=""):
     if title:
-        print(f"\n{'─'*60}")
+        print(f"\n{'-'*60}")
         print(f"  {title}")
-        print(f"{'─'*60}")
+        print(f"{'-'*60}")
     else:
         print()
 
-def ok(msg):   print(f"  \033[32m✓\033[0m  {msg}")
-def fail(msg): print(f"  \033[31m✗\033[0m  {msg}", file=sys.stderr)
+def ok(msg):   print(f"  [OK]  {msg}")
+def fail(msg): print(f"  [FAIL] {msg}", file=sys.stderr)
 def info(msg): print(f"     {msg}")
 
 # ── Connect ───────────────────────────────────────────────────────

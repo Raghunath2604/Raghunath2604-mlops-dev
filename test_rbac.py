@@ -16,18 +16,18 @@ def test_rbac():
     
     try:
         print("Navigating to dashboard...")
-        driver.get("http://localhost:8080/dashboard.html")
+        driver.get("http://localhost:8000/dashboard.html")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "auth-screen")))
         
+        test_email = f"test_{int(time.time())}@example.com"
         # Register a new user
         print("Switching to Request Access tab...")
-        # Since I didn't change the switchTab logic, I can just click the tab
         tabs = driver.find_elements(By.CLASS_NAME, "atab")
         tabs[1].click() # Click 'Request Access'
         
         time.sleep(1)
         driver.find_element(By.ID, "ri-name").send_keys("Test User")
-        driver.find_element(By.ID, "ri-email").send_keys("test@example.com")
+        driver.find_element(By.ID, "ri-email").send_keys(test_email)
         driver.find_element(By.ID, "ri-pw").send_keys("password123")
         driver.find_element(By.ID, "ri-btn").click()
         
@@ -37,21 +37,32 @@ def test_rbac():
         )
         print("Registration successful (pending admin approval).")
         
-        # Now try to login as test user, it should fail
+        # Now try to login as test user, it should fail with pending approval
         tabs[0].click() # Back to Login
         time.sleep(1)
-        driver.find_element(By.ID, "li-email").clear() # If any
-        driver.find_element(By.ID, "li-pw").clear()
-        driver.find_element(By.ID, "li-pw").send_keys("password123")
+        email_field = driver.find_element(By.ID, "li-email")
+        email_field.clear()
+        email_field.send_keys(test_email)
+        
+        pw_field = driver.find_element(By.ID, "li-pw")
+        pw_field.clear()
+        pw_field.send_keys("password123")
         driver.find_element(By.ID, "li-btn").click()
         
-        time.sleep(2)
-        err = driver.find_element(By.ID, "login-err").text
-        print("Login attempt for unapproved user:", err)
+        time.sleep(1)
+        WebDriverWait(driver, 5).until(
+            EC.text_to_be_present_in_element((By.ID, "login-err"), "pending")
+        )
+        print("Verified: Unapproved user was rejected properly.")
         
         # Now login as Demo Admin
-        driver.find_element(By.ID, "li-pw").clear()
-        driver.find_element(By.ID, "li-pw").send_keys("demo")
+        email_field = driver.find_element(By.ID, "li-email")
+        email_field.clear()
+        email_field.send_keys("demo@nodepilot.dev")
+        
+        pw_field = driver.find_element(By.ID, "li-pw")
+        pw_field.clear()
+        pw_field.send_keys("demo")
         driver.find_element(By.ID, "li-btn").click()
         
         print("Logged in as Admin. Checking for Admin Panel...")
@@ -59,13 +70,14 @@ def test_rbac():
         print("Admin Panel tab is visible!")
         
         driver.find_element(By.ID, "nav-admin").click()
-        time.sleep(2)
-        driver.save_screenshot("C:/Users/raghu/.gemini/antigravity-ide/brain/48025fbf-3a82-47c3-94c0-c9da7da2d000/browser/admin_panel_1786433509121.webp")
-        print("Admin Panel loaded and screenshot saved.")
+        time.sleep(1)
+        print("Admin Panel loaded successfully!")
         
     except Exception as e:
         print("Test failed:", e)
-        driver.save_screenshot("C:/Users/raghu/.gemini/antigravity-ide/brain/48025fbf-3a82-47c3-94c0-c9da7da2d000/browser/error.webp")
+        for entry in driver.get_log('browser'):
+            print(entry)
+        raise e
     finally:
         driver.quit()
 

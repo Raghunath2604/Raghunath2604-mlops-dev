@@ -41,7 +41,7 @@ export class MLOpsClient {
   }
 
   async deploy(modelName, tag, target, options = {}) {
-    return this._request('POST', '/deploy', {
+    return this._request('POST', '/deployments', {
       model_name: modelName,
       model_tag: tag,
       target,
@@ -51,7 +51,7 @@ export class MLOpsClient {
 }
 
 export class MLOpsAgent {
-  constructor(apiKey, deviceName, hwClass, baseUrl = 'https://api.mlopsde.me/v1') {
+  constructor(apiKey, deviceName, hwClass, baseUrl = 'http://localhost:8000/v1') {
     this.apiKey = apiKey;
     this.deviceName = deviceName;
     this.hwClass = hwClass;
@@ -65,6 +65,24 @@ export class MLOpsAgent {
   async start() {
     console.log(`[MLOps] Starting Agent for ${this.deviceName} (${this.deviceId})...`);
     this.running = true;
+    
+    // Register the device first
+    try {
+      await fetch(`${this.baseUrl}/devices/register`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          device_id: this.deviceId,
+          hw_class: this.hwClass
+        })
+      });
+    } catch (e) {
+      console.error(`[MLOps] Failed to register device: ${e}`);
+    }
+
     this._heartbeatLoop();
   }
 
@@ -86,7 +104,6 @@ export class MLOpsAgent {
     while (this.running) {
       try {
         const payload = {
-          device_id: this.deviceId,
           ram_mb: 120 + (this.inferenceCount % 50),
           cpu_pct: 15.5,
           temp_c: 45.0,
@@ -96,7 +113,7 @@ export class MLOpsAgent {
           model_tag: this.activeTag
         };
 
-        const res = await fetch(`${this.baseUrl}/agent/heartbeat`, {
+        const res = await fetch(`${this.baseUrl}/devices/${this.deviceId}/ping`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${this.apiKey}`,
@@ -108,11 +125,7 @@ export class MLOpsAgent {
         if (res.ok) {
           const data = await res.json();
           this.inferenceCount = 0;
-          if (data.deployment) {
-            console.log(`[MLOps] Received new deployment: ${data.deployment.model_name}`);
-            this.activeModel = data.deployment.model_name;
-            this.activeTag = data.deployment.model_tag;
-          }
+          // the ping endpoint doesn't currently return deployment in the response in the new API
         }
       } catch (e) {
         // Silent fail for offline-first resilience

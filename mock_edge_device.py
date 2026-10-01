@@ -12,8 +12,11 @@ except ImportError:
     print("Error: Could not import MLOpsAgent. Make sure you are in the project root.")
     sys.exit(1)
 
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 API_KEY = os.environ.get("MLOPS_API_KEY", "demo")
-API_URL = os.environ.get("MLOPS_API_URL", "https://mlopsde.me/api/index/v1") # Vercel URL
+API_URL = os.environ.get("MLOPS_API_URL", "http://localhost:8000/v1")
 HW_CLASS = os.environ.get("HW_CLASS", "jetson_orin")
 
 def run_mock_device():
