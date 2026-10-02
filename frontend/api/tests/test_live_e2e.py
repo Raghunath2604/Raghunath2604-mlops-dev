@@ -1,7 +1,44 @@
+import socket
+import threading
+import time
+import os
+import sys
 import requests
 import pytest
 
 BASE = "http://127.0.0.1:8000"
+
+def is_server_running(host="127.0.0.1", port=8000):
+    try:
+        with socket.create_connection((host, port), timeout=0.5):
+            return True
+    except OSError:
+        return False
+
+@pytest.fixture(scope="session", autouse=True)
+def ensure_live_server():
+    if not is_server_running():
+        api_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        if api_dir not in sys.path:
+            sys.path.insert(0, api_dir)
+        os.environ["TESTING"] = "true"
+        import index
+        with index.app.app_context():
+            index.init_db()
+        server_thread = threading.Thread(
+            target=lambda: index.app.run(host="127.0.0.1", port=8000, debug=False, use_reloader=False),
+            daemon=True
+        )
+        server_thread.start()
+        for _ in range(50):
+            if is_server_running():
+                break
+            time.sleep(0.1)
+
+@pytest.fixture(autouse=True)
+def check_server():
+    if not is_server_running():
+        pytest.skip("Live server not running on http://127.0.0.1:8000")
 
 @pytest.fixture(scope="module")
 def session():
