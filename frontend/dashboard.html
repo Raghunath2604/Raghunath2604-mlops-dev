@@ -1060,6 +1060,13 @@ html, body {
       <div class="cf-turnstile" data-sitekey="0x4AAAAAAEO-WRxQ_X-Q68uZ" data-action="signup" data-theme="dark" style="margin-bottom:15px;"></div>
       <button class="btn-primary" id="ri-btn" onclick="doRegister()">Submit Access Request →</button>
     </div>
+
+    <div style="text-align:center; margin-top:16px; border-top:1px solid var(--border); padding-top:14px;">
+      <a href="/login.html" style="font-size:0.82rem; font-weight:600; color:var(--cobalt-bright); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+        <span>🚀 Open Full Login Portal (Google, GitHub & Email OTP)</span>
+        <span>→</span>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -1201,16 +1208,34 @@ html, body {
           </div>
         </div>
 
-        <!-- SILICON RUNTIME STRIP -->
-        <div class="silicon-summary-strip">
-          <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Supported Silicon Runtimes:</span>
-          <div class="silicon-pills">
-            <span class="silicon-chip">NVIDIA Ampere / TensorRT 10</span>
-            <span class="silicon-chip">RPi 5 ARM64 NEON</span>
-            <span class="silicon-chip">Hailo-8L 13 TOPS NPU</span>
-            <span class="silicon-chip">Google Edge TPU (INT8)</span>
-            <span class="silicon-chip">Rockchip RK3588 (RKNN)</span>
-            <span class="silicon-chip">Intel Iris Xe / OpenVINO</span>
+        <!-- SILICON RUNTIME STRIP & DIGITAL TWIN SIMULATOR -->
+        <div class="silicon-summary-strip" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">17 Silicon Digital Twins:</span>
+            <div class="silicon-pills">
+              <span class="silicon-chip">NVIDIA Ampere / TensorRT 10</span>
+              <span class="silicon-chip">RPi 5 ARM64 NEON</span>
+              <span class="silicon-chip">Hailo-8L 13 TOPS NPU</span>
+              <span class="silicon-chip">Google Edge TPU (INT8)</span>
+              <span class="silicon-chip">Rockchip RK3588 (RKNN)</span>
+              <span class="silicon-chip">Intel Iris Xe / OpenVINO</span>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <div id="sim-status-indicator" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--emerald); background:rgba(0, 229, 153, 0.1); border:1px solid rgba(0,229,153,0.3); padding:5px 12px; border-radius:12px; display:flex; align-items:center; gap:6px;">
+              <span style="width:6px; height:6px; background:var(--emerald); border-radius:50%; display:inline-block; box-shadow:0 0 8px var(--emerald);"></span>
+              <span id="sim-status-label">SIMULATOR READY</span>
+            </div>
+            <button class="action-btn" id="btn-toggle-sim" onclick="toggleHardwareSimulation()" style="background:linear-gradient(135deg, var(--cobalt), var(--cobalt-bright)); color:#fff; border:none; padding:6px 14px; font-size:0.78rem; font-weight:700; border-radius:8px; cursor:pointer;" title="Boot and stream live telemetry from all 17 silicon platforms">
+              ▶ Boot 17 Silicon Twins
+            </button>
+            <button class="action-btn" onclick="injectSimulationDrift()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--text-main); padding:6px 12px; font-size:0.78rem; font-weight:600; border-radius:8px; cursor:pointer;" title="Inject real-time model drift into Jetson Nano">
+              ⚡ Inject Drift
+            </button>
+            <button class="action-btn" onclick="toggleSimulationDisconnect()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--text-main); padding:6px 12px; font-size:0.78rem; font-weight:600; border-radius:8px; cursor:pointer;" title="Simulate edge node network disconnect">
+              📶 Disconnect Node
+            </button>
           </div>
         </div>
 
@@ -1799,7 +1824,84 @@ function bootApp(user) {
 }
 
 async function refreshAll() {
-  await Promise.all([loadSummary(), loadDevices(), loadDeployments(), loadEvents(), loadModels()]);
+  await Promise.all([loadSummary(), loadDevices(), loadDeployments(), loadEvents(), loadModels(), checkSimulationStatus()]);
+}
+
+let isSimulatorRunning = false;
+
+async function checkSimulationStatus() {
+  try {
+    const res = await apiFetch('/simulation/status');
+    if (res && res.success) {
+      isSimulatorRunning = res.running;
+      updateSimulatorUI(res.running, res.total_hardware_nodes);
+    }
+  } catch(e) {}
+}
+
+function updateSimulatorUI(running, nodeCount) {
+  const lbl = document.getElementById('sim-status-label');
+  const btn = document.getElementById('btn-toggle-sim');
+  if (!lbl || !btn) return;
+  if (running) {
+    lbl.textContent = `17 TWINS STREAMING`;
+    lbl.parentElement.style.borderColor = 'rgba(0, 240, 255, 0.4)';
+    lbl.parentElement.style.color = 'var(--cobalt-bright)';
+    btn.textContent = '⏹ Stop Simulation';
+    btn.style.background = 'rgba(255, 59, 105, 0.25)';
+    btn.style.borderColor = 'var(--ruby)';
+  } else {
+    lbl.textContent = nodeCount > 0 ? `${nodeCount} TWINS READY` : `SIMULATOR READY`;
+    lbl.parentElement.style.borderColor = 'rgba(0, 229, 153, 0.3)';
+    lbl.parentElement.style.color = 'var(--emerald)';
+    btn.textContent = '▶ Boot 17 Silicon Twins';
+    btn.style.background = 'linear-gradient(135deg, var(--cobalt), var(--cobalt-bright))';
+    btn.style.borderColor = 'transparent';
+  }
+}
+
+async function toggleHardwareSimulation() {
+  const btn = document.getElementById('btn-toggle-sim');
+  if (isSimulatorRunning) {
+    btn.textContent = 'Stopping...';
+    await apiFetch('/simulation/stop', { method: 'POST' });
+    isSimulatorRunning = false;
+    updateSimulatorUI(false);
+    toast('Hardware simulation stopped.');
+  } else {
+    btn.textContent = 'Booting Silicon Fleet...';
+    try {
+      const res = await apiFetch('/simulation/start', { method: 'POST', body: JSON.stringify({ interval: 3.0 }) });
+      isSimulatorRunning = true;
+      updateSimulatorUI(true);
+      toast('All 17 Silicon Digital Twins booted & streaming live telemetry!', 'success');
+      await loadDevices();
+      await loadSummary();
+    } catch(err) {
+      toast('Failed to start hardware simulation.', 'error');
+      btn.textContent = '▶ Boot 17 Silicon Twins';
+    }
+  }
+}
+
+async function injectSimulationDrift() {
+  try {
+    await apiFetch('/simulation/drift', { method: 'POST', body: JSON.stringify({ node: 'jetson_nano', score: 0.78 }) });
+    toast('Drift injected into NVIDIA Jetson Nano (KL=0.78). Watch drift alerts trigger!', 'warning');
+    setTimeout(loadDevices, 1000);
+  } catch(e) {
+    toast('Error injecting drift.', 'error');
+  }
+}
+
+async function toggleSimulationDisconnect() {
+  try {
+    await apiFetch('/simulation/disconnect', { method: 'POST', body: JSON.stringify({ node: 'rpi5', offline: true }) });
+    toast('Simulated disconnect on Raspberry Pi 5. Node buffering locally.', 'info');
+    setTimeout(loadDevices, 1000);
+  } catch(e) {
+    toast('Error simulating disconnect.', 'error');
+  }
 }
 
 async function loadSummary() {

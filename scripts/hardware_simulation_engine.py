@@ -455,14 +455,21 @@ class SiliconFleetSimulator:
             self.nodes[key] = SimulatedHardwareNode(key, profile, api_url, api_key)
 
     def boot_all(self):
+        from concurrent.futures import ThreadPoolExecutor
         print("\n" + "=" * 70)
         print(f"  BOOTING ALL 17 SILICON DIGITAL TWINS (Target: {self.api_url})")
         print("=" * 70)
-        success_count = 0
-        for key, node in self.nodes.items():
-            if node.register():
-                success_count += 1
-                node.heartbeat()
+        def _init_node(node):
+            try:
+                if node.register():
+                    node.heartbeat()
+                    return 1
+            except Exception:
+                pass
+            return 0
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            results = list(ex.map(_init_node, self.nodes.values()))
+        success_count = sum(results)
         print(f"\n[FLEET READY] {success_count} / {len(self.nodes)} Hardware Platforms Initialized.")
         return success_count
 

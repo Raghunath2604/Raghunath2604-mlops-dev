@@ -1,6 +1,7 @@
 # MLOps.dev — Netlify redirects
 /about          /about.html          200
 /demo           /demo.html           200
+/login          /login.html          200
 /dashboard      /dashboard.html      200
 /blog           /blog.html           200
 /careers        /careers.html        200

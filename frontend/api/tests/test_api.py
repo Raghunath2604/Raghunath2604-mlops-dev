@@ -103,3 +103,47 @@ def test_webhook_crud(client):
         # List webhooks again
         res = client.get("/v1/webhooks", headers={"Authorization": f"Bearer {client.token}"})
         assert len(json.loads(res.data)["data"]) == 0
+
+def test_auth_send_and_verify_code(client):
+    email = "engineer@edge-ai.io"
+    # 1. Send code
+    res = client.post("/v1/auth/send-code", json={"email": email})
+    assert res.status_code == 200
+    data = json.loads(res.data)
+    assert data["success"] is True
+    code = data.get("code")
+    assert code is not None and len(code) == 6
+
+    # 2. Verify wrong code
+    res_bad = client.post("/v1/auth/verify-code", json={"email": email, "code": "000000"})
+    assert res_bad.status_code == 400
+
+    # 3. Verify correct code
+    res_ok = client.post("/v1/auth/verify-code", json={"email": email, "code": code})
+    assert res_ok.status_code == 200
+    user_data = json.loads(res_ok.data)
+    assert user_data["success"] is True
+    assert user_data["user"]["email"] == email
+
+def test_auth_oauth_social(client):
+    # Google OAuth
+    res_g = client.post("/v1/auth/oauth/google", json={"email": "developer@gmail.com", "name": "Google Dev"})
+    assert res_g.status_code == 200
+    data_g = json.loads(res_g.data)
+    assert data_g["success"] is True
+    assert data_g["user"]["email"] == "developer@gmail.com"
+
+    # GitHub OAuth
+    res_gh = client.post("/v1/auth/oauth/github", json={"username": "octocat", "email": "octocat@github.com"})
+    assert res_gh.status_code == 200
+    data_gh = json.loads(res_gh.data)
+    assert data_gh["success"] is True
+    assert data_gh["user"]["email"] == "octocat@github.com"
+
+def test_simulation_status(client):
+    res = client.get("/v1/simulation/status")
+    assert res.status_code == 200
+    data = json.loads(res.data)
+    assert data["success"] is True
+    assert "devices" in data
+

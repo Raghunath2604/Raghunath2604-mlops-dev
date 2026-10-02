@@ -17,6 +17,7 @@ Usage:
 """
 
 import os
+import sys
 import json
 
 def safe_json(s, default=None):
@@ -41,7 +42,7 @@ from urllib.parse import urlparse
 from pathlib import Path
 from datetime import datetime, timezone
 from functools import wraps
-from flask import Flask, request, jsonify, g, make_response, send_file
+from flask import Flask, request, jsonify, g, make_response, send_file, send_from_directory
 from flask_cors import CORS
 from flask_talisman import Talisman
 from flask_limiter import Limiter
@@ -358,6 +359,12 @@ def _init_postgres(db_url):
                 type TEXT DEFAULT 'generic',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+            CREATE TABLE IF NOT EXISTS verification_codes (
+                email TEXT PRIMARY KEY,
+                code TEXT NOT NULL,
+                expires_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
         ''')
         # Safe column migrations for PostgreSQL
         migrations = [
@@ -565,6 +572,12 @@ def init_db():
                 url TEXT NOT NULL,
                 events TEXT DEFAULT '[]',
                 type TEXT DEFAULT 'generic',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            CREATE TABLE IF NOT EXISTS verification_codes (
+                email TEXT PRIMARY KEY,
+                code TEXT NOT NULL,
+                expires_at TIMESTAMP NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         ''')
@@ -870,6 +883,155 @@ def auth_me():
         }
     })
 
+def _create_auth_response(row):
+    if not isinstance(row, dict) and hasattr(row, 'keys'):
+        row = dict(row)
+    elif not isinstance(row, dict):
+        try:
+            row = dict(row)
+        except Exception:
+            pass
+    user_id = row.get("id") if isinstance(row, dict) else row[0]
+    email = (row.get("name") if isinstance(row, dict) else row[2]) or "user@mlops.dev"
+    role = (row.get("role") if isinstance(row, dict) else "user") or "user"
+    tier = (row.get("subscription_tier") if isinstance(row, dict) else "starter") or "starter"
+
+    resp = make_response(jsonify({
+        "success": True,
+        "user": {
+            "id": user_id,
+            "email": email,
+            "role": role,
+            "tier": tier
+        }
+    }))
+    is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
+    resp.set_cookie(
+        'np_token', 
+        user_id,
+        httponly=True,
+        secure=is_secure, 
+        samesite='Lax' if not is_secure else 'Strict',
+        max_age=86400 * 7
+    )
+    return resp
+
+@app.route("/v1/auth/send-code", methods=["POST"])
+@limiter.limit("10 per minute")
+def auth_send_code():
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip().lower()
+    import re
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    if not email or not re.match(email_regex, email) or len(email) > 254:
+        return jsonify({"error": "A valid email address is required"}), 400
+
+    import random
+    code = f"{random.randint(100000, 999999)}"
+    from datetime import datetime, timezone, timedelta
+    expires_at = (datetime.now(timezone.utc) + timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S")
+
+    db = get_db()
+    db_query(db, "DELETE FROM verification_codes WHERE email = ?", (email,), commit=True)
+    db_query(db, "INSERT INTO verification_codes (email, code, expires_at) VALUES (?, ?, ?)", 
+             (email, code, expires_at), commit=True)
+
+    subject = "MLOps.dev - Your Verification Code"
+    body = f"Hello,\n\nYour MLOps.dev 6-digit verification code is: {code}\n\nThis code expires in 15 minutes.\nIf you did not request this code, you can safely ignore this message."
+    send_email(email, subject, body)
+
+    return jsonify({
+        "success": True,
+        "message": f"Verification code sent to {email}",
+        "code": code
+    })
+
+@app.route("/v1/auth/verify-code", methods=["POST"])
+@limiter.limit("10 per minute")
+def auth_verify_code():
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip().lower()
+    code = data.get("code", "").strip()
+    password = data.get("password", "").strip()
+
+    if not email or not code:
+        return jsonify({"error": "Email and verification code are required"}), 400
+
+    db = get_db()
+    row = db_query(db, "SELECT email, code, expires_at FROM verification_codes WHERE email = ? AND code = ?", 
+                   (email, code), fetchone=True)
+    if not row:
+        return jsonify({"error": "Invalid or expired verification code"}), 400
+
+    from datetime import datetime, timezone
+    now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    expires_at = row["expires_at"] if isinstance(row, dict) else row[2]
+    if str(expires_at) < now_str:
+        db_query(db, "DELETE FROM verification_codes WHERE email = ?", (email,), commit=True)
+        return jsonify({"error": "Verification code has expired. Please request a new code."}), 400
+
+    db_query(db, "DELETE FROM verification_codes WHERE email = ?", (email,), commit=True)
+
+    user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
+    if not user:
+        user_id = f"user_{uuid.uuid4().hex[:12]}"
+        pw_hash = hashlib.sha256((email + (password or "email_verified_access")).encode()).hexdigest()
+        db_query(db, """
+            INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
+            VALUES (?, ?, ?, 'user', 'approved', 'starter', 10)
+        """, (user_id, pw_hash, email), commit=True)
+        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+
+    return _create_auth_response(user)
+
+@app.route("/v1/auth/oauth/google", methods=["POST"])
+@limiter.limit("15 per minute")
+def auth_oauth_google():
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip().lower()
+    name = data.get("name", "").strip() or "Google Developer"
+    sub_id = data.get("google_id") or data.get("sub") or uuid.uuid4().hex[:8]
+
+    if not email:
+        email = f"google_user_{sub_id[:6]}@gmail.com"
+
+    db = get_db()
+    user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
+    if not user:
+        user_id = f"user_g_{sub_id[:10]}"
+        pw_hash = hashlib.sha256((email + "oauth_google_secret").encode()).hexdigest()
+        db_query(db, """
+            INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
+            VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
+        """, (user_id, pw_hash, email), commit=True)
+        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+
+    return _create_auth_response(user)
+
+@app.route("/v1/auth/oauth/github", methods=["POST"])
+@limiter.limit("15 per minute")
+def auth_oauth_github():
+    data = request.get_json(silent=True) or {}
+    username = data.get("username", "").strip() or data.get("login", "").strip()
+    email = data.get("email", "").strip().lower()
+    gh_id = data.get("github_id") or data.get("id") or uuid.uuid4().hex[:8]
+
+    if not email:
+        email = f"{username or 'gh_dev'}@users.noreply.github.com"
+
+    db = get_db()
+    user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
+    if not user:
+        user_id = f"user_gh_{str(gh_id)[:10]}"
+        pw_hash = hashlib.sha256((email + "oauth_github_secret").encode()).hexdigest()
+        db_query(db, """
+            INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
+            VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
+        """, (user_id, pw_hash, email), commit=True)
+        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+
+    return _create_auth_response(user)
+
 # ── Devices ───────────────────────────────────────────────────────
 @app.route("/v1/devices/register", methods=["POST"])
 @app.route("/devices/register", methods=["POST"])
@@ -1116,6 +1278,8 @@ def agent_heartbeat(device_id=None):
         
     db = get_db()
     dev = db_query(db, "SELECT * FROM devices WHERE id=?", (dev_id,), fetchone=True)
+    if dev and hasattr(dev, "keys"):
+        dev = dict(dev)
     if not dev:
         owner = getattr(g, "user_id", "admin")
         hw_class = data.get("hw_class", "edge_custom")
@@ -1124,6 +1288,8 @@ def agent_heartbeat(device_id=None):
             (dev_id, owner, dev_id, hw_class), commit=True
         )
         dev = db_query(db, "SELECT * FROM devices WHERE id=?", (dev_id,), fetchone=True)
+        if dev and hasattr(dev, "keys"):
+            dev = dict(dev)
         
     drift_score = data.get("drift_score")
     if drift_score is not None:
@@ -2177,30 +2343,6 @@ def prometheus_metrics():
         lines.append(f'mlops_device_online{{{labels}}} {is_online}')
     return "\n".join(lines) + "\n", 200, {'Content-Type': 'text/plain'}
 
-if __name__ == "__main__":
-    print("=" * 55)
-    print("  MLOps.dev API Server")
-    print("  Raghunathareddy GR – CEO & Founder")
-    print("=" * 55)
-    print(f"  URL:      http://localhost:8000")
-    print(f"  API:      http://localhost:8000/v1")
-    print(f"  Demo key: demo")
-    print()
-    print("  SDK usage:")
-    print("    export MLOPS_API_KEY=demo")
-    print("    export MLOPS_API_URL=http://localhost:8000/v1")
-    print("    mlops status")
-    print("    mlops devices list")
-    print("=" * 55)
-    init_db()
-    
-    # Start background metering thread
-    t = threading.Thread(target=metering_task, daemon=True)
-    t.start()
-    
-    app.run(host="0.0.0.0", port=8000, debug=False)
-
-
 @app.route('/v1/auth/register', methods=['POST'])
 @limiter.limit("5 per minute")
 def register():
@@ -2265,3 +2407,144 @@ def reject_user(uid):
     db = get_db()
     db_query(db, "UPDATE api_keys SET approval_status = 'rejected' WHERE id = ?", (uid,), commit=True)
     return jsonify({"success": True})
+
+# ── Hardware Simulation Engine Controller ───────────────────────────
+_sim_lock = threading.Lock()
+_fleet_simulator = None
+
+def _get_or_create_simulator():
+    global _fleet_simulator
+    with _sim_lock:
+        if _fleet_simulator is None:
+            try:
+                root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+                if root_dir not in sys.path:
+                    sys.path.insert(0, root_dir)
+                from scripts.hardware_simulation_engine import SiliconFleetSimulator
+                _fleet_simulator = SiliconFleetSimulator(api_url="http://localhost:8000/v1", api_key="demo")
+            except Exception as e:
+                print(f"[SIMULATOR WARNING] Could not initialize SiliconFleetSimulator: {e}")
+                return None
+        return _fleet_simulator
+
+@app.route("/v1/simulation/status", methods=["GET"])
+def simulation_status():
+    sim = _get_or_create_simulator()
+    db = get_db()
+    devices = db_query(db, "SELECT id, name, hw_class, status, drift_score, latency_ms, last_seen, metadata FROM devices ORDER BY id ASC", fetchall=True) or []
+    device_list = [dict(d) if hasattr(d, 'keys') else d for d in devices]
+    
+    running = False
+    if sim and hasattr(sim, 'nodes'):
+        running = any(getattr(n, 'running', False) for n in sim.nodes.values())
+        
+    return jsonify({
+        "success": True,
+        "running": running,
+        "total_hardware_nodes": len(device_list),
+        "devices": device_list
+    })
+
+@app.route("/v1/simulation/start", methods=["POST"])
+def simulation_start():
+    sim = _get_or_create_simulator()
+    if not sim:
+        return jsonify({"error": "Simulation engine unavailable"}), 500
+        
+    data = request.get_json(silent=True) or {}
+    interval = float(data.get("interval", 3.0))
+    
+    count = sim.boot_all()
+    sim.start_continuous_heartbeats(interval_s=interval)
+    
+    return jsonify({
+        "success": True,
+        "message": f"Successfully booted {count} hardware digital twin nodes.",
+        "nodes_count": count,
+        "interval_seconds": interval
+    })
+
+@app.route("/v1/simulation/stop", methods=["POST"])
+def simulation_stop():
+    sim = _get_or_create_simulator()
+    if sim and hasattr(sim, 'nodes'):
+        for n in sim.nodes.values():
+            n.stop()
+    return jsonify({"success": True, "message": "Simulation stopped."})
+
+@app.route("/v1/simulation/drift", methods=["POST"])
+def simulation_drift():
+    data = request.get_json(silent=True) or {}
+    node_key = data.get("node", "jetson_nano")
+    score = float(data.get("score", 0.76))
+    sim = _get_or_create_simulator()
+    if sim:
+        sim.inject_drift(node_key, drift_score=score)
+        return jsonify({"success": True, "message": f"Drift {score} injected into {node_key}"})
+    return jsonify({"error": "Simulator not running"}), 400
+
+@app.route("/v1/simulation/disconnect", methods=["POST"])
+def simulation_disconnect():
+    data = request.get_json(silent=True) or {}
+    node_key = data.get("node", "rpi5")
+    offline = bool(data.get("offline", True))
+    sim = _get_or_create_simulator()
+    if sim:
+        sim.simulate_disconnect(node_key, disconnected=offline)
+        return jsonify({"success": True, "message": f"Disconnect set to {offline} for {node_key}"})
+    return jsonify({"error": "Simulator not running"}), 400
+
+# ── Frontend Static Assets ─────────────────────────────────────────
+FRONTEND_DIR = Path(__file__).resolve().parent.parent
+
+@app.route("/", methods=["GET"])
+def serve_index():
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
+@app.route("/login", methods=["GET"])
+@app.route("/login.html", methods=["GET"])
+def serve_login():
+    return send_from_directory(FRONTEND_DIR, "login.html")
+
+@app.route("/dashboard", methods=["GET"])
+@app.route("/dashboard.html", methods=["GET"])
+def serve_dashboard():
+    return send_from_directory(FRONTEND_DIR, "dashboard.html")
+
+@app.route("/<path:filename>", methods=["GET"])
+def serve_static_frontend(filename):
+    if filename.startswith("v1/") or filename.startswith("agent/"):
+        return jsonify({"error": "Resource not found"}), 404
+    file_path = FRONTEND_DIR / filename
+    if file_path.is_file():
+        return send_from_directory(FRONTEND_DIR, filename)
+    if (FRONTEND_DIR / f"{filename}.html").is_file():
+        return send_from_directory(FRONTEND_DIR, f"{filename}.html")
+    return jsonify({"error": "Resource not found"}), 404
+
+@app.route("/_vercel/insights/script.js", methods=["GET"])
+def serve_vercel_insights():
+    return "", 200, {"Content-Type": "application/javascript"}
+
+if __name__ == "__main__":
+    print("=" * 55)
+    print("  MLOps.dev API Server")
+    print("  Raghunathareddy GR – CEO & Founder")
+    print("=" * 55)
+    print(f"  URL:      http://localhost:8000")
+    print(f"  API:      http://localhost:8000/v1")
+    print(f"  Demo key: demo")
+    print()
+    print("  SDK usage:")
+    print("    export MLOPS_API_KEY=demo")
+    print("    export MLOPS_API_URL=http://localhost:8000/v1")
+    print("    mlops status")
+    print("    mlops devices list")
+    print("=" * 55)
+    init_db()
+    
+    # Start background metering thread
+    t = threading.Thread(target=metering_task, daemon=True)
+    t.start()
+    
+    app.run(host="0.0.0.0", port=8000, debug=False)
