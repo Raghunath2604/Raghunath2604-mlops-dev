@@ -13,7 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+  <!-- External Stylesheet File -->
+  <link rel="stylesheet" href="login.css" />
 
   <style>
     :root {
@@ -716,7 +717,7 @@
 
   <!-- Header -->
   <header>
-    <a href="/index.html" class="brand">
+    <a href="index.html" class="brand">
       <div class="brand-logo">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#logo-grad)"/>
@@ -865,6 +866,9 @@
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
               <input type="password" id="pw-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required />
+              <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('pw-password', this)" title="Show/Hide Password">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
             </div>
           </div>
 
@@ -900,6 +904,9 @@
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
               <input type="password" id="reg-password" class="form-input" placeholder="••••••••" minlength="8" autocomplete="new-password" required />
+              <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('reg-password', this)" title="Show/Hide Password">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
             </div>
           </div>
 
@@ -939,16 +946,24 @@
   <footer>
     <div>SOC2 Type II • Hardware Keystore (TPM 2.0) • End-to-End Encrypted</div>
     <div class="footer-links">
-      <a href="/index.html">Platform</a>
-      <a href="/dashboard.html">Fleet Dashboard</a>
-      <a href="/docs.html">API Docs</a>
-      <a href="/privacy.html">Privacy</a>
+      <a href="index.html">Platform</a>
+      <a href="dashboard.html">Fleet Dashboard</a>
+      <a href="api-reference.html">API Docs</a>
+      <a href="privacy.html">Privacy</a>
     </div>
   </footer>
 
   <script>
-    // Relative API endpoint to avoid CORS issues
-    const API_BASE = '';
+    // Adaptive API base handling (supports http://localhost:8000, 127.0.0.1, custom port, or file://)
+    const API_BASE = (window.location.protocol === 'file:' || (window.location.port !== '8000' && window.location.port !== '')) ? 'http://localhost:8000' : '';
+
+    function togglePasswordVisibility(inputId, btn) {
+      const inp = document.getElementById(inputId);
+      if (!inp) return;
+      const isPw = inp.type === 'password';
+      inp.type = isPw ? 'text' : 'password';
+      btn.style.color = isPw ? 'var(--cyan)' : 'var(--text-3)';
+    }
 
     function showToast(msg, type = 'info') {
       const t = document.getElementById('toast');
@@ -1138,7 +1153,7 @@
         if (res.ok && data.success) {
           showToast('Authentication Verified! Launching Fleet Control Plane...', 'success');
           setTimeout(() => {
-            window.location.href = '/dashboard.html';
+            window.location.href = 'dashboard.html';
           }, 600);
         } else {
           showToast(data.error || 'Verification code invalid or expired.', 'error');
@@ -1171,7 +1186,7 @@
         if (res.ok && data.success) {
           showToast(`Signed in with ${provider === 'google' ? 'Google' : 'GitHub'}! Launching...`, 'success');
           setTimeout(() => {
-            window.location.href = '/dashboard.html';
+            window.location.href = 'dashboard.html';
           }, 600);
         } else {
           showToast(data.error || 'Social sign-in failed.', 'error');
@@ -1202,7 +1217,7 @@
         if (res.ok && data.success) {
           showToast('Credentials accepted! Redirecting to dashboard...', 'success');
           setTimeout(() => {
-            window.location.href = '/dashboard.html';
+            window.location.href = 'dashboard.html';
           }, 600);
         } else {
           showToast(data.error || 'Invalid email or password.', 'error');
@@ -1267,7 +1282,7 @@
         if (res.ok && data.success) {
           showToast('Demo Access Granted! Launching Fleet Control...', 'success');
           setTimeout(() => {
-            window.location.href = '/dashboard.html';
+            window.location.href = 'dashboard.html';
           }, 500);
         } else {
           showToast(data.error || 'Demo login failed.', 'error');
