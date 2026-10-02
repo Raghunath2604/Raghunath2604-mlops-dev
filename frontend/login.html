@@ -3,59 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In — MLOps.dev Control Plane</title>
+  <title>Sign In — MLOps.dev Fleet Control Plane</title>
   <meta name="description" content="Production-grade authentication for MLOps.dev fleet control plane. Secure access via Google, GitHub, or 6-digit email OTP verification." />
   
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23080B14'/><path d='M8 16L14 10L20 16L26 10' stroke='%234F7FEF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M8 22L14 16L20 22L26 16' stroke='%2300F0FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+  <!-- Encoded SVG Favicon (prevents premature head closure) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23080B14'/%3E%3Cpath d='M8 16L14 10L20 16L26 10' stroke='%234F7FEF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 22L14 16L20 22L26 16' stroke='%2300F0FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
-  <!-- Fonts -->
+  <!-- Fonts with reliable local fallbacks -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
 
   <style>
     :root {
-      --ink: #07090F;
-      --surface: #0E1322;
-      --surface-elevated: #151D33;
-      --surface-card: rgba(18, 25, 45, 0.75);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(79, 127, 239, 0.5);
-      --border-hover: rgba(255, 255, 255, 0.16);
-      --accent: #4F7FEF;
-      --accent-hover: #6390FA;
-      --accent-glow: rgba(79, 127, 239, 0.35);
-      --cyan: #00F0FF;
-      --cyan-glow: rgba(0, 240, 255, 0.25);
-      --emerald: #00E599;
-      --ruby: #FF3B69;
-      --amber: #FFB300;
-      --text-1: #F3F6FD;
-      --text-2: #94A3C0;
-      --text-3: #586888;
+      --void: #05070e;
+      --surface: #0b101d;
+      --surface-card: rgba(14, 20, 36, 0.88);
+      --surface-elevated: #162038;
+      --surface-input: #0a0e1a;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-focus: #3b82f6;
+      --border-hover: rgba(255, 255, 255, 0.18);
+      
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-glow: rgba(59, 130, 246, 0.35);
+      --cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.28);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --ruby: #f43f5e;
+      --amber: #f59e0b;
+
+      --text-1: #f8fafc;
+      --text-2: #94a3b8;
+      --text-3: #64748b;
+
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    body {
-      background-color: var(--ink);
+    html, body {
+      min-height: 100vh;
+      background-color: var(--void);
       color: var(--text-1);
       font-family: var(--font-sans);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
       position: relative;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Ambient Spatial Cyber Grid */
+    /* Ambient Spatial Backdrop */
     .bg-mesh {
       position: fixed;
       inset: 0;
@@ -66,11 +77,11 @@
 
     .mesh-orb-1 {
       position: absolute;
-      top: -150px;
-      left: 15%;
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle, rgba(79, 127, 239, 0.18) 0%, rgba(79, 127, 239, 0) 70%);
+      top: -120px;
+      left: 20%;
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(59, 130, 246, 0) 70%);
       filter: blur(80px);
       animation: floatOrb 18s ease-in-out infinite alternate;
     }
@@ -78,10 +89,10 @@
     .mesh-orb-2 {
       position: absolute;
       bottom: -150px;
-      right: 15%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, rgba(0, 240, 255, 0) 70%);
+      right: 18%;
+      width: 620px;
+      height: 620px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.14) 0%, rgba(0, 240, 255, 0) 70%);
       filter: blur(90px);
       animation: floatOrb 22s ease-in-out infinite alternate-reverse;
     }
@@ -90,22 +101,24 @@
       position: absolute;
       inset: 0;
       background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 48px 48px;
-      opacity: 0.6;
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+      opacity: 0.7;
     }
 
     @keyframes floatOrb {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(40px, 60px) scale(1.15); }
+      100% { transform: translate(35px, 50px) scale(1.12); }
     }
 
-    /* Header Nav */
+    /* Top Navigation */
     header {
       position: relative;
       z-index: 10;
-      padding: 24px 36px;
+      padding: 22px 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -122,8 +135,8 @@
     .brand-logo {
       width: 38px;
       height: 38px;
-      background: linear-gradient(135deg, rgba(79, 127, 239, 0.2), rgba(0, 240, 255, 0.2));
-      border: 1px solid rgba(79, 127, 239, 0.4);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(0, 240, 255, 0.25));
+      border: 1px solid rgba(59, 130, 246, 0.45);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -131,14 +144,20 @@
       box-shadow: 0 0 16px var(--accent-glow);
     }
 
+    .brand-logo svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
     .brand-name {
-      font-size: 1.15rem;
+      font-size: 1.18rem;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
 
     .brand-name span {
-      background: linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #00f0ff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -148,26 +167,28 @@
       align-items: center;
       gap: 8px;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: var(--emerald);
-      background: rgba(0, 229, 153, 0.08);
-      border: 1px solid rgba(0, 229, 153, 0.2);
-      padding: 6px 12px;
-      border-radius: 20px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 6px 14px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
     }
 
     .pulse-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       background: var(--emerald);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--emerald);
-      animation: pulse 2s infinite;
+      animation: pulseDot 2s infinite;
     }
 
-    @keyframes pulse {
+    @keyframes pulseDot {
       0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.4); opacity: 0.5; }
+      50% { transform: scale(1.35); opacity: 0.45; }
     }
 
     /* Main Container */
@@ -176,24 +197,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 30px 20px;
       position: relative;
       z-index: 10;
     }
 
     .auth-card {
       width: 100%;
-      max-width: 480px;
+      max-width: 460px;
       background: var(--surface-card);
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px;
+      border-radius: var(--radius-lg);
+      padding: 36px 36px 32px;
       box-shadow: 
-        0 24px 60px rgba(0, 0, 0, 0.55),
-        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        0 24px 70px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 1px 0 rgba(255, 255, 255, 0.15) inset;
       position: relative;
       overflow: hidden;
     }
@@ -204,13 +225,13 @@
       top: 0;
       left: 10%;
       right: 10%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(79, 127, 239, 0.6), rgba(0, 240, 255, 0.6), transparent);
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, #3b82f6 40%, #00f0ff 60%, transparent);
     }
 
     .auth-header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .auth-badge {
@@ -218,19 +239,26 @@
       align-items: center;
       gap: 6px;
       font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--cyan);
       background: rgba(0, 240, 255, 0.08);
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      padding: 4px 10px;
-      border-radius: 12px;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      padding: 4px 12px;
+      border-radius: 999px;
       margin-bottom: 12px;
     }
 
+    .auth-badge svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
     .auth-title {
-      font-size: 1.75rem;
+      font-size: 1.65rem;
       font-weight: 800;
       letter-spacing: -0.03em;
       margin-bottom: 6px;
@@ -238,7 +266,7 @@
     }
 
     .auth-subtitle {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-2);
       line-height: 1.45;
     }
@@ -248,7 +276,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .btn-social {
@@ -256,10 +284,10 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.035);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
       color: var(--text-1);
       font-family: var(--font-sans);
       font-size: 0.88rem;
@@ -269,10 +297,10 @@
     }
 
     .btn-social:hover {
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.075);
       border-color: var(--border-hover);
       transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     }
 
     .btn-social:active {
@@ -289,12 +317,13 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      margin: 20px 0;
+      margin: 18px 0;
       color: var(--text-3);
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-family: var(--font-mono);
+      font-weight: 600;
     }
 
     .divider::before,
@@ -305,20 +334,20 @@
       background: var(--border);
     }
 
-    /* Tabs */
+    /* Auth Tabs */
     .auth-tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(6, 9, 18, 0.6);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 4px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       gap: 4px;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 8px 14px;
+      padding: 8px 10px;
       background: transparent;
       border: none;
       border-radius: 8px;
@@ -327,14 +356,18 @@
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
       text-align: center;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
     }
 
     .tab-btn.active {
       background: var(--surface-elevated);
       color: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
     }
 
     .tab-pane {
@@ -343,7 +376,7 @@
 
     .tab-pane.active {
       display: block;
-      animation: fadeIn 0.25s ease-out;
+      animation: fadeIn 0.22s ease-out;
     }
 
     @keyframes fadeIn {
@@ -351,17 +384,17 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Form Inputs */
+    /* Form Fields */
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .form-label {
       display: block;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--text-2);
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
 
     .input-wrap {
@@ -377,24 +410,25 @@
       height: 17px;
       color: var(--text-3);
       pointer-events: none;
+      flex-shrink: 0;
     }
 
     .form-input {
       width: 100%;
-      background: rgba(14, 19, 34, 0.7);
+      background: var(--surface-input);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 12px 14px 12px 42px;
       color: #fff;
       font-family: var(--font-sans);
-      font-size: 0.92rem;
-      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      transition: all 0.18s ease;
     }
 
     .form-input:focus {
       outline: none;
       border-color: var(--accent);
-      background: rgba(14, 19, 34, 0.95);
+      background: #0d1222;
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
@@ -402,46 +436,46 @@
       color: var(--text-3);
     }
 
-    /* 6-Digit Verification PIN Inputs */
-    .otp-container {
+    /* 6-Digit OTP Box Grid */
+    .otp-grid {
       display: flex;
       justify-content: space-between;
       gap: 8px;
-      margin: 18px 0;
+      margin: 16px 0;
     }
 
-    .otp-digit {
-      width: 56px;
-      height: 60px;
+    .otp-box {
+      width: 52px;
+      height: 58px;
       text-align: center;
       font-family: var(--font-mono);
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 700;
-      background: rgba(14, 19, 34, 0.8);
+      background: var(--surface-input);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       color: var(--cyan);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .otp-digit:focus {
+    .otp-box:focus {
       outline: none;
       border-color: var(--cyan);
       box-shadow: 0 0 16px var(--cyan-glow);
-      background: rgba(14, 19, 34, 1);
+      background: #0d1428;
       transform: translateY(-2px);
     }
 
-    /* Buttons */
+    /* Submit & Action Buttons */
     .btn-submit {
       width: 100%;
-      padding: 13px 18px;
-      background: linear-gradient(135deg, var(--accent) 0%, #3B66D6 100%);
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       color: #fff;
       font-family: var(--font-sans);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -449,13 +483,13 @@
       justify-content: center;
       gap: 8px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 18px var(--accent-glow);
+      box-shadow: 0 4px 16px var(--accent-glow);
     }
 
     .btn-submit:hover {
-      background: linear-gradient(135deg, var(--accent-hover) 0%, #4F7FEF 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(79, 127, 239, 0.5);
+      box-shadow: 0 6px 22px rgba(59, 130, 246, 0.55);
     }
 
     .btn-submit:active {
@@ -463,25 +497,35 @@
     }
 
     .btn-submit:disabled {
-      opacity: 0.6;
+      opacity: 0.65;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
 
+    .btn-submit svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
     .btn-secondary {
       width: 100%;
-      padding: 11px 16px;
+      padding: 10px 16px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       color: var(--text-2);
       font-family: var(--font-sans);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       margin-top: 10px;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .btn-secondary:hover {
@@ -489,120 +533,75 @@
       color: #fff;
     }
 
-    /* Demo Quick Launch Pill */
-    .demo-bar {
-      margin-top: 22px;
-      padding: 14px;
-      background: linear-gradient(135deg, rgba(79, 127, 239, 0.08), rgba(0, 240, 255, 0.05));
-      border: 1px dashed rgba(79, 127, 239, 0.35);
-      border-radius: 14px;
+    /* VIP Demo Card */
+    .vip-demo-card {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.09), rgba(0, 240, 255, 0.06));
+      border: 1px dashed rgba(59, 130, 246, 0.4);
+      border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .demo-text {
+    .vip-info {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .demo-title {
+    .vip-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vip-title {
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--text-1);
     }
 
-    .demo-sub {
+    .vip-sub {
       font-size: 0.72rem;
-      color: var(--text-3);
+      color: var(--cyan);
       font-family: var(--font-mono);
+      font-weight: 600;
     }
 
     .btn-demo-quick {
       padding: 8px 14px;
       background: var(--surface-elevated);
-      border: 1px solid rgba(79, 127, 239, 0.4);
-      color: var(--cyan);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      color: #fff;
       font-family: var(--font-mono);
       font-size: 0.76rem;
-      font-weight: 600;
-      border-radius: 8px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .btn-demo-quick:hover {
-      background: var(--accent);
+      background: #2563eb;
       color: #fff;
-      box-shadow: 0 0 12px var(--accent-glow);
+      box-shadow: 0 0 14px var(--accent-glow);
+      transform: translateY(-1px);
     }
 
-    /* Live Toast Feedback */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      padding: 12px 20px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.86rem;
-      font-weight: 600;
-      z-index: 100;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .toast.success { border-color: var(--emerald); color: var(--emerald); }
-    .toast.error { border-color: var(--ruby); color: var(--ruby); }
-    .toast.info { border-color: var(--cyan); color: var(--cyan); }
-
-    /* Footer */
-    footer {
-      position: relative;
-      z-index: 10;
-      padding: 20px 36px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.78rem;
-      color: var(--text-3);
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 16px;
-    }
-
-    .footer-links a {
-      color: var(--text-3);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .footer-links a:hover {
-      color: var(--text-2);
-    }
-
+    /* Dev Auto-Fill Helper */
     .dev-code-banner {
       margin-top: 10px;
       padding: 8px 12px;
       background: rgba(0, 240, 255, 0.08);
-      border: 1px solid rgba(0, 240, 255, 0.25);
-      border-radius: 8px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: var(--radius-sm);
       font-family: var(--font-mono);
       font-size: 0.76rem;
       color: var(--cyan);
@@ -613,33 +612,102 @@
 
     .spinner {
       display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
       border-radius: 50%;
       border-top-color: #fff;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.7s linear infinite;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 540px) {
+    /* Live Toast Feedback */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 18px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 1000;
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .toast.success { border-color: var(--emerald); color: var(--emerald); }
+    .toast.error { border-color: var(--ruby); color: #fb7185; }
+    .toast.info { border-color: var(--cyan); color: var(--cyan); }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 10;
+      padding: 18px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.76rem;
+      color: var(--text-3);
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(5, 7, 14, 0.8);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-3);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-2);
+    }
+
+    @media (max-width: 520px) {
       .auth-card {
-        padding: 28px 20px;
+        padding: 26px 18px;
       }
       .social-auth-grid {
         grid-template-columns: 1fr;
       }
+      .otp-box {
+        width: 44px;
+        height: 50px;
+        font-size: 1.25rem;
+      }
       header, footer {
         padding: 16px 20px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Spatial Background -->
+  <!-- Ambient Spatial Glow -->
   <div class="bg-mesh">
     <div class="mesh-orb-1"></div>
     <div class="mesh-orb-2"></div>
@@ -650,12 +718,12 @@
   <header>
     <a href="/index.html" class="brand">
       <div class="brand-logo">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#logo-grad)"/>
           <defs>
             <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#4F7FEF"/>
-              <stop offset="1" stop-color="#00F0FF"/>
+              <stop stop-color="#3b82f6"/>
+              <stop offset="1" stop-color="#00f0ff"/>
             </linearGradient>
           </defs>
         </svg>
@@ -669,16 +737,16 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Auth Container -->
   <main>
     <div class="auth-card">
       <div class="auth-header">
         <div class="auth-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          Enterprise Authentication
+          Enterprise Security
         </div>
         <h1 class="auth-title">Welcome Back</h1>
         <p class="auth-subtitle">Sign in to orchestrate edge AI models, telemetry & digital twins</p>
@@ -686,8 +754,8 @@
 
       <!-- Social Authentication Buttons -->
       <div class="social-auth-grid">
-        <button class="btn-social" id="btn-google" onclick="handleSocialAuth('google')">
-          <svg viewBox="0 0 24 24">
+        <button class="btn-social" id="btn-google" type="button" onclick="handleSocialAuth('google')">
+          <svg width="18" height="18" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
@@ -696,8 +764,8 @@
           Google
         </button>
 
-        <button class="btn-social" id="btn-github" onclick="handleSocialAuth('github')">
-          <svg viewBox="0 0 24 24" fill="currentColor">
+        <button class="btn-social" id="btn-github" type="button" onclick="handleSocialAuth('github')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
           </svg>
           GitHub
@@ -706,71 +774,71 @@
 
       <div class="divider">or continue with</div>
 
-      <!-- Auth Method Tabs -->
+      <!-- Segmented Auth Mode Switcher -->
       <div class="auth-tabs">
-        <button class="tab-btn active" id="tab-btn-code" onclick="switchAuthTab('code')">Email Code (OTP)</button>
-        <button class="tab-btn" id="tab-btn-pw" onclick="switchAuthTab('pw')">Password</button>
-        <button class="tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">New Account</button>
+        <button class="tab-btn active" id="tab-btn-code" type="button" onclick="switchAuthTab('code')">Email Code (OTP)</button>
+        <button class="tab-btn" id="tab-btn-pw" type="button" onclick="switchAuthTab('pw')">Password</button>
+        <button class="tab-btn" id="tab-btn-register" type="button" onclick="switchAuthTab('register')">New Account</button>
       </div>
 
-      <!-- 1. Email OTP Verification Tab -->
+      <!-- 1. Email OTP Tab -->
       <div class="tab-pane active" id="pane-code">
-        <!-- Step 1: Request Code -->
+        <!-- Step 1: Email Input -->
         <div id="otp-step-1">
           <div class="form-group">
-            <label class="form-label">Work Email Address</label>
+            <label class="form-label">Corporate Email Address</label>
             <div class="input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                 <polyline points="22,6 12,13 2,6"/>
               </svg>
-              <input type="email" id="otp-email" class="form-input" placeholder="engineer@company.com" required />
+              <input type="email" id="otp-email" class="form-input" placeholder="engineer@enterprise.com" autocomplete="email" required />
             </div>
           </div>
 
-          <button class="btn-submit" id="btn-send-code" onclick="requestVerificationCode()">
+          <button class="btn-submit" id="btn-send-code" type="button" onclick="requestVerificationCode()">
             <span>Send 6-Digit Access Code</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </button>
         </div>
 
-        <!-- Step 2: Enter 6-digit Code -->
+        <!-- Step 2: 6-Digit Verification PIN Entry -->
         <div id="otp-step-2" style="display: none;">
           <div class="form-group">
-            <label class="form-label" style="display: flex; justify-content: space-between;">
-              <span>Verification PIN</span>
-              <span id="otp-email-target" style="color: var(--cyan); font-family: var(--font-mono); font-size: 0.76rem;"></span>
-            </label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+              <span class="form-label" style="margin-bottom: 0;">Verification PIN</span>
+              <span id="otp-email-target" style="color: var(--cyan); font-family: var(--font-mono); font-size: 0.74rem;"></span>
+            </div>
             
-            <div class="otp-container">
-              <input type="text" maxlength="1" class="otp-digit" id="d1" oninput="handleDigitInput(this, 'd2')" onkeydown="handleDigitKey(event, this, null)" autofocus />
-              <input type="text" maxlength="1" class="otp-digit" id="d2" oninput="handleDigitInput(this, 'd3')" onkeydown="handleDigitKey(event, this, 'd1')" />
-              <input type="text" maxlength="1" class="otp-digit" id="d3" oninput="handleDigitInput(this, 'd4')" onkeydown="handleDigitKey(event, this, 'd2')" />
-              <input type="text" maxlength="1" class="otp-digit" id="d4" oninput="handleDigitInput(this, 'd5')" onkeydown="handleDigitKey(event, this, 'd3')" />
-              <input type="text" maxlength="1" class="otp-digit" id="d5" oninput="handleDigitInput(this, 'd6')" onkeydown="handleDigitKey(event, this, 'd4')" />
-              <input type="text" maxlength="1" class="otp-digit" id="d6" oninput="handleDigitInput(this, null)" onkeydown="handleDigitKey(event, this, 'd5')" />
+            <div class="otp-grid" id="otp-inputs">
+              <input type="text" maxlength="1" class="otp-box" id="d1" inputmode="numeric" autocomplete="one-time-code" />
+              <input type="text" maxlength="1" class="otp-box" id="d2" inputmode="numeric" />
+              <input type="text" maxlength="1" class="otp-box" id="d3" inputmode="numeric" />
+              <input type="text" maxlength="1" class="otp-box" id="d4" inputmode="numeric" />
+              <input type="text" maxlength="1" class="otp-box" id="d5" inputmode="numeric" />
+              <input type="text" maxlength="1" class="otp-box" id="d6" inputmode="numeric" />
             </div>
 
-            <!-- Dev Code Auto-Fill Helper -->
+            <!-- Dev Code Helper Pill -->
             <div id="dev-code-pill" class="dev-code-banner" style="display: none;">
-              <span>Code: <strong id="dev-code-val"></strong></span>
-              <button class="btn-demo-quick" style="padding: 2px 8px;" onclick="autofillDevCode()">Auto-Fill</button>
+              <span>Dev Code: <strong id="dev-code-val" style="color:#fff;"></strong></span>
+              <button class="btn-demo-quick" style="padding: 3px 10px;" type="button" onclick="autofillDevCode()">Auto-Fill & Verify</button>
             </div>
           </div>
 
-          <button class="btn-submit" id="btn-verify-code" onclick="submitVerificationCode()">
+          <button class="btn-submit" id="btn-verify-code" type="button" onclick="submitVerificationCode()">
             <span>Verify & Launch Fleet Console</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
               <polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg>
           </button>
 
-          <button class="btn-secondary" onclick="resetOtpStep()">
-            Change Email Address
+          <button class="btn-secondary" type="button" onclick="resetOtpStep()">
+            ← Change Email Address
           </button>
         </div>
       </div>
@@ -779,30 +847,30 @@
       <div class="tab-pane" id="pane-pw">
         <form onsubmit="handlePasswordLogin(event)">
           <div class="form-group">
-            <label class="form-label">Email Address</label>
+            <label class="form-label">Work Email Address</label>
             <div class="input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                 <polyline points="22,6 12,13 2,6"/>
               </svg>
-              <input type="email" id="pw-email" class="form-input" placeholder="admin@mlops.dev" required />
+              <input type="email" id="pw-email" class="form-input" placeholder="admin@mlops.dev" autocomplete="email" required />
             </div>
           </div>
 
           <div class="form-group">
             <label class="form-label">Password</label>
             <div class="input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
-              <input type="password" id="pw-password" class="form-input" placeholder="••••••••" required />
+              <input type="password" id="pw-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required />
             </div>
           </div>
 
           <button type="submit" class="btn-submit" id="btn-login-pw">
             <span>Sign In to Dashboard</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
@@ -816,28 +884,28 @@
           <div class="form-group">
             <label class="form-label">Corporate Email</label>
             <div class="input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                 <polyline points="22,6 12,13 2,6"/>
               </svg>
-              <input type="email" id="reg-email" class="form-input" placeholder="you@enterprise.com" required />
+              <input type="email" id="reg-email" class="form-input" placeholder="you@enterprise.com" autocomplete="email" required />
             </div>
           </div>
 
           <div class="form-group">
             <label class="form-label">Create Password (min. 8 characters)</label>
             <div class="input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
-              <input type="password" id="reg-password" class="form-input" placeholder="Minimum 8 characters" minlength="8" required />
+              <input type="password" id="reg-password" class="form-input" placeholder="••••••••" minlength="8" autocomplete="new-password" required />
             </div>
           </div>
 
           <button type="submit" class="btn-submit" id="btn-register">
             <span>Create Developer Account</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
@@ -845,13 +913,18 @@
         </form>
       </div>
 
-      <!-- Demo Quick Operator Access -->
-      <div class="demo-bar">
-        <div class="demo-text">
-          <div class="demo-title">Evaluation Access</div>
-          <div class="demo-sub">demo@mlops.dev (Enterprise)</div>
+      <!-- VIP 1-Click Evaluation Fleet Access -->
+      <div class="vip-demo-card">
+        <div class="vip-info">
+          <div class="vip-badge-row">
+            <span class="vip-title">Evaluation Access</span>
+            <span style="font-size:0.68rem; background:rgba(16,185,129,0.15); color:var(--emerald); padding:1px 6px; border-radius:4px; font-weight:700;">ACTIVE</span>
+          </div>
+          <div class="vip-sub">demo@mlops.dev (Enterprise)</div>
         </div>
-        <button class="btn-demo-quick" onclick="oneClickDemoLogin()">1-Click Login →</button>
+        <button class="btn-demo-quick" type="button" onclick="oneClickDemoLogin()">
+          ⚡ 1-Click Login →
+        </button>
       </div>
     </div>
   </main>
@@ -864,7 +937,7 @@
 
   <!-- Footer -->
   <footer>
-    <div>SOC2 Type II • Hardware Keystore • End-to-End Encrypted</div>
+    <div>SOC2 Type II • Hardware Keystore (TPM 2.0) • End-to-End Encrypted</div>
     <div class="footer-links">
       <a href="/index.html">Platform</a>
       <a href="/dashboard.html">Fleet Dashboard</a>
@@ -874,20 +947,22 @@
   </footer>
 
   <script>
-    const API_BASE = window.location.origin.includes('8000') ? '' : (window.location.origin.includes('localhost') ? 'http://localhost:8000' : '');
+    // Relative API endpoint to avoid CORS issues
+    const API_BASE = '';
 
     function showToast(msg, type = 'info') {
       const t = document.getElementById('toast');
       const icon = document.getElementById('toast-icon');
       const text = document.getElementById('toast-msg');
+      if (!t) return;
       
       t.className = `toast ${type} show`;
       text.textContent = msg;
-      icon.textContent = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+      icon.textContent = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
 
       setTimeout(() => {
         t.classList.remove('show');
-      }, 4200);
+      }, 4000);
     }
 
     function switchAuthTab(tab) {
@@ -906,14 +981,15 @@
       }
     }
 
-    // ── Email Verification (OTP) Flow ─────────────────────────
+    // ── Email OTP Verification Flow ──────────────────────────
     let currentEmail = '';
     let latestDebugCode = '';
 
     async function requestVerificationCode() {
-      const email = document.getElementById('otp-email').value.trim();
+      const emailInput = document.getElementById('otp-email');
+      const email = emailInput ? emailInput.value.trim() : '';
       if (!email || !email.includes('@')) {
-        showToast('Please enter a valid work email address.', 'error');
+        showToast('Please enter a valid corporate email address.', 'error');
         return;
       }
 
@@ -927,7 +1003,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
           currentEmail = email;
@@ -942,40 +1018,84 @@
           }
 
           showToast(`6-Digit Verification PIN sent to ${email}`, 'success');
+          setupOtpInputListeners();
           document.getElementById('d1').focus();
         } else {
-          showToast(data.error || 'Failed to dispatch code.', 'error');
+          showToast(data.error || 'Failed to dispatch verification code.', 'error');
         }
       } catch (err) {
         showToast('Network error connecting to control plane API.', 'error');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = `<span>Send 6-Digit Access Code</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+        btn.innerHTML = `<span>Send 6-Digit Access Code</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
       }
     }
 
-    function handleDigitInput(curr, nextId) {
-      if (curr.value.length >= 1) {
-        curr.value = curr.value[0];
-        if (nextId) {
-          document.getElementById(nextId).focus();
-        } else {
-          // All 6 filled! Auto-submit
-          submitVerificationCode();
-        }
-      }
-    }
+    function setupOtpInputListeners() {
+      const boxes = [
+        document.getElementById('d1'),
+        document.getElementById('d2'),
+        document.getElementById('d3'),
+        document.getElementById('d4'),
+        document.getElementById('d5'),
+        document.getElementById('d6')
+      ];
 
-    function handleDigitKey(e, curr, prevId) {
-      if (e.key === 'Backspace' && !curr.value && prevId) {
-        document.getElementById(prevId).focus();
-      }
+      boxes.forEach((box, idx) => {
+        // Prevent duplicate listener attachment
+        if (box._hasListeners) return;
+        box._hasListeners = true;
+
+        box.addEventListener('input', (e) => {
+          const val = box.value.replace(/[^0-9]/g, '');
+          box.value = val ? val[val.length - 1] : '';
+
+          if (box.value && idx < 5) {
+            boxes[idx + 1].focus();
+          }
+
+          // Auto-submit when all 6 are filled
+          const fullCode = boxes.map(b => b.value).join('');
+          if (fullCode.length === 6) {
+            submitVerificationCode();
+          }
+        });
+
+        box.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace') {
+            if (!box.value && idx > 0) {
+              boxes[idx - 1].focus();
+            }
+          } else if (e.key === 'ArrowLeft' && idx > 0) {
+            boxes[idx - 1].focus();
+          } else if (e.key === 'ArrowRight' && idx < 5) {
+            boxes[idx + 1].focus();
+          }
+        });
+
+        box.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+          if (pasted) {
+            for (let i = 0; i < 6; i++) {
+              if (pasted[i]) boxes[i].value = pasted[i];
+            }
+            if (pasted.length >= 6) {
+              boxes[5].focus();
+              submitVerificationCode();
+            } else {
+              boxes[Math.min(pasted.length, 5)].focus();
+            }
+          }
+        });
+      });
     }
 
     function autofillDevCode() {
       if (!latestDebugCode || latestDebugCode.length !== 6) return;
       for (let i = 1; i <= 6; i++) {
-        document.getElementById(`d${i}`).value = latestDebugCode[i - 1];
+        const el = document.getElementById(`d${i}`);
+        if (el) el.value = latestDebugCode[i - 1];
       }
       submitVerificationCode();
     }
@@ -984,15 +1104,18 @@
       document.getElementById('otp-step-2').style.display = 'none';
       document.getElementById('otp-step-1').style.display = 'block';
       for (let i = 1; i <= 6; i++) {
-        document.getElementById(`d${i}`).value = '';
+        const el = document.getElementById(`d${i}`);
+        if (el) el.value = '';
       }
-      document.getElementById('otp-email').focus();
+      const emailInput = document.getElementById('otp-email');
+      if (emailInput) emailInput.focus();
     }
 
     async function submitVerificationCode() {
       let code = '';
       for (let i = 1; i <= 6; i++) {
-        code += document.getElementById(`d${i}`).value;
+        const el = document.getElementById(`d${i}`);
+        code += el ? el.value : '';
       }
 
       if (code.length !== 6) {
@@ -1010,13 +1133,13 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: currentEmail, code })
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
           showToast('Authentication Verified! Launching Fleet Control Plane...', 'success');
           setTimeout(() => {
             window.location.href = '/dashboard.html';
-          }, 800);
+          }, 600);
         } else {
           showToast(data.error || 'Verification code invalid or expired.', 'error');
           btn.disabled = false;
@@ -1043,18 +1166,18 @@
             email: provider === 'google' ? 'engineer@gmail.com' : 'developer@github.com'
           })
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
-          showToast(`Signed in with ${provider === 'google' ? 'Google' : 'GitHub'}! Redirecting...`, 'success');
+          showToast(`Signed in with ${provider === 'google' ? 'Google' : 'GitHub'}! Launching...`, 'success');
           setTimeout(() => {
             window.location.href = '/dashboard.html';
-          }, 800);
+          }, 600);
         } else {
           showToast(data.error || 'Social sign-in failed.', 'error');
         }
       } catch (err) {
-        showToast('OAuth service error. Ensure server is reachable.', 'error');
+        showToast('OAuth service error. Ensure control plane is reachable.', 'error');
       }
     }
 
@@ -1074,13 +1197,13 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
           showToast('Credentials accepted! Redirecting to dashboard...', 'success');
           setTimeout(() => {
             window.location.href = '/dashboard.html';
-          }, 800);
+          }, 600);
         } else {
           showToast(data.error || 'Invalid email or password.', 'error');
           btn.disabled = false;
@@ -1109,17 +1232,16 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
-          showToast('Account created successfully! Logging you in...', 'success');
+          showToast('Account created! Logging you in...', 'success');
           setTimeout(() => {
-            // Log in directly
             document.getElementById('pw-email').value = email;
             document.getElementById('pw-password').value = password;
             switchAuthTab('pw');
             document.getElementById('btn-login-pw').click();
-          }, 900);
+          }, 800);
         } else {
           showToast(data.error || 'Registration failed.', 'error');
           btn.disabled = false;
@@ -1132,7 +1254,7 @@
       }
     }
 
-    // ── 1-Click Demo Evaluation ───────────────────────────────
+    // ── 1-Click Instant Demo Evaluation ────────────────────────
     async function oneClickDemoLogin() {
       showToast('Launching Demo Fleet Session...', 'info');
       try {
@@ -1141,12 +1263,12 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: 'demo', password: 'demo' })
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         if (res.ok && data.success) {
           showToast('Demo Access Granted! Launching Fleet Control...', 'success');
           setTimeout(() => {
             window.location.href = '/dashboard.html';
-          }, 600);
+          }, 500);
         } else {
           showToast(data.error || 'Demo login failed.', 'error');
         }

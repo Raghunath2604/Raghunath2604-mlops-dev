@@ -82,7 +82,8 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 }
 
 html, body {
-  height: 100%;
+  height: 100vh;
+  max-height: 100vh;
   overflow: hidden;
   background: var(--bg-base);
   color: var(--text-main);
@@ -110,118 +111,236 @@ html, body {
 .sk-line-short { width: 45%; }
 .sk-box { width: 100%; height: 28px; margin: 6px 0; }
 
-/* ── AUTH SCREEN ── */
+/* ── AUTH SCREEN (OBSIDIAN PRECISION THEME) ── */
 #auth-screen {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.08) 0%, #06090e 70%);
-  z-index: 500;
+  background: radial-gradient(circle at 50% 15%, rgba(59, 130, 246, 0.12) 0%, #05070e 80%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  overflow-y: auto;
 }
-.auth-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 2.2rem;
+#auth-screen .auth-card {
+  background: rgba(14, 20, 36, 0.94);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 32px 32px 28px;
   width: 100%;
-  max-width: 420px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  max-width: 440px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   position: relative;
+  overflow: hidden;
+}
+#auth-screen .auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3b82f6 40%, #00f0ff 60%, transparent);
 }
 .auth-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1.15rem;
-  font-weight: 800;
-  margin-bottom: 1.8rem;
-  color: var(--text-main);
+  gap: 12px;
+  margin-bottom: 20px;
 }
 .auth-logo-box {
-  width: 32px;
-  height: 32px;
-  background: var(--cobalt);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(0, 240, 255, 0.25));
+  border: 1px solid rgba(59, 130, 246, 0.5);
   border-radius: var(--radius-sm);
   display: grid;
   place-items: center;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.35);
 }
-.auth-logo-box svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2.2; }
+.auth-logo-box svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2.2; }
+.auth-title-wrap { display: flex; flex-direction: column; }
+.auth-title-text { font-size: 1.15rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+.auth-subtitle-text { font-family: var(--font-mono); font-size: 0.72rem; color: var(--cobalt-bright); font-weight: 600; }
+
+/* Social OAuth Grid */
+.auth-social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.btn-social-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--text-main);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.btn-social-auth:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+.btn-social-auth svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 16px;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Tabs */
 .auth-tabs {
   display: flex;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 1.5rem;
+  background: rgba(6, 9, 18, 0.6);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 16px;
+  gap: 3px;
 }
 .auth-tab {
+  flex: 1;
   background: none;
   border: none;
   color: var(--text-muted);
   font-family: var(--font-ui);
-  font-size: 0.88rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 7px;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
   transition: all 0.15s;
+  text-align: center;
 }
+.auth-tab:hover { color: #fff; }
 .auth-tab.active {
-  color: var(--text-main);
-  border-bottom-color: var(--cobalt-bright);
+  background: var(--bg-lift);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 .auth-panel { display: none; }
-.auth-panel.active { display: block; }
-.form-group { margin-bottom: 1rem; }
+.auth-panel.active { display: block; animation: fadeInAuth 0.2s ease-out; }
+@keyframes fadeInAuth { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Form Controls */
+.form-group { margin-bottom: 0.9rem; }
 .form-group label {
   display: block;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: var(--text-muted);
-  margin-bottom: 0.4rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  margin-bottom: 0.35rem;
 }
 .form-control {
   width: 100%;
   background: var(--bg-input);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   padding: 0.65rem 0.85rem;
   color: var(--text-main);
   font-size: 0.88rem;
   font-family: var(--font-ui);
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.form-control:focus { border-color: var(--cobalt-bright); }
+.form-control:focus {
+  border-color: var(--cobalt-bright);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
 .form-control::placeholder { color: var(--text-dim); }
+
+/* Overlay OTP Digit Grid */
+.overlay-otp-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 12px 0 14px;
+}
+.overlay-otp-box {
+  width: 48px;
+  height: 52px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #00f0ff;
+  transition: all 0.15s;
+}
+.overlay-otp-box:focus {
+  outline: none;
+  border-color: #00f0ff;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+  transform: translateY(-1px);
+}
+
 .btn-primary {
   width: 100%;
-  background: var(--cobalt);
-  border: 1px solid var(--cobalt-bright);
-  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
   color: #fff;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
-  font-weight: 600;
-  padding: 0.72rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.68rem;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.15s;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
-.btn-primary:hover { background: var(--cobalt-hover); }
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary:hover {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
 .auth-demo-pill {
-  margin-top: 1rem;
-  background: var(--cobalt-dim);
-  border: 1px solid var(--cobalt-border);
-  border-radius: var(--radius-sm);
-  padding: 0.6rem 0.85rem;
+  margin-top: 14px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(0, 240, 255, 0.05));
+  border: 1px dashed rgba(59, 130, 246, 0.35);
+  border-radius: 10px;
+  padding: 10px 12px;
   font-size: 0.78rem;
   color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 .auth-demo-pill strong { color: var(--text-main); font-family: var(--font-mono); font-size: 0.75rem; }
 .auth-demo-btn {
@@ -1006,24 +1125,90 @@ html, body {
   </div>
 </div>
 
-<!-- AUTH OVERLAY SCREEN -->
+<!-- AUTH OVERLAY SCREEN (OBSIDIAN PRECISION THEME) -->
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-header">
       <div class="auth-logo-box">
-        <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="2" y1="7" x2="22" y2="17"/></svg>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="22" y2="17"/></svg>
       </div>
-      <span>MLOps.dev</span>
-      <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cobalt-bright); font-weight:600;">Control Plane</span>
+      <div class="auth-title-wrap">
+        <span class="auth-title-text">MLOps.dev</span>
+        <span class="auth-subtitle-text">Fleet Control Plane Access</span>
+      </div>
     </div>
 
+    <!-- Social OAuth Buttons -->
+    <div class="auth-social-grid">
+      <button class="btn-social-auth" type="button" onclick="doSocialAuth('google')">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Google</span>
+      </button>
+
+      <button class="btn-social-auth" type="button" onclick="doSocialAuth('github')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        <span>GitHub</span>
+      </button>
+    </div>
+
+    <div class="auth-divider">or authenticate via</div>
+
+    <!-- Segmented Mode Pills -->
     <div class="auth-tabs">
-      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
-      <button class="auth-tab" onclick="switchTab('register')">Request Access</button>
+      <button class="auth-tab active" id="tab-auth-otp" type="button" onclick="switchOverlayTab('otp')">⚡ Email OTP</button>
+      <button class="auth-tab" id="tab-auth-pw" type="button" onclick="switchOverlayTab('pw')">🔑 Password</button>
+      <button class="auth-tab" id="tab-auth-reg" type="button" onclick="switchOverlayTab('reg')">🛡️ Request Access</button>
     </div>
 
-    <!-- Login Tab -->
-    <div class="auth-panel active" id="ap-login">
+    <!-- 1. Email OTP Tab -->
+    <div class="auth-panel active" id="ap-otp">
+      <div id="overlay-otp-step-1">
+        <div class="form-group">
+          <label>Work Email Address</label>
+          <input class="form-control" id="otp-overlay-email" type="email" placeholder="engineer@enterprise.com" autocomplete="email"/>
+        </div>
+        <button class="btn-primary" id="btn-overlay-send-code" type="button" onclick="doOverlaySendCode()">
+          Send 6-Digit Access Code →
+        </button>
+      </div>
+
+      <div id="overlay-otp-step-2" style="display: none;">
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label style="margin-bottom:0;">6-Digit Verification PIN</label>
+            <span id="overlay-otp-target" style="font-family:var(--font-mono); font-size:0.72rem; color:var(--cobalt-bright);"></span>
+          </div>
+          <div class="overlay-otp-grid">
+            <input type="text" maxlength="1" class="overlay-otp-box" id="od1" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="overlay-otp-box" id="od2" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="overlay-otp-box" id="od3" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="overlay-otp-box" id="od4" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="overlay-otp-box" id="od5" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="overlay-otp-box" id="od6" inputmode="numeric"/>
+          </div>
+          <div id="overlay-dev-code-pill" class="auth-demo-pill" style="display:none; margin:0 0 10px; background:rgba(0,240,255,0.08); border-color:rgba(0,240,255,0.3);">
+            <span style="font-size:0.74rem; color:var(--text-main);">Dev Code: <strong id="overlay-dev-code-val" style="color:#00f0ff;"></strong></span>
+            <button class="auth-demo-btn" type="button" onclick="autofillOverlayDevCode()">Auto-Fill</button>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-overlay-verify-code" type="button" onclick="doOverlayVerifyCode()">
+          Verify & Launch Console →
+        </button>
+        <button type="button" onclick="resetOverlayOtpStep()" style="width:100%; margin-top:8px; background:transparent; border:none; color:var(--text-dim); font-size:0.78rem; cursor:pointer; padding:4px;">
+          ← Change Email
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Password Tab -->
+    <div class="auth-panel" id="ap-login">
       <div class="error-msg" id="login-err"></div>
       <div class="form-group">
         <label>Operator Email / ID</label>
@@ -1033,21 +1218,10 @@ html, body {
         <label>Password or Cluster API Key</label>
         <input class="form-control" id="li-pw" type="password" placeholder="••••••••" autocomplete="current-password"/>
       </div>
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAAEO-WRxQ_X-Q68uZ" data-action="login" data-theme="dark" style="margin-bottom:15px;"></div>
-      <button class="btn-primary" id="li-btn" onclick="doLogin()">Authenticate to Control Plane →</button>
-      
-      <div class="auth-demo-pill" style="margin-top:1.2rem; background:rgba(37,99,235,0.12); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:0.8rem; display:flex; flex-direction:column; gap:8px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:0.8rem; color:var(--text-muted);">Evaluation Demo Access:</span>
-          <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--emerald); font-weight:700;">demo / demo</span>
-        </div>
-        <button class="btn-primary" type="button" onclick="quickDemoLaunch()" style="background:linear-gradient(135deg, var(--cobalt), var(--cobalt-bright)); padding:0.55rem; font-size:0.82rem; cursor:pointer;">
-          ⚡ 1-Click Instant Fleet Access →
-        </button>
-      </div>
+      <button class="btn-primary" id="li-btn" type="button" onclick="doLogin()">Authenticate to Control Plane →</button>
     </div>
 
-    <!-- Register Tab -->
+    <!-- 3. Register Tab -->
     <div class="auth-panel" id="ap-register">
       <div class="error-msg" id="reg-err"></div>
       <div class="form-group">
@@ -1062,13 +1236,23 @@ html, body {
         <label>Password *</label>
         <input class="form-control" id="ri-pw" type="password" placeholder="Create a secure password" autocomplete="new-password"/>
       </div>
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAAEO-WRxQ_X-Q68uZ" data-action="signup" data-theme="dark" style="margin-bottom:15px;"></div>
-      <button class="btn-primary" id="ri-btn" onclick="doRegister()">Submit Access Request →</button>
+      <button class="btn-primary" id="ri-btn" type="button" onclick="doRegister()">Submit Access Request →</button>
     </div>
 
-    <div style="text-align:center; margin-top:16px; border-top:1px solid var(--border); padding-top:14px;">
-      <a href="/login.html" style="font-size:0.82rem; font-weight:600; color:var(--cobalt-bright); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-        <span>🚀 Open Full Login Portal (Google, GitHub & Email OTP)</span>
+    <!-- 1-Click Evaluation Fleet Access -->
+    <div class="auth-demo-pill">
+      <div>
+        <div style="font-weight:700; color:var(--text-main); font-size:0.8rem;">⚡ Evaluation Access</div>
+        <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--cobalt-bright);">demo@mlops.dev (Enterprise)</div>
+      </div>
+      <button class="btn-primary" type="button" onclick="quickDemoLaunch()" style="width:auto; padding:0.45rem 0.85rem; font-size:0.78rem;">
+        1-Click Login →
+      </button>
+    </div>
+
+    <div style="text-align:center; margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
+      <a href="/login.html" style="font-size:0.78rem; font-weight:600; color:var(--cobalt-bright); text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+        <span>🚀 Open Standalone Login Portal</span>
         <span>→</span>
       </a>
     </div>
@@ -1719,10 +1903,194 @@ function showToast(msg, type='ok') {
 }
 const toast = showToast;
 
+function switchOverlayTab(tab) {
+  const tabs = ['otp', 'pw', 'reg'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`tab-auth-${t}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+  const pOtp = document.getElementById('ap-otp');
+  const pPw = document.getElementById('ap-login');
+  const pReg = document.getElementById('ap-register');
+  if (pOtp) pOtp.classList.toggle('active', tab === 'otp');
+  if (pPw) pPw.classList.toggle('active', tab === 'pw');
+  if (pReg) pReg.classList.toggle('active', tab === 'reg');
+}
 function switchTab(tab) {
-  document.querySelectorAll('.auth-tab').forEach((b,i) => b.classList.toggle('active', (i===0 && tab==='login') || (i===1 && tab==='register')));
-  document.getElementById('ap-login').classList.toggle('active', tab==='login');
-  document.getElementById('ap-register').classList.toggle('active', tab==='register');
+  if (tab === 'login') switchOverlayTab('pw');
+  else if (tab === 'register') switchOverlayTab('reg');
+  else switchOverlayTab(tab);
+}
+
+// ── Overlay Social OAuth ──
+async function doSocialAuth(provider) {
+  showToast(`Authenticating via ${provider === 'google' ? 'Google' : 'GitHub'}...`, 'info');
+  try {
+    const endpoint = provider === 'google' ? '/auth/oauth/google' : '/auth/oauth/github';
+    const resp = await fetch(`${API}${endpoint}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: provider === 'google' ? 'Google Cloud Operator' : 'GitHub Developer',
+        email: provider === 'google' ? 'engineer@gmail.com' : 'developer@github.com'
+      }),
+      credentials: 'include'
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Social sign-in rejected');
+    const user = {name: data.user.email, email: data.user.email, role: data.user.role || 'operator'};
+    localStorage.setItem('np_user', JSON.stringify(user));
+    bootApp(user);
+    showToast(`Signed in with ${provider === 'google' ? 'Google' : 'GitHub'}!`, 'success');
+  } catch(e) {
+    showToast(e.message || 'OAuth authentication failed', 'error');
+  }
+}
+
+// ── Overlay Email OTP ──
+let currentOverlayOtpEmail = '';
+let overlayDebugCode = '';
+
+async function doOverlaySendCode() {
+  const emailInput = document.getElementById('otp-overlay-email');
+  const email = emailInput ? emailInput.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    showToast('Please enter a valid work email address.', 'error');
+    return;
+  }
+  const btn = document.getElementById('btn-overlay-send-code');
+  if (btn) { btn.disabled = true; btn.textContent = 'Dispatching Code...'; }
+
+  try {
+    const res = await fetch(`${API}/auth/send-code`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success) {
+      currentOverlayOtpEmail = email;
+      const targetSpan = document.getElementById('overlay-otp-target');
+      if (targetSpan) targetSpan.textContent = email;
+      document.getElementById('overlay-otp-step-1').style.display = 'none';
+      document.getElementById('overlay-otp-step-2').style.display = 'block';
+
+      if (data.code) {
+        overlayDebugCode = data.code;
+        const codeVal = document.getElementById('overlay-dev-code-val');
+        if (codeVal) codeVal.textContent = data.code;
+        const pill = document.getElementById('overlay-dev-code-pill');
+        if (pill) pill.style.display = 'flex';
+      }
+      showToast(`Verification code sent to ${email}`, 'success');
+      setupOverlayOtpListeners();
+      const firstBox = document.getElementById('od1');
+      if (firstBox) firstBox.focus();
+    } else {
+      showToast(data.error || 'Failed to dispatch code.', 'error');
+    }
+  } catch(err) {
+    showToast('Network error connecting to auth server.', 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Send 6-Digit Access Code →'; }
+  }
+}
+
+function setupOverlayOtpListeners() {
+  const boxes = ['od1', 'od2', 'od3', 'od4', 'od5', 'od6'].map(id => document.getElementById(id)).filter(Boolean);
+  boxes.forEach((box, idx) => {
+    if (box._hasListeners) return;
+    box._hasListeners = true;
+
+    box.addEventListener('input', () => {
+      const val = box.value.replace(/[^0-9]/g, '');
+      box.value = val ? val[val.length - 1] : '';
+      if (box.value && idx < 5) {
+        boxes[idx + 1].focus();
+      }
+      const full = boxes.map(b => b.value).join('');
+      if (full.length === 6) {
+        doOverlayVerifyCode();
+      }
+    });
+
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !box.value && idx > 0) {
+        boxes[idx - 1].focus();
+      }
+    });
+
+    box.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+      if (pasted) {
+        for (let i = 0; i < 6; i++) {
+          if (pasted[i] && boxes[i]) boxes[i].value = pasted[i];
+        }
+        if (pasted.length >= 6) {
+          boxes[5].focus();
+          doOverlayVerifyCode();
+        } else {
+          boxes[Math.min(pasted.length, 5)].focus();
+        }
+      }
+    });
+  });
+}
+
+function autofillOverlayDevCode() {
+  if (!overlayDebugCode || overlayDebugCode.length !== 6) return;
+  for (let i = 1; i <= 6; i++) {
+    const b = document.getElementById(`od${i}`);
+    if (b) b.value = overlayDebugCode[i - 1];
+  }
+  doOverlayVerifyCode();
+}
+
+function resetOverlayOtpStep() {
+  document.getElementById('overlay-otp-step-2').style.display = 'none';
+  document.getElementById('overlay-otp-step-1').style.display = 'block';
+  for (let i = 1; i <= 6; i++) {
+    const b = document.getElementById(`od${i}`);
+    if (b) b.value = '';
+  }
+  const emailInput = document.getElementById('otp-overlay-email');
+  if (emailInput) emailInput.focus();
+}
+
+async function doOverlayVerifyCode() {
+  let code = '';
+  for (let i = 1; i <= 6; i++) {
+    const b = document.getElementById(`od${i}`);
+    code += b ? b.value : '';
+  }
+  if (code.length !== 6) {
+    showToast('Please enter all 6 digits of the code.', 'error');
+    return;
+  }
+  const btn = document.getElementById('btn-overlay-verify-code');
+  if (btn) { btn.disabled = true; btn.textContent = 'Verifying PIN...'; }
+  try {
+    const res = await fetch(`${API}/auth/verify-code`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email: currentOverlayOtpEmail, code }),
+      credentials: 'include'
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success) {
+      const user = { name: data.user.email, email: data.user.email, role: data.user.role || 'operator' };
+      localStorage.setItem('np_user', JSON.stringify(user));
+      bootApp(user);
+      showToast('PIN Verified! Welcome to Control Plane.', 'success');
+    } else {
+      showToast(data.error || 'Verification code invalid or expired.', 'error');
+      if (btn) { btn.disabled = false; btn.textContent = 'Verify & Launch Console →'; }
+    }
+  } catch(err) {
+    showToast('Network error verifying code.', 'error');
+    if (btn) { btn.disabled = false; btn.textContent = 'Verify & Launch Console →'; }
+  }
 }
 
 async function quickDemoLaunch() {

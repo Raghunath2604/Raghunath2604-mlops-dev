@@ -94,7 +94,8 @@ def send_email(to_email, subject, body):
 app = Flask(__name__)
 
 # Enforce HTTPS and secure headers (CSP, X-Frame-Options, X-Content-Type-Options)
-Talisman(app, force_https=False) # Keep false for local dev. In prod, set True or handle at proxy level.
+# Set content_security_policy=None to allow inline styles, scripts, Google Fonts, and SVG data URIs in HTML frontend
+Talisman(app, force_https=False, content_security_policy=None)
 
 # Restrict CORS to specific frontend domains
 CORS(app, resources={r"/*": {"origins": ["https://www.mlopsde.me", "https://mlopsde.me", "http://localhost:8000", "http://localhost:8080", "http://127.0.0.1:8080"]}}, supports_credentials=True)
@@ -2514,17 +2515,23 @@ FRONTEND_DIR = Path(__file__).resolve().parent.parent
 
 @app.route("/", methods=["GET"])
 def serve_index():
-    return send_from_directory(FRONTEND_DIR, "index.html")
+    resp = make_response(send_from_directory(FRONTEND_DIR, "index.html"))
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
 
 @app.route("/login", methods=["GET"])
 @app.route("/login.html", methods=["GET"])
 def serve_login():
-    return send_from_directory(FRONTEND_DIR, "login.html")
+    resp = make_response(send_from_directory(FRONTEND_DIR, "login.html"))
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
 
 @app.route("/dashboard", methods=["GET"])
 @app.route("/dashboard.html", methods=["GET"])
 def serve_dashboard():
-    return send_from_directory(FRONTEND_DIR, "dashboard.html")
+    resp = make_response(send_from_directory(FRONTEND_DIR, "dashboard.html"))
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
 
 @app.route("/<path:filename>", methods=["GET"])
 def serve_static_frontend(filename):
@@ -2532,9 +2539,13 @@ def serve_static_frontend(filename):
         return jsonify({"error": "Resource not found"}), 404
     file_path = FRONTEND_DIR / filename
     if file_path.is_file():
-        return send_from_directory(FRONTEND_DIR, filename)
+        resp = make_response(send_from_directory(FRONTEND_DIR, filename))
+        resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        return resp
     if (FRONTEND_DIR / f"{filename}.html").is_file():
-        return send_from_directory(FRONTEND_DIR, f"{filename}.html")
+        resp = make_response(send_from_directory(FRONTEND_DIR, f"{filename}.html"))
+        resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        return resp
     return jsonify({"error": "Resource not found"}), 404
 
 @app.route("/_vercel/insights/script.js", methods=["GET"])
