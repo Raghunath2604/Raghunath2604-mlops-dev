@@ -924,6 +924,8 @@
         height: 48px;
         font-size: 1.25rem;
       }
+    }
+
     /* ── Interactive OAuth Modals ── */
     .oauth-modal-overlay {
       position: fixed;
@@ -1918,6 +1920,9 @@
         }
       } catch (e) {
         showToast('Connection error.', 'error');
+      }
+    }
+
     // Check URL parameters for social triggers
     window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
