@@ -593,14 +593,15 @@ def health():
 
 # ── Status ────────────────────────────────────────────────────────
 @app.route("/v1/status")
+@app.route("/v1/summary")
 @require_auth
 def status():
     db = get_db()
-    total    = db.execute("SELECT COUNT(*) FROM devices").fetchone()[0]
-    online   = db.execute("SELECT COUNT(*) FROM devices WHERE status='online'").fetchone()[0]
-    offline  = db.execute("SELECT COUNT(*) FROM devices WHERE status='offline'").fetchone()[0]
-    drifting = db.execute("SELECT COUNT(*) FROM devices WHERE status IN ('drift','warning')").fetchone()[0]
-    active_d = db.execute("SELECT COUNT(*) FROM deployments WHERE status='running'").fetchone()[0]
+    total    = (db_query(db, "SELECT COUNT(*) FROM devices", fetchone=True) or [0])[0]
+    online   = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status='online'", fetchone=True) or [0])[0]
+    offline  = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status='offline'", fetchone=True) or [0])[0]
+    drifting = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status IN ('drift','warning')", fetchone=True) or [0])[0]
+    active_d = (db_query(db, "SELECT COUNT(*) FROM deployments WHERE status='running'", fetchone=True) or [0])[0]
     return jsonify({
         "total_devices": total, "online": online,
         "offline": offline, "drifting": drifting,

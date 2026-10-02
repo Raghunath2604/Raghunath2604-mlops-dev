@@ -1036,9 +1036,14 @@ html, body {
       <div class="cf-turnstile" data-sitekey="0x4AAAAAAEO-WRxQ_X-Q68uZ" data-action="login" data-theme="dark" style="margin-bottom:15px;"></div>
       <button class="btn-primary" id="li-btn" onclick="doLogin()">Authenticate to Control Plane →</button>
       
-      <div class="auth-demo-pill">
-        <span>Demo: <strong>demo@nodepilot.dev</strong></span>
-        <button class="auth-demo-btn" onclick="fillDemoAuth()">Auto Fill</button>
+      <div class="auth-demo-pill" style="margin-top:1.2rem; background:rgba(37,99,235,0.12); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:0.8rem; display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Evaluation Demo Access:</span>
+          <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--emerald); font-weight:700;">demo / demo</span>
+        </div>
+        <button class="btn-primary" type="button" onclick="quickDemoLaunch()" style="background:linear-gradient(135deg, var(--cobalt), var(--cobalt-bright)); padding:0.55rem; font-size:0.82rem; cursor:pointer;">
+          ⚡ 1-Click Instant Fleet Access →
+        </button>
       </div>
     </div>
 
@@ -1653,9 +1658,7 @@ html, body {
 <script>
 'use strict';
 
-const API = window.location.origin.includes('localhost') 
-  ? 'http://localhost:8000/v1' 
-  : `${window.location.origin}/v1`;
+const API = '/v1';
 
 let ST = { devices:[], deployments:[], events:[], summary:{}, devFilter:'all', evFilter:'all' };
 let sseSource = null;
@@ -1703,11 +1706,18 @@ async function apiFetch(path, opts={}) {
 
 function showToast(msg, type='ok') {
   const t = document.getElementById('toast');
-  document.getElementById('toast-icon').textContent = type==='ok' ? '✓' : '✕';
-  document.getElementById('toast-msg').textContent = msg;
-  t.className = `toast-notice ${type} show`;
+  if (!t) return;
+  const icon = document.getElementById('toast-icon');
+  if (icon) {
+    icon.textContent = (type === 'ok' || type === 'success') ? '✓' : (type === 'warn' || type === 'warning') ? '⚠' : (type === 'info') ? 'ℹ' : '✕';
+  }
+  const txt = document.getElementById('toast-msg');
+  if (txt) txt.textContent = msg;
+  const normType = (type === 'success' ? 'ok' : (type === 'warning' || type === 'warn') ? 'warn' : (type === 'error' || type === 'danger') ? 'err' : type);
+  t.className = `toast-notice ${normType} show`;
   setTimeout(() => t.classList.remove('show'), 3500);
 }
+const toast = showToast;
 
 function switchTab(tab) {
   document.querySelectorAll('.auth-tab').forEach((b,i) => b.classList.toggle('active', (i===0 && tab==='login') || (i===1 && tab==='register')));
@@ -1715,10 +1725,31 @@ function switchTab(tab) {
   document.getElementById('ap-register').classList.toggle('active', tab==='register');
 }
 
+async function quickDemoLaunch() {
+  const errBox = document.getElementById('login-err');
+  if (errBox) errBox.classList.remove('show');
+  const btn = document.getElementById('li-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Launching Demo Fleet...'; }
+  try {
+    const resp = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email: 'demo', password: 'demo'}),
+      credentials: 'include'
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Demo login rejected');
+    const user = {name: 'Fleet Demo Operator', email: 'demo@mlops.dev', role: 'admin'};
+    localStorage.setItem('np_user', JSON.stringify(user));
+    bootApp(user);
+  } catch(e) {
+    if (errBox) { errBox.textContent = e.message || 'Demo access error'; errBox.classList.add('show'); }
+    if (btn) { btn.disabled = false; btn.textContent = 'Authenticate to Control Plane →'; }
+  }
+}
+
 function fillDemoAuth() {
-  document.getElementById('li-email').value = 'demo@nodepilot.dev';
-  document.getElementById('li-pw').value = 'demo1234';
-  doLogin();
+  quickDemoLaunch();
 }
 
 async function doLogin() {
@@ -2544,6 +2575,7 @@ function nav(page, btn) {
 }
 
 function initChart() {
+  if (typeof Chart === 'undefined') return;
   const ctx = document.getElementById('driftChart');
   if (!ctx) return;
   if (driftChart) driftChart.destroy();
@@ -2581,6 +2613,7 @@ function initChart() {
 }
 
 function initMap() {
+  if (typeof L === 'undefined') return;
   if (fleetMap) return;
   const mapDiv = document.getElementById('fleet-map');
   if (!mapDiv) return;
@@ -2594,7 +2627,7 @@ function initMap() {
 }
 
 function updateMapMarkers() {
-  if (!fleetMap) return;
+  if (typeof L === 'undefined' || !fleetMap) return;
   markers.forEach(m => fleetMap.removeLayer(m));
   markers = [];
 
