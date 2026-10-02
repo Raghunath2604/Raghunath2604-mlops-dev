@@ -849,6 +849,146 @@ def auth_oauth_github():
 
     return _create_auth_response(user)
 
+# ── Real OAuth 2.0 Configuration & Redirect Handlers ──────────────
+@app.route("/v1/auth/oauth/config", methods=["GET"])
+@app.route("/auth/oauth/config", methods=["GET"])
+def auth_oauth_config():
+    return jsonify({
+        "google_client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
+        "github_client_id": os.environ.get("GITHUB_CLIENT_ID", ""),
+        "google_enabled": bool(os.environ.get("GOOGLE_CLIENT_ID")),
+        "github_enabled": bool(os.environ.get("GITHUB_CLIENT_ID")),
+    })
+
+@app.route("/v1/auth/oauth/github/authorize", methods=["GET"])
+@app.route("/auth/oauth/github/authorize", methods=["GET"])
+def auth_oauth_github_authorize():
+    client_id = os.environ.get("GITHUB_CLIENT_ID")
+    if not client_id:
+        return redirect("/login.html?oauth_fallback=github")
+    import urllib.parse
+    redirect_uri = urllib.parse.quote(request.host_url.rstrip("/") + "/v1/auth/oauth/github/callback")
+    return redirect(f"https://github.com/login/oauth/authorize?client_id={client_id}&scope=read:user,user:email&redirect_uri={redirect_uri}")
+
+@app.route("/v1/auth/oauth/github/callback", methods=["GET"])
+@app.route("/auth/oauth/github/callback", methods=["GET"])
+def auth_oauth_github_callback():
+    code = request.args.get("code")
+    client_id = os.environ.get("GITHUB_CLIENT_ID")
+    client_secret = os.environ.get("GITHUB_CLIENT_SECRET")
+    if not code or not client_id or not client_secret:
+        return redirect("/login.html?error=github_missing_credentials")
+    try:
+        import urllib.request
+        import urllib.parse
+        token_data = urllib.parse.urlencode({
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "code": code
+        }).encode("utf-8")
+        req = urllib.request.Request("https://github.com/login/oauth/access_token", data=token_data, headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            token_res = json.loads(resp.read().decode())
+        access_token = token_res.get("access_token")
+        if not access_token:
+            return redirect("/login.html?error=github_token_exchange_failed")
+
+        user_req = urllib.request.Request("https://api.github.com/user", headers={"Authorization": f"Bearer {access_token}", "User-Agent": "MLOps-Dev"})
+        with urllib.request.urlopen(user_req, timeout=10) as u_resp:
+            gh_user = json.loads(u_resp.read().decode())
+
+        username = gh_user.get("login") or "gh_user"
+        email = gh_user.get("email") or f"{username}@users.noreply.github.com"
+        gh_id = str(gh_user.get("id"))
+        avatar = gh_user.get("avatar_url") or ""
+
+        db = get_db()
+        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
+        if not user:
+            user_id = f"user_gh_{gh_id[:10]}"
+            pw_hash = hashlib.sha256((email + "oauth_github_secret").encode()).hexdigest()
+            db_query(db, """
+                INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
+                VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
+            """, (user_id, pw_hash, email), commit=True)
+            user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+
+        user_id = user["id"] if isinstance(user, dict) else user[0]
+        response = redirect(f"/dashboard.html?auth=success&provider=github&user={urllib.parse.quote(username)}&avatar={urllib.parse.quote(avatar)}")
+        is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
+        response.set_cookie('np_token', user_id, httponly=True, secure=is_secure, samesite='Lax' if not is_secure else 'Strict', max_age=86400 * 7)
+        return response
+    except Exception as e:
+        import urllib.parse
+        return redirect(f"/login.html?error={urllib.parse.quote(str(e))}")
+
+@app.route("/v1/auth/oauth/google/authorize", methods=["GET"])
+@app.route("/auth/oauth/google/authorize", methods=["GET"])
+def auth_oauth_google_authorize():
+    client_id = os.environ.get("GOOGLE_CLIENT_ID")
+    if not client_id:
+        return redirect("/login.html?oauth_fallback=google")
+    import urllib.parse
+    redirect_uri = urllib.parse.quote(request.host_url.rstrip("/") + "/v1/auth/oauth/google/callback")
+    google_url = f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&scope=openid%20email%20profile&redirect_uri={redirect_uri}"
+    return redirect(google_url)
+
+@app.route("/v1/auth/oauth/google/callback", methods=["GET"])
+@app.route("/auth/oauth/google/callback", methods=["GET"])
+def auth_oauth_google_callback():
+    code = request.args.get("code")
+    client_id = os.environ.get("GOOGLE_CLIENT_ID")
+    client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+    if not code or not client_id or not client_secret:
+        return redirect("/login.html?error=google_missing_credentials")
+    try:
+        import urllib.request
+        import urllib.parse
+        redirect_uri = request.host_url.rstrip("/") + "/v1/auth/oauth/google/callback"
+        token_data = urllib.parse.urlencode({
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "code": code,
+            "grant_type": "authorization_code",
+            "redirect_uri": redirect_uri
+        }).encode("utf-8")
+        req = urllib.request.Request("https://oauth2.googleapis.com/token", data=token_data, headers={"Content-Type": "application/x-www-form-urlencoded"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            token_res = json.loads(resp.read().decode())
+        access_token = token_res.get("access_token")
+        if not access_token:
+            return redirect("/login.html?error=google_token_exchange_failed")
+
+        user_req = urllib.request.Request("https://www.googleapis.com/oauth2/v2/userinfo", headers={"Authorization": f"Bearer {access_token}"})
+        with urllib.request.urlopen(user_req, timeout=10) as u_resp:
+            g_user = json.loads(u_resp.read().decode())
+
+        email = g_user.get("email", "").lower()
+        name = g_user.get("name") or "Google Developer"
+        g_id = str(g_user.get("id"))
+        avatar = g_user.get("picture") or ""
+
+        db = get_db()
+        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
+        if not user:
+            user_id = f"user_g_{g_id[:10]}"
+            pw_hash = hashlib.sha256((email + "oauth_google_secret").encode()).hexdigest()
+            db_query(db, """
+                INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
+                VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
+            """, (user_id, pw_hash, email), commit=True)
+            user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+
+        user_id = user["id"] if isinstance(user, dict) else user[0]
+        response = redirect(f"/dashboard.html?auth=success&provider=google&user={urllib.parse.quote(name)}&email={urllib.parse.quote(email)}&avatar={urllib.parse.quote(avatar)}")
+        is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
+        response.set_cookie('np_token', user_id, httponly=True, secure=is_secure, samesite='Lax' if not is_secure else 'Strict', max_age=86400 * 7)
+        return response
+    except Exception as e:
+        import urllib.parse
+        return redirect(f"/login.html?error={urllib.parse.quote(str(e))}")
+
+
 # ── Devices ───────────────────────────────────────────────────────
 @app.route("/v1/devices/register", methods=["POST"])
 @require_auth

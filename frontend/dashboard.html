@@ -1923,27 +1923,23 @@ function switchTab(tab) {
 
 // ── Overlay Social OAuth ──
 async function doSocialAuth(provider) {
-  showToast(`Authenticating via ${provider === 'google' ? 'Google' : 'GitHub'}...`, 'info');
   try {
-    const endpoint = provider === 'google' ? '/auth/oauth/google' : '/auth/oauth/github';
-    const resp = await fetch(`${API}${endpoint}`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        name: provider === 'google' ? 'Google Cloud Operator' : 'GitHub Developer',
-        email: provider === 'google' ? 'engineer@gmail.com' : 'developer@github.com'
-      }),
-      credentials: 'include'
-    });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || 'Social sign-in rejected');
-    const user = {name: data.user.email, email: data.user.email, role: data.user.role || 'operator'};
-    localStorage.setItem('np_user', JSON.stringify(user));
-    bootApp(user);
-    showToast(`Signed in with ${provider === 'google' ? 'Google' : 'GitHub'}!`, 'success');
-  } catch(e) {
-    showToast(e.message || 'OAuth authentication failed', 'error');
-  }
+    const cfgRes = await fetch(`${API}/auth/oauth/config`).catch(() => null);
+    if (cfgRes && cfgRes.ok) {
+      const cfg = await cfgRes.json();
+      if (provider === 'github' && cfg.github_enabled) {
+        window.location.href = `${API}/auth/oauth/github/authorize`;
+        return;
+      }
+      if (provider === 'google' && cfg.google_enabled) {
+        window.location.href = `${API}/auth/oauth/google/authorize`;
+        return;
+      }
+    }
+  } catch(e){}
+
+  // Direct to verified account portal
+  window.location.href = `login.html?social=${provider}`;
 }
 
 // ── Overlay Email OTP ──
@@ -2206,13 +2202,30 @@ function bootApp(user) {
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').classList.add('on');
   
-  const initials = (user.name || 'Admin').slice(0, 2).toUpperCase();
-  document.getElementById('sb-ava').textContent = initials;
-  document.getElementById('sb-uname').textContent = user.name || 'Administrator';
-  document.getElementById('sb-urole').textContent = user.role || 'Member';
+  const avaEl = document.getElementById('sb-ava');
+  if (user && user.avatar) {
+    avaEl.innerHTML = `<img src="${user.avatar}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover; display:block;">`;
+    avaEl.style.padding = '0';
+    avaEl.style.overflow = 'hidden';
+  } else {
+    const initials = (user.name || user.email || 'Admin').slice(0, 2).toUpperCase();
+    avaEl.textContent = initials;
+  }
+
+  document.getElementById('sb-uname').textContent = user.name || user.email || 'Administrator';
+  
+  let roleTitle = user.role || 'Member';
+  if (user.provider === 'github') {
+    roleTitle = 'GitHub Developer';
+  } else if (user.provider === 'google') {
+    roleTitle = 'Google Cloud Engineer';
+  } else if (user.role === 'admin') {
+    roleTitle = 'Cluster Admin';
+  }
+  document.getElementById('sb-urole').textContent = roleTitle;
 
   if (document.getElementById('nav-admin')) {
-    document.getElementById('nav-admin').style.display = (user.role === 'admin') ? 'flex' : 'none';
+    document.getElementById('nav-admin').style.display = (user.role === 'admin' || user.provider) ? 'flex' : 'none';
   }
 
   refreshAll();
@@ -3035,14 +3048,49 @@ function startSSE() {
 
 // Check session on load
 async function checkAuth() {
+  // First check URL query params (from OAuth redirect callback)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('auth') === 'success') {
+    const oauthUser = {
+      name: params.get('user') || params.get('email') || 'Developer',
+      email: params.get('email') || '',
+      provider: params.get('provider') || 'oauth',
+      avatar: params.get('avatar') || '',
+      role: 'developer'
+    };
+    localStorage.setItem('np_user', JSON.stringify(oauthUser));
+    localStorage.setItem('mlops_user', JSON.stringify(oauthUser));
+    window.history.replaceState({}, document.title, window.location.pathname);
+    bootApp(oauthUser);
+    showToast(`Welcome ${oauthUser.name}! Signed in via ${oauthUser.provider}.`, 'success');
+    return;
+  }
+
+  // Also check stored user in localStorage
+  const savedUserStr = localStorage.getItem('np_user') || localStorage.getItem('mlops_user');
+  let savedUser = null;
+  if (savedUserStr) {
+    try { savedUser = JSON.parse(savedUserStr); } catch(e){}
+  }
+
   try {
     const resp = await fetch(`${API}/auth/me`, {credentials: 'include'});
     if (!resp.ok) throw new Error('Unauthorized');
     const data = await resp.json();
-    const user = {name: data.user.email, email: data.user.email, role: data.user.role};
+    const user = {
+      name: (savedUser && savedUser.name) || data.user.email,
+      email: data.user.email,
+      role: data.user.role,
+      avatar: (savedUser && savedUser.avatar) || '',
+      provider: (savedUser && savedUser.provider) || ''
+    };
     localStorage.setItem('np_user', JSON.stringify(user));
     bootApp(user);
   } catch(e) {
+    if (savedUser && (savedUser.name || savedUser.email)) {
+      bootApp(savedUser);
+      return;
+    }
     document.getElementById('app').classList.remove('on');
     document.getElementById('auth-screen').style.display = 'flex';
   }

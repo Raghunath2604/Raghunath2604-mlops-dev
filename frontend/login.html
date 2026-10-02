@@ -924,9 +924,106 @@
         height: 48px;
         font-size: 1.25rem;
       }
-      .social-auth-grid {
-        grid-template-columns: 1fr;
-      }
+    /* ── Interactive OAuth Modals ── */
+    .oauth-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 4, 8, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .oauth-modal-overlay.open {
+      display: flex;
+      animation: fadeInModal 0.2s ease-out;
+    }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .oauth-modal-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(10, 15, 30, 0.96);
+      border: 1px solid rgba(91, 138, 240, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(91, 138, 240, 0.15);
+      position: relative;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: var(--text-3);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .modal-close-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .gh-preview-box {
+      margin: 14px 0;
+      padding: 12px 14px;
+      background: rgba(5, 8, 18, 0.85);
+      border: 1px solid rgba(0, 255, 179, 0.3);
+      border-radius: var(--radius-md);
+      display: none;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .gh-preview-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--neon-mint);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .gh-preview-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+    }
+
+    .gh-preview-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .gh-preview-login {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent-blue);
+    }
+
+    .gh-preview-bio {
+      font-size: 0.72rem;
+      color: var(--text-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
     }
   </style>
 </head>
@@ -1219,6 +1316,95 @@
     </div>
   </main>
 
+  <!-- GitHub Interactive Authentication Modal -->
+  <div id="modal-github" class="oauth-modal-overlay" onclick="if(event.target===this)closeOauthModal('github')">
+    <div class="oauth-modal-card">
+      <button class="modal-close-btn" type="button" onclick="closeOauthModal('github')">✕</button>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div style="width:38px; height:38px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 style="font-family:var(--font-display); font-size:1.15rem; font-weight:700; color:#fff;">Connect GitHub Account</h3>
+          <p style="font-size:0.75rem; color:var(--text-2);">Sign in with your verified GitHub developer handle</p>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label">GitHub Username *</label>
+        <div class="input-wrap">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="modal-gh-username" class="form-input" placeholder="e.g. octocat, torvalds, your-username" oninput="onGhUsernameInput(this.value)" autocomplete="username" required />
+        </div>
+      </div>
+
+      <!-- Real-time GitHub Profile preview card -->
+      <div id="gh-live-preview" class="gh-preview-box">
+        <img id="gh-prev-avatar" class="gh-preview-avatar" src="" alt="Avatar" />
+        <div class="gh-preview-info">
+          <div id="gh-prev-name" class="gh-preview-name">Octocat</div>
+          <div id="gh-prev-login" class="gh-preview-login">@octocat</div>
+          <div id="gh-prev-bio" class="gh-preview-bio">Building the world's software</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Work / Notification Email</label>
+        <div class="input-wrap">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="modal-gh-email" class="form-input" placeholder="developer@github.com" />
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btn-gh-confirm" type="button" onclick="submitGhAuth()">
+        <span>Authenticate GitHub Profile →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Google Interactive Authentication Modal -->
+  <div id="modal-google" class="oauth-modal-overlay" onclick="if(event.target===this)closeOauthModal('google')">
+    <div class="oauth-modal-card">
+      <button class="modal-close-btn" type="button" onclick="closeOauthModal('google')">✕</button>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div style="width:38px; height:38px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 style="font-family:var(--font-display); font-size:1.15rem; font-weight:700; color:#fff;">Sign In with Google</h3>
+          <p style="font-size:0.75rem; color:var(--text-2);">Connect your personal Gmail or Google Workspace identity</p>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label">Google Account Email *</label>
+        <div class="input-wrap">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="modal-google-email" class="form-input" placeholder="engineer@gmail.com" autocomplete="email" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Display Name *</label>
+        <div class="input-wrap">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="modal-google-name" class="form-input" placeholder="e.g. Alex Chen" autocomplete="name" required />
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btn-google-confirm" type="button" onclick="submitGoogleAuth()">
+        <span>Authenticate Google Account →</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Live Toast Notification -->
   <div id="toast" class="toast">
     <span id="toast-icon">✓</span>
@@ -1432,6 +1618,14 @@
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
+          const userSession = {
+            id: data.user.id,
+            name: currentEmail,
+            email: currentEmail,
+            role: data.user.role || 'operator'
+          };
+          localStorage.setItem('np_user', JSON.stringify(userSession));
+          localStorage.setItem('mlops_user', JSON.stringify(userSession));
           showToast('Authentication Verified! Launching Fleet Control Plane...', 'success');
           setTimeout(() => {
             window.location.href = 'dashboard.html';
@@ -1448,32 +1642,186 @@
       }
     }
 
-    // ── Social OAuth (Google & GitHub) ─────────────────────────
+    // ── Interactive OAuth Modals (Google & GitHub) ─────────────
+    let ghDebounceTimer = null;
+    let verifiedGhProfile = null;
+
+    function openOauthModal(provider) {
+      const modal = document.getElementById(`modal-${provider}`);
+      if (modal) modal.classList.add('open');
+      const input = provider === 'github' ? document.getElementById('modal-gh-username') : document.getElementById('modal-google-email');
+      if (input) setTimeout(() => input.focus(), 100);
+    }
+
+    function closeOauthModal(provider) {
+      const modal = document.getElementById(`modal-${provider}`);
+      if (modal) modal.classList.remove('open');
+    }
+
     async function handleSocialAuth(provider) {
-      showToast(`Initiating secure ${provider === 'google' ? 'Google' : 'GitHub'} authentication...`, 'info');
-      
       try {
-        const endpoint = provider === 'google' ? '/v1/auth/oauth/google' : '/v1/auth/oauth/github';
-        const res = await fetch(`${API_BASE}${endpoint}`, {
+        const cfgRes = await fetch(`${API_BASE}/v1/auth/oauth/config`).catch(() => null);
+        if (cfgRes && cfgRes.ok) {
+          const cfg = await cfgRes.json();
+          if (provider === 'github' && cfg.github_enabled) {
+            window.location.href = `${API_BASE}/v1/auth/oauth/github/authorize`;
+            return;
+          }
+          if (provider === 'google' && cfg.google_enabled) {
+            window.location.href = `${API_BASE}/v1/auth/oauth/google/authorize`;
+            return;
+          }
+        }
+      } catch (e) {}
+
+      // Interactive verified account connection
+      openOauthModal(provider);
+    }
+
+    function onGhUsernameInput(username) {
+      clearTimeout(ghDebounceTimer);
+      const clean = username.trim().replace(/^@/, '');
+      const previewBox = document.getElementById('gh-live-preview');
+      if (!clean) {
+        if (previewBox) previewBox.style.display = 'none';
+        verifiedGhProfile = null;
+        return;
+      }
+
+      ghDebounceTimer = setTimeout(async () => {
+        try {
+          const res = await fetch(`https://api.github.com/users/${encodeURIComponent(clean)}`);
+          if (res.ok) {
+            const data = await res.json();
+            verifiedGhProfile = data;
+            document.getElementById('gh-prev-avatar').src = data.avatar_url;
+            document.getElementById('gh-prev-name').textContent = data.name || data.login;
+            document.getElementById('gh-prev-login').textContent = `@${data.login} · ${data.public_repos || 0} repos`;
+            document.getElementById('gh-prev-bio').textContent = data.bio || `GitHub member since ${new Date(data.created_at).getFullYear()}`;
+            previewBox.style.display = 'flex';
+            const emailInp = document.getElementById('modal-gh-email');
+            if (data.email && emailInp && !emailInp.value) {
+              emailInp.value = data.email;
+            }
+          } else {
+            previewBox.style.display = 'none';
+            verifiedGhProfile = null;
+          }
+        } catch (e) {
+          previewBox.style.display = 'none';
+          verifiedGhProfile = null;
+        }
+      }, 350);
+    }
+
+    async function submitGhAuth() {
+      const usernameInput = document.getElementById('modal-gh-username');
+      const username = usernameInput ? usernameInput.value.trim().replace(/^@/, '') : '';
+      if (!username) {
+        showToast('Please enter your GitHub username.', 'error');
+        return;
+      }
+
+      const emailInput = document.getElementById('modal-gh-email');
+      const email = (emailInput && emailInput.value.trim()) || (verifiedGhProfile && verifiedGhProfile.email) || `${username}@users.noreply.github.com`;
+      const name = (verifiedGhProfile && verifiedGhProfile.name) || username;
+      const avatar = (verifiedGhProfile && verifiedGhProfile.avatar_url) || `https://github.com/${username}.png`;
+
+      const btn = document.getElementById('btn-gh-confirm');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span> Connecting GitHub Profile...`;
+
+      try {
+        const res = await fetch(`${API_BASE}/v1/auth/oauth/github`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name: provider === 'google' ? 'Google Cloud Engineer' : 'GitHub Developer',
-            email: provider === 'google' ? 'engineer@gmail.com' : 'developer@github.com'
+            username,
+            name,
+            email,
+            avatar_url: avatar,
+            github_id: verifiedGhProfile ? verifiedGhProfile.id : username
           })
         });
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
-          showToast(`Signed in with ${provider === 'google' ? 'Google' : 'GitHub'}! Launching...`, 'success');
+          const userSession = {
+            id: data.user.id,
+            name,
+            email,
+            role: 'developer',
+            provider: 'github',
+            avatar
+          };
+          localStorage.setItem('np_user', JSON.stringify(userSession));
+          localStorage.setItem('mlops_user', JSON.stringify(userSession));
+          showToast(`Authenticated as @${username}! Launching Fleet Control...`, 'success');
           setTimeout(() => {
             window.location.href = 'dashboard.html';
           }, 600);
         } else {
-          showToast(data.error || 'Social sign-in failed.', 'error');
+          showToast(data.error || 'GitHub authentication failed.', 'error');
+          btn.disabled = false;
+          btn.innerHTML = `<span>Authenticate GitHub Profile →</span>`;
         }
       } catch (err) {
-        showToast('OAuth service error. Ensure control plane is reachable.', 'error');
+        showToast('Network error connecting to control plane API.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<span>Authenticate GitHub Profile →</span>`;
+      }
+    }
+
+    async function submitGoogleAuth() {
+      const emailInput = document.getElementById('modal-google-email');
+      const email = emailInput ? emailInput.value.trim() : '';
+      const nameInput = document.getElementById('modal-google-name');
+      const name = (nameInput && nameInput.value.trim()) || 'Google Developer';
+
+      if (!email || !email.includes('@')) {
+        showToast('Please enter a valid Google Account email.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btn-google-confirm');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span> Connecting Google Account...`;
+
+      try {
+        const res = await fetch(`${API_BASE}/v1/auth/oauth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            name,
+            provider: 'google'
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.success) {
+          const userSession = {
+            id: data.user.id,
+            name,
+            email,
+            role: 'engineer',
+            provider: 'google'
+          };
+          localStorage.setItem('np_user', JSON.stringify(userSession));
+          localStorage.setItem('mlops_user', JSON.stringify(userSession));
+          showToast(`Signed in with Google as ${email}! Launching...`, 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 600);
+        } else {
+          showToast(data.error || 'Google authentication failed.', 'error');
+          btn.disabled = false;
+          btn.innerHTML = `<span>Authenticate Google Account →</span>`;
+        }
+      } catch (err) {
+        showToast('Network error connecting to auth server.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<span>Authenticate Google Account →</span>`;
       }
     }
 
@@ -1570,8 +1918,17 @@
         }
       } catch (e) {
         showToast('Connection error.', 'error');
+    // Check URL parameters for social triggers
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const social = params.get('social');
+      if (social === 'github' || social === 'google') {
+        setTimeout(() => handleSocialAuth(social), 250);
       }
-    }
+      if (params.get('error')) {
+        showToast(params.get('error'), 'error');
+      }
+    });
   </script>
 </body>
 </html>

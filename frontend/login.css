@@ -927,7 +927,107 @@ footer {
     height: 48px;
     font-size: 1.25rem;
   }
-  .social-auth-grid {
-    grid-template-columns: 1fr;
-  }
 }
+
+/* ── Interactive OAuth Modals ── */
+.oauth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 4, 8, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.oauth-modal-overlay.open {
+  display: flex;
+  animation: fadeInModal 0.2s ease-out;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.oauth-modal-card {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(10, 15, 30, 0.96);
+  border: 1px solid rgba(91, 138, 240, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(91, 138, 240, 0.15);
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.gh-preview-box {
+  margin: 14px 0;
+  padding: 12px 14px;
+  background: rgba(5, 8, 18, 0.85);
+  border: 1px solid rgba(0, 255, 179, 0.3);
+  border-radius: var(--radius-md);
+  display: none;
+  align-items: center;
+  gap: 14px;
+}
+
+.gh-preview-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--neon-mint);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.gh-preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.gh-preview-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.gh-preview-login {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--accent-blue);
+}
+
+.gh-preview-bio {
+  font-size: 0.72rem;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
