@@ -218,6 +218,8 @@ def init_db():
                 status TEXT,
                 drift_score REAL DEFAULT 0,
                 latency_ms REAL DEFAULT 0,
+                uptime_s INTEGER DEFAULT 0,
+                metadata TEXT DEFAULT '{}',
                 last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY(owner_id) REFERENCES api_keys(id)
             );
@@ -273,6 +275,7 @@ def init_db():
                 kl_score REAL,
                 severity TEXT,
                 model_name TEXT,
+                resolved_at TIMESTAMP,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS waitlist (
@@ -282,8 +285,24 @@ def init_db():
                 position INTEGER,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-
         ''')
+        pg_migrations = [
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS device_limit INTEGER DEFAULT 10",
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user'",
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS approval_status TEXT DEFAULT 'pending'",
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT",
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS subscription_tier TEXT DEFAULT 'enterprise'",
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS subscription_status TEXT DEFAULT 'active'",
+            "ALTER TABLE drift_alerts ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMP",
+            "ALTER TABLE devices ADD COLUMN IF NOT EXISTS uptime_s INTEGER DEFAULT 0",
+            "ALTER TABLE devices ADD COLUMN IF NOT EXISTS metadata TEXT DEFAULT '{}'",
+        ]
+        for m in pg_migrations:
+            try:
+                cursor.execute(m)
+            except Exception:
+                pass
+
         # Insert demo user if not exists
         cursor.execute("SELECT id FROM api_keys WHERE id = 'admin'")
         if not cursor.fetchone():
@@ -320,6 +339,8 @@ def init_db():
                 status TEXT,
                 drift_score REAL DEFAULT 0,
                 latency_ms REAL DEFAULT 0,
+                uptime_s INTEGER DEFAULT 0,
+                metadata TEXT DEFAULT '{}',
                 last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY(owner_id) REFERENCES api_keys(id)
             );
@@ -373,6 +394,7 @@ def init_db():
                 kl_score REAL,
                 severity TEXT,
                 model_name TEXT,
+                resolved_at TIMESTAMP,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS waitlist (
@@ -384,6 +406,19 @@ def init_db():
             );
 
         ''')
+        # Safely migrate columns onto existing tables
+        safe_migrations = [
+            "ALTER TABLE audit_log ADD COLUMN owner_id TEXT DEFAULT 'admin'",
+            "ALTER TABLE drift_alerts ADD COLUMN resolved_at TIMESTAMP",
+            "ALTER TABLE devices ADD COLUMN metadata TEXT DEFAULT '{}'",
+            "ALTER TABLE devices ADD COLUMN uptime_s INTEGER DEFAULT 0",
+        ]
+        for migration in safe_migrations:
+            try:
+                db.execute(migration)
+            except Exception:
+                pass
+
         # Ensure missing columns exist in api_keys for existing DBs
         pragma_cols = [row[1] for row in db.execute("PRAGMA table_info(api_keys)").fetchall()]
         if 'device_limit' not in pragma_cols:
