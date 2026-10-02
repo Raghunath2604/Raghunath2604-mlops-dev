@@ -483,14 +483,20 @@ def db_query(db, query, args=(), fetchone=False, fetchall=False, commit=False):
         db.commit()
         
     res = None
+    class IndexableDict(dict):
+        def __getitem__(self, key):
+            if isinstance(key, int):
+                return list(self.values())[key]
+            return super().__getitem__(key)
+
     if fetchone:
         res = cursor.fetchone()
         if res:
-            res = dict(res)
+            res = IndexableDict(dict(res) if hasattr(res, 'keys') else res)
     elif fetchall:
         res = cursor.fetchall()
         if res:
-            res = [dict(r) for r in res]
+            res = [IndexableDict(dict(r) if hasattr(r, 'keys') else r) for r in res]
             
     cursor.close()
     return res
