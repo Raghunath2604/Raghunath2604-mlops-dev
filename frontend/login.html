@@ -6,43 +6,45 @@
   <title>Sign In — MLOps.dev Fleet Control Plane</title>
   <meta name="description" content="Production-grade authentication for MLOps.dev fleet control plane. Secure access via Google, GitHub, or 6-digit email OTP verification." />
   
-  <!-- Encoded SVG Favicon (prevents premature head closure) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23080B14'/%3E%3Cpath d='M8 16L14 10L20 16L26 10' stroke='%234F7FEF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 22L14 16L20 22L26 16' stroke='%2300F0FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <!-- Encoded SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235B8AF0'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2300FFB3'/%3E%3C/svg%3E" />
 
   <!-- Fonts with reliable local fallbacks -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+  
   <!-- External Stylesheet File -->
   <link rel="stylesheet" href="login.css" />
 
   <style>
     :root {
-      --void: #05070e;
-      --surface: #0b101d;
-      --surface-card: rgba(14, 20, 36, 0.88);
-      --surface-elevated: #162038;
-      --surface-input: #0a0e1a;
-      --border: rgba(255, 255, 255, 0.09);
-      --border-focus: #3b82f6;
-      --border-hover: rgba(255, 255, 255, 0.18);
+      --void: #020408;
+      --surface: #070b14;
+      --surface-card: rgba(8, 12, 24, 0.84);
+      --surface-elevated: #0f172a;
+      --surface-input: #050811;
+      --border: rgba(91, 138, 240, 0.18);
+      --border-focus: #5B8AF0;
+      --border-hover: rgba(91, 138, 240, 0.4);
       
-      --accent: #3b82f6;
-      --accent-hover: #60a5fa;
-      --accent-glow: rgba(59, 130, 246, 0.35);
-      --cyan: #00f0ff;
-      --cyan-glow: rgba(0, 240, 255, 0.28);
-      --emerald: #10b981;
-      --emerald-glow: rgba(16, 185, 129, 0.25);
-      --ruby: #f43f5e;
-      --amber: #f59e0b;
+      --accent-blue: #5B8AF0;
+      --accent-blue-glow: rgba(91, 138, 240, 0.45);
+      --neon-mint: #00FFB3;
+      --neon-mint-glow: rgba(0, 255, 179, 0.35);
+      --cyan: #00F0FF;
+      --emerald: #10B981;
+      --ruby: #F43F5E;
+      --amber: #F59E0B;
 
-      --text-1: #f8fafc;
-      --text-2: #94a3b8;
-      --text-3: #64748b;
+      --text-1: #FFFFFF;
+      --text-2: #B0C0E0;
+      --text-3: #6B7C9E;
+      --text-muted: #4A5874;
 
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', 'JetBrains Mono', Consolas, monospace;
       
       --radius-sm: 8px;
       --radius-md: 12px;
@@ -78,48 +80,74 @@
 
     .mesh-orb-1 {
       position: absolute;
-      top: -120px;
-      left: 20%;
-      width: 580px;
-      height: 580px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(59, 130, 246, 0) 70%);
-      filter: blur(80px);
-      animation: floatOrb 18s ease-in-out infinite alternate;
+      top: 10%;
+      left: -5%;
+      width: 750px;
+      height: 750px;
+      background: radial-gradient(circle, rgba(91, 138, 240, 0.28) 0%, rgba(59, 130, 246, 0.12) 40%, rgba(2, 4, 8, 0) 70%);
+      filter: blur(100px);
+      animation: pulseOrbBlue 14s ease-in-out infinite alternate;
     }
 
     .mesh-orb-2 {
       position: absolute;
-      bottom: -150px;
-      right: 18%;
-      width: 620px;
-      height: 620px;
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.14) 0%, rgba(0, 240, 255, 0) 70%);
+      bottom: 5%;
+      right: -5%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(0, 255, 179, 0.22) 0%, rgba(16, 185, 129, 0.09) 45%, rgba(2, 4, 8, 0) 72%);
+      filter: blur(110px);
+      animation: pulseOrbMint 18s ease-in-out infinite alternate-reverse;
+    }
+
+    .mesh-orb-3 {
+      position: absolute;
+      top: 45%;
+      left: 35%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(91, 138, 240, 0.1) 0%, rgba(2, 4, 8, 0) 70%);
       filter: blur(90px);
-      animation: floatOrb 22s ease-in-out infinite alternate-reverse;
+      pointer-events: none;
     }
 
     .grid-overlay {
       position: absolute;
       inset: 0;
       background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-      opacity: 0.7;
+        linear-gradient(rgba(91, 138, 240, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91, 138, 240, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 50%, transparent 95%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 50%, transparent 95%);
+      opacity: 0.85;
     }
 
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(35px, 50px) scale(1.12); }
+    .scanlines-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.12) 2px, rgba(0, 0, 0, 0.12) 4px);
+      opacity: 0.6;
     }
 
-    /* Top Navigation */
+    @keyframes pulseOrbBlue {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+      50% { transform: translate(40px, 30px) scale(1.15); opacity: 1; }
+      100% { transform: translate(-20px, 60px) scale(0.95); opacity: 0.85; }
+    }
+
+    @keyframes pulseOrbMint {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.75; }
+      50% { transform: translate(-50px, -40px) scale(1.12); opacity: 0.95; }
+      100% { transform: translate(20px, -20px) scale(0.9); opacity: 0.7; }
+    }
+
+    /* Header */
     header {
       position: relative;
-      z-index: 10;
-      padding: 22px 36px;
+      z-index: 20;
+      padding: 24px 44px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -128,156 +156,320 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       text-decoration: none;
       color: var(--text-1);
     }
 
-    .brand-logo {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(0, 240, 255, 0.25));
-      border: 1px solid rgba(59, 130, 246, 0.45);
-      border-radius: 10px;
+    .brand-icon {
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 16px var(--accent-glow);
-    }
-
-    .brand-logo svg {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
+      filter: drop-shadow(0 0 12px var(--accent-blue-glow));
     }
 
     .brand-name {
-      font-size: 1.18rem;
+      font-family: var(--font-display);
+      font-size: 1.28rem;
       font-weight: 800;
       letter-spacing: -0.02em;
+      color: #FFFFFF;
     }
 
     .brand-name span {
-      background: linear-gradient(135deg, #3b82f6 0%, #00f0ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--accent-blue);
     }
 
-    .nav-status {
-      display: flex;
+    .live-pill {
+      display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--emerald);
-      background: rgba(16, 185, 129, 0.08);
-      border: 1px solid rgba(16, 185, 129, 0.25);
       padding: 6px 14px;
-      border-radius: 999px;
-      letter-spacing: 0.04em;
+      border-radius: 9999px;
+      background: rgba(8, 16, 28, 0.7);
+      border: 1px solid rgba(0, 255, 179, 0.35);
+      box-shadow: 0 0 16px rgba(0, 255, 179, 0.15), inset 0 0 8px rgba(0, 255, 179, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-decoration: none;
     }
 
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      background: var(--emerald);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--emerald);
-      animation: pulseDot 2s infinite;
-    }
-
-    @keyframes pulseDot {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.35); opacity: 0.45; }
-    }
-
-    /* Main Container */
-    main {
-      flex: 1;
+    .live-dot-wrap {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 30px 20px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--neon-mint);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-mint);
+    }
+
+    .live-ping {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 1.5px solid var(--neon-mint);
+      opacity: 0.8;
+      animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes ping {
+      75%, 100% {
+        transform: scale(2.2);
+        opacity: 0;
+      }
+    }
+
+    .live-pill-text {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--neon-mint);
+      text-transform: uppercase;
+    }
+
+    /* Main Container & Split Layout */
+    main {
+      flex: 1;
       position: relative;
       z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 44px 40px;
+    }
+
+    .login-split-container {
+      width: 100%;
+      max-width: 1320px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 56px;
+    }
+
+    /* Left Poster Hero */
+    .poster-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-right: 20px;
+    }
+
+    .hero-emblem-wrap {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .hero-hex-mark {
+      width: 76px;
+      height: 76px;
+      filter: drop-shadow(0 0 20px rgba(91, 138, 240, 0.5)) drop-shadow(0 0 35px rgba(0, 255, 179, 0.3));
+      animation: subtleFloat 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes subtleFloat {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-4px) rotate(1deg); }
+      100% { transform: translateY(2px) rotate(-1deg); }
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 5.5vw, 5.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+      margin-bottom: 16px;
+    }
+
+    .hero-headline .text-white {
+      color: #FFFFFF;
+    }
+
+    .hero-headline .text-blue {
+      color: var(--accent-blue);
+      text-shadow: 0 0 30px rgba(91, 138, 240, 0.4);
+    }
+
+    .hero-strapline {
+      font-family: var(--font-sans);
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.45;
+      margin-bottom: 38px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-strapline span {
+      color: var(--text-1);
+      font-weight: 600;
+    }
+
+    .poster-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 40px;
+    }
+
+    .poster-stat-card {
+      background: rgba(10, 16, 32, 0.6);
+      border: 1px solid rgba(91, 138, 240, 0.16);
+      border-radius: var(--radius-md);
+      padding: 14px 12px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+
+    .poster-stat-card:hover {
+      border-color: rgba(0, 255, 179, 0.4);
+      background: rgba(12, 22, 44, 0.8);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 255, 179, 0.15);
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .stat-value.blue {
+      color: var(--accent-blue);
+    }
+
+    .stat-value.mint {
+      color: var(--neon-mint);
+      text-shadow: 0 0 16px rgba(0, 255, 179, 0.4);
+    }
+
+    .stat-value.white span {
+      color: var(--accent-blue);
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-signature {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-left: 2px solid rgba(91, 138, 240, 0.3);
+      padding-left: 14px;
+    }
+
+    .hero-domain {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      letter-spacing: 0.06em;
+    }
+
+    .hero-founder-meta {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-founder-meta a {
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .hero-founder-meta a:hover {
+      color: var(--neon-mint);
+    }
+
+    /* Right Auth Panel & Card */
+    .auth-panel {
+      display: flex;
+      justify-content: center;
+      width: 100%;
     }
 
     .auth-card {
       width: 100%;
       max-width: 460px;
       background: var(--surface-card);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 36px 36px 32px;
+      padding: 34px 32px;
       box-shadow: 
-        0 24px 70px rgba(0, 0, 0, 0.7),
-        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-        0 1px 0 rgba(255, 255, 255, 0.15) inset;
+        0 24px 60px -12px rgba(0, 0, 0, 0.85),
+        0 0 32px -4px rgba(91, 138, 240, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
       position: relative;
-      overflow: hidden;
-    }
-
-    .auth-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 10%;
-      right: 10%;
-      height: 1.5px;
-      background: linear-gradient(90deg, transparent, #3b82f6 40%, #00f0ff 60%, transparent);
     }
 
     .auth-header {
-      text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
+      text-align: left;
     }
 
     .auth-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
+      background: rgba(91, 138, 240, 0.12);
+      border: 1px solid rgba(91, 138, 240, 0.3);
+      color: var(--accent-blue);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
       font-weight: 700;
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--cyan);
-      background: rgba(0, 240, 255, 0.08);
-      border: 1px solid rgba(0, 240, 255, 0.25);
-      padding: 4px 12px;
-      border-radius: 999px;
       margin-bottom: 12px;
     }
 
-    .auth-badge svg {
-      width: 12px;
-      height: 12px;
-      flex-shrink: 0;
-    }
-
     .auth-title {
+      font-family: var(--font-display);
       font-size: 1.65rem;
       font-weight: 800;
+      color: var(--text-1);
       letter-spacing: -0.03em;
       margin-bottom: 6px;
-      color: #fff;
     }
 
     .auth-subtitle {
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       color: var(--text-2);
       line-height: 1.45;
     }
 
-    /* Social Auth Grid */
     .social-auth-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .btn-social {
@@ -285,90 +477,80 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.035);
+      padding: 10px 14px;
+      background: rgba(14, 22, 40, 0.75);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 12px 14px;
       color: var(--text-1);
       font-family: var(--font-sans);
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-social:hover {
-      background: rgba(255, 255, 255, 0.075);
-      border-color: var(--border-hover);
+      background: rgba(22, 34, 60, 0.9);
+      border-color: var(--accent-blue);
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-    }
-
-    .btn-social:active {
-      transform: translateY(0);
-    }
-
-    .btn-social svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
     .divider {
       display: flex;
       align-items: center;
-      gap: 14px;
+      text-align: center;
       margin: 18px 0;
-      color: var(--text-3);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      color: var(--text-muted);
       font-family: var(--font-mono);
-      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
 
-    .divider::before,
-    .divider::after {
+    .divider::before, .divider::after {
       content: '';
       flex: 1;
-      height: 1px;
-      background: var(--border);
+      border-bottom: 1px solid rgba(91, 138, 240, 0.15);
     }
 
-    /* Auth Tabs */
+    .divider::before { margin-right: 12px; }
+    .divider::after { margin-left: 12px; }
+
     .auth-tabs {
       display: flex;
-      background: rgba(6, 9, 18, 0.6);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
+      background: rgba(5, 8, 17, 0.85);
       padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
       margin-bottom: 20px;
-      gap: 4px;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 8px 10px;
+      padding: 8px 6px;
       background: transparent;
       border: none;
-      border-radius: 8px;
-      color: var(--text-2);
+      border-radius: var(--radius-sm);
+      color: var(--text-3);
       font-family: var(--font-sans);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.18s ease;
+      white-space: nowrap;
       text-align: center;
     }
 
     .tab-btn:hover {
-      color: #fff;
+      color: var(--text-1);
     }
 
     .tab-btn.active {
       background: var(--surface-elevated);
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(91, 138, 240, 0.3);
     }
 
     .tab-pane {
@@ -377,25 +559,25 @@
 
     .tab-pane.active {
       display: block;
-      animation: fadeIn 0.22s ease-out;
+      animation: fadeInPane 0.22s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+    @keyframes fadeInPane {
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Form Fields */
     .form-group {
       margin-bottom: 16px;
     }
 
     .form-label {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-2);
-      margin-bottom: 7px;
+      margin-bottom: 6px;
+      font-family: var(--font-sans);
     }
 
     .input-wrap {
@@ -407,47 +589,61 @@
     .input-wrap svg {
       position: absolute;
       left: 14px;
-      width: 17px;
-      height: 17px;
       color: var(--text-3);
       pointer-events: none;
-      flex-shrink: 0;
     }
 
     .form-input {
       width: 100%;
+      padding: 11px 14px 11px 42px;
       background: var(--surface-input);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 12px 14px 12px 42px;
-      color: #fff;
+      color: var(--text-1);
       font-family: var(--font-sans);
-      font-size: 0.9rem;
-      transition: all 0.18s ease;
+      font-size: 0.88rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .form-input:focus {
       outline: none;
-      border-color: var(--accent);
-      background: #0d1222;
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(91, 138, 240, 0.2);
+      background: rgba(10, 16, 32, 0.95);
     }
 
     .form-input::placeholder {
-      color: var(--text-3);
+      color: var(--text-muted);
     }
 
-    /* 6-Digit OTP Box Grid */
-    .otp-grid {
+    .btn-toggle-pw {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-3);
+      cursor: pointer;
+      padding: 4px;
       display: flex;
-      justify-content: space-between;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s ease;
+    }
+
+    .btn-toggle-pw:hover {
+      color: var(--accent-blue);
+    }
+
+    .otp-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
       gap: 8px;
-      margin: 16px 0;
+      margin-bottom: 12px;
     }
 
     .otp-box {
-      width: 52px;
-      height: 58px;
+      width: 100%;
+      height: 54px;
       text-align: center;
       font-family: var(--font-mono);
       font-size: 1.45rem;
@@ -455,26 +651,25 @@
       background: var(--surface-input);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      color: var(--cyan);
+      color: var(--neon-mint);
       transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .otp-box:focus {
       outline: none;
-      border-color: var(--cyan);
-      box-shadow: 0 0 16px var(--cyan-glow);
-      background: #0d1428;
+      border-color: var(--neon-mint);
+      box-shadow: 0 0 16px var(--neon-mint-glow);
+      background: #081422;
       transform: translateY(-2px);
     }
 
-    /* Submit & Action Buttons */
     .btn-submit {
       width: 100%;
       padding: 12px 18px;
-      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: var(--radius-md);
-      color: #fff;
+      color: #FFFFFF;
       font-family: var(--font-sans);
       font-size: 0.9rem;
       font-weight: 700;
@@ -484,13 +679,13 @@
       justify-content: center;
       gap: 8px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 16px var(--accent-glow);
+      box-shadow: 0 4px 18px rgba(59, 130, 246, 0.38);
     }
 
     .btn-submit:hover {
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      background: linear-gradient(135deg, #5B8AF0 0%, #2563EB 100%);
       transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(59, 130, 246, 0.55);
+      box-shadow: 0 8px 26px rgba(91, 138, 240, 0.55);
     }
 
     .btn-submit:active {
@@ -504,16 +699,10 @@
       box-shadow: none;
     }
 
-    .btn-submit svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-
     .btn-secondary {
       width: 100%;
       padding: 10px 16px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       color: var(--text-2);
@@ -531,15 +720,15 @@
 
     .btn-secondary:hover {
       background: rgba(255, 255, 255, 0.08);
-      color: #fff;
+      color: #FFFFFF;
+      border-color: rgba(91, 138, 240, 0.4);
     }
 
-    /* VIP Demo Card */
     .vip-demo-card {
-      margin-top: 20px;
-      padding: 14px 16px;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.09), rgba(0, 240, 255, 0.06));
-      border: 1px dashed rgba(59, 130, 246, 0.4);
+      margin-top: 18px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, rgba(91, 138, 240, 0.08), rgba(0, 255, 179, 0.06));
+      border: 1px dashed rgba(91, 138, 240, 0.35);
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
@@ -567,16 +756,16 @@
 
     .vip-sub {
       font-size: 0.72rem;
-      color: var(--cyan);
+      color: var(--neon-mint);
       font-family: var(--font-mono);
       font-weight: 600;
     }
 
     .btn-demo-quick {
-      padding: 8px 14px;
+      padding: 7px 12px;
       background: var(--surface-elevated);
-      border: 1px solid rgba(59, 130, 246, 0.45);
-      color: #fff;
+      border: 1px solid rgba(91, 138, 240, 0.45);
+      color: #FFFFFF;
       font-family: var(--font-mono);
       font-size: 0.76rem;
       font-weight: 700;
@@ -590,22 +779,21 @@
     }
 
     .btn-demo-quick:hover {
-      background: #2563eb;
-      color: #fff;
-      box-shadow: 0 0 14px var(--accent-glow);
+      background: var(--accent-blue);
+      color: #FFFFFF;
+      box-shadow: 0 0 16px var(--accent-blue-glow);
       transform: translateY(-1px);
     }
 
-    /* Dev Auto-Fill Helper */
     .dev-code-banner {
       margin-top: 10px;
       padding: 8px 12px;
-      background: rgba(0, 240, 255, 0.08);
-      border: 1px solid rgba(0, 240, 255, 0.3);
+      background: rgba(0, 255, 179, 0.08);
+      border: 1px solid rgba(0, 255, 179, 0.3);
       border-radius: var(--radius-sm);
       font-family: var(--font-mono);
-      font-size: 0.76rem;
-      color: var(--cyan);
+      font-size: 0.75rem;
+      color: var(--neon-mint);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -617,7 +805,7 @@
       height: 15px;
       border: 2px solid rgba(255, 255, 255, 0.25);
       border-radius: 50%;
-      border-top-color: #fff;
+      border-top-color: #FFFFFF;
       animation: spin 0.7s linear infinite;
     }
 
@@ -625,7 +813,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Live Toast Feedback */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -653,27 +840,28 @@
       pointer-events: auto;
     }
 
-    .toast.success { border-color: var(--emerald); color: var(--emerald); }
-    .toast.error { border-color: var(--ruby); color: #fb7185; }
-    .toast.info { border-color: var(--cyan); color: var(--cyan); }
+    .toast.success { border-color: var(--neon-mint); color: var(--neon-mint); }
+    .toast.error { border-color: var(--ruby); color: #FB7185; }
+    .toast.info { border-color: var(--accent-blue); color: var(--accent-blue); }
 
-    /* Footer */
     footer {
       position: relative;
-      z-index: 10;
-      padding: 18px 36px;
+      z-index: 20;
+      padding: 18px 44px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.76rem;
       color: var(--text-3);
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      background: rgba(5, 7, 14, 0.8);
+      border-top: 1px solid rgba(91, 138, 240, 0.12);
+      background: rgba(2, 4, 8, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .footer-links {
       display: flex;
-      gap: 16px;
+      gap: 18px;
     }
 
     .footer-links a {
@@ -683,256 +871,351 @@
     }
 
     .footer-links a:hover {
-      color: var(--text-2);
+      color: var(--neon-mint);
     }
 
-    @media (max-width: 520px) {
-      .auth-card {
-        padding: 26px 18px;
-      }
-      .social-auth-grid {
+    @media (max-width: 1024px) {
+      .login-split-container {
         grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 10px 0;
       }
-      .otp-box {
-        width: 44px;
-        height: 50px;
-        font-size: 1.25rem;
+      .poster-hero {
+        align-items: center;
+        text-align: center;
+        padding-right: 0;
       }
+      .hero-strapline {
+        text-align: center;
+        margin-bottom: 26px;
+      }
+      .poster-stats-grid {
+        max-width: 540px;
+        margin-bottom: 24px;
+      }
+      .hero-signature {
+        align-items: center;
+        border-left: none;
+        padding-left: 0;
+      }
+      .auth-panel {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 640px) {
       header, footer {
         padding: 16px 20px;
         flex-direction: column;
         gap: 12px;
         text-align: center;
       }
+      main {
+        padding: 10px 16px 30px;
+      }
+      .poster-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .auth-card {
+        padding: 24px 18px;
+      }
+      .otp-box {
+        height: 48px;
+        font-size: 1.25rem;
+      }
+      .social-auth-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Ambient Spatial Glow -->
+  <!-- Ambient Spatial Glow & Precision Backdrop -->
   <div class="bg-mesh">
     <div class="mesh-orb-1"></div>
     <div class="mesh-orb-2"></div>
+    <div class="mesh-orb-3"></div>
     <div class="grid-overlay"></div>
+    <div class="scanlines-overlay"></div>
   </div>
 
   <!-- Header -->
   <header>
     <a href="index.html" class="brand">
-      <div class="brand-logo">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#logo-grad)"/>
-          <defs>
-            <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#3b82f6"/>
-              <stop offset="1" stop-color="#00f0ff"/>
-            </linearGradient>
-          </defs>
+      <div class="brand-icon">
+        <svg viewBox="0 0 32 32" width="32" height="32" fill="none">
+          <polygon points="16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5" stroke="#5B8AF0" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="3" fill="#00FFB3"/>
         </svg>
       </div>
       <div class="brand-name">MLOps<span>.dev</span></div>
     </a>
 
-    <div class="nav-status">
-      <div class="pulse-dot"></div>
-      <span>CONTROL PLANE READY</span>
-    </div>
+    <!-- Live indicator from Poster -->
+    <a href="dashboard.html" class="live-pill" title="Live Fleet Status">
+      <div class="live-dot-wrap">
+        <span class="live-ping"></span>
+        <span class="live-dot"></span>
+      </div>
+      <span class="live-pill-text">LIVE</span>
+    </a>
   </header>
 
-  <!-- Main Auth Container -->
+  <!-- Main Split-Screen Container -->
   <main>
-    <div class="auth-card">
-      <div class="auth-header">
-        <div class="auth-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    <div class="login-split-container">
+      
+      <!-- Left Showcase Panel (Directly matching poster.html) -->
+      <section class="poster-hero">
+        <!-- Animated Hex Logo Mark from poster.html -->
+        <div class="hero-emblem-wrap">
+          <svg class="hero-hex-mark" viewBox="0 0 72 72" fill="none">
+            <polygon points="36,4 8,20 8,52 36,68 64,52 64,20" stroke="#5B8AF0" stroke-width="1.5" stroke-linejoin="round" opacity=".4"/>
+            <polygon points="36,12 16,24 16,48 36,60 56,48 56,24" stroke="#5B8AF0" stroke-width="1" stroke-linejoin="round" opacity=".25"/>
+            <line x1="36" y1="4" x2="36" y2="68" stroke="#5B8AF0" stroke-width=".8" opacity=".2"/>
+            <line x1="8" y1="20" x2="64" y2="52" stroke="#5B8AF0" stroke-width=".8" opacity=".2"/>
+            <line x1="64" y1="20" x2="8" y2="52" stroke="#5B8AF0" stroke-width=".8" opacity=".2"/>
+            <circle cx="36" cy="36" r="6" fill="#1e293b" opacity=".9"/>
+            <circle cx="36" cy="36" r="10" stroke="#00FFB3" stroke-width="1.2" opacity=".6" fill="none"/>
+            <circle cx="36" cy="36" r="3" fill="#00FFB3"/>
           </svg>
-          Enterprise Security
-        </div>
-        <h1 class="auth-title">Welcome Back</h1>
-        <p class="auth-subtitle">Sign in to orchestrate edge AI models, telemetry & digital twins</p>
-      </div>
-
-      <!-- Social Authentication Buttons -->
-      <div class="social-auth-grid">
-        <button class="btn-social" id="btn-google" type="button" onclick="handleSocialAuth('google')">
-          <svg width="18" height="18" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          Google
-        </button>
-
-        <button class="btn-social" id="btn-github" type="button" onclick="handleSocialAuth('github')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-          </svg>
-          GitHub
-        </button>
-      </div>
-
-      <div class="divider">or continue with</div>
-
-      <!-- Segmented Auth Mode Switcher -->
-      <div class="auth-tabs">
-        <button class="tab-btn active" id="tab-btn-code" type="button" onclick="switchAuthTab('code')">Email Code (OTP)</button>
-        <button class="tab-btn" id="tab-btn-pw" type="button" onclick="switchAuthTab('pw')">Password</button>
-        <button class="tab-btn" id="tab-btn-register" type="button" onclick="switchAuthTab('register')">New Account</button>
-      </div>
-
-      <!-- 1. Email OTP Tab -->
-      <div class="tab-pane active" id="pane-code">
-        <!-- Step 1: Email Input -->
-        <div id="otp-step-1">
-          <div class="form-group">
-            <label class="form-label">Corporate Email Address</label>
-            <div class="input-wrap">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-              <input type="email" id="otp-email" class="form-input" placeholder="engineer@enterprise.com" autocomplete="email" required />
-            </div>
-          </div>
-
-          <button class="btn-submit" id="btn-send-code" type="button" onclick="requestVerificationCode()">
-            <span>Send 6-Digit Access Code</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
         </div>
 
-        <!-- Step 2: 6-Digit Verification PIN Entry -->
-        <div id="otp-step-2" style="display: none;">
-          <div class="form-group">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
-              <span class="form-label" style="margin-bottom: 0;">Verification PIN</span>
-              <span id="otp-email-target" style="color: var(--cyan); font-family: var(--font-mono); font-size: 0.74rem;"></span>
-            </div>
-            
-            <div class="otp-grid" id="otp-inputs">
-              <input type="text" maxlength="1" class="otp-box" id="d1" inputmode="numeric" autocomplete="one-time-code" />
-              <input type="text" maxlength="1" class="otp-box" id="d2" inputmode="numeric" />
-              <input type="text" maxlength="1" class="otp-box" id="d3" inputmode="numeric" />
-              <input type="text" maxlength="1" class="otp-box" id="d4" inputmode="numeric" />
-              <input type="text" maxlength="1" class="otp-box" id="d5" inputmode="numeric" />
-              <input type="text" maxlength="1" class="otp-box" id="d6" inputmode="numeric" />
-            </div>
+        <!-- Poster Headline & Strapline -->
+        <h1 class="hero-headline">
+          <span class="text-white">MLOps</span><span class="text-blue">.dev</span>
+        </h1>
+        <p class="hero-strapline">
+          Edge ML deployment. <span>Offline-first.</span> <span>Drift-aware.</span>
+        </p>
 
-            <!-- Dev Code Helper Pill -->
-            <div id="dev-code-pill" class="dev-code-banner" style="display: none;">
-              <span>Dev Code: <strong id="dev-code-val" style="color:#fff;"></strong></span>
-              <button class="btn-demo-quick" style="padding: 3px 10px;" type="button" onclick="autofillDevCode()">Auto-Fill & Verify</button>
-            </div>
+        <!-- Key Metrics Row from Poster Reference -->
+        <div class="poster-stats-grid">
+          <div class="poster-stat-card">
+            <div class="stat-value blue">&lt;8MB</div>
+            <div class="stat-label">agent binary</div>
           </div>
-
-          <button class="btn-submit" id="btn-verify-code" type="button" onclick="submitVerificationCode()">
-            <span>Verify & Launch Fleet Console</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-          </button>
-
-          <button class="btn-secondary" type="button" onclick="resetOtpStep()">
-            ← Change Email Address
-          </button>
+          <div class="poster-stat-card">
+            <div class="stat-value mint">99.7%</div>
+            <div class="stat-label">sync uptime</div>
+          </div>
+          <div class="poster-stat-card">
+            <div class="stat-value white">&lt;90<span>s</span></div>
+            <div class="stat-label">deploy latency</div>
+          </div>
+          <div class="poster-stat-card">
+            <div class="stat-value mint">6h+</div>
+            <div class="stat-label">offline tested</div>
+          </div>
         </div>
-      </div>
 
-      <!-- 2. Password Login Tab -->
-      <div class="tab-pane" id="pane-pw">
-        <form onsubmit="handlePasswordLogin(event)">
-          <div class="form-group">
-            <label class="form-label">Work Email Address</label>
-            <div class="input-wrap">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-              <input type="email" id="pw-email" class="form-input" placeholder="admin@mlops.dev" autocomplete="email" required />
-            </div>
+        <!-- Founder Signature & Domain from Poster Reference -->
+        <div class="hero-signature">
+          <div class="hero-domain">www.mlops.dev</div>
+          <div class="hero-founder-meta">
+            Raghunathareddy GR · CEO &amp; Founder · <a href="mailto:hello@mlops.dev">hello@mlops.dev</a>
           </div>
+        </div>
+      </section>
 
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <div class="input-wrap">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Right Interactive Authentication Panel -->
+      <section class="auth-panel">
+        <div class="auth-card">
+          <div class="auth-header">
+            <div class="auth-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
-              <input type="password" id="pw-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required />
-              <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('pw-password', this)" title="Show/Hide Password">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Enterprise Security
+            </div>
+            <h2 class="auth-title">Welcome Back</h2>
+            <p class="auth-subtitle">Fleet Control Plane Access • Real-Time Telemetry &amp; Over-the-Air Rollouts</p>
+          </div>
+
+          <!-- Social Authentication Buttons -->
+          <div class="social-auth-grid">
+            <button class="btn-social" id="btn-google" type="button" onclick="handleSocialAuth('google')">
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              Google
+            </button>
+
+            <button class="btn-social" id="btn-github" type="button" onclick="handleSocialAuth('github')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              GitHub
+            </button>
+          </div>
+
+          <div class="divider">or continue with</div>
+
+          <!-- Segmented Auth Mode Switcher -->
+          <div class="auth-tabs">
+            <button class="tab-btn active" id="tab-btn-code" type="button" onclick="switchAuthTab('code')">Email Code (OTP)</button>
+            <button class="tab-btn" id="tab-btn-pw" type="button" onclick="switchAuthTab('pw')">Password</button>
+            <button class="tab-btn" id="tab-btn-register" type="button" onclick="switchAuthTab('register')">New Account</button>
+          </div>
+
+          <!-- 1. Email OTP Tab -->
+          <div class="tab-pane active" id="pane-code">
+            <!-- Step 1: Email Input -->
+            <div id="otp-step-1">
+              <div class="form-group">
+                <label class="form-label">Corporate Email Address</label>
+                <div class="input-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  <input type="email" id="otp-email" class="form-input" placeholder="engineer@enterprise.com" autocomplete="email" required />
+                </div>
+              </div>
+
+              <button class="btn-submit" id="btn-send-code" type="button" onclick="requestVerificationCode()">
+                <span>Send 6-Digit Access Code</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Step 2: 6-Digit Verification PIN Entry -->
+            <div id="otp-step-2" style="display: none;">
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                  <span class="form-label" style="margin-bottom: 0;">Verification PIN</span>
+                  <span id="otp-email-target" style="color: var(--neon-mint); font-family: var(--font-mono); font-size: 0.74rem;"></span>
+                </div>
+                
+                <div class="otp-grid" id="otp-inputs">
+                  <input type="text" maxlength="1" class="otp-box" id="d1" inputmode="numeric" autocomplete="one-time-code" />
+                  <input type="text" maxlength="1" class="otp-box" id="d2" inputmode="numeric" />
+                  <input type="text" maxlength="1" class="otp-box" id="d3" inputmode="numeric" />
+                  <input type="text" maxlength="1" class="otp-box" id="d4" inputmode="numeric" />
+                  <input type="text" maxlength="1" class="otp-box" id="d5" inputmode="numeric" />
+                  <input type="text" maxlength="1" class="otp-box" id="d6" inputmode="numeric" />
+                </div>
+
+                <!-- Dev Code Helper Pill -->
+                <div id="dev-code-pill" class="dev-code-banner" style="display: none;">
+                  <span>Dev Code: <strong id="dev-code-val" style="color:#fff;"></strong></span>
+                  <button class="btn-demo-quick" style="padding: 3px 10px;" type="button" onclick="autofillDevCode()">Auto-Fill &amp; Verify</button>
+                </div>
+              </div>
+
+              <button class="btn-submit" id="btn-verify-code" type="button" onclick="submitVerificationCode()">
+                <span>Verify &amp; Launch Fleet Console</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </button>
+
+              <button class="btn-secondary" type="button" onclick="resetOtpStep()">
+                ← Change Email Address
               </button>
             </div>
           </div>
 
-          <button type="submit" class="btn-submit" id="btn-login-pw">
-            <span>Sign In to Dashboard</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
-        </form>
-      </div>
+          <!-- 2. Password Login Tab -->
+          <div class="tab-pane" id="pane-pw">
+            <form onsubmit="handlePasswordLogin(event)">
+              <div class="form-group">
+                <label class="form-label">Work Email Address</label>
+                <div class="input-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  <input type="email" id="pw-email" class="form-input" placeholder="admin@mlops.dev" autocomplete="email" required />
+                </div>
+              </div>
 
-      <!-- 3. New Account Registration Tab -->
-      <div class="tab-pane" id="pane-register">
-        <form onsubmit="handleRegister(event)">
-          <div class="form-group">
-            <label class="form-label">Corporate Email</label>
-            <div class="input-wrap">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-              <input type="email" id="reg-email" class="form-input" placeholder="you@enterprise.com" autocomplete="email" required />
-            </div>
-          </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <div class="input-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <input type="password" id="pw-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required />
+                  <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('pw-password', this)" title="Show/Hide Password">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
 
-          <div class="form-group">
-            <label class="form-label">Create Password (min. 8 characters)</label>
-            <div class="input-wrap">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              <input type="password" id="reg-password" class="form-input" placeholder="••••••••" minlength="8" autocomplete="new-password" required />
-              <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('reg-password', this)" title="Show/Hide Password">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <button type="submit" class="btn-submit" id="btn-login-pw">
+                <span>Sign In to Dashboard</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
               </button>
+            </form>
+          </div>
+
+          <!-- 3. New Account Registration Tab -->
+          <div class="tab-pane" id="pane-register">
+            <form onsubmit="handleRegister(event)">
+              <div class="form-group">
+                <label class="form-label">Corporate Email</label>
+                <div class="input-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  <input type="email" id="reg-email" class="form-input" placeholder="you@enterprise.com" autocomplete="email" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Create Password (min. 8 characters)</label>
+                <div class="input-wrap">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <input type="password" id="reg-password" class="form-input" placeholder="••••••••" minlength="8" autocomplete="new-password" required />
+                  <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility('reg-password', this)" title="Show/Hide Password">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-submit" id="btn-register">
+                <span>Create Developer Account</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- VIP 1-Click Evaluation Fleet Access -->
+          <div class="vip-demo-card">
+            <div class="vip-info">
+              <div class="vip-badge-row">
+                <span class="vip-title">Evaluation Access</span>
+                <span style="font-size:0.68rem; background:rgba(0,255,179,0.15); color:var(--neon-mint); padding:1px 6px; border-radius:4px; font-weight:700;">ACTIVE</span>
+              </div>
+              <div class="vip-sub">demo@mlops.dev (Enterprise)</div>
             </div>
+            <button class="btn-demo-quick" type="button" onclick="oneClickDemoLogin()">
+              ⚡ 1-Click Login →
+            </button>
           </div>
-
-          <button type="submit" class="btn-submit" id="btn-register">
-            <span>Create Developer Account</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
-        </form>
-      </div>
-
-      <!-- VIP 1-Click Evaluation Fleet Access -->
-      <div class="vip-demo-card">
-        <div class="vip-info">
-          <div class="vip-badge-row">
-            <span class="vip-title">Evaluation Access</span>
-            <span style="font-size:0.68rem; background:rgba(16,185,129,0.15); color:var(--emerald); padding:1px 6px; border-radius:4px; font-weight:700;">ACTIVE</span>
-          </div>
-          <div class="vip-sub">demo@mlops.dev (Enterprise)</div>
         </div>
-        <button class="btn-demo-quick" type="button" onclick="oneClickDemoLogin()">
-          ⚡ 1-Click Login →
-        </button>
-      </div>
+      </section>
     </div>
   </main>
 
@@ -944,7 +1227,7 @@
 
   <!-- Footer -->
   <footer>
-    <div>SOC2 Type II • Hardware Keystore (TPM 2.0) • End-to-End Encrypted</div>
+    <div>SOC2 Type II • Hardware Keystore (TPM 2.0) • End-to-End Encrypted Control Plane</div>
     <div class="footer-links">
       <a href="index.html">Platform</a>
       <a href="dashboard.html">Fleet Dashboard</a>
@@ -962,7 +1245,7 @@
       if (!inp) return;
       const isPw = inp.type === 'password';
       inp.type = isPw ? 'text' : 'password';
-      btn.style.color = isPw ? 'var(--cyan)' : 'var(--text-3)';
+      btn.style.color = isPw ? 'var(--neon-mint)' : 'var(--text-3)';
     }
 
     function showToast(msg, type = 'info') {
@@ -1057,7 +1340,6 @@
       ];
 
       boxes.forEach((box, idx) => {
-        // Prevent duplicate listener attachment
         if (box._hasListeners) return;
         box._hasListeners = true;
 
@@ -1069,7 +1351,6 @@
             boxes[idx + 1].focus();
           }
 
-          // Auto-submit when all 6 are filled
           const fullCode = boxes.map(b => b.value).join('');
           if (fullCode.length === 6) {
             submitVerificationCode();
