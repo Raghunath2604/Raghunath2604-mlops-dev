@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Control Center — MLOps.dev</title>
+<meta name="description" content="Master Administrative Control Plane & RBAC Management Suite for MLOps.dev"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' stroke='%235B8AF0' stroke-width='1.8' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%2300FFB3'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-base: #04070e;
+  --bg-surface: #080e1b;
+  --bg-card: #0d1527;
+  --bg-card-hover: #121c33;
+  --bg-input: #070d19;
+  
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-focus: #5B8AF0;
+  
+  --accent-blue: #5B8AF0;
+  --neon-mint: #00FFB3;
+  --alert-amber: #FFB300;
+  --rose: #FF2E63;
+  
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+  
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  height: 64px;
+  background: rgba(8, 14, 27, 0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(91, 138, 240, 0.1);
+  border: 1px solid rgba(91, 138, 240, 0.3);
+  border-radius: 8px;
+}
+
+.brand-name {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+.brand-name span { color: var(--accent-blue); }
+
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: rgba(0, 255, 179, 0.1);
+  border: 1px solid rgba(0, 255, 179, 0.3);
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--neon-mint);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #5B8AF0, #3B6FD8);
+  border: 1px solid #5B8AF0;
+  color: #fff;
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 16px rgba(91, 138, 240, 0.4);
+}
+
+/* Nav Tabs */
+.admin-nav {
+  background: rgba(8, 14, 27, 0.6);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  padding: 12px 18px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition);
+}
+.tab-btn:hover { color: #fff; }
+.tab-btn.active {
+  color: var(--neon-mint);
+  border-bottom-color: var(--neon-mint);
+}
+
+/* Main Container */
+main {
+  flex: 1;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 28px 60px;
+}
+
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Grid Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent-blue), transparent);
+}
+.stat-card.mint::after { background: linear-gradient(90deg, var(--neon-mint), transparent); }
+.stat-card.amber::after { background: linear-gradient(90deg, var(--alert-amber), transparent); }
+.stat-card.rose::after { background: linear-gradient(90deg, var(--rose), transparent); }
+
+.stat-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stat-sub {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Panel Sections */
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Table */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.84rem;
+}
+
+th {
+  padding: 12px 18px;
+  background: rgba(4, 7, 14, 0.5);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+tr:hover td { background: var(--bg-card-hover); }
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+.badge-admin { background: rgba(0, 255, 179, 0.12); color: var(--neon-mint); border: 1px solid rgba(0, 255, 179, 0.3); }
+.badge-engineer { background: rgba(91, 138, 240, 0.12); color: var(--accent-blue); border: 1px solid rgba(91, 138, 240, 0.3); }
+.badge-user { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border); }
+
+.badge-approved { background: rgba(0, 255, 179, 0.12); color: var(--neon-mint); }
+.badge-pending { background: rgba(255, 179, 0, 0.12); color: var(--alert-amber); }
+.badge-rejected { background: rgba(255, 46, 99, 0.12); color: var(--rose); }
+
+/* Action Buttons */
+.btn-action {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.btn-action.approve {
+  background: rgba(0, 255, 179, 0.1);
+  border-color: rgba(0, 255, 179, 0.3);
+  color: var(--neon-mint);
+}
+.btn-action.approve:hover { background: rgba(0, 255, 179, 0.2); }
+
+.btn-action.reject {
+  background: rgba(255, 46, 99, 0.1);
+  border-color: rgba(255, 46, 99, 0.3);
+  color: var(--rose);
+}
+.btn-action.reject:hover { background: rgba(255, 46, 99, 0.2); }
+
+/* Form inputs in panels */
+.admin-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  outline: none;
+}
+.admin-input:focus { border-color: var(--border-focus); }
+
+/* Modals */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(3, 6, 12, 0.85);
+  backdrop-filter: blur(12px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; animation: fadeIn 0.18s ease; }
+
+.modal-card {
+  max-width: 500px;
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 26px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px; right: 18px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.modal-close:hover { color: #fff; }
+
+.form-group {
+  margin-bottom: 14px;
+}
+.form-label {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(8, 16, 28, 0.95);
+  border: 1px solid var(--neon-mint);
+  border-radius: 10px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.84rem;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 9999;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { border-color: var(--rose); }
+
+/* Switch Toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; cursor: pointer;
+  inset: 0; background-color: rgba(255,255,255,0.1);
+  border-radius: 24px; transition: .3s;
+  border: 1px solid var(--border);
+}
+.slider:before {
+  position: absolute; content: "";
+  height: 16px; width: 16px; left: 3px; bottom: 3px;
+  background-color: white; border-radius: 50%;
+  transition: .3s;
+}
+input:checked + .slider { background-color: var(--neon-mint); border-color: var(--neon-mint); }
+input:checked + .slider:before { transform: translateX(20px); background-color: #04070e; }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; align-items:center; gap:16px;">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
+          <polygon points="16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5" stroke="#5B8AF0" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="3" fill="#00FFB3"/>
+        </svg>
+      </div>
+      <div class="brand-name">MLOps<span>.dev</span></div>
+    </a>
+    <span class="admin-badge">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Founder Clearance
+    </span>
+  </div>
+
+  <div class="header-actions">
+    <a href="dashboard.html" class="btn-header">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Fleet Dashboard
+    </a>
+    <button class="btn-header" onclick="doLogout()">Sign Out</button>
+  </div>
+</header>
+
+<nav class="admin-nav">
+  <button class="tab-btn active" onclick="switchTab('overview', this)">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+    Overview &amp; Health
+  </button>
+  <button class="tab-btn" onclick="switchTab('users', this)">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    User &amp; Access Control
+  </button>
+  <button class="tab-btn" onclick="switchTab('fleet', this)">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    Fleet &amp; OTA Rollouts
+  </button>
+  <button class="tab-btn" onclick="switchTab('system', this)">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    System Engine &amp; Keys
+  </button>
+  <button class="tab-btn" onclick="switchTab('audit', this)">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    System Audit Log
+  </button>
+</nav>
+
+<main>
+  <!-- 1. TAB: OVERVIEW & HEALTH -->
+  <div class="tab-pane active" id="pane-overview">
+    <div class="stats-grid">
+      <div class="stat-card mint">
+        <div class="stat-label">Total Registered Users</div>
+        <div class="stat-value" id="stat-total-users">—</div>
+        <div class="stat-sub" id="stat-admin-count">— Admins elevated</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">Pending Operator Approvals</div>
+        <div class="stat-value" id="stat-pending-users">—</div>
+        <div class="stat-sub">Requires admin decision</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Edge Fleet Nodes</div>
+        <div class="stat-value" id="stat-devices">—</div>
+        <div class="stat-sub" id="stat-healthy-devs">— Healthy nodes</div>
+      </div>
+      <div class="stat-card rose">
+        <div class="stat-label">Feature Drift Alerts</div>
+        <div class="stat-value" id="stat-drift-devs">—</div>
+        <div class="stat-sub">KL threshold &gt; 0.15</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00FFB3" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          System Health &amp; Infrastructure
+        </div>
+        <button class="btn-action" onclick="loadOverview()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Refresh Telemetry</button>
+      </div>
+      <div style="padding:20px; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px;">
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; margin-bottom:6px;">Database Engine</div>
+          <div id="sys-db-type" style="font-size:1.05rem; font-weight:700; color:#fff;">Connecting...</div>
+          <div style="font-size:0.75rem; color:var(--neon-mint); margin-top:4px;">● Connection Active · Latency &lt; 12ms</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; margin-bottom:6px;">Hardware Simulation Twins</div>
+          <div id="sys-sim-status" style="font-size:1.05rem; font-weight:700; color:#fff;">17 Silicon Nodes Active</div>
+          <div style="font-size:0.75rem; color:var(--accent-blue); margin-top:4px;">Heartbeats streaming at 3.0s interval</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
+          <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; margin-bottom:6px;">Platform Maintenance Mode</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
+            <span id="sys-maint-label" style="font-size:0.92rem; font-weight:600; color:var(--text-muted);">Normal Operation</span>
+            <label class="switch">
+              <input type="checkbox" id="maint-toggle" onchange="toggleMaintenance(this.checked)"/>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. TAB: USERS & OPERATORS -->
+  <div class="tab-pane" id="pane-users">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>Registered Operators &amp; Identity Registry</span>
+        </div>
+        <div class="panel-actions">
+          <input type="text" id="user-search" class="admin-input" placeholder="Search by email or ID..." oninput="filterUsers(this.value)" style="width:240px;"/>
+          <select id="user-filter-status" class="admin-input" onchange="filterUsers()">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending Only</option>
+            <option value="approved">Approved Only</option>
+            <option value="rejected">Rejected Only</option>
+          </select>
+          <button class="btn-header btn-primary" onclick="openCreateUserModal()">+ Invite Operator</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Operator</th>
+              <th>Role</th>
+              <th>Tier &amp; Quota</th>
+              <th>Status</th>
+              <th>OAuth Provider</th>
+              <th>Created</th>
+              <th>Manipulation Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-dim);">Loading operators...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. TAB: FLEET & OTA ROLLOUTS -->
+  <div class="tab-pane" id="pane-fleet">
+    <!-- Broadcast Rollout Card -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B8AF0" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          Over-the-Air (OTA) Model Broadcast Controller
+        </div>
+        <button class="btn-action reject" onclick="triggerEmergencyRollback()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
+          Emergency Fleet Rollback
+        </button>
+      </div>
+      <div style="padding:20px; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end;">
+        <div class="form-group" style="margin-bottom:0; flex:1; min-width:200px;">
+          <label class="form-label">Model Name</label>
+          <input type="text" id="ota-model-name" class="admin-input" style="width:100%;" value="yolov8n-edge"/>
+        </div>
+        <div class="form-group" style="margin-bottom:0; flex:1; min-width:160px;">
+          <label class="form-label">Version Tag</label>
+          <input type="text" id="ota-model-tag" class="admin-input" style="width:100%;" value="v2.4.1"/>
+        </div>
+        <div class="form-group" style="margin-bottom:0; flex:1; min-width:180px;">
+          <label class="form-label">Canary Staging Strategy</label>
+          <select id="ota-strategy" class="admin-input" style="width:100%;">
+            <option value="canary_10">Canary 10% Initial Gate</option>
+            <option value="canary_25" selected>Canary 25% Balanced</option>
+            <option value="canary_50">Staged 50% Rollout</option>
+            <option value="fleet_100">Immediate 100% Broadcast</option>
+          </select>
+        </div>
+        <button class="btn-header btn-primary" style="height:36px;" onclick="broadcastOtaUpdate()">
+          Broadcast OTA Update →
+        </button>
+      </div>
+    </div>
+
+    <!-- Devices Table -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Edge Device Fleet Matrix</div>
+        <button class="btn-action" onclick="loadDevices()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Refresh Nodes</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Node Identifier</th>
+              <th>Silicon Class</th>
+              <th>State</th>
+              <th>Active Model</th>
+              <th>KL Drift Score</th>
+              <th>Latency</th>
+              <th>Last Seen</th>
+              <th>Hardware Actions</th>
+            </tr>
+          </thead>
+          <tbody id="devices-tbody">
+            <tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-dim);">Loading devices...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. TAB: SYSTEM ENGINE & SECRETS -->
+  <div class="tab-pane" id="pane-system">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Master API Keys &amp; Root Secrets</div>
+        <button class="btn-header btn-primary" onclick="openCreateKeyModal()">+ Generate API Key</button>
+      </div>
+      <div style="padding:20px;">
+        <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.6; margin-bottom:16px;">
+          Master API keys have direct programmatic clearance to edge model provisioning, device heartbeats, and cluster configuration. Store securely in CI/CD keystores or hardware HSMs.
+        </p>
+        <div id="new-key-banner" style="display:none; margin-bottom:16px; padding:14px; background:rgba(0,255,179,0.08); border:1px solid rgba(0,255,179,0.3); border-radius:10px;">
+          <div style="font-size:0.75rem; font-weight:700; color:var(--neon-mint); margin-bottom:4px;">NEW KEY GENERATED — SAVE IMMEDIATELY</div>
+          <div id="new-key-val" style="font-family:var(--font-mono); font-size:0.88rem; color:#fff; word-break:break-all;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. TAB: AUDIT LOG -->
+  <div class="tab-pane" id="pane-audit">
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">System-Wide Security &amp; Administrative Audit Log</div>
+        <div class="panel-actions">
+          <button class="btn-action" onclick="exportAuditLogs()">Export JSON</button>
+          <button class="btn-action" onclick="loadAuditLogs()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Refresh</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Operator ID</th>
+              <th>Action / Event</th>
+              <th>Target</th>
+              <th>Outcome</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody id="audit-tbody">
+            <tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-dim);">Loading audit events...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal: Create / Invite Operator -->
+<div id="modal-create-user" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-create-user')">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('modal-create-user')">✕</button>
+    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#fff;">Invite / Create Operator</h3>
+    <form onsubmit="submitCreateUser(event)">
+      <div class="form-group">
+        <label class="form-label">Operator Email *</label>
+        <input type="email" id="new-user-email" class="admin-input" style="width:100%;" placeholder="engineer@enterprise.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role Clearance</label>
+        <select id="new-user-role" class="admin-input" style="width:100%;">
+          <option value="engineer" selected>Engineer (Manage Models &amp; Deployments)</option>
+          <option value="admin">Administrator (Full Control Plane Access)</option>
+          <option value="user">Standard Developer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subscription Tier</label>
+        <select id="new-user-tier" class="admin-input" style="width:100%;">
+          <option value="free">Free Tier (3 devices)</option>
+          <option value="pro" selected>Pro Tier (25 devices)</option>
+          <option value="enterprise">Enterprise Tier (Unlimited)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Device Limit Quota</label>
+        <input type="number" id="new-user-quota" class="admin-input" style="width:100%;" value="50" min="1"/>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button type="button" class="btn-header" onclick="closeModal('modal-create-user')">Cancel</button>
+        <button type="submit" class="btn-header btn-primary">Create Operator</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Update User Details -->
+<div id="modal-edit-user" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-edit-user')">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('modal-edit-user')">✕</button>
+    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#fff;">Edit Operator Clearance</h3>
+    <input type="hidden" id="edit-user-id"/>
+    <div style="margin-bottom:14px; font-size:0.85rem; color:var(--text-muted);">
+      Target Operator: <strong id="edit-user-email" style="color:#fff;"></strong>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role Clearance</label>
+      <select id="edit-user-role" class="admin-input" style="width:100%;">
+        <option value="user">Standard Developer</option>
+        <option value="engineer">Engineer</option>
+        <option value="admin">Administrator</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subscription Tier</label>
+      <select id="edit-user-tier" class="admin-input" style="width:100%;">
+        <option value="free">Free</option>
+        <option value="pro">Pro</option>
+        <option value="enterprise">Enterprise</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Device Limit Quota</label>
+      <input type="number" id="edit-user-quota" class="admin-input" style="width:100%;" value="25"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Approval Status</label>
+      <select id="edit-user-status" class="admin-input" style="width:100%;">
+        <option value="approved">Approved</option>
+        <option value="pending">Pending</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+      <button type="button" class="btn-header" onclick="closeModal('modal-edit-user')">Cancel</button>
+      <button type="button" class="btn-header btn-primary" onclick="submitEditUser()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Generate Master Key -->
+<div id="modal-create-key" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-create-key')">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('modal-create-key')">✕</button>
+    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#fff;">Generate Master API Key</h3>
+    <form onsubmit="submitCreateKey(event)">
+      <div class="form-group">
+        <label class="form-label">Key Label *</label>
+        <input type="text" id="new-key-name" class="admin-input" style="width:100%;" placeholder="e.g. CI/CD Model Deployer" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Assigned Role</label>
+        <select id="new-key-role" class="admin-input" style="width:100%;">
+          <option value="admin" selected>Admin (Root Clearance)</option>
+          <option value="engineer">Engineer</option>
+        </select>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button type="button" class="btn-header" onclick="closeModal('modal-create-key')">Cancel</button>
+        <button type="submit" class="btn-header btn-primary">Generate Key</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Live Toast Notification -->
+<div id="toast" class="toast">
+  <span id="toast-msg">Operation completed</span>
+</div>
+
+<script>
+'use strict';
+const API = '/v1';
+let currentAdmin = null;
+let allUsers = [];
+let allDevices = [];
+let allLogs = [];
+
+function showToast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  const msgEl = document.getElementById('toast-msg');
+  if (!el || !msgEl) return;
+  msgEl.textContent = msg;
+  el.className = `toast show ${type === 'error' ? 'error' : ''}`;
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+function switchTab(tabKey, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const pane = document.getElementById(`pane-${tabKey}`);
+  if (pane) pane.classList.add('active');
+
+  if (tabKey === 'overview') loadOverview();
+  else if (tabKey === 'users') loadUsers();
+  else if (tabKey === 'fleet') loadDevices();
+  else if (tabKey === 'audit') loadAuditLogs();
+}
+
+function openModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('open');
+}
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+// ── Check Admin Auth On Load ──────────────────────────────────────────
+async function checkAdminAuth() {
+  try {
+    const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+    if (!res.ok) {
+      window.location.href = 'login.html?notice=admin_clearance_required';
+      return;
+    }
+    const isMasterAdmin = Boolean(
+      data.user.is_admin ||
+      data.user.role === 'admin' ||
+      (data.user.email && data.user.email.toLowerCase() === 'raghunathareddygr94@gmail.com')
+    );
+    if (!data.success || !data.user || !isMasterAdmin) {
+      window.location.href = 'login.html?notice=admin_clearance_denied';
+      return;
+    }
+    currentAdmin = data.user;
+    loadOverview();
+  } catch(e) {
+    window.location.href = 'login.html?notice=admin_clearance_required';
+  }
+}
+
+// ── 1. Overview Telemetry ─────────────────────────────────────────────
+async function loadOverview() {
+  try {
+    const res = await fetch(`${API}/admin/overview`, { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.success && data.overview) {
+      const o = data.overview;
+      document.getElementById('stat-total-users').textContent = o.total_users;
+      document.getElementById('stat-admin-count').textContent = `${o.admin_count} Admins elevated`;
+      document.getElementById('stat-pending-users').textContent = o.pending_approvals;
+      document.getElementById('stat-devices').textContent = o.total_devices;
+      document.getElementById('stat-healthy-devs').textContent = `${o.healthy_devices} Healthy nodes`;
+      document.getElementById('stat-drift-devs').textContent = o.drift_warning_devices;
+      document.getElementById('sys-db-type').textContent = o.database_type;
+      
+      const toggle = document.getElementById('maint-toggle');
+      if (toggle) toggle.checked = o.maintenance_mode;
+      const lbl = document.getElementById('sys-maint-label');
+      if (lbl) lbl.textContent = o.maintenance_mode ? 'MAINTENANCE MODE ACTIVE' : 'Normal Operation';
+    }
+  } catch(e) {}
+}
+
+async function toggleMaintenance(val) {
+  try {
+    const res = await fetch(`${API}/admin/maintenance`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ enabled: val })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`Maintenance mode set to ${val ? 'ACTIVE' : 'OFF'}`);
+      loadOverview();
+    } else {
+      showToast(data.error || 'Failed to toggle maintenance mode', 'error');
+    }
+  } catch(e) {
+    showToast('Network error updating maintenance state', 'error');
+  }
+}
+
+// ── 2. Users Management ───────────────────────────────────────────────
+async function loadUsers() {
+  try {
+    const res = await fetch(`${API}/admin/users`, { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.success && data.users) {
+      allUsers = data.users;
+      renderUsers(allUsers);
+    }
+  } catch(e) {}
+}
+
+function renderUsers(users) {
+  const tbody = document.getElementById('users-tbody');
+  if (!tbody) return;
+  if (!users.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-dim);">No operators found matching query.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = users.map(u => {
+    const roleBadge = u.role === 'admin' ? '<span class="badge badge-admin">Admin</span>' : (u.role === 'engineer' ? '<span class="badge badge-engineer">Engineer</span>' : '<span class="badge badge-user">User</span>');
+    const statusBadge = u.approval_status === 'approved' ? '<span class="badge badge-approved">Approved</span>' : (u.approval_status === 'pending' ? '<span class="badge badge-pending">Pending</span>' : '<span class="badge badge-rejected">Rejected</span>');
+    
+    let oauthPills = '<span style="color:var(--text-dim); font-size:0.75rem;">Password</span>';
+    if (u.oauth_providers && u.oauth_providers.length) {
+      oauthPills = u.oauth_providers.map(p => `<span class="badge" style="background:rgba(255,255,255,0.06); text-transform:capitalize;">${p.provider}</span>`).join(' ');
+    }
+
+    const isCurrent = currentAdmin && currentAdmin.id === u.id;
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700; color:#fff;">${u.name || u.id}</div>
+          <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-dim);">${u.id}</div>
+        </td>
+        <td>${roleBadge}</td>
+        <td>
+          <span style="font-weight:600; text-transform:uppercase; font-size:0.76rem;">${u.subscription_tier || 'pro'}</span>
+          <span style="color:var(--text-dim); font-size:0.72rem;">(${u.device_limit || 25} nodes)</span>
+        </td>
+        <td>${statusBadge}</td>
+        <td>${oauthPills}</td>
+        <td style="font-size:0.75rem; color:var(--text-dim);">${u.created_at ? u.created_at.slice(0, 10) : '—'}</td>
+        <td>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            ${u.approval_status === 'pending' ? `<button class="btn-action approve" onclick="approveUser('${u.id}')">Approve</button>` : ''}
+            ${u.approval_status === 'approved' && !isCurrent ? `<button class="btn-action reject" onclick="rejectUser('${u.id}')">Revoke</button>` : ''}
+            <button class="btn-action" onclick="openEditUserModal('${u.id}')">Edit Clearance</button>
+            ${!isCurrent ? `<button class="btn-action reject" onclick="deleteUser('${u.id}')" title="Delete Operator">✕</button>` : ''}
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterUsers() {
+  const query = (document.getElementById('user-search').value || '').trim().toLowerCase();
+  const status = document.getElementById('user-filter-status').value;
+  
+  const filtered = allUsers.filter(u => {
+    const matchQuery = !query || (u.name && u.name.toLowerCase().includes(query)) || (u.id && u.id.toLowerCase().includes(query));
+    const matchStatus = status === 'all' || u.approval_status === status;
+    return matchQuery && matchStatus;
+  });
+  renderUsers(filtered);
+}
+
+async function approveUser(uid) {
+  try {
+    const res = await fetch(`${API}/admin/users/${uid}/approve`, { method: 'POST', credentials: 'include' });
+    if (res.ok) {
+      showToast(`User ${uid} approved successfully`);
+      loadUsers();
+      loadOverview();
+    }
+  } catch(e) { showToast('Error approving user', 'error'); }
+}
+
+async function rejectUser(uid) {
+  if (!confirm(`Revoke clearance for operator ${uid}?`)) return;
+  try {
+    const res = await fetch(`${API}/admin/users/${uid}/reject`, { method: 'POST', credentials: 'include' });
+    if (res.ok) {
+      showToast(`User ${uid} access revoked`);
+      loadUsers();
+      loadOverview();
+    }
+  } catch(e) { showToast('Error revoking user access', 'error'); }
+}
+
+async function deleteUser(uid) {
+  if (!confirm(`Permanently delete operator ${uid} and associated credentials?`)) return;
+  try {
+    const res = await fetch(`${API}/admin/users/${uid}`, { method: 'DELETE', credentials: 'include' });
+    if (res.ok) {
+      showToast(`User ${uid} deleted`);
+      loadUsers();
+      loadOverview();
+    }
+  } catch(e) { showToast('Error deleting user', 'error'); }
+}
+
+function openCreateUserModal() {
+  openModal('modal-create-user');
+}
+
+async function submitCreateUser(e) {
+  e.preventDefault();
+  const email = document.getElementById('new-user-email').value.trim();
+  const role = document.getElementById('new-user-role').value;
+  const tier = document.getElementById('new-user-tier').value;
+  const limit = document.getElementById('new-user-quota').value;
+
+  try {
+    const res = await fetch(`${API}/admin/users/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, role, subscription_tier: tier, device_limit: limit })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast(`Operator ${email} created successfully! Initial key generated.`);
+      closeModal('modal-create-user');
+      loadUsers();
+      loadOverview();
+    } else {
+      showToast(data.error || 'Failed to create user', 'error');
+    }
+  } catch(e) { showToast('Network error creating operator', 'error'); }
+}
+
+function openEditUserModal(uid) {
+  const u = allUsers.find(x => x.id === uid);
+  if (!u) return;
+  document.getElementById('edit-user-id').value = u.id;
+  document.getElementById('edit-user-email').textContent = u.name || u.id;
+  document.getElementById('edit-user-role').value = u.role || 'user';
+  document.getElementById('edit-user-tier').value = u.subscription_tier || 'pro';
+  document.getElementById('edit-user-quota').value = u.device_limit || 25;
+  document.getElementById('edit-user-status').value = u.approval_status || 'approved';
+  openModal('modal-edit-user');
+}
+
+async function submitEditUser() {
+  const uid = document.getElementById('edit-user-id').value;
+  const role = document.getElementById('edit-user-role').value;
+  const tier = document.getElementById('edit-user-tier').value;
+  const limit = document.getElementById('edit-user-quota').value;
+  const status = document.getElementById('edit-user-status').value;
+
+  try {
+    const res = await fetch(`${API}/admin/users/${uid}/update`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ role, subscription_tier: tier, device_limit: limit, approval_status: status })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast(`Operator ${uid} updated`);
+      closeModal('modal-edit-user');
+      loadUsers();
+    } else {
+      showToast(data.error || 'Update failed', 'error');
+    }
+  } catch(e) { showToast('Network error updating operator', 'error'); }
+}
+
+// ── 3. Fleet & OTA Control ────────────────────────────────────────────
+async function loadDevices() {
+  try {
+    const res = await fetch(`${API}/admin/devices`, { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.success && data.devices) {
+      allDevices = data.devices;
+      renderDevices(allDevices);
+    }
+  } catch(e) {}
+}
+
+function renderDevices(devs) {
+  const tbody = document.getElementById('devices-tbody');
+  if (!tbody) return;
+  if (!devs.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-dim);">No devices active in cluster.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = devs.map(d => {
+    const isDrift = (d.drift_score || 0) >= 0.15;
+    const driftBadge = isDrift 
+      ? `<span class="badge" style="background:rgba(255,46,99,0.12); color:var(--rose);">${d.drift_score.toFixed(3)} DRIFT</span>`
+      : `<span class="badge" style="background:rgba(0,255,179,0.08); color:var(--neon-mint);">${d.drift_score.toFixed(3)} Normal</span>`;
+
+    const stateColor = d.status === 'online' || d.status === 'healthy' ? 'var(--neon-mint)' : (d.status === 'maintenance' ? 'var(--alert-amber)' : 'var(--rose)');
+
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700; color:#fff;">${d.name || d.id}</div>
+          <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-dim);">${d.id}</div>
+        </td>
+        <td style="font-family:var(--font-mono); font-size:0.78rem;">${d.hw_class || 'Jetson / Edge'}</td>
+        <td><span style="display:inline-flex; align-items:center; gap:5px; font-weight:600; color:${stateColor}; text-transform:uppercase; font-size:0.74rem;">● ${d.status}</span></td>
+        <td><span class="badge" style="background:rgba(91,138,240,0.12); color:var(--accent-blue);">${d.model_tag || 'v1.0.0'}</span></td>
+        <td>${driftBadge}</td>
+        <td style="font-family:var(--font-mono); font-size:0.76rem;">${d.latency_ms ? d.latency_ms.toFixed(1) : 18.4}ms</td>
+        <td style="font-size:0.72rem; color:var(--text-dim);">${d.last_seen ? d.last_seen.slice(11, 19) : 'Just now'}</td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button class="btn-action" onclick="deviceAction('${d.id}', 'reboot')">Reboot</button>
+            ${d.status === 'maintenance' ? `<button class="btn-action approve" onclick="deviceAction('${d.id}', 'online')">Online</button>` : `<button class="btn-action" onclick="deviceAction('${d.id}', 'maintenance')">Maint</button>`}
+            ${isDrift ? `<button class="btn-action approve" onclick="deviceAction('${d.id}', 'reset_drift')">Clear Drift</button>` : `<button class="btn-action reject" onclick="deviceAction('${d.id}', 'simulate_drift')">Sim Drift</button>`}
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function deviceAction(id, action) {
+  try {
+    const res = await fetch(`${API}/admin/devices/${id}/action`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ action })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast(data.message || `Action ${action} dispatched.`);
+      loadDevices();
+    } else {
+      showToast(data.error || 'Action failed', 'error');
+    }
+  } catch(e) { showToast('Network error executing device command', 'error'); }
+}
+
+async function broadcastOtaUpdate() {
+  const name = document.getElementById('ota-model-name').value.trim();
+  const tag = document.getElementById('ota-model-tag').value.trim();
+  const strat = document.getElementById('ota-strategy').value;
+
+  try {
+    const res = await fetch(`${API}/admin/deploy/broadcast`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ model_name: name, model_tag: tag, strategy: strat })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast(data.message || 'OTA Broadcast Initiated!');
+      loadDevices();
+    } else {
+      showToast(data.error || 'Failed to initiate OTA rollout', 'error');
+    }
+  } catch(e) { showToast('Network error broadcasting model', 'error'); }
+}
+
+async function triggerEmergencyRollback() {
+  if (!confirm('EMERGENCY ROLLBACK: Revert all edge nodes to last golden baseline?')) return;
+  try {
+    const res = await fetch(`${API}/admin/deploy/rollback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ target_tag: 'v1.0.0-golden' })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast('Emergency Rollback Executed: All nodes restored to golden baseline');
+      loadDevices();
+    } else {
+      showToast(data.error || 'Rollback failed', 'error');
+    }
+  } catch(e) { showToast('Network error during rollback', 'error'); }
+}
+
+// ── 4. Keys & Secrets ────────────────────────────────────────────────
+function openCreateKeyModal() {
+  openModal('modal-create-key');
+}
+
+async function submitCreateKey(e) {
+  e.preventDefault();
+  const name = document.getElementById('new-key-name').value.trim();
+  const role = document.getElementById('new-key-role').value;
+
+  try {
+    const res = await fetch(`${API}/admin/keys/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ name, role, tier: 'enterprise' })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast('Master API Key generated!');
+      closeModal('modal-create-key');
+      const b = document.getElementById('new-key-banner');
+      const v = document.getElementById('new-key-val');
+      if (b && v) {
+        v.textContent = data.key;
+        b.style.display = 'block';
+      }
+    } else {
+      showToast(data.error || 'Key generation failed', 'error');
+    }
+  } catch(e) { showToast('Network error creating key', 'error'); }
+}
+
+// ── 5. System Audit Log ──────────────────────────────────────────────
+async function loadAuditLogs() {
+  try {
+    const res = await fetch(`${API}/admin/audit-logs`, { credentials: 'include' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.success && data.audit_logs) {
+      allLogs = data.audit_logs;
+      renderAuditLogs(allLogs);
+    }
+  } catch(e) {}
+}
+
+function renderAuditLogs(logs) {
+  const tbody = document.getElementById('audit-tbody');
+  if (!tbody) return;
+  if (!logs.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-dim);">No audit events recorded yet.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = logs.map(l => {
+    return `
+      <tr>
+        <td style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">${l.created_at ? l.created_at.slice(0, 19).replace('T', ' ') : '—'}</td>
+        <td style="font-family:var(--font-mono); font-size:0.76rem;">${l.owner_id || 'system'}</td>
+        <td><span class="badge" style="background:rgba(91,138,240,0.1); color:var(--accent-blue);">${l.event_type || 'OP'}</span></td>
+        <td style="font-family:var(--font-mono); font-size:0.74rem;">${l.device_id || 'cluster'}</td>
+        <td><span class="badge badge-approved">${l.status || 'SUCCESS'}</span></td>
+        <td style="font-size:0.78rem; color:var(--text-muted);">${l.msg || '—'}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function exportAuditLogs() {
+  const blob = new Blob([JSON.stringify(allLogs, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mlops-audit-log-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+}
+
+async function doLogout() {
+  try {
+    await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include' });
+  } catch(e) {}
+  localStorage.clear();
+  window.location.href = 'login.html';
+}
+
+window.addEventListener('DOMContentLoaded', checkAdminAuth);
+</script>
+</body>
+</html>

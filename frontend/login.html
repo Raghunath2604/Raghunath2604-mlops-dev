@@ -1186,6 +1186,17 @@
             <p class="auth-subtitle">Fleet Control Plane Access • Real-Time Telemetry &amp; Over-the-Air Rollouts</p>
           </div>
 
+          <!-- Security Clearance Alert Banner -->
+          <div id="notice-security-banner" style="display:none; margin-bottom:1.25rem; padding:0.85rem 1rem; border-radius:10px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); text-align:left;">
+            <div style="display:flex; align-items:center; gap:6px; color:#f87171; font-weight:700; font-size:0.8rem; margin-bottom:3px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span id="notice-banner-title">RESTRICTED CONTROL PLANE</span>
+            </div>
+            <div id="notice-banner-text" style="font-size:0.75rem; color:#fca5a5; line-height:1.45;">
+              Administrator clearance is required. Please authenticate with your primary administrator account (<strong style="color:#fff;">raghunathareddygr94@gmail.com</strong>).
+            </div>
+          </div>
+
           <!-- Social Authentication Buttons -->
           <div class="social-auth-grid">
             <button class="btn-social" id="btn-google" type="button" onclick="handleSocialAuth('google')" title="Sign in with your Google account">
@@ -2029,7 +2040,7 @@
       }
     }
 
-    // Check URL parameters for social triggers
+    // Check URL parameters for social triggers and admin notices
     window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const social = params.get('social');
@@ -2038,6 +2049,25 @@
       }
       if (params.get('error')) {
         showToast(params.get('error'), 'error');
+      }
+
+      const notice = params.get('notice');
+      if (notice) {
+        const banner = document.getElementById('notice-security-banner');
+        const bannerTitle = document.getElementById('notice-banner-title');
+        const bannerText = document.getElementById('notice-banner-text');
+        if (banner) {
+          banner.style.display = 'block';
+          if (notice === 'admin_clearance_required') {
+            if (bannerTitle) bannerTitle.textContent = 'RESTRICTED AIRSPACE: ADMIN LOGIN REQUIRED';
+            if (bannerText) bannerText.innerHTML = 'Only the primary administrator (<strong style="color:#fff;">raghunathareddygr94@gmail.com</strong>) has access to the live fleet control plane. Please sign in below.';
+            showToast('🔐 Administrator clearance required to access the Fleet Control Plane.', 'error', 6000);
+          } else if (notice === 'admin_clearance_denied') {
+            if (bannerTitle) bannerTitle.textContent = 'ACCESS DENIED (403 FORBIDDEN)';
+            if (bannerText) bannerText.innerHTML = 'Your authenticated account does not possess administrator clearance for the fleet control plane. Switch accounts to proceed.';
+            showToast('🛑 Access denied: Your account lacks administrative privileges.', 'error', 6000);
+          }
+        }
       }
     });
   </script>

@@ -1239,15 +1239,15 @@ html, body {
       <button class="btn-primary" id="ri-btn" type="button" onclick="doRegister()">Submit Access Request →</button>
     </div>
 
-    <!-- 1-Click Evaluation Fleet Access -->
-    <div class="auth-demo-pill">
-      <div>
-        <div style="font-weight:700; color:var(--text-main); font-size:0.8rem;">⚡ Evaluation Access</div>
-        <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--cobalt-bright);">demo@mlops.dev (Enterprise)</div>
+    <!-- Master Admin Protection Notice -->
+    <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:0.75rem 1rem; margin-top:10px; text-align:left;">
+      <div style="display:flex; align-items:center; gap:6px; color:#f87171; font-weight:700; font-size:0.75rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>ADMINISTRATOR AIRSPACE</span>
       </div>
-      <button class="btn-primary" type="button" onclick="quickDemoLaunch()" style="width:auto; padding:0.45rem 0.85rem; font-size:0.78rem;">
-        1-Click Login →
-      </button>
+      <div style="font-size:0.72rem; color:var(--text-dim); margin-top:3px; line-height:1.4;">
+        Live cluster nodes and OTA rollouts are strictly restricted to primary administrator (<code style="color:#fca5a5;">raghunathareddygr94@gmail.com</code>).
+      </div>
     </div>
 
     <div style="text-align:center; margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
@@ -1305,6 +1305,11 @@ html, body {
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         <span>Cluster Settings</span>
       </button>
+      <a href="admin.html" class="sb-item" id="nav-master-admin" style="color:var(--ruby, #ef4444); font-weight:700;">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>Master Admin Suite</span>
+        <span class="sb-badge alert" style="background:#ef4444; color:#fff; display:inline-block; margin-left:auto;">ADMIN</span>
+      </a>
       <button class="sb-item" onclick="nav('admin',this)" id="nav-admin" style="display:none;">
         <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <span>RBAC Approvals</span>
@@ -1336,6 +1341,10 @@ html, body {
         <div class="cluster-pill"><div class="live-dot"></div><span>Connected · TLS 1.3</span></div>
       </div>
       <div class="topbar-right">
+        <a href="admin.html" class="action-btn" style="background:rgba(239,68,68,0.14); border-color:rgba(239,68,68,0.4); color:#fca5a5; font-weight:700; text-decoration:none;" title="Open Master Admin Control Suite">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Admin Suite</span>
+        </a>
         <button class="action-btn" onclick="toggleTerminal()" title="Toggle Interactive Edge CLI">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
           Edge CLI
@@ -1818,6 +1827,18 @@ html, body {
 
       <!-- PAGE: ADMIN RBAC -->
       <section class="page" id="page-admin">
+        <div style="background:linear-gradient(135deg, rgba(239,68,68,0.12), rgba(15,23,42,0.85)); border:1px solid rgba(239,68,68,0.35); border-radius:12px; padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <div style="font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#ef4444; margin-bottom:4px;">Master Administrative Privileges Active</div>
+            <h3 style="font-size:1.15rem; font-weight:700; color:#fff; margin:0;">Full-System Manipulation &amp; Fleet Operations</h3>
+            <p style="font-size:0.82rem; color:#94a3b8; margin:4px 0 0 0;">Manipulate operator accounts, broadcast OTA rollouts, manage master API keys, and trigger emergency rollbacks.</p>
+          </div>
+          <a href="admin.html" style="padding:0.75rem 1.25rem; background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; font-weight:700; font-size:0.85rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(239,68,68,0.3);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Launch Standalone Admin Panel →
+          </a>
+        </div>
+
         <div class="panel">
           <div class="panel-header">
             <h2 class="panel-title">Pending Operator Access Requests</h2>
@@ -2090,25 +2111,11 @@ async function doOverlayVerifyCode() {
 
 async function quickDemoLaunch() {
   const errBox = document.getElementById('login-err');
-  if (errBox) errBox.classList.remove('show');
-  const btn = document.getElementById('li-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Launching Demo Fleet...'; }
-  try {
-    const resp = await fetch(`${API}/auth/login`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({email: 'demo', password: 'demo'}),
-      credentials: 'include'
-    });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || 'Demo login rejected');
-    const user = {name: 'Fleet Demo Operator', email: 'demo@mlops.dev', role: 'admin'};
-    localStorage.setItem('np_user', JSON.stringify(user));
-    bootApp(user);
-  } catch(e) {
-    if (errBox) { errBox.textContent = e.message || 'Demo access error'; errBox.classList.add('show'); }
-    if (btn) { btn.disabled = false; btn.textContent = 'Authenticate to Control Plane →'; }
+  if (errBox) {
+    errBox.textContent = 'Demo access disabled. Administrator clearance required (raghunathareddygr94@gmail.com).';
+    errBox.classList.add('show');
   }
+  showToast('Restricted: Live control plane requires Administrator clearance.', 'error');
 }
 
 function fillDemoAuth() {
@@ -3046,57 +3053,112 @@ function startSSE() {
   setInterval(refreshAll, 20000);
 }
 
-// Check session on load
+// Strict Admin Access Control & Air-Gapped Verification
 async function checkAuth() {
-  // First check URL query params (from OAuth redirect callback)
   const params = new URLSearchParams(window.location.search);
-  if (params.get('auth') === 'success') {
-    const oauthUser = {
-      name: params.get('user') || params.get('email') || 'Developer',
-      email: params.get('email') || '',
-      provider: params.get('provider') || 'oauth',
-      avatar: params.get('avatar') || '',
-      role: 'developer'
-    };
-    localStorage.setItem('np_user', JSON.stringify(oauthUser));
-    localStorage.setItem('mlops_user', JSON.stringify(oauthUser));
+  const isAuthSuccess = params.get('auth') === 'success';
+  if (isAuthSuccess) {
     window.history.replaceState({}, document.title, window.location.pathname);
-    bootApp(oauthUser);
-    showToast(`Welcome ${oauthUser.name}! Signed in via ${oauthUser.provider}.`, 'success');
-    return;
-  }
-
-  // Also check stored user in localStorage
-  const savedUserStr = localStorage.getItem('np_user') || localStorage.getItem('mlops_user');
-  let savedUser = null;
-  if (savedUserStr) {
-    try { savedUser = JSON.parse(savedUserStr); } catch(e){}
   }
 
   try {
     const resp = await fetch(`${API}/auth/me`, {credentials: 'include'});
     if (!resp.ok) throw new Error('Unauthorized');
     const data = await resp.json();
-    const user = {
-      name: (savedUser && savedUser.name) || data.user.email,
-      email: data.user.email,
-      role: data.user.role,
-      avatar: (savedUser && savedUser.avatar) || '',
-      provider: (savedUser && savedUser.provider) || ''
-    };
-    localStorage.setItem('np_user', JSON.stringify(user));
-    bootApp(user);
-  } catch(e) {
-    if (savedUser && (savedUser.name || savedUser.email)) {
-      bootApp(savedUser);
+    if (!data || !data.user) throw new Error('No user data');
+
+    // Strict Admin Verification: Only the designated admin has access to the real dashboard
+    const isAdmin = Boolean(
+      data.user.is_admin ||
+      data.user.role === 'admin' ||
+      (data.user.email && data.user.email.toLowerCase() === 'raghunathareddygr94@gmail.com')
+    );
+
+    if (!isAdmin) {
+      // Non-admin detected: HIDE dashboard, prevent boot, show high-security clearance denied screen
+      localStorage.removeItem('np_user');
+      localStorage.removeItem('mlops_user');
+      document.getElementById('app').classList.remove('on');
+      const authScreen = document.getElementById('auth-screen');
+      if (authScreen) authScreen.style.display = 'none';
+      showRestrictedAccessScreen(data.user);
       return;
     }
+
+    // Authorized Administrator
+    const user = {
+      name: data.user.name || data.user.email || 'Administrator',
+      email: data.user.email,
+      role: 'admin',
+      is_admin: true,
+      avatar: data.user.avatar || '',
+      provider: data.user.provider || ''
+    };
+    localStorage.setItem('np_user', JSON.stringify(user));
+    localStorage.setItem('mlops_user', JSON.stringify(user));
+    bootApp(user);
+    if (isAuthSuccess) {
+      showToast(`Master Admin verified: ${user.email}`, 'success');
+    }
+  } catch(e) {
+    // Unauthenticated user attempting to view real dashboard: redirect to login portal
+    localStorage.removeItem('np_user');
+    localStorage.removeItem('mlops_user');
     document.getElementById('app').classList.remove('on');
-    document.getElementById('auth-screen').style.display = 'flex';
+    window.location.href = 'login.html?notice=admin_clearance_required';
+  }
+}
+
+function showRestrictedAccessScreen(user) {
+  const scr = document.getElementById('admin-restricted-screen');
+  if (scr) {
+    if (user) {
+      const emailEl = document.getElementById('restricted-current-email');
+      const roleEl = document.getElementById('restricted-current-role');
+      if (emailEl) emailEl.textContent = user.email || 'None';
+      if (roleEl) roleEl.textContent = user.role || 'Public Visitor';
+    }
+    scr.style.display = 'flex';
   }
 }
 
 window.addEventListener('DOMContentLoaded', checkAuth);
 </script>
+
+<!-- RESTRICTED AIR-GAPPED CONTROL PLANE LOCK SCREEN (SHOWN TO NON-ADMINS) -->
+<div id="admin-restricted-screen" style="display:none; position:fixed; inset:0; z-index:999999; background:radial-gradient(ellipse at 50% 20%, #0d1224 0%, #030611 100%); flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;">
+  <div style="max-width:540px; background:rgba(10, 16, 32, 0.88); border:1px solid rgba(239, 68, 68, 0.35); border-radius:18px; padding:2.5rem 2rem; box-shadow:0 24px 60px rgba(0,0,0,0.8), 0 0 40px rgba(239,68,68,0.15); backdrop-filter:blur(24px);">
+    <div style="width:68px; height:68px; border-radius:16px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem;">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        <line x1="12" y1="15" x2="12" y2="18"/>
+      </svg>
+    </div>
+    <div style="display:inline-block; font-size:0.72rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#ef4444; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:999px; padding:0.25rem 0.85rem; margin-bottom:1rem;">
+      Air-Gapped Control Plane
+    </div>
+    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:800; color:#ffffff; margin-bottom:0.75rem;">
+      Administrator Clearance Required
+    </h2>
+    <p style="color:#94a3b8; font-size:0.9rem; line-height:1.55; margin-bottom:1.5rem;">
+      Real-time fleet control, silicon edge telemetry, and model rollouts are restricted exclusively to the primary administrator (<strong style="color:#f87171;">raghunathareddygr94@gmail.com</strong>). Public visitors and non-admin users cannot access this dashboard.
+    </p>
+    <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:0.85rem 1rem; margin-bottom:1.75rem; text-align:left; font-size:0.8rem; color:#cbd5e1; font-family:'IBM Plex Mono',monospace;">
+      <div>Authenticated As: <span id="restricted-current-email" style="color:#38bdf8;">None</span></div>
+      <div>Access Role: <span id="restricted-current-role" style="color:#f59e0b;">Public Visitor</span></div>
+      <div style="margin-top:4px; font-size:0.72rem; color:#64748b;">Clearance Status: DENIED (Code 403)</div>
+    </div>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="login.html?notice=admin_clearance_required" style="flex:1; min-width:180px; padding:0.85rem 1.25rem; background:linear-gradient(135deg, #ef4444, #dc2626); color:#ffffff; font-weight:700; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem; box-shadow:0 4px 14px rgba(239,68,68,0.3);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Sign In as Administrator
+      </a>
+      <a href="index.html" style="padding:0.85rem 1.25rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#e2e8f0; font-weight:600; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem;">
+        Return to Homepage
+      </a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
