@@ -12,7 +12,7 @@
 - **Edge Installer:** `https://www.mlopsde.me/install.sh` (or `https://get.mlopsde.me`)
 - **API Base URL:** `https://www.mlopsde.me/v1`
 - **Vercel Project:** `raghunathareddygr94-9147s-projects/mlops-dev`
-- **Active Production Deployment ID:** `dpl_C7R25QD6iW8XWs7GgoCG3UuhK9Jh`
+- **Active Production Deployment ID:** `dpl_AwBLUcBJh958U8vWir3FCy7PbhPH`
 
 ---
 
