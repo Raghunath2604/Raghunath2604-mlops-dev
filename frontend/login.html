@@ -1080,6 +1080,381 @@
       background: rgba(0, 255, 179, 0.18);
       border-color: var(--neon-mint);
     }
+
+    /* ═════════════════════════════════════════════════════════════════════
+       DYNAMIC CREATIVE CYBER ANIMATIONS & 3D INTERACTIVITY
+       ═════════════════════════════════════════════════════════════════════ */
+    
+    /* 3D Holographic Perspective Card & Orbiting Luminous Border Beam */
+    .auth-panel {
+      perspective: 1200px;
+    }
+    .auth-card {
+      position: relative;
+      transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      background: rgba(8, 14, 28, 0.88) !important;
+      border: 1px solid rgba(91, 138, 240, 0.25) !important;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 45px rgba(91, 138, 240, 0.12) !important;
+      overflow: hidden;
+    }
+    .auth-card-reflection {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle 380px at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(91, 138, 240, 0.12), rgba(0, 255, 179, 0.04) 40%, transparent 70%);
+      opacity: 0.9;
+      z-index: 1;
+      transition: opacity 0.3s ease;
+    }
+    .auth-card::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(from var(--border-angle, 0deg), transparent 0%, #5B8AF0 25%, #00FFB3 50%, #00F0FF 75%, transparent 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.65;
+      animation: rotateCardBeam 10s linear infinite;
+    }
+    @property --border-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    @keyframes rotateCardBeam {
+      to { --border-angle: 360deg; }
+    }
+
+    /* Hero Emblem Dual-Rotating Geometric Hex Rings */
+    .hero-emblem-wrap {
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero-emblem-wrap:hover {
+      transform: scale(1.08) rotate(3deg);
+    }
+    .hex-outer-ring {
+      transform-origin: 36px 36px;
+      animation: spinHexCW 26s linear infinite;
+    }
+    .hex-inner-ring {
+      transform-origin: 36px 36px;
+      animation: spinHexCCW 16s linear infinite;
+    }
+    .hex-core-pulse {
+      transform-origin: 36px 36px;
+      animation: pulseHexCore 2.8s ease-in-out infinite alternate;
+    }
+    @keyframes spinHexCW {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spinHexCCW {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes pulseHexCore {
+      0% { transform: scale(0.85); opacity: 0.4; }
+      100% { transform: scale(1.35); opacity: 0.95; }
+    }
+
+    /* Tactical Circular Radar & Real-Time Silicon Telemetry Stream */
+    .radar-telemetry-box {
+      margin-top: 1.5rem;
+      background: rgba(8, 14, 28, 0.78);
+      border: 1px solid rgba(91, 138, 240, 0.28);
+      border-radius: var(--radius-md, 12px);
+      padding: 1rem 1.25rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(91, 138, 240, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .radar-telemetry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 0.6rem;
+    }
+    .radar-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .radar-live-blip {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--neon-mint);
+      box-shadow: 0 0 10px var(--neon-mint);
+      animation: blipPulse 1.4s ease-in-out infinite alternate;
+    }
+    @keyframes blipPulse {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      100% { transform: scale(1.3); opacity: 1; }
+    }
+    .radar-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-2);
+      text-transform: uppercase;
+    }
+    .btn-radar-ping {
+      background: rgba(0, 255, 179, 0.1);
+      border: 1px solid rgba(0, 255, 179, 0.35);
+      color: var(--neon-mint);
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 3px 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+    .btn-radar-ping:hover {
+      background: rgba(0, 255, 179, 0.25);
+      box-shadow: 0 0 14px rgba(0, 255, 179, 0.45);
+      transform: translateY(-1px);
+    }
+    .radar-telemetry-body {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .radar-scope {
+      width: 90px;
+      height: 90px;
+      min-width: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(7, 18, 38, 0.9) 0%, rgba(2, 6, 14, 0.95) 100%);
+      border: 1.5px solid rgba(0, 255, 179, 0.35);
+      box-shadow: 0 0 18px rgba(0, 255, 179, 0.15), inset 0 0 14px rgba(0, 255, 179, 0.1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .radar-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px dashed rgba(0, 255, 179, 0.25);
+      inset: 12px;
+    }
+    .radar-ring.r2 {
+      inset: 26px;
+      border-style: dotted;
+    }
+    .radar-crosshair-h {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0, 255, 179, 0.2);
+    }
+    .radar-crosshair-v {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(0, 255, 179, 0.2);
+    }
+    .radar-sweep-beam {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 45px;
+      height: 45px;
+      transform-origin: 0 0;
+      background: conic-gradient(from 0deg at 0 0, rgba(0, 255, 179, 0.45) 0deg, transparent 55deg);
+      animation: radarSweep 3.2s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes radarSweep {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .radar-blip {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neon-mint);
+      box-shadow: 0 0 8px var(--neon-mint);
+      transform: translate(-50%, -50%);
+      animation: blipFade 2.5s ease-in-out infinite;
+    }
+    .radar-blip span {
+      position: absolute;
+      left: 8px;
+      top: -4px;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: #fff;
+      opacity: 0.75;
+    }
+    .radar-blip.b-agx { top: 28%; left: 68%; animation-delay: 0.2s; background: #00F0FF; box-shadow: 0 0 8px #00F0FF; }
+    .radar-blip.b-hailo { top: 72%; left: 74%; animation-delay: 0.8s; background: #00FFB3; box-shadow: 0 0 8px #00FFB3; }
+    .radar-blip.b-coral { top: 65%; left: 26%; animation-delay: 1.4s; background: #a855f7; box-shadow: 0 0 8px #a855f7; }
+    .radar-blip.b-rpi5 { top: 32%; left: 32%; animation-delay: 2.1s; background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+    @keyframes blipFade {
+      0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(0.85); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.35); }
+    }
+    .radar-stream-terminal {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      line-height: 1.55;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .terminal-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-2);
+      transition: all 0.3s ease;
+    }
+    .terminal-line .t-tag {
+      color: var(--cyan);
+      font-weight: 700;
+      font-size: 0.65rem;
+    }
+    .terminal-line .t-tag.mint { color: var(--neon-mint); }
+    .terminal-line .t-tag.blue { color: var(--accent-blue); }
+    .terminal-line .t-tag.gold { color: var(--amber); }
+    .terminal-line .t-val {
+      color: #fff;
+      font-weight: 500;
+    }
+    .terminal-line .t-meta {
+      color: var(--text-dim);
+      font-size: 0.65rem;
+      margin-left: auto;
+    }
+
+    /* Segmented Tab Slider */
+    .auth-tabs {
+      position: relative !important;
+      display: flex !important;
+      background: rgba(5, 9, 18, 0.75) !important;
+      border: 1px solid rgba(91, 138, 240, 0.22) !important;
+      border-radius: 10px !important;
+      padding: 4px !important;
+      margin-bottom: 22px !important;
+      gap: 4px !important;
+    }
+    .tabs-slider-pill {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: calc(33.333% - 5px);
+      background: linear-gradient(135deg, rgba(91, 138, 240, 0.28), rgba(0, 255, 179, 0.16));
+      border: 1px solid rgba(0, 255, 179, 0.4);
+      border-radius: 7px;
+      box-shadow: 0 0 14px rgba(0, 255, 179, 0.18);
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .tab-btn {
+      position: relative !important;
+      z-index: 2 !important;
+      background: transparent !important;
+      border: none !important;
+      transition: color 0.2s ease, text-shadow 0.2s ease !important;
+    }
+    .tab-btn.active {
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      text-shadow: 0 0 10px rgba(0, 255, 179, 0.4) !important;
+    }
+
+    /* OTP Inputs Micro-Bounce & Glowing Laser Focus */
+    .otp-box {
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    .otp-box:focus {
+      transform: scale(1.08) translateY(-2px) !important;
+      border-color: var(--neon-mint) !important;
+      box-shadow: 0 0 16px rgba(0, 255, 179, 0.45), inset 0 0 8px rgba(0, 255, 179, 0.15) !important;
+    }
+    .otp-box.filled {
+      border-color: var(--accent-blue) !important;
+      background: rgba(91, 138, 240, 0.08) !important;
+    }
+
+    /* Floating Cyber FX Controller Dock */
+    .cyber-floating-dock {
+      position: fixed;
+      bottom: 24px;
+      right: 28px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(7, 12, 24, 0.85);
+      border: 1px solid rgba(91, 138, 240, 0.25);
+      border-radius: 9999px;
+      padding: 6px 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(91, 138, 240, 0.1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .btn-cyber-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-2);
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-cyber-pill:hover {
+      background: rgba(0, 255, 179, 0.15);
+      border-color: var(--neon-mint);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(0, 255, 179, 0.35);
+    }
+    .cyber-pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: blipPulse 1.2s infinite alternate;
+    }
+    @media (max-width: 900px) {
+      .radar-telemetry-box { display: none; }
+      .cyber-floating-dock { bottom: 12px; right: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -1090,6 +1465,7 @@
     <div class="mesh-orb-3"></div>
     <div class="grid-overlay"></div>
     <div class="scanlines-overlay"></div>
+    <canvas id="neural-mesh-canvas" style="position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:1;"></canvas>
   </div>
 
   <!-- Header -->
@@ -1121,16 +1497,20 @@
       <!-- Left Showcase Panel (Directly matching poster.html) -->
       <section class="poster-hero">
         <!-- Animated Hex Logo Mark from poster.html -->
-        <div class="hero-emblem-wrap">
+        <div class="hero-emblem-wrap" title="MLOps.dev Silicon Architecture">
           <svg class="hero-hex-mark" viewBox="0 0 72 72" fill="none">
-            <polygon points="36,4 8,20 8,52 36,68 64,52 64,20" stroke="#5B8AF0" stroke-width="1.5" stroke-linejoin="round" opacity=".4"/>
-            <polygon points="36,12 16,24 16,48 36,60 56,48 56,24" stroke="#5B8AF0" stroke-width="1" stroke-linejoin="round" opacity=".25"/>
-            <line x1="36" y1="4" x2="36" y2="68" stroke="#5B8AF0" stroke-width=".8" opacity=".2"/>
-            <line x1="8" y1="20" x2="64" y2="52" stroke="#5B8AF0" stroke-width=".8" opacity=".2"/>
-            <line x1="64" y1="20" x2="8" y2="52" stroke="#5B8AF0" stroke-width=".8" opacity=".2"/>
-            <circle cx="36" cy="36" r="6" fill="#1e293b" opacity=".9"/>
-            <circle cx="36" cy="36" r="10" stroke="#00FFB3" stroke-width="1.2" opacity=".6" fill="none"/>
-            <circle cx="36" cy="36" r="3" fill="#00FFB3"/>
+            <g class="hex-outer-ring">
+              <polygon points="36,4 8,20 8,52 36,68 64,52 64,20" stroke="#5B8AF0" stroke-width="1.6" stroke-linejoin="round" opacity=".55"/>
+              <line x1="36" y1="4" x2="36" y2="68" stroke="#5B8AF0" stroke-width=".8" opacity=".25"/>
+              <line x1="8" y1="20" x2="64" y2="52" stroke="#5B8AF0" stroke-width=".8" opacity=".25"/>
+              <line x1="64" y1="20" x2="8" y2="52" stroke="#5B8AF0" stroke-width=".8" opacity=".25"/>
+            </g>
+            <g class="hex-inner-ring">
+              <polygon points="36,12 16,24 16,48 36,60 56,48 56,24" stroke="#00F0FF" stroke-width="1.3" stroke-linejoin="round" opacity=".65"/>
+            </g>
+            <circle cx="36" cy="36" r="6" fill="#0f172a" opacity=".95"/>
+            <circle class="hex-core-pulse" cx="36" cy="36" r="10" stroke="#00FFB3" stroke-width="1.4" opacity=".6" fill="none"/>
+            <circle cx="36" cy="36" r="3.5" fill="#00FFB3"/>
           </svg>
         </div>
 
@@ -1162,6 +1542,44 @@
           </div>
         </div>
 
+        <!-- Interactive Edge Radar & Live Silicon Telemetry Module -->
+        <div class="radar-telemetry-box">
+          <div class="radar-telemetry-header">
+            <div class="radar-header-left">
+              <span class="radar-live-blip"></span>
+              <span class="radar-title">EDGE RADAR &amp; SILICON TELEMETRY</span>
+            </div>
+            <button type="button" class="btn-radar-ping" onclick="triggerRadarPing(event)" title="Ping all 6 active edge hardware twins">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="2" y1="12" x2="4" y2="12"/></svg>
+              <span>Ping Fleet</span>
+            </button>
+          </div>
+
+          <div class="radar-telemetry-body">
+            <!-- Tactical Circular Radar -->
+            <div class="radar-scope" id="radar-scope" onclick="triggerRadarPing(event)" title="Click to pulse radar sonar wave">
+              <div class="radar-sweep-beam"></div>
+              <div class="radar-ring r1"></div>
+              <div class="radar-ring r2"></div>
+              <div class="radar-crosshair-h"></div>
+              <div class="radar-crosshair-v"></div>
+              <!-- Edge Node Blips with Tooltips -->
+              <div class="radar-blip b-agx" title="NVIDIA Jetson AGX Orin — 120 FPS"><span>AGX</span></div>
+              <div class="radar-blip b-hailo" title="Hailo-8 AI Accelerator — 0.012 Drift"><span>H8</span></div>
+              <div class="radar-blip b-coral" title="Google Coral Edge TPU — Synced"><span>TPU</span></div>
+              <div class="radar-blip b-rpi5" title="Raspberry Pi 5 Fleet Node — 8.4ms"><span>RP5</span></div>
+            </div>
+
+            <!-- Live Streaming Telemetry Terminal -->
+            <div class="radar-stream-terminal">
+              <div class="terminal-line" id="stream-line-1"><span class="t-tag">[AGX-ORIN]</span> <span class="t-val">yolov8n: 118 FPS</span> <span class="t-meta">42°C</span></div>
+              <div class="terminal-line" id="stream-line-2"><span class="t-tag mint">[HAILO-8]</span> <span class="t-val">int8: drift 0.011</span> <span class="t-meta">3.4ms</span></div>
+              <div class="terminal-line" id="stream-line-3"><span class="t-tag blue">[CORAL-TPU]</span> <span class="t-val">tls1.3 golden</span> <span class="t-meta">99.8%</span></div>
+              <div class="terminal-line" id="stream-line-4"><span class="t-tag gold">[RP5-EDGE]</span> <span class="t-val">offline-first sync</span> <span class="t-meta">active</span></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Founder Signature & Domain from Poster Reference -->
         <div class="hero-signature">
           <div class="hero-domain">www.mlops.dev</div>
@@ -1173,7 +1591,8 @@
 
       <!-- Right Interactive Authentication Panel -->
       <section class="auth-panel">
-        <div class="auth-card">
+        <div class="auth-card" id="auth-card">
+          <div class="auth-card-reflection"></div>
           <div class="auth-header">
             <div class="auth-badge">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1220,7 +1639,8 @@
           <div class="divider">or continue with</div>
 
           <!-- Segmented Auth Mode Switcher -->
-          <div class="auth-tabs">
+          <div class="auth-tabs" id="auth-tabs-wrap">
+            <div class="tabs-slider-pill" id="tabs-slider-pill"></div>
             <button class="tab-btn active" id="tab-btn-code" type="button" onclick="switchAuthTab('code')">Email Code (OTP)</button>
             <button class="tab-btn" id="tab-btn-pw" type="button" onclick="switchAuthTab('pw')">Password</button>
             <button class="tab-btn" id="tab-btn-register" type="button" onclick="switchAuthTab('register')">New Account</button>
@@ -1553,15 +1973,29 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
 
+      let targetBtn = null;
       if (tab === 'code') {
-        document.getElementById('tab-btn-code').classList.add('active');
+        targetBtn = document.getElementById('tab-btn-code');
         document.getElementById('pane-code').classList.add('active');
       } else if (tab === 'pw') {
-        document.getElementById('tab-btn-pw').classList.add('active');
+        targetBtn = document.getElementById('tab-btn-pw');
         document.getElementById('pane-pw').classList.add('active');
       } else if (tab === 'register') {
-        document.getElementById('tab-btn-register').classList.add('active');
+        targetBtn = document.getElementById('tab-btn-register');
         document.getElementById('pane-register').classList.add('active');
+      }
+      if (targetBtn) {
+        targetBtn.classList.add('active');
+        updateTabSliderPill(targetBtn);
+      }
+      playUiClickSound(580);
+    }
+
+    function updateTabSliderPill(btn) {
+      const pill = document.getElementById('tabs-slider-pill');
+      if (pill && btn) {
+        pill.style.left = `${btn.offsetLeft}px`;
+        pill.style.width = `${btn.offsetWidth}px`;
       }
     }
 
@@ -2070,6 +2504,377 @@
         }
       }
     });
+  </script>
+
+  <!-- Interactive Cyber FX Floating Controls -->
+  <div class="cyber-floating-dock">
+    <button type="button" class="btn-cyber-pill" onclick="triggerWarpShockwave()" title="Trigger Quantum Fleet Particle Shockwave">
+      <span class="cyber-pill-dot"></span>
+      <span>⚡ Quantum Ripple</span>
+    </button>
+    <button type="button" class="btn-cyber-pill" id="btn-sound-toggle" onclick="toggleCyberAudio()" title="Toggle Sci-Fi Audio Synthesizer">
+      <span id="sound-icon">🔇 Audio Muted</span>
+    </button>
+  </div>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════════════════
+  // HIGH-OCTANE CYBER ANIMATIONS, NEURAL CANVAS & 3D INTERACTIVE ENGINE
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // ── 1. Web Audio API Sci-Fi Synthesizer ──────────────────────────────
+  let audioCtx = null;
+  let audioEnabled = false;
+
+  function initAudioContext() {
+    if (!audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) audioCtx = new AudioContext();
+    }
+  }
+
+  function toggleCyberAudio() {
+    initAudioContext();
+    audioEnabled = !audioEnabled;
+    const icon = document.getElementById('sound-icon');
+    if (icon) {
+      icon.textContent = audioEnabled ? '🔊 Audio Active' : '🔇 Audio Muted';
+    }
+    if (audioEnabled) {
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      playUiClickSound(780);
+      showToast('Cybernetic Audio Synthesizer Enabled', 'info', 2500);
+    } else {
+      showToast('Audio Muted', 'info', 2000);
+    }
+  }
+
+  function playUiClickSound(freq = 600) {
+    if (!audioEnabled || !audioCtx) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.5, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.08);
+    } catch(e) {}
+  }
+
+  function playRadarChirp() {
+    if (!audioEnabled || !audioCtx) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.16);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.18);
+    } catch(e) {}
+  }
+
+  // ── 2. Interactive Silicon Neural Edge Canvas ────────────────────────
+  (function initNeuralCanvas() {
+    const canvas = document.getElementById('neural-mesh-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    let shockwaves = [];
+    const colors = ['#00F0FF', '#00FFB3', '#5B8AF0', '#c084fc', '#fbbf24'];
+
+    const mouse = { x: -9999, y: -9999, isHovering: false };
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.7;
+        this.vy = (Math.random() - 0.5) * 0.7;
+        this.radius = Math.random() * 2 + 1.2;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.pulse = Math.random() * Math.PI;
+      }
+      update() {
+        this.pulse += 0.03;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0) this.x = width;
+        if (this.x > width) this.x = 0;
+        if (this.y < 0) this.y = height;
+        if (this.y > height) this.y = 0;
+
+        // Mouse attraction
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 180) {
+          const force = (180 - dist) / 180;
+          this.x += (dx / dist) * force * 1.5;
+          this.y += (dy / dist) * force * 1.5;
+        }
+
+        // Shockwaves interaction
+        shockwaves.forEach(sw => {
+          const sdx = this.x - sw.x;
+          const sdy = this.y - sw.y;
+          const sdist = Math.sqrt(sdx * sdx + sdy * sdy);
+          if (Math.abs(sdist - sw.currentRadius) < 30) {
+            const push = (1 - sw.progress) * 8;
+            this.x += (sdx / (sdist || 1)) * push;
+            this.y += (sdy / (sdist || 1)) * push;
+          }
+        });
+      }
+      draw() {
+        ctx.beginPath();
+        const r = this.radius + Math.sin(this.pulse) * 0.6;
+        ctx.arc(this.x, this.y, Math.max(0.5, r), 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    function spawnParticles() {
+      particles = [];
+      const count = Math.min(Math.floor((width * height) / 28000), 55);
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      spawnParticles();
+    });
+    resize();
+    spawnParticles();
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.isHovering = true;
+    });
+    window.addEventListener('mouseleave', () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
+      mouse.isHovering = false;
+    });
+
+    window.triggerWarpShockwave = function(x, y) {
+      initAudioContext();
+      playRadarChirp();
+      shockwaves.push({
+        x: x || width / 2,
+        y: y || height / 2,
+        maxRadius: Math.max(width, height) * 0.8,
+        currentRadius: 0,
+        progress: 0,
+        speed: 18,
+        color: '#00F0FF'
+      });
+      // Flash card border temporarily
+      const card = document.getElementById('auth-card');
+      if (card) {
+        card.style.boxShadow = '0 0 60px rgba(0, 255, 179, 0.4), 0 24px 70px rgba(0, 0, 0, 0.9)';
+        setTimeout(() => {
+          card.style.boxShadow = '';
+        }, 600);
+      }
+    };
+
+    window.addEventListener('click', e => {
+      if (['INPUT', 'BUTTON', 'A'].includes(e.target.tagName)) return;
+      shockwaves.push({
+        x: e.clientX,
+        y: e.clientY,
+        maxRadius: 360,
+        currentRadius: 0,
+        progress: 0,
+        speed: 12,
+        color: '#00FFB3'
+      });
+    });
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw connective filaments
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 135) {
+            const alpha = (1 - dist / 135) * 0.32;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(91, 138, 240, ${alpha})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+
+            // Occasional travelling data packet
+            if ((i + j) % 7 === 0) {
+              const time = Date.now() * 0.0015;
+              const t = (time + i) % 1;
+              const px = particles[i].x + dx * -t;
+              const py = particles[i].y + dy * -t;
+              ctx.beginPath();
+              ctx.arc(px, py, 1.4, 0, Math.PI * 2);
+              ctx.fillStyle = '#00FFB3';
+              ctx.fill();
+            }
+          }
+        }
+
+        // Connect to mouse
+        if (mouse.isHovering) {
+          const mdx = mouse.x - particles[i].x;
+          const mdy = mouse.y - particles[i].y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mdist < 170) {
+            const malpha = (1 - mdist / 170) * 0.45;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(0, 240, 255, ${malpha})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+
+        particles[i].update();
+        particles[i].draw();
+      }
+
+      // Draw expanding shockwaves
+      for (let k = shockwaves.length - 1; k >= 0; k--) {
+        const sw = shockwaves[k];
+        sw.currentRadius += sw.speed;
+        sw.progress = sw.currentRadius / sw.maxRadius;
+        const swAlpha = Math.max(0, (1 - sw.progress) * 0.55);
+
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.currentRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(0, 255, 179, ${swAlpha})`;
+        ctx.lineWidth = Math.max(1, 3 * (1 - sw.progress));
+        ctx.stroke();
+
+        if (sw.progress >= 1) {
+          shockwaves.splice(k, 1);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  })();
+
+  // ── 3. 3D Perspective Card Tilt & Hologram Tracker ──────────────────
+  (function initCardTilt() {
+    const card = document.getElementById('auth-card');
+    if (!card) return;
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -5.5;
+      const rotateY = ((x - centerX) / centerX) * 5.5;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+      card.style.setProperty('--mouse-x', `${((x / rect.width) * 100).toFixed(1)}%`);
+      card.style.setProperty('--mouse-y', `${((y / rect.height) * 100).toFixed(1)}%`);
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+      card.style.setProperty('--mouse-x', '50%');
+      card.style.setProperty('--mouse-y', '30%');
+    });
+  })();
+
+  // ── 4. Interactive Radar Ping & Live Silicon Telemetry Stream ───────
+  const telemetryFeeds = [
+    { tag: '[AGX-ORIN]', val: 'yolov8n: 122 FPS', meta: '41°C', cls: '' },
+    { tag: '[HAILO-8]', val: 'int8: drift 0.009', meta: '3.1ms', cls: 'mint' },
+    { tag: '[CORAL-TPU]', val: 'tls1.3 golden', meta: '99.8%', cls: 'blue' },
+    { tag: '[RP5-EDGE]', val: 'offline-first sync', meta: 'active', cls: 'gold' },
+    { tag: '[JETSON-NANO]', val: 'resnet50: 48 FPS', meta: 'nominal', cls: '' },
+    { tag: '[ORANGEPI-5]', val: 'rknn: 64.2 FPS', meta: '36°C', cls: 'mint' },
+    { tag: '[CLUSTER-GW]', val: 'heartbeat 17/17', meta: '0 packet loss', cls: 'blue' }
+  ];
+
+  let feedIdx = 0;
+  setInterval(() => {
+    const lineId = `stream-line-${(feedIdx % 4) + 1}`;
+    const el = document.getElementById(lineId);
+    if (el) {
+      const item = telemetryFeeds[(feedIdx + 3) % telemetryFeeds.length];
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.innerHTML = `<span class="t-tag ${item.cls}">${item.tag}</span> <span class="t-val">${item.val}</span> <span class="t-meta">${item.meta}</span>`;
+        el.style.opacity = '1';
+      }, 200);
+    }
+    feedIdx++;
+  }, 3200);
+
+  window.triggerRadarPing = function(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    initAudioContext();
+    playRadarChirp();
+
+    const scope = document.getElementById('radar-scope');
+    if (scope) {
+      scope.style.boxShadow = '0 0 35px rgba(0, 255, 179, 0.7), inset 0 0 25px rgba(0, 255, 179, 0.4)';
+      setTimeout(() => {
+        scope.style.boxShadow = '';
+      }, 500);
+    }
+
+    const line1 = document.getElementById('stream-line-1');
+    if (line1) {
+      line1.innerHTML = `<span class="t-tag mint">[PING-ACK]</span> <span class="t-val" style="color:var(--neon-mint);">17 Twins Responding</span> <span class="t-meta">4.8ms</span>`;
+    }
+    showToast('📡 Radar Sonar Ping Broadcasted: 17 Silicon Twins Acknowledged', 'success', 2500);
+  };
+
+  // ── 5. Setup Tabs Slider Position on Load ────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    const initialTab = document.getElementById('tab-btn-code');
+    if (initialTab && typeof updateTabSliderPill === 'function') {
+      setTimeout(() => updateTabSliderPill(initialTab), 100);
+    }
+  });
   </script>
 </body>
 </html>

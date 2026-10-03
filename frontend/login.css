@@ -1084,4 +1084,379 @@ footer {
   border-color: var(--neon-mint);
 }
 
+/* ═════════════════════════════════════════════════════════════════════
+   DYNAMIC CREATIVE CYBER ANIMATIONS & 3D INTERACTIVITY
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* 3D Holographic Perspective Card & Orbiting Luminous Border Beam */
+.auth-panel {
+  perspective: 1200px;
+}
+.auth-card {
+  position: relative;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  background: rgba(8, 14, 28, 0.88) !important;
+  border: 1px solid rgba(91, 138, 240, 0.25) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 45px rgba(91, 138, 240, 0.12) !important;
+  overflow: hidden;
+}
+.auth-card-reflection {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle 380px at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(91, 138, 240, 0.12), rgba(0, 255, 179, 0.04) 40%, transparent 70%);
+  opacity: 0.9;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+.auth-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--border-angle, 0deg), transparent 0%, #5B8AF0 25%, #00FFB3 50%, #00F0FF 75%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.65;
+  animation: rotateCardBeam 10s linear infinite;
+}
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes rotateCardBeam {
+  to { --border-angle: 360deg; }
+}
+
+/* Hero Emblem Dual-Rotating Geometric Hex Rings */
+.hero-emblem-wrap {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-emblem-wrap:hover {
+  transform: scale(1.08) rotate(3deg);
+}
+.hex-outer-ring {
+  transform-origin: 36px 36px;
+  animation: spinHexCW 26s linear infinite;
+}
+.hex-inner-ring {
+  transform-origin: 36px 36px;
+  animation: spinHexCCW 16s linear infinite;
+}
+.hex-core-pulse {
+  transform-origin: 36px 36px;
+  animation: pulseHexCore 2.8s ease-in-out infinite alternate;
+}
+@keyframes spinHexCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes spinHexCCW {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+@keyframes pulseHexCore {
+  0% { transform: scale(0.85); opacity: 0.4; }
+  100% { transform: scale(1.35); opacity: 0.95; }
+}
+
+/* Tactical Circular Radar & Real-Time Silicon Telemetry Stream */
+.radar-telemetry-box {
+  margin-top: 1.5rem;
+  background: rgba(8, 14, 28, 0.78);
+  border: 1px solid rgba(91, 138, 240, 0.28);
+  border-radius: var(--radius-md, 12px);
+  padding: 1rem 1.25rem;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(91, 138, 240, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+.radar-telemetry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.6rem;
+}
+.radar-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.radar-live-blip {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--neon-mint);
+  box-shadow: 0 0 10px var(--neon-mint);
+  animation: blipPulse 1.4s ease-in-out infinite alternate;
+}
+@keyframes blipPulse {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+.radar-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+  text-transform: uppercase;
+}
+.btn-radar-ping {
+  background: rgba(0, 255, 179, 0.1);
+  border: 1px solid rgba(0, 255, 179, 0.35);
+  color: var(--neon-mint);
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+.btn-radar-ping:hover {
+  background: rgba(0, 255, 179, 0.25);
+  box-shadow: 0 0 14px rgba(0, 255, 179, 0.45);
+  transform: translateY(-1px);
+}
+.radar-telemetry-body {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.radar-scope {
+  width: 90px;
+  height: 90px;
+  min-width: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(7, 18, 38, 0.9) 0%, rgba(2, 6, 14, 0.95) 100%);
+  border: 1.5px solid rgba(0, 255, 179, 0.35);
+  box-shadow: 0 0 18px rgba(0, 255, 179, 0.15), inset 0 0 14px rgba(0, 255, 179, 0.1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(0, 255, 179, 0.25);
+  inset: 12px;
+}
+.radar-ring.r2 {
+  inset: 26px;
+  border-style: dotted;
+}
+.radar-crosshair-h {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0, 255, 179, 0.2);
+}
+.radar-crosshair-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 255, 179, 0.2);
+}
+.radar-sweep-beam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 45px;
+  height: 45px;
+  transform-origin: 0 0;
+  background: conic-gradient(from 0deg at 0 0, rgba(0, 255, 179, 0.45) 0deg, transparent 55deg);
+  animation: radarSweep 3.2s linear infinite;
+  pointer-events: none;
+}
+@keyframes radarSweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.radar-blip {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-mint);
+  box-shadow: 0 0 8px var(--neon-mint);
+  transform: translate(-50%, -50%);
+  animation: blipFade 2.5s ease-in-out infinite;
+}
+.radar-blip span {
+  position: absolute;
+  left: 8px;
+  top: -4px;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #fff;
+  opacity: 0.75;
+}
+.radar-blip.b-agx { top: 28%; left: 68%; animation-delay: 0.2s; background: #00F0FF; box-shadow: 0 0 8px #00F0FF; }
+.radar-blip.b-hailo { top: 72%; left: 74%; animation-delay: 0.8s; background: #00FFB3; box-shadow: 0 0 8px #00FFB3; }
+.radar-blip.b-coral { top: 65%; left: 26%; animation-delay: 1.4s; background: #a855f7; box-shadow: 0 0 8px #a855f7; }
+.radar-blip.b-rpi5 { top: 32%; left: 32%; animation-delay: 2.1s; background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+@keyframes blipFade {
+  0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(0.85); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.35); }
+}
+.radar-stream-terminal {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.terminal-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-2);
+  transition: all 0.3s ease;
+}
+.terminal-line .t-tag {
+  color: var(--cyan);
+  font-weight: 700;
+  font-size: 0.65rem;
+}
+.terminal-line .t-tag.mint { color: var(--neon-mint); }
+.terminal-line .t-tag.blue { color: var(--accent-blue); }
+.terminal-line .t-tag.gold { color: var(--amber); }
+.terminal-line .t-val {
+  color: #fff;
+  font-weight: 500;
+}
+.terminal-line .t-meta {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  margin-left: auto;
+}
+
+/* Segmented Tab Slider */
+.auth-tabs {
+  position: relative !important;
+  display: flex !important;
+  background: rgba(5, 9, 18, 0.75) !important;
+  border: 1px solid rgba(91, 138, 240, 0.22) !important;
+  border-radius: 10px !important;
+  padding: 4px !important;
+  margin-bottom: 22px !important;
+  gap: 4px !important;
+}
+.tabs-slider-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(33.333% - 5px);
+  background: linear-gradient(135deg, rgba(91, 138, 240, 0.28), rgba(0, 255, 179, 0.16));
+  border: 1px solid rgba(0, 255, 179, 0.4);
+  border-radius: 7px;
+  box-shadow: 0 0 14px rgba(0, 255, 179, 0.18);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+.tab-btn {
+  position: relative !important;
+  z-index: 2 !important;
+  background: transparent !important;
+  border: none !important;
+  transition: color 0.2s ease, text-shadow 0.2s ease !important;
+}
+.tab-btn.active {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 10px rgba(0, 255, 179, 0.4) !important;
+}
+
+/* OTP Inputs Micro-Bounce & Glowing Laser Focus */
+.otp-box {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+.otp-box:focus {
+  transform: scale(1.08) translateY(-2px) !important;
+  border-color: var(--neon-mint) !important;
+  box-shadow: 0 0 16px rgba(0, 255, 179, 0.45), inset 0 0 8px rgba(0, 255, 179, 0.15) !important;
+}
+.otp-box.filled {
+  border-color: var(--accent-blue) !important;
+  background: rgba(91, 138, 240, 0.08) !important;
+}
+
+/* Floating Cyber FX Controller Dock */
+.cyber-floating-dock {
+  position: fixed;
+  bottom: 24px;
+  right: 28px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(7, 12, 24, 0.85);
+  border: 1px solid rgba(91, 138, 240, 0.25);
+  border-radius: 9999px;
+  padding: 6px 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(91, 138, 240, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.btn-cyber-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-2);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.btn-cyber-pill:hover {
+  background: rgba(0, 255, 179, 0.15);
+  border-color: var(--neon-mint);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(0, 255, 179, 0.35);
+}
+.cyber-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  animation: blipPulse 1.2s infinite alternate;
+}
+@media (max-width: 900px) {
+  .radar-telemetry-box { display: none; }
+  .cyber-floating-dock { bottom: 12px; right: 12px; }
+}
+
 
