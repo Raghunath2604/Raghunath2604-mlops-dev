@@ -366,6 +366,19 @@ def _init_postgres(db_url):
                 expires_at TIMESTAMP NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+            CREATE TABLE IF NOT EXISTS oauth_accounts (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                provider TEXT NOT NULL,
+                provider_user_id TEXT NOT NULL,
+                email TEXT,
+                name TEXT,
+                avatar_url TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(provider, provider_user_id),
+                FOREIGN KEY(user_id) REFERENCES api_keys(id) ON DELETE CASCADE
+            );
         ''')
         # Safe column migrations for PostgreSQL
         migrations = [
@@ -382,6 +395,8 @@ def _init_postgres(db_url):
             "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'admin'",
             "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS approval_status TEXT DEFAULT 'approved'",
             "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS subscription_tier TEXT DEFAULT 'enterprise'",
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS avatar_url TEXT",
+            "ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE",
             "ALTER TABLE deployments ADD COLUMN IF NOT EXISTS strategy TEXT DEFAULT 'direct'",
             "ALTER TABLE deployments ADD COLUMN IF NOT EXISTS stages TEXT DEFAULT '{}'",
             "ALTER TABLE deployments ALTER COLUMN health_gate TYPE TEXT USING health_gate::text",
@@ -581,6 +596,19 @@ def init_db():
                 expires_at TIMESTAMP NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+            CREATE TABLE IF NOT EXISTS oauth_accounts (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                provider TEXT NOT NULL,
+                provider_user_id TEXT NOT NULL,
+                email TEXT,
+                name TEXT,
+                avatar_url TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(provider, provider_user_id),
+                FOREIGN KEY(user_id) REFERENCES api_keys(id) ON DELETE CASCADE
+            );
         ''')
         
         # Safely migrate columns onto existing tables
@@ -589,6 +617,8 @@ def init_db():
             "ALTER TABLE drift_alerts ADD COLUMN resolved_at TIMESTAMP",
             "ALTER TABLE devices ADD COLUMN metadata TEXT DEFAULT '{}'",
             "ALTER TABLE devices ADD COLUMN uptime_s INTEGER DEFAULT 0",
+            "ALTER TABLE api_keys ADD COLUMN avatar_url TEXT",
+            "ALTER TABLE api_keys ADD COLUMN email_verified INTEGER DEFAULT 0",
         ]
         for migration in safe_migrations:
             try:
@@ -872,7 +902,7 @@ def auth_logout():
 def auth_me():
     # Return user context, heavily used for frontend route guarding
     db = get_db()
-    user = db_query(db, "SELECT id, name, subscription_tier, role FROM api_keys WHERE id = ?", (g.user_id,), fetchone=True)
+    user = db_query(db, "SELECT id, name, subscription_tier, role, avatar_url FROM api_keys WHERE id = ?", (g.user_id,), fetchone=True)
     if not user:
         return jsonify({"error": "User not found"}), 404
     user_role = "admin"
@@ -883,13 +913,21 @@ def auth_me():
             user_role = user["role"] or "admin"
         except (KeyError, IndexError):
             user_role = "admin"
+            
+    # Check for linked OAuth accounts
+    oa = db_query(db, "SELECT provider, name, avatar_url FROM oauth_accounts WHERE user_id = ? ORDER BY updated_at DESC", (g.user_id,), fetchone=True)
+    provider = oa.get("provider") if isinstance(oa, dict) else (oa[0] if oa else None)
+    avatar = (user.get("avatar_url") if isinstance(user, dict) else user[4]) or (oa.get("avatar_url") if isinstance(oa, dict) else (oa[2] if oa else ""))
+
     return jsonify({
         "success": True,
         "user": {
-            "id": user["id"],
-            "email": user["name"],
-            "tier": user["subscription_tier"],
-            "role": user_role
+            "id": user["id"] if isinstance(user, dict) else user[0],
+            "email": user["name"] if isinstance(user, dict) else user[1],
+            "tier": user["subscription_tier"] if isinstance(user, dict) else user[2],
+            "role": user_role,
+            "provider": provider or "password",
+            "avatar": avatar or ""
         }
     })
 
@@ -994,55 +1032,88 @@ def auth_verify_code():
 
     return _create_auth_response(user)
 
-@app.route("/v1/auth/oauth/google", methods=["POST"])
-@limiter.limit("15 per minute")
-def auth_oauth_google():
-    data = request.get_json(silent=True) or {}
-    email = data.get("email", "").strip().lower()
-    name = data.get("name", "").strip() or "Google Developer"
-    sub_id = data.get("google_id") or data.get("sub") or uuid.uuid4().hex[:8]
+# ── Real Multi-Provider OAuth 2.0 Engine (Google & GitHub) ─────────
+import secrets
 
-    if not email:
-        email = f"google_user_{sub_id[:6]}@gmail.com"
+def _get_base_url():
+    env_url = os.environ.get("NEXT_PUBLIC_APP_URL") or os.environ.get("APP_URL") or os.environ.get("VERCEL_PROJECT_PRODUCTION_URL")
+    if env_url:
+        if not env_url.startswith("http://") and not env_url.startswith("https://"):
+            env_url = "https://" + env_url
+        return env_url.rstrip("/")
+    proto = request.headers.get("X-Forwarded-Proto", "https" if request.is_secure else "http")
+    host = request.headers.get("X-Forwarded-Host", request.host)
+    return f"{proto}://{host}".rstrip("/")
 
+def _link_or_create_oauth_user(provider, provider_user_id, email, name, avatar_url):
     db = get_db()
-    user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
-    if not user:
-        user_id = f"user_g_{sub_id[:10]}"
-        pw_hash = hashlib.sha256((email + "oauth_google_secret").encode()).hexdigest()
-        db_query(db, """
-            INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
-            VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
-        """, (user_id, pw_hash, email), commit=True)
-        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
-
-    return _create_auth_response(user)
-
-@app.route("/v1/auth/oauth/github", methods=["POST"])
-@limiter.limit("15 per minute")
-def auth_oauth_github():
-    data = request.get_json(silent=True) or {}
-    username = data.get("username", "").strip() or data.get("login", "").strip()
-    email = data.get("email", "").strip().lower()
-    gh_id = data.get("github_id") or data.get("id") or uuid.uuid4().hex[:8]
-
+    provider_user_id = str(provider_user_id)
+    email = (email or "").strip().lower()
     if not email:
-        email = f"{username or 'gh_dev'}@users.noreply.github.com"
+        email = f"{provider}_{provider_user_id[:8]}@users.noreply.mlops.dev"
+    name = (name or "").strip() or f"{provider.capitalize()} User"
+    avatar_url = (avatar_url or "").strip()
 
-    db = get_db()
-    user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
-    if not user:
-        user_id = f"user_gh_{str(gh_id)[:10]}"
-        pw_hash = hashlib.sha256((email + "oauth_github_secret").encode()).hexdigest()
+    # 1. Check if OAuth account is already linked
+    oauth_row = db_query(db, "SELECT user_id FROM oauth_accounts WHERE provider = ? AND provider_user_id = ?", 
+                         (provider, provider_user_id), fetchone=True)
+    if oauth_row:
+        user_id = oauth_row["user_id"] if isinstance(oauth_row, dict) else oauth_row[0]
+        db_query(db, "UPDATE oauth_accounts SET email = ?, name = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP WHERE provider = ? AND provider_user_id = ?",
+                 (email, name, avatar_url, provider, provider_user_id), commit=True)
+        if avatar_url:
+            db_query(db, "UPDATE api_keys SET avatar_url = COALESCE(avatar_url, ?) WHERE id = ?", (avatar_url, user_id), commit=True)
+        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier, avatar_url FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+        return user
+
+    # 2. Check if user already exists with this exact email -> link account
+    user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier, avatar_url FROM api_keys WHERE name = ?", (email,), fetchone=True)
+    if user:
+        user_id = user["id"] if isinstance(user, dict) else user[0]
+        oauth_id = f"oa_{uuid.uuid4().hex[:12]}"
         db_query(db, """
-            INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
-            VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
-        """, (user_id, pw_hash, email), commit=True)
-        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+            INSERT INTO oauth_accounts (id, user_id, provider, provider_user_id, email, name, avatar_url)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (oauth_id, user_id, provider, provider_user_id, email, name, avatar_url), commit=True)
+        if avatar_url:
+            db_query(db, "UPDATE api_keys SET avatar_url = COALESCE(avatar_url, ?), email_verified = 1 WHERE id = ?", (avatar_url, user_id), commit=True)
+        return user
 
-    return _create_auth_response(user)
+    # 3. Create new user account with verified email
+    user_id = f"user_{provider[:2]}_{uuid.uuid4().hex[:10]}"
+    pw_hash = hashlib.sha256((email + f"oauth_{provider}_secret_{secrets.token_hex(8)}").encode()).hexdigest()
+    db_query(db, """
+        INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit, avatar_url, email_verified)
+        VALUES (?, ?, ?, 'user', 'approved', 'pro', 25, ?, 1)
+    """, (user_id, pw_hash, email, avatar_url), commit=True)
 
-# ── Real OAuth 2.0 Configuration & Redirect Handlers ──────────────
+    oauth_id = f"oa_{uuid.uuid4().hex[:12]}"
+    db_query(db, """
+        INSERT INTO oauth_accounts (id, user_id, provider, provider_user_id, email, name, avatar_url)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (oauth_id, user_id, provider, provider_user_id, email, name, avatar_url), commit=True)
+
+    user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier, avatar_url FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+    return user
+
+def _create_oauth_redirect_response(user, provider, display_name, email, avatar_url, state_cookie_name=None):
+    user_id = user["id"] if isinstance(user, dict) else user[0]
+    import urllib.parse
+    redirect_target = f"/dashboard.html?auth=success&provider={provider}&user={urllib.parse.quote(display_name)}&email={urllib.parse.quote(email)}&avatar={urllib.parse.quote(avatar_url)}"
+    resp = make_response(redirect(redirect_target))
+    is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
+    resp.set_cookie(
+        'np_token',
+        user_id,
+        httponly=True,
+        secure=is_secure,
+        samesite='Lax' if not is_secure else 'Strict',
+        max_age=86400 * 7
+    )
+    if state_cookie_name:
+        resp.delete_cookie(state_cookie_name, httponly=True, secure=is_secure, samesite='Lax')
+    return resp
+
 @app.route("/v1/auth/oauth/config", methods=["GET"])
 @app.route("/auth/oauth/config", methods=["GET"])
 def auth_oauth_config():
@@ -1051,6 +1122,7 @@ def auth_oauth_config():
         "github_client_id": os.environ.get("GITHUB_CLIENT_ID", ""),
         "google_enabled": bool(os.environ.get("GOOGLE_CLIENT_ID")),
         "github_enabled": bool(os.environ.get("GITHUB_CLIENT_ID")),
+        "base_url": _get_base_url()
     })
 
 @app.route("/v1/auth/oauth/github/authorize", methods=["GET"])
@@ -1059,58 +1131,111 @@ def auth_oauth_github_authorize():
     client_id = os.environ.get("GITHUB_CLIENT_ID")
     if not client_id:
         return redirect("/login.html?oauth_fallback=github")
+
     import urllib.parse
-    redirect_uri = urllib.parse.quote(request.host_url.rstrip("/") + "/v1/auth/oauth/github/callback")
-    return redirect(f"https://github.com/login/oauth/authorize?client_id={client_id}&scope=read:user,user:email&redirect_uri={redirect_uri}")
+    state = secrets.token_urlsafe(32)
+    base_url = _get_base_url()
+    redirect_uri = f"{base_url}/v1/auth/oauth/github/callback"
+
+    github_url = (
+        "https://github.com/login/oauth/authorize?"
+        + urllib.parse.urlencode({
+            "client_id": client_id,
+            "scope": "read:user user:email",
+            "state": state,
+            "redirect_uri": redirect_uri
+        })
+    )
+    resp = make_response(redirect(github_url))
+    is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
+    resp.set_cookie('oauth_state_github', state, max_age=600, httponly=True, secure=is_secure, samesite='Lax')
+    return resp
 
 @app.route("/v1/auth/oauth/github/callback", methods=["GET"])
 @app.route("/auth/oauth/github/callback", methods=["GET"])
 def auth_oauth_github_callback():
+    error = request.args.get("error")
+    if error:
+        error_desc = request.args.get("error_description", "GitHub sign-in was cancelled.")
+        import urllib.parse
+        return redirect(f"/login.html?error={urllib.parse.quote(error_desc)}")
+
     code = request.args.get("code")
+    received_state = request.args.get("state")
+    stored_state = request.cookies.get("oauth_state_github")
     client_id = os.environ.get("GITHUB_CLIENT_ID")
     client_secret = os.environ.get("GITHUB_CLIENT_SECRET")
+
     if not code or not client_id or not client_secret:
         return redirect("/login.html?error=github_missing_credentials")
+
+    if not stored_state or not received_state or not secrets.compare_digest(stored_state, received_state):
+        return redirect("/login.html?error=Security+state+mismatch+(anti-CSRF).+Please+try+again.")
+
     try:
         import urllib.request
         import urllib.parse
+        base_url = _get_base_url()
+        redirect_uri = f"{base_url}/v1/auth/oauth/github/callback"
+
         token_data = urllib.parse.urlencode({
             "client_id": client_id,
             "client_secret": client_secret,
-            "code": code
+            "code": code,
+            "redirect_uri": redirect_uri
         }).encode("utf-8")
-        req = urllib.request.Request("https://github.com/login/oauth/access_token", data=token_data, headers={"Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        req = urllib.request.Request(
+            "https://github.com/login/oauth/access_token",
+            data=token_data,
+            headers={"Accept": "application/json", "User-Agent": "MLOps-Dev-OAuth"}
+        )
+        with urllib.request.urlopen(req, timeout=12) as resp:
             token_res = json.loads(resp.read().decode())
+
         access_token = token_res.get("access_token")
         if not access_token:
-            return redirect("/login.html?error=github_token_exchange_failed")
+            err_msg = token_res.get("error_description") or "Failed to exchange authorization code with GitHub."
+            import urllib.parse
+            return redirect(f"/login.html?error={urllib.parse.quote(err_msg)}")
 
-        user_req = urllib.request.Request("https://api.github.com/user", headers={"Authorization": f"Bearer {access_token}", "User-Agent": "MLOps-Dev"})
-        with urllib.request.urlopen(user_req, timeout=10) as u_resp:
+        # Fetch primary user profile
+        user_req = urllib.request.Request(
+            "https://api.github.com/user",
+            headers={"Authorization": f"Bearer {access_token}", "User-Agent": "MLOps-Dev-OAuth"}
+        )
+        with urllib.request.urlopen(user_req, timeout=12) as u_resp:
             gh_user = json.loads(u_resp.read().decode())
 
-        username = gh_user.get("login") or "gh_user"
-        email = gh_user.get("email") or f"{username}@users.noreply.github.com"
         gh_id = str(gh_user.get("id"))
-        avatar = gh_user.get("avatar_url") or ""
+        username = gh_user.get("login") or f"gh_{gh_id}"
+        name = gh_user.get("name") or username
+        email = gh_user.get("email")
+        avatar = gh_user.get("avatar_url") or f"https://github.com/{username}.png"
 
-        db = get_db()
-        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
-        if not user:
-            user_id = f"user_gh_{gh_id[:10]}"
-            pw_hash = hashlib.sha256((email + "oauth_github_secret").encode()).hexdigest()
-            db_query(db, """
-                INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
-                VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
-            """, (user_id, pw_hash, email), commit=True)
-            user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+        # If email is private on GitHub profile, retrieve primary verified email from /user/emails
+        if not email:
+            try:
+                emails_req = urllib.request.Request(
+                    "https://api.github.com/user/emails",
+                    headers={"Authorization": f"Bearer {access_token}", "User-Agent": "MLOps-Dev-OAuth"}
+                )
+                with urllib.request.urlopen(emails_req, timeout=10) as e_resp:
+                    emails_list = json.loads(e_resp.read().decode())
+                for e in emails_list:
+                    if e.get("primary") and e.get("verified"):
+                        email = e.get("email")
+                        break
+                    elif e.get("verified") and not email:
+                        email = e.get("email")
+            except Exception:
+                pass
 
-        user_id = user["id"] if isinstance(user, dict) else user[0]
-        response = redirect(f"/dashboard.html?auth=success&provider=github&user={urllib.parse.quote(username)}&avatar={urllib.parse.quote(avatar)}")
-        is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
-        response.set_cookie('np_token', user_id, httponly=True, secure=is_secure, samesite='Lax' if not is_secure else 'Strict', max_age=86400 * 7)
-        return response
+        if not email:
+            email = f"{username}@users.noreply.github.com"
+
+        user = _link_or_create_oauth_user("github", gh_id, email, name, avatar)
+        return _create_oauth_redirect_response(user, "github", name or username, email, avatar, "oauth_state_github")
+
     except Exception as e:
         import urllib.parse
         return redirect(f"/login.html?error={urllib.parse.quote(str(e))}")
@@ -1121,23 +1246,56 @@ def auth_oauth_google_authorize():
     client_id = os.environ.get("GOOGLE_CLIENT_ID")
     if not client_id:
         return redirect("/login.html?oauth_fallback=google")
+
     import urllib.parse
-    redirect_uri = urllib.parse.quote(request.host_url.rstrip("/") + "/v1/auth/oauth/google/callback")
-    google_url = f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&scope=openid%20email%20profile&redirect_uri={redirect_uri}"
-    return redirect(google_url)
+    state = secrets.token_urlsafe(32)
+    base_url = _get_base_url()
+    redirect_uri = f"{base_url}/v1/auth/oauth/google/callback"
+
+    google_url = (
+        "https://accounts.google.com/o/oauth2/v2/auth?"
+        + urllib.parse.urlencode({
+            "client_id": client_id,
+            "response_type": "code",
+            "scope": "openid email profile",
+            "state": state,
+            "redirect_uri": redirect_uri,
+            "access_type": "online",
+            "prompt": "select_account"
+        })
+    )
+    resp = make_response(redirect(google_url))
+    is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
+    resp.set_cookie('oauth_state_google', state, max_age=600, httponly=True, secure=is_secure, samesite='Lax')
+    return resp
 
 @app.route("/v1/auth/oauth/google/callback", methods=["GET"])
 @app.route("/auth/oauth/google/callback", methods=["GET"])
 def auth_oauth_google_callback():
+    error = request.args.get("error")
+    if error:
+        error_desc = request.args.get("error_description", "Google sign-in was cancelled.")
+        import urllib.parse
+        return redirect(f"/login.html?error={urllib.parse.quote(error_desc)}")
+
     code = request.args.get("code")
+    received_state = request.args.get("state")
+    stored_state = request.cookies.get("oauth_state_google")
     client_id = os.environ.get("GOOGLE_CLIENT_ID")
     client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+
     if not code or not client_id or not client_secret:
         return redirect("/login.html?error=google_missing_credentials")
+
+    if not stored_state or not received_state or not secrets.compare_digest(stored_state, received_state):
+        return redirect("/login.html?error=Security+state+mismatch+(anti-CSRF).+Please+try+again.")
+
     try:
         import urllib.request
         import urllib.parse
-        redirect_uri = request.host_url.rstrip("/") + "/v1/auth/oauth/google/callback"
+        base_url = _get_base_url()
+        redirect_uri = f"{base_url}/v1/auth/oauth/google/callback"
+
         token_data = urllib.parse.urlencode({
             "client_id": client_id,
             "client_secret": client_secret,
@@ -1145,41 +1303,65 @@ def auth_oauth_google_callback():
             "grant_type": "authorization_code",
             "redirect_uri": redirect_uri
         }).encode("utf-8")
-        req = urllib.request.Request("https://oauth2.googleapis.com/token", data=token_data, headers={"Content-Type": "application/x-www-form-urlencoded"})
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        req = urllib.request.Request(
+            "https://oauth2.googleapis.com/token",
+            data=token_data,
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+        with urllib.request.urlopen(req, timeout=12) as resp:
             token_res = json.loads(resp.read().decode())
+
         access_token = token_res.get("access_token")
         if not access_token:
-            return redirect("/login.html?error=google_token_exchange_failed")
+            err_msg = token_res.get("error_description") or "Failed to exchange authorization code with Google."
+            import urllib.parse
+            return redirect(f"/login.html?error={urllib.parse.quote(err_msg)}")
 
-        user_req = urllib.request.Request("https://www.googleapis.com/oauth2/v2/userinfo", headers={"Authorization": f"Bearer {access_token}"})
-        with urllib.request.urlopen(user_req, timeout=10) as u_resp:
+        user_req = urllib.request.Request(
+            "https://www.googleapis.com/oauth2/v2/userinfo",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        with urllib.request.urlopen(user_req, timeout=12) as u_resp:
             g_user = json.loads(u_resp.read().decode())
 
-        email = g_user.get("email", "").lower()
-        name = g_user.get("name") or "Google Developer"
+        email = g_user.get("email", "").strip().lower()
+        name = g_user.get("name") or (email.split("@")[0].capitalize() if email else "Google Developer")
         g_id = str(g_user.get("id"))
         avatar = g_user.get("picture") or ""
 
-        db = get_db()
-        user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE name = ?", (email,), fetchone=True)
-        if not user:
-            user_id = f"user_g_{g_id[:10]}"
-            pw_hash = hashlib.sha256((email + "oauth_google_secret").encode()).hexdigest()
-            db_query(db, """
-                INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit)
-                VALUES (?, ?, ?, 'user', 'approved', 'pro', 25)
-            """, (user_id, pw_hash, email), commit=True)
-            user = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (user_id,), fetchone=True)
+        user = _link_or_create_oauth_user("google", g_id, email, name, avatar)
+        return _create_oauth_redirect_response(user, "google", name, email, avatar, "oauth_state_google")
 
-        user_id = user["id"] if isinstance(user, dict) else user[0]
-        response = redirect(f"/dashboard.html?auth=success&provider=google&user={urllib.parse.quote(name)}&email={urllib.parse.quote(email)}&avatar={urllib.parse.quote(avatar)}")
-        is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
-        response.set_cookie('np_token', user_id, httponly=True, secure=is_secure, samesite='Lax' if not is_secure else 'Strict', max_age=86400 * 7)
-        return response
     except Exception as e:
         import urllib.parse
         return redirect(f"/login.html?error={urllib.parse.quote(str(e))}")
+
+@app.route("/v1/auth/oauth/google", methods=["POST"])
+@limiter.limit("15 per minute")
+def auth_oauth_google():
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip().lower()
+    name = data.get("name", "").strip() or "Google Developer"
+    sub_id = data.get("google_id") or data.get("sub") or uuid.uuid4().hex[:8]
+    avatar = data.get("avatar_url", "")
+    if not email:
+        email = f"google_user_{sub_id[:6]}@gmail.com"
+    user = _link_or_create_oauth_user("google", sub_id, email, name, avatar)
+    return _create_auth_response(user)
+
+@app.route("/v1/auth/oauth/github", methods=["POST"])
+@limiter.limit("15 per minute")
+def auth_oauth_github():
+    data = request.get_json(silent=True) or {}
+    username = data.get("username", "").strip() or data.get("login", "").strip()
+    name = data.get("name", "").strip() or username
+    email = data.get("email", "").strip().lower()
+    gh_id = data.get("github_id") or data.get("id") or username or uuid.uuid4().hex[:8]
+    avatar = data.get("avatar_url", "")
+    if not email:
+        email = f"{username or 'gh_dev'}@users.noreply.github.com"
+    user = _link_or_create_oauth_user("github", gh_id, email, name, avatar)
+    return _create_auth_response(user)
 
 # ── Devices ───────────────────────────────────────────────────────
 @app.route("/v1/devices/register", methods=["POST"])
