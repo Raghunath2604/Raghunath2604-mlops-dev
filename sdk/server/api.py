@@ -41,7 +41,7 @@ from urllib.parse import urlparse
 from pathlib import Path
 from datetime import datetime, timezone
 from functools import wraps
-from flask import Flask, request, jsonify, g, make_response, send_from_directory
+from flask import Flask, request, jsonify, g, make_response, redirect, send_from_directory
 from flask_cors import CORS
 from flask_talisman import Talisman
 from flask_limiter import Limiter
