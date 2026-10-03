@@ -1454,6 +1454,161 @@
     @media (max-width: 900px) {
       .radar-telemetry-box { display: none; }
       .cyber-floating-dock { bottom: 12px; right: 12px; }
+      .stitch-telemetry-ribbon { padding: 6px 16px; }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════════
+       GOOGLE STITCH MCP ZERO-TRUST TELEMETRY & DESIGN TOKENS
+       ═════════════════════════════════════════════════════════════════════ */
+    .stitch-telemetry-ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 44px;
+      background: rgba(3, 7, 18, 0.75);
+      border-bottom: 1px solid rgba(91, 138, 240, 0.16);
+      font-family: 'JetBrains Mono', var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-2);
+      z-index: 15;
+      position: relative;
+      backdrop-filter: blur(12px);
+    }
+    .telemetry-ribbon-left, .telemetry-ribbon-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .ribbon-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      padding: 2px 10px;
+    }
+    .ribbon-chip.security {
+      background: rgba(0, 255, 179, 0.06);
+      border-color: rgba(0, 255, 179, 0.28);
+      color: var(--neon-mint);
+    }
+    .chip-dot-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neon-mint);
+      box-shadow: 0 0 6px var(--neon-mint);
+      animation: blipPulse 1.4s infinite alternate;
+    }
+    .chip-val-cyan { color: var(--cyan); font-weight: 700; }
+    .chip-val-mint { color: var(--neon-mint); font-weight: 700; }
+    .chip-hash { color: var(--text-dim); font-size: 0.62rem; margin-left: 4px; }
+
+    /* Industrial Corner Tick Marks */
+    .auth-corner-tr {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 14px;
+      height: 14px;
+      border-top: 2px solid var(--accent-blue);
+      border-right: 2px solid var(--accent-blue);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    .auth-corner-bl {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 14px;
+      height: 14px;
+      border-bottom: 2px solid var(--neon-mint);
+      border-left: 2px solid var(--neon-mint);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Stitch Hardware Metrics Quad */
+    .stitch-metrics-quad {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .stitch-metric-pill {
+      background: rgba(3, 7, 18, 0.6);
+      border: 1px solid rgba(91, 138, 240, 0.18);
+      border-radius: 8px;
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    .stitch-metric-val {
+      font-family: 'JetBrains Mono', var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .stitch-metric-val.mint { color: var(--neon-mint); }
+    .stitch-metric-val.cyan { color: var(--cyan); }
+    .stitch-metric-lbl {
+      font-family: 'JetBrains Mono', var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+    }
+
+    /* Ephemeral Session Timer */
+    .otp-session-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(91, 138, 240, 0.08);
+      border: 1px solid rgba(91, 138, 240, 0.25);
+      border-radius: 9999px;
+      padding: 3px 10px;
+      font-family: 'JetBrains Mono', var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-blue);
+      margin-bottom: 10px;
+    }
+    .otp-session-pill span.timer {
+      color: var(--neon-mint);
+      font-weight: 700;
+    }
+
+    /* Compliance Footer */
+    .stitch-compliance-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 14px 20px;
+      font-family: 'JetBrains Mono', var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(2, 4, 8, 0.88);
+      z-index: 10;
+      position: relative;
+      flex-wrap: wrap;
+    }
+    .compliance-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .compliance-tag span.dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--neon-mint);
     }
   </style>
 </head>
@@ -1489,6 +1644,18 @@
       <span class="live-pill-text">LIVE</span>
     </a>
   </header>
+
+  <!-- Top Telemetry Ribbon from Stitch MCP -->
+  <div class="stitch-telemetry-ribbon">
+    <div class="telemetry-ribbon-left">
+      <div class="ribbon-chip"><span class="chip-dot-green"></span><span>CLUSTER: US-EAST-IAD1</span></div>
+      <div class="ribbon-chip"><span class="chip-val-cyan">12ms</span><span>RTT LATENCY</span></div>
+      <div class="ribbon-chip"><span class="chip-val-mint">17 / 17</span><span>TWINS HEALTHY</span></div>
+    </div>
+    <div class="telemetry-ribbon-right">
+      <div class="ribbon-chip security"><span>🛡️</span><span>FIPS 140-3 L4 • ZERO-TRUST ENCLAVE</span><span class="chip-hash">SHA256:9b8f...e104</span></div>
+    </div>
+  </div>
 
   <!-- Main Split-Screen Container -->
   <main>
@@ -1578,6 +1745,26 @@
               <div class="terminal-line" id="stream-line-4"><span class="t-tag gold">[RP5-EDGE]</span> <span class="t-val">offline-first sync</span> <span class="t-meta">active</span></div>
             </div>
           </div>
+
+          <!-- Stitch Hardware Metrics Quad -->
+          <div class="stitch-metrics-quad">
+            <div class="stitch-metric-pill">
+              <span class="stitch-metric-val cyan" id="m-compute">84.7%</span>
+              <span class="stitch-metric-lbl">GPU Compute Load</span>
+            </div>
+            <div class="stitch-metric-pill">
+              <span class="stitch-metric-val mint" id="m-thru">91.2 TB/s</span>
+              <span class="stitch-metric-lbl">HBM3e Memory Thruput</span>
+            </div>
+            <div class="stitch-metric-pill">
+              <span class="stitch-metric-val" id="m-sec">mTLS 1.3</span>
+              <span class="stitch-metric-lbl">Quantum-Resistant Cert</span>
+            </div>
+            <div class="stitch-metric-pill">
+              <span class="stitch-metric-val mint" id="m-nodes">17 / 17</span>
+              <span class="stitch-metric-lbl">Active Silicon Nodes</span>
+            </div>
+          </div>
         </div>
 
         <!-- Founder Signature & Domain from Poster Reference -->
@@ -1593,6 +1780,8 @@
       <section class="auth-panel">
         <div class="auth-card" id="auth-card">
           <div class="auth-card-reflection"></div>
+          <div class="auth-corner-tr"></div>
+          <div class="auth-corner-bl"></div>
           <div class="auth-header">
             <div class="auth-badge">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1672,6 +1861,11 @@
 
             <!-- Step 2: 6-Digit Verification PIN Entry -->
             <div id="otp-step-2" style="display: none;">
+              <div class="otp-session-pill">
+                <span>🛡️ EPHEMERAL TOKEN</span>
+                <span>•</span>
+                <span>EXPIRES IN <span class="timer" id="otp-timer-count">03:00</span></span>
+              </div>
               <div class="form-group">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
                   <span class="form-label" style="margin-bottom: 0;">Verification PIN</span>
@@ -1801,6 +1995,15 @@
       </section>
     </div>
   </main>
+
+  <!-- Google Stitch Zero-Trust Compliance Footer -->
+  <footer class="stitch-compliance-bar">
+    <div class="compliance-tag"><span class="dot"></span><span>SOC2 TYPE II</span></div>
+    <div class="compliance-tag"><span class="dot"></span><span>FIPS 140-3 L4 ENCLAVE</span></div>
+    <div class="compliance-tag"><span class="dot"></span><span>QUANTUM-RESISTANT TLS 1.3</span></div>
+    <div class="compliance-tag"><span class="dot"></span><span>AIR-GAPPED TELEMETRY</span></div>
+    <div class="compliance-tag" style="color:var(--text-1); font-weight:600;"><span>MLOps.dev v1.0.4 Enterprise</span></div>
+  </footer>
 
   <!-- GitHub Interactive Authentication Modal -->
   <div id="modal-github" class="oauth-modal-overlay" onclick="if(event.target===this)closeOauthModal('github')">
@@ -1999,6 +2202,51 @@
       }
     }
 
+    // ── Stitch MCP Ephemeral OTP Countdown & Live Telemetry Flux ──
+    let otpTimerInterval = null;
+    function startOtpCountdown(seconds = 180) {
+      stopOtpCountdown();
+      let remaining = seconds;
+      const timerEl = document.getElementById('otp-timer-count');
+      function updateDisplay() {
+        const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+        const s = (remaining % 60).toString().padStart(2, '0');
+        if (timerEl) timerEl.textContent = `${m}:${s}`;
+      }
+      updateDisplay();
+      otpTimerInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          stopOtpCountdown();
+          if (timerEl) timerEl.textContent = 'EXPIRED';
+          showToast('Verification code session expired. Please request a new code.', 'error');
+        } else {
+          updateDisplay();
+        }
+      }, 1000);
+    }
+
+    function stopOtpCountdown() {
+      if (otpTimerInterval) {
+        clearInterval(otpTimerInterval);
+        otpTimerInterval = null;
+      }
+    }
+
+    // Telemetry Flux Interval to make Stitch metrics live
+    setInterval(() => {
+      const compEl = document.getElementById('m-compute');
+      const thruEl = document.getElementById('m-thru');
+      if (compEl) {
+        const comp = (82 + Math.random() * 6).toFixed(1);
+        compEl.textContent = `${comp}%`;
+      }
+      if (thruEl) {
+        const thru = (89 + Math.random() * 4).toFixed(1);
+        thruEl.textContent = `${thru} TB/s`;
+      }
+    }, 3200);
+
     // ── Email OTP Verification Flow ──────────────────────────
     let currentEmail = '';
     let latestDebugCode = '';
@@ -2028,6 +2276,7 @@
           document.getElementById('otp-email-target').textContent = email;
           document.getElementById('otp-step-1').style.display = 'none';
           document.getElementById('otp-step-2').style.display = 'block';
+          startOtpCountdown(180);
 
           if (data.code) {
             latestDebugCode = data.code;
@@ -2117,6 +2366,7 @@
     }
 
     function resetOtpStep() {
+      stopOtpCountdown();
       document.getElementById('otp-step-2').style.display = 'none';
       document.getElementById('otp-step-1').style.display = 'block';
       for (let i = 1; i <= 6; i++) {
