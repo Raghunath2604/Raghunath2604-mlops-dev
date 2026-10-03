@@ -901,22 +901,30 @@ def _create_oauth_redirect_response(user, provider, display_name, email, avatar_
         resp.delete_cookie(state_cookie_name, httponly=True, secure=is_secure, samesite='Lax')
     return resp
 
+def _get_oauth_env(key):
+    val = os.environ.get(key, "").strip()
+    if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
+        val = val[1:-1].strip()
+    return val
+
 @app.route("/v1/auth/oauth/config", methods=["GET"])
 @app.route("/auth/oauth/config", methods=["GET"])
 def auth_oauth_config():
+    g_id = _get_oauth_env("GOOGLE_CLIENT_ID")
+    gh_id = _get_oauth_env("GITHUB_CLIENT_ID")
     return jsonify({
-        "google_client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
-        "github_client_id": os.environ.get("GITHUB_CLIENT_ID", ""),
-        "google_enabled": bool(os.environ.get("GOOGLE_CLIENT_ID")),
-        "github_enabled": bool(os.environ.get("GITHUB_CLIENT_ID")),
+        "google_client_id": g_id if g_id != "[SENSITIVE]" else "",
+        "github_client_id": gh_id if gh_id != "[SENSITIVE]" else "",
+        "google_enabled": bool(g_id and g_id != "[SENSITIVE]"),
+        "github_enabled": bool(gh_id and gh_id != "[SENSITIVE]"),
         "base_url": _get_base_url()
     })
 
 @app.route("/v1/auth/oauth/github/authorize", methods=["GET"])
 @app.route("/auth/oauth/github/authorize", methods=["GET"])
 def auth_oauth_github_authorize():
-    client_id = os.environ.get("GITHUB_CLIENT_ID")
-    if not client_id:
+    client_id = _get_oauth_env("GITHUB_CLIENT_ID")
+    if not client_id or client_id == "[SENSITIVE]":
         return redirect("/login.html?oauth_fallback=github")
 
     import urllib.parse
@@ -950,8 +958,8 @@ def auth_oauth_github_callback():
     code = request.args.get("code")
     received_state = request.args.get("state")
     stored_state = request.cookies.get("oauth_state_github")
-    client_id = os.environ.get("GITHUB_CLIENT_ID")
-    client_secret = os.environ.get("GITHUB_CLIENT_SECRET")
+    client_id = _get_oauth_env("GITHUB_CLIENT_ID")
+    client_secret = _get_oauth_env("GITHUB_CLIENT_SECRET")
 
     if not code or not client_id or not client_secret:
         return redirect("/login.html?error=github_missing_credentials")
@@ -1030,8 +1038,8 @@ def auth_oauth_github_callback():
 @app.route("/v1/auth/oauth/google/authorize", methods=["GET"])
 @app.route("/auth/oauth/google/authorize", methods=["GET"])
 def auth_oauth_google_authorize():
-    client_id = os.environ.get("GOOGLE_CLIENT_ID")
-    if not client_id:
+    client_id = _get_oauth_env("GOOGLE_CLIENT_ID")
+    if not client_id or client_id == "[SENSITIVE]":
         return redirect("/login.html?oauth_fallback=google")
 
     import urllib.parse
@@ -1068,8 +1076,8 @@ def auth_oauth_google_callback():
     code = request.args.get("code")
     received_state = request.args.get("state")
     stored_state = request.cookies.get("oauth_state_google")
-    client_id = os.environ.get("GOOGLE_CLIENT_ID")
-    client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+    client_id = _get_oauth_env("GOOGLE_CLIENT_ID")
+    client_secret = _get_oauth_env("GOOGLE_CLIENT_SECRET")
 
     if not code or not client_id or not client_secret:
         return redirect("/login.html?error=google_missing_credentials")
@@ -1122,6 +1130,23 @@ def auth_oauth_google_callback():
     except Exception as e:
         import urllib.parse
         return redirect(f"/login.html?error={urllib.parse.quote(str(e))}")
+
+@app.route("/v1/auth/oauth/callback", methods=["GET"])
+@app.route("/auth/oauth/callback", methods=["GET"])
+def auth_oauth_unified_callback():
+    provider = request.args.get("provider", "").lower()
+    if not provider:
+        if request.cookies.get("oauth_state_google"):
+            provider = "google"
+        elif request.cookies.get("oauth_state_github"):
+            provider = "github"
+        elif "scope" in request.args or "authuser" in request.args:
+            provider = "google"
+        else:
+            provider = "github"
+    if provider == "google":
+        return auth_oauth_google_callback()
+    return auth_oauth_github_callback()
 
 @app.route("/v1/auth/oauth/google", methods=["POST"])
 @limiter.limit("15 per minute")
