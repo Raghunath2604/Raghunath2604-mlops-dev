@@ -45,8 +45,9 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 <link rel="canonical" href="https://www.mlops.dev"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/landing.css">
+<link rel="stylesheet" href="/tokens.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -193,6 +194,30 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   <button class="mn-cta" onclick="smoothTo('wl');closeMobNav()">Get early access — free</button>
 </div>
 
+<!-- TOP ZERO-TRUST TELEMETRY & ZULU MISSION RIBBON -->
+<div class="stitch-telemetry-ribbon" style="display:flex; align-items:center; justify-content:space-between; padding:6px 32px; background:rgba(3,7,18,0.94); border-bottom:1px solid rgba(91,138,240,0.2); font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#94a3b8; position:relative; z-index:100; backdrop-filter:blur(16px);">
+  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(91,138,240,0.08); border:1px solid rgba(91,138,240,0.28); border-radius:4px; padding:2px 8px; color:#7dd3fc; font-weight:700;">
+      <span>UTC / ZULU</span>
+      <span id="zulu-clock-home" style="color:#fff;">00:00:00.000 UTC</span>
+    </div>
+    <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0,255,179,0.06); border:1px solid rgba(0,255,179,0.25); border-radius:4px; padding:2px 8px; color:#00ffb3;">
+      <span>🛡️ FIPS 140-3 L4 ENCLAVE</span>
+      <span style="opacity:0.75; font-size:0.62rem; margin-left:4px;">SHA256:9b8f...e104</span>
+    </div>
+    <div style="display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; color:#94a3b8;">
+      <span style="width:6px; height:6px; border-radius:50%; background:#00ffb3; box-shadow:0 0 6px #00ffb3;"></span>
+      <span>17 / 17 TWINS ONLINE</span>
+    </div>
+  </div>
+  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <span style="color:#7dd3fc; font-weight:600;">SUB-10MS AIR-GAP DIODE</span>
+    <span style="color:#64748b;">•</span>
+    <span style="color:#86efac; font-weight:600;">0.0000% PACKET LOSS</span>
+    <a href="login.html" style="color:#5b8af0; text-decoration:none; font-weight:700;">LAUNCH CONSOLE →</a>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo" onclick="scrollToTop()" role="button" tabindex="0">
@@ -245,6 +270,19 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
       <p class="hero-sub">
         <strong>Deploy, monitor, and heal ML models</strong> across Jetson boards, Raspberry Pis, and custom ARM hardware — even when the internet is gone. The MLOps platform built for the real world.
       </p>
+
+      <!-- 1-Line Physical Hardware Provisioning Bar -->
+      <div style="margin: 18px 0 24px; background: rgba(5,9,19,0.92); border: 1px solid rgba(91,138,240,0.3); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); position: relative; overflow: hidden;">
+        <div style="position:absolute; top:0; left:0; width:10px; height:10px; border-top:2px solid #5b8af0; border-left:2px solid #5b8af0;"></div>
+        <div style="position:absolute; bottom:0; right:0; width:10px; height:10px; border-bottom:2px solid #00ffb3; border-right:2px solid #00ffb3;"></div>
+        <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+          <span style="color: #00ffb3; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 700;">$</span>
+          <code style="color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo</code>
+        </div>
+        <button type="button" onclick="navigator.clipboard.writeText('curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo'); showToast('✓ Copied 1-line edge installer!','ok')" style="background: rgba(91,138,240,0.15); border: 1px solid rgba(91,138,240,0.4); color: #7dd3fc; border-radius: 4px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: all 0.15s; flex-shrink: 0;">
+          COPY
+        </button>
+      </div>
 
       <div class="hero-ctas">
         <button class="cta-primary" onclick="smoothTo('wl')">
@@ -1132,6 +1170,17 @@ document.addEventListener('DOMContentLoaded',function(){
   if(!p)return;
   api('/waitlist',{method:'POST',body:JSON.stringify({email:p,source:'offline_sync'})})
     .then(()=>localStorage.removeItem('pending_wl')).catch(()=>{});
+// ── Zulu Mission Clock for Homepage ──
+(function(){
+  const zuluHome = document.getElementById('zulu-clock-home');
+  if(!zuluHome) return;
+  function tick() {
+    const now = new Date();
+    const iso = now.toISOString();
+    zuluHome.textContent = `${iso.substring(11, 23)} UTC`;
+  }
+  tick();
+  setInterval(tick, 43);
 })();
 </script>
 <script>
