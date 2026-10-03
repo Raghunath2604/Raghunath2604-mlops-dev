@@ -1,0 +1,99 @@
+/**
+ * ══════════════════════════════════════════════════════════════════════════════
+ * MLOps.dev — Bespoke Aerospace Mission Control Design Tokens
+ * Generated via Google Stitch MCP (Project: 6238397156815965385)
+ * Handcrafted Human-Engineered Anti-AI Aesthetic
+ * ══════════════════════════════════════════════════════════════════════════════
+ */
+
+:root {
+  /* ── Spatial Surfaces (Obsidian Obsidian Layering) ── */
+  --stitch-void: #030712;
+  --stitch-surface-lowest: #080e1a;
+  --stitch-surface-low: #0e131f;
+  --stitch-surface-card: #121826;
+  --stitch-surface-container: #161c28;
+  --stitch-surface-high: #1a202c;
+  --stitch-surface-highest: #242a36;
+  --stitch-surface-elevated: #2f3542;
+
+  /* ── Technical Neon & Chromatic Accents ── */
+  --stitch-cobalt: #5b8af0;
+  --stitch-cobalt-glow: rgba(91, 138, 240, 0.42);
+  --stitch-cobalt-subtle: rgba(91, 138, 240, 0.12);
+  
+  --stitch-emerald: #00ffb3;
+  --stitch-emerald-glow: rgba(0, 255, 179, 0.38);
+  --stitch-emerald-subtle: rgba(0, 255, 179, 0.12);
+
+  --stitch-cyan: #00f0ff;
+  --stitch-cyan-glow: rgba(0, 240, 255, 0.35);
+
+  --stitch-crimson: #ff3b6b;
+  --stitch-crimson-glow: rgba(255, 59, 107, 0.42);
+  --stitch-crimson-subtle: rgba(255, 59, 107, 0.12);
+
+  --stitch-amber: #f59e0b;
+  --stitch-amber-glow: rgba(245, 158, 11, 0.35);
+
+  /* ── High-Contrast Typography ── */
+  --stitch-text-primary: #f8fafc;
+  --stitch-text-secondary: #94a3b8;
+  --stitch-text-dim: #64748b;
+  --stitch-text-muted: #334155;
+  --stitch-text-mono-cyan: #7dd3fc;
+  --stitch-text-mono-mint: #86efac;
+
+  /* ── Font Stacks (Artisanal Anti-AI Typography) ── */
+  --stitch-font-display: 'Space Grotesk', -apple-system, sans-serif;
+  --stitch-font-mono: 'JetBrains Mono', 'IBM Plex Mono', Consolas, monospace;
+  --stitch-font-body: 'Geist', 'Plus Jakarta Sans', -apple-system, sans-serif;
+
+  /* ── Precision Borders & Dividers ── */
+  --stitch-border-subtle: rgba(255, 255, 255, 0.06);
+  --stitch-border-default: rgba(91, 138, 240, 0.18);
+  --stitch-border-active: rgba(91, 138, 240, 0.55);
+  --stitch-border-emerald: rgba(0, 255, 179, 0.35);
+  --stitch-border-crimson: rgba(255, 59, 107, 0.4);
+
+  /* ── Industrial Metrics & Radii ── */
+  --stitch-radius-sm: 4px;
+  --stitch-radius-md: 8px;
+  --stitch-radius-lg: 12px;
+  --stitch-radius-full: 9999px;
+  
+  --stitch-topbar-h: 46px;
+  --stitch-ribbon-h: 34px;
+  --stitch-rail-w: 220px;
+}
+
+/* Global Industrial Utilities */
+.tactical-border-tr {
+  position: relative;
+}
+.tactical-border-tr::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid var(--stitch-cobalt);
+  border-right: 2px solid var(--stitch-cobalt);
+  pointer-events: none;
+}
+
+.tactical-border-bl {
+  position: relative;
+}
+.tactical-border-bl::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid var(--stitch-emerald);
+  border-left: 2px solid var(--stitch-emerald);
+  pointer-events: none;
+}

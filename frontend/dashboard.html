@@ -28,7 +28,8 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="tokens.css" />
 
 <!-- Chart.js & Leaflet Map -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -957,7 +958,229 @@ html, body {
   .sidebar { width: 68px; min-width: 68px; }
   .sb-brand span, .sb-group-title, .sb-item span, .sb-badge, .sb-user-info, .btn-logout { display: none; }
   .sb-item { justify-content: center; padding: 0.75rem; }
-  .kpi-grid { grid-template-columns: 1fr; }
+/* ═══════════════════════════════════════════════════════════════════
+   BESPOKE AEROSPACE MISSION CONTROL & STITCH ZERO-TRUST STYLES
+   ═══════════════════════════════════════════════════════════════════ */
+.mission-control-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 24px;
+  background: rgba(3, 7, 18, 0.95);
+  border-bottom: 1px solid rgba(91, 138, 240, 0.2);
+  font-family: var(--stitch-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  color: #94a3b8;
+  z-index: 100;
+  flex-shrink: 0;
+  backdrop-filter: blur(16px);
+}
+.ribbon-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.zulu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(91, 138, 240, 0.08);
+  border: 1px solid rgba(91, 138, 240, 0.28);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: #7dd3fc;
+  font-weight: 700;
+}
+.zulu-clock {
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+.security-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 255, 179, 0.06);
+  border: 1px solid rgba(0, 255, 179, 0.25);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: #00ffb3;
+}
+.btn-emergency-rollback {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 59, 107, 0.15);
+  border: 1px solid rgba(255, 59, 107, 0.5);
+  color: #ff3b6b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-emergency-rollback:hover {
+  background: rgba(255, 59, 107, 0.3);
+  box-shadow: 0 0 14px rgba(255, 59, 107, 0.4);
+}
+
+/* Aerospace Tactical Radar & Airspace Grid */
+.aerospace-ops-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.radar-panel-tactical {
+  background: #050913;
+  border: 1px solid rgba(91, 138, 240, 0.24);
+  border-radius: 10px;
+  padding: 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.radar-panel-tactical::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid #5b8af0;
+  border-left: 2px solid #5b8af0;
+  pointer-events: none;
+}
+.radar-panel-tactical::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid #00ffb3;
+  border-right: 2px solid #00ffb3;
+  pointer-events: none;
+}
+.radar-hud-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+.radar-stage-flex {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.radar-screen-wrap {
+  width: 220px;
+  height: 220px;
+  position: relative;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 25, 45, 0.7) 0%, #030712 70%);
+  border: 1px solid rgba(91, 138, 240, 0.35);
+  box-shadow: 0 0 25px rgba(91, 138, 240, 0.15), inset 0 0 25px rgba(0, 255, 179, 0.08);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.radar-canvas-element {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.radar-live-hud-data {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+.hud-data-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+.hud-val-cyan { color: #00f0ff; font-weight: 700; }
+.hud-val-mint { color: #00ffb3; font-weight: 700; }
+.hud-val-gold { color: #f59e0b; font-weight: 700; }
+
+/* Optical Diode Queue & Canary Traffic Splitter */
+.airgap-canary-panel {
+  background: #050913;
+  border: 1px solid rgba(0, 255, 179, 0.22);
+  border-radius: 10px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.diode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+}
+.diode-queue-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.diode-packet-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(8, 14, 26, 0.85);
+  border: 1px solid rgba(91, 138, 240, 0.16);
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+}
+.canary-splitter-box {
+  background: rgba(3, 7, 18, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px;
+}
+.canary-bar-track {
+  height: 8px;
+  border-radius: 4px;
+  background: #1e293b;
+  overflow: hidden;
+  display: flex;
+  margin: 8px 0;
+}
+.canary-base-fill {
+  background: #5b8af0;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+.canary-canary-fill {
+  background: #00ffb3;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+.canary-labels-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+}
+@media (max-width: 1024px) {
+  .aerospace-ops-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -1334,6 +1557,32 @@ html, body {
 
   <!-- WORKSPACE -->
   <div class="workspace">
+    <!-- TOP ZERO-TRUST TELEMETRY & ZULU MISSION RIBBON -->
+    <div class="mission-control-ribbon">
+      <div class="ribbon-group">
+        <div class="zulu-badge">
+          <span>UTC / ZULU</span>
+          <span class="zulu-clock" id="zulu-mission-clock">00:00:00.000 UTC</span>
+        </div>
+        <div class="security-chip">
+          <span>🛡️ FIPS 140-3 L4 ENCLAVE</span>
+          <span style="opacity:0.75; font-size:0.62rem; margin-left:4px;">SHA256:9b8f...e104</span>
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; color:#94a3b8;">
+          <span style="width:6px; height:6px; border-radius:50%; background:#00ffb3; box-shadow:0 0 6px #00ffb3;"></span>
+          <span>4,128 / 4,130 TWINS ONLINE</span>
+        </div>
+      </div>
+      <div class="ribbon-group">
+        <span style="color:#7dd3fc; font-weight:600;">SUB-10MS AIR-GAP DIODE</span>
+        <span style="color:#64748b;">•</span>
+        <span style="color:#86efac; font-weight:600;">0.0000% PACKET LOSS</span>
+        <button type="button" class="btn-emergency-rollback" onclick="triggerEmergencyRollback()" title="Guarded Instant Model Rollback Trigger">
+          <span>⚠ ROLLBACK TRIGGER</span>
+        </button>
+      </div>
+    </div>
+
     <!-- TOPBAR -->
     <header class="topbar">
       <div class="topbar-left">
@@ -1369,6 +1618,100 @@ html, body {
 
       <!-- PAGE: OVERVIEW -->
       <section class="page active" id="page-overview">
+        <!-- AEROSPACE TACTICAL OPERATIONS RADAR & AIRSPACE MODULE -->
+        <div class="aerospace-ops-grid">
+          <!-- 1. Tactical Vector Drift Sweep Radar -->
+          <div class="radar-panel-tactical">
+            <div class="radar-hud-bar">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#00ffb3; box-shadow:0 0 8px #00ffb3;"></span>
+                <span style="font-weight:700; color:#fff; letter-spacing:0.04em;">TACTICAL VECTOR DRIFT RADAR</span>
+              </div>
+              <span style="color:#7dd3fc;">BAND: 5.8 GHz FHSS · AZIMUTH SWEEP</span>
+            </div>
+            
+            <div class="radar-stage-flex">
+              <!-- Radar Scope Canvas -->
+              <div class="radar-screen-wrap" id="aerospace-radar-wrap">
+                <canvas id="mission-radar-canvas" class="radar-canvas-element" width="220" height="220"></canvas>
+              </div>
+
+              <!-- Real-time HUD Telemetry Data -->
+              <div class="radar-live-hud-data">
+                <div class="hud-data-row">
+                  <span style="color:#64748b;">RADIAL AZIMUTH:</span>
+                  <span class="hud-val-cyan" id="hud-azimuth">314.2° NNE</span>
+                </div>
+                <div class="hud-data-row">
+                  <span style="color:#64748b;">RADAR ELEVATION:</span>
+                  <span class="hud-val-cyan" id="hud-elevation">+18.4° TILT</span>
+                </div>
+                <div class="hud-data-row">
+                  <span style="color:#64748b;">MEAN COSINE SIM:</span>
+                  <span class="hud-val-mint" id="hud-cosine">0.9782 (GOLDEN)</span>
+                </div>
+                <div class="hud-data-row">
+                  <span style="color:#64748b;">DRIFT ANOMALY:</span>
+                  <span class="hud-val-mint" id="hud-anomaly">0.012 (BOUNDED)</span>
+                </div>
+                <div class="hud-data-row">
+                  <span style="color:#64748b;">QUANT STATUS:</span>
+                  <span class="hud-val-gold" id="hud-quant">INT8 ACTIVE · 275 TOPS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Optical Diode Queue & Canary Traffic Splitter -->
+          <div class="airgap-canary-panel">
+            <div>
+              <div class="diode-header">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span style="color:#00ffb3;">⚡</span>
+                  <span style="font-weight:700; color:#fff;">AIR-GAP OPTICAL DIODE LINK</span>
+                </div>
+                <span style="color:#00ffb3; font-size:0.65rem;">RX-ONLY LASER</span>
+              </div>
+
+              <div class="diode-queue-stream" id="diode-stream">
+                <div class="diode-packet-item">
+                  <span style="color:#7dd3fc;">[CHUNK_001]</span>
+                  <span style="color:#f8fafc;">weights-int8.bin</span>
+                  <span style="color:#86efac; font-weight:700;">VERIFIED (SHA-256)</span>
+                </div>
+                <div class="diode-packet-item">
+                  <span style="color:#7dd3fc;">[CHUNK_002]</span>
+                  <span style="color:#f8fafc;">yolov8-engine.plan</span>
+                  <span style="color:#86efac; font-weight:700;">100% INGESTED</span>
+                </div>
+                <div class="diode-packet-item">
+                  <span style="color:#7dd3fc;">[CHUNK_003]</span>
+                  <span style="color:#f8fafc;">telemetry-buffer</span>
+                  <span style="color:#00ffb3; font-weight:700;">SYNCING (3.2 MB/s)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Canary Traffic Splitter -->
+            <div class="canary-splitter-box">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; font-weight:700; color:#fff;">CANARY TRAFFIC SPLITTER</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.68rem; color:#f59e0b;" id="canary-circuit-status">CIRCUIT ARMED</span>
+              </div>
+
+              <div class="canary-bar-track">
+                <div class="canary-base-fill" id="canary-bar-base" style="width: 88%;"></div>
+                <div class="canary-canary-fill" id="canary-bar-canary" style="width: 12%;"></div>
+              </div>
+
+              <div class="canary-labels-row">
+                <span style="color:#5b8af0;">Base v4.17.9: <strong id="lbl-canary-base">88%</strong></span>
+                <span style="color:#00ffb3;">Canary v4.18.2: <strong id="lbl-canary-canary">12%</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- KPI METRICS -->
         <div class="kpi-grid">
           <div class="kpi-card">
@@ -3121,6 +3464,120 @@ function showRestrictedAccessScreen(user) {
     scr.style.display = 'flex';
   }
 }
+
+// ── Bespoke Aerospace Mission Control Telemetry Loops ──
+function initMissionControlFX() {
+  // 1. Millisecond Zulu Clock
+  const zuluEl = document.getElementById('zulu-mission-clock');
+  function tickZulu() {
+    const now = new Date();
+    const iso = now.toISOString();
+    const timePart = iso.substring(11, 23);
+    if (zuluEl) zuluEl.textContent = `${timePart} UTC`;
+  }
+  tickZulu();
+  setInterval(tickZulu, 43);
+
+  // 2. Tactical Vector Drift Radar Canvas Sweep
+  const canvas = document.getElementById('mission-radar-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let angle = 0;
+    const targets = [
+      { r: 0.65, a: 0.8, name: 'AGX-ORIN', color: '#00ffb3' },
+      { r: 0.42, a: 2.1, name: 'HAILO-8', color: '#00ffb3' },
+      { r: 0.78, a: 3.9, name: 'CORAL-TPU', color: '#00f0ff' },
+      { r: 0.55, a: 5.2, name: 'RPI5-EDGE', color: '#5b8af0' }
+    ];
+
+    function drawRadar() {
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const radius = cx - 8;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Radar Concentric Range Rings
+      ctx.lineWidth = 1;
+      for (let i = 1; i <= 3; i++) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, (radius / 3) * i, 0, Math.PI * 2);
+        ctx.strokeStyle = i === 3 ? 'rgba(91, 138, 240, 0.4)' : 'rgba(91, 138, 240, 0.16)';
+        ctx.stroke();
+      }
+
+      // Radar Crosshair Graticule
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - radius);
+      ctx.lineTo(cx, cy + radius);
+      ctx.moveTo(cx - radius, cy);
+      ctx.lineTo(cx + radius, cy);
+      ctx.strokeStyle = 'rgba(91, 138, 240, 0.18)';
+      ctx.stroke();
+
+      // Sweeping Beam Gradient
+      angle = (angle + 0.035) % (Math.PI * 2);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      const grad = ctx.createLinearGradient(0, 0, radius, 0);
+      grad.addColorStop(0, 'rgba(0, 255, 179, 0)');
+      grad.addColorStop(0.8, 'rgba(0, 255, 179, 0.28)');
+      grad.addColorStop(1, 'rgba(0, 255, 179, 0.75)');
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, radius, -0.22, 0);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.restore();
+
+      // Target Blips
+      targets.forEach(tgt => {
+        const tx = cx + Math.cos(tgt.a) * (radius * tgt.r);
+        const ty = cy + Math.sin(tgt.a) * (radius * tgt.r);
+        
+        ctx.beginPath();
+        ctx.arc(tx, ty, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = tgt.color;
+        ctx.shadowColor = tgt.color;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Label
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '8px "JetBrains Mono", monospace';
+        ctx.fillText(tgt.name, tx + 6, ty + 3);
+      });
+
+      requestAnimationFrame(drawRadar);
+    }
+    requestAnimationFrame(drawRadar);
+  }
+
+  // 3. Telemetry HUD Fluctuations
+  setInterval(() => {
+    const azEl = document.getElementById('hud-azimuth');
+    const cosEl = document.getElementById('hud-cosine');
+    const anomEl = document.getElementById('hud-anomaly');
+    if (azEl) {
+      const deg = (310 + Math.random() * 8).toFixed(1);
+      azEl.textContent = `${deg}° NNE`;
+    }
+    if (cosEl) {
+      const sim = (0.9775 + Math.random() * 0.0018).toFixed(4);
+      cosEl.textContent = `${sim} (GOLDEN)`;
+    }
+    if (anomEl) {
+      const anom = (0.011 + Math.random() * 0.003).toFixed(3);
+      anomEl.textContent = `${anom} (BOUNDED)`;
+    }
+  }, 2800);
+}
+window.addEventListener('load', initMissionControlFX);
 
 window.addEventListener('DOMContentLoaded', checkAuth);
 </script>
