@@ -1076,7 +1076,9 @@ def _link_or_create_oauth_user(provider, provider_user_id, email, name, avatar_u
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (oauth_id, user_id, provider, provider_user_id, email, name, avatar_url), commit=True)
         if avatar_url:
-            db_query(db, "UPDATE api_keys SET avatar_url = COALESCE(avatar_url, ?), email_verified = 1 WHERE id = ?", (avatar_url, user_id), commit=True)
+            db_query(db, "UPDATE api_keys SET avatar_url = COALESCE(avatar_url, ?), email_verified = TRUE WHERE id = ?", (avatar_url, user_id), commit=True)
+        else:
+            db_query(db, "UPDATE api_keys SET email_verified = TRUE WHERE id = ?", (user_id,), commit=True)
         return user
 
     # 3. Create new user account with verified email
@@ -1084,7 +1086,7 @@ def _link_or_create_oauth_user(provider, provider_user_id, email, name, avatar_u
     pw_hash = hashlib.sha256((email + f"oauth_{provider}_secret_{secrets.token_hex(8)}").encode()).hexdigest()
     db_query(db, """
         INSERT INTO api_keys (id, key_hash, name, role, approval_status, subscription_tier, device_limit, avatar_url, email_verified)
-        VALUES (?, ?, ?, 'user', 'approved', 'pro', 25, ?, 1)
+        VALUES (?, ?, ?, 'user', 'approved', 'pro', 25, ?, TRUE)
     """, (user_id, pw_hash, email, avatar_url), commit=True)
 
     oauth_id = f"oa_{uuid.uuid4().hex[:12]}"
