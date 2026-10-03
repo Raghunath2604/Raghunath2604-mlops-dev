@@ -1028,6 +1028,58 @@
       text-overflow: ellipsis;
       max-width: 320px;
     }
+
+    .quick-chips-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-2);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quick-chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .quick-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      color: var(--text-1);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all var(--transition-fast);
+      font-family: var(--font-mono);
+    }
+
+    .quick-chip:hover {
+      background: rgba(91, 138, 240, 0.15);
+      border-color: var(--accent-blue);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .quick-chip.founder {
+      border-color: rgba(0, 255, 179, 0.35);
+      background: rgba(0, 255, 179, 0.06);
+      color: var(--neon-mint);
+    }
+
+    .quick-chip.founder:hover {
+      background: rgba(0, 255, 179, 0.18);
+      border-color: var(--neon-mint);
+    }
   </style>
 </head>
 <body>
@@ -1335,7 +1387,24 @@
         </div>
       </div>
 
-      <div class="form-group" style="margin-top:14px;">
+      <!-- Quick Select Profiles -->
+      <div class="quick-chips-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Instant 1-Click Verification:
+      </div>
+      <div class="quick-chips-container">
+        <button type="button" class="quick-chip founder" onclick="selectGhQuickChip('Raghunath2604', 'Raghunath Reddy', 'raghunathareddygr94@gmail.com')">
+          ⚡ @Raghunath2604 <span style="opacity:0.75; font-size:0.68rem;">(Founder)</span>
+        </button>
+        <button type="button" class="quick-chip" onclick="selectGhQuickChip('octocat', 'The Octocat', 'octocat@github.com')">
+          @octocat
+        </button>
+        <button type="button" class="quick-chip" onclick="selectGhQuickChip('torvalds', 'Linus Torvalds', 'torvalds@kernel.org')">
+          @torvalds
+        </button>
+      </div>
+
+      <div class="form-group" style="margin-top:10px;">
         <label class="form-label">GitHub Username *</label>
         <div class="input-wrap">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1386,7 +1455,24 @@
         </div>
       </div>
 
-      <div class="form-group" style="margin-top:14px;">
+      <!-- Quick Select Profiles -->
+      <div class="quick-chips-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Instant 1-Click Profile:
+      </div>
+      <div class="quick-chips-container">
+        <button type="button" class="quick-chip founder" onclick="selectGoogleQuickChip('raghunathareddygr94@gmail.com', 'Raghunath Reddy')">
+          ⚡ raghunathareddygr94@gmail.com <span style="opacity:0.75; font-size:0.68rem;">(Founder)</span>
+        </button>
+        <button type="button" class="quick-chip" onclick="selectGoogleQuickChip('alex.chen@mlops.dev', 'Alex Chen')">
+          alex.chen@mlops.dev
+        </button>
+        <button type="button" class="quick-chip" onclick="selectGoogleQuickChip('sarah.kim@cloudai.io', 'Sarah Kim')">
+          sarah.kim@cloudai.io
+        </button>
+      </div>
+
+      <div class="form-group" style="margin-top:10px;">
         <label class="form-label">Google Account Email *</label>
         <div class="input-wrap">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -1659,6 +1745,25 @@
     function closeOauthModal(provider) {
       const modal = document.getElementById(`modal-${provider}`);
       if (modal) modal.classList.remove('open');
+    }
+
+    function selectGhQuickChip(username, name, email) {
+      const uEl = document.getElementById('modal-gh-username');
+      const eEl = document.getElementById('modal-gh-email');
+      if (uEl) {
+        uEl.value = username;
+        onGhUsernameInput(username);
+      }
+      if (eEl && email) {
+        eEl.value = email;
+      }
+    }
+
+    function selectGoogleQuickChip(email, name) {
+      const eEl = document.getElementById('modal-google-email');
+      const nEl = document.getElementById('modal-google-name');
+      if (eEl) eEl.value = email;
+      if (nEl) nEl.value = name;
     }
 
     async function handleSocialAuth(provider) {

@@ -1032,3 +1032,56 @@ footer {
   max-width: 320px;
 }
 
+.quick-chips-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.quick-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.quick-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  color: var(--text-1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all var(--transition-fast);
+  font-family: var(--font-mono);
+}
+
+.quick-chip:hover {
+  background: rgba(91, 138, 240, 0.15);
+  border-color: var(--accent-blue);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.quick-chip.founder {
+  border-color: rgba(0, 255, 179, 0.35);
+  background: rgba(0, 255, 179, 0.06);
+  color: var(--neon-mint);
+}
+
+.quick-chip.founder:hover {
+  background: rgba(0, 255, 179, 0.18);
+  border-color: var(--neon-mint);
+}
+
+
