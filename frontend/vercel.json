@@ -19,6 +19,16 @@
       "has": [
         {
           "type": "host",
+          "value": "docs.mlops.dev"
+        }
+      ],
+      "destination": "/docs.html"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
           "value": "get.mlopsde.me"
         }
       ],
@@ -130,6 +140,28 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "docs.mlopsde.me"
+        }
+      ],
+      "destination": "/docs",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "docs.mlops.dev"
+        }
+      ],
+      "destination": "/docs",
+      "permanent": false
+    },
     {
       "source": "/docs/api",
       "destination": "/api-reference.html",

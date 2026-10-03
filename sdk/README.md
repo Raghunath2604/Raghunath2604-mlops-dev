@@ -159,8 +159,8 @@ client = mlops.Client(
 
 ## Links
 
-- Website: https://www.mlops.dev
-- Docs: https://docs.mlops.dev/api
+- Website: https://mlopsde.me
+- Docs: https://docs.mlopsde.me
 - GitHub: https://github.com/Raghunath2604/Raghunath2604-mlops-dev
 - Discord: https://discord.gg/Tb47N9NaPk
 - Roadmap: https://roadmap.mlops.dev

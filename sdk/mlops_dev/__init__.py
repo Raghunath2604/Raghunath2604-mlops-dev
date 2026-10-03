@@ -39,7 +39,7 @@ Quick start:
 Links:
     PyPI:    https://pypi.org/project/mlops-dev
     GitHub:  https://github.com/Raghunath2604/Raghunath2604-mlops-dev
-    Docs:    https://docs.mlops.dev/api
+    Docs:    https://docs.mlopsde.me
     Discord: https://discord.gg/Tb47N9NaPk
 
 Author: Raghunathareddy GR <hello@mlops.dev>

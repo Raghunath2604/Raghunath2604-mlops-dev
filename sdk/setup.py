@@ -11,7 +11,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://www.mlops.dev",
     project_urls={
-        "Documentation": "https://docs.mlops.dev/api",
+        "Documentation": "https://docs.mlopsde.me",
         "Source":        "https://github.com/Raghunath2604/Raghunath2604-mlops-dev",
         "Tracker":       "https://github.com/Raghunath2604/Raghunath2604-mlops-dev/issues",
         "Discord":       "https://discord.gg/Tb47N9NaPk",

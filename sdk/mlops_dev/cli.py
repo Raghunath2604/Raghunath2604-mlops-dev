@@ -454,7 +454,7 @@ Examples:
   mlops drift report
   mlops drift reset jetson-prod-01
 
-Docs:    https://docs.mlops.dev/api
+Docs:    https://docs.mlopsde.me
 Discord: https://discord.gg/Tb47N9NaPk
         """,
     )
