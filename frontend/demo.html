@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -97,9 +97,8 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 .dpb-status{font-family:var(--fm);font-size:.64rem;color:var(--green);display:flex;align-items:center;gap:.35rem}
 .dpb-dot2{width:4px;height:4px;background:var(--green);border-radius:50%;animation:pls 1.5s infinite}
 /* The "screen" inside the player */
-.demo-screen{height:340px;position:relative;overflow:hidden;background:var(--bg)}
-/* Chapters render here via canvas */
-#demo-canvas{width:100%;height:100%;display:block}
+.demo-screen{min-height:360px;max-height:480px;position:relative;overflow:hidden;background:#030509;display:flex;align-items:center;justify-content:center}
+.demo-video-el{width:100%;height:100%;min-height:360px;max-height:480px;object-fit:contain;background:#030509;display:block;cursor:pointer}
 /* Controls */
 .demo-controls{padding:.7rem 1rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.8rem}
 .demo-play-btn{
@@ -342,10 +341,15 @@ body{animation:pgInD .45s ease both}
         <div class="dpb-dot" style="background:#FEBC2E"></div>
         <div class="dpb-dot" style="background:#28C840"></div>
         <span class="dpb-title">mlops.dev — product walkthrough</span>
-        <div class="dpb-status"><span class="dpb-dot2"></span>3 min</div>
+        <div class="dpb-status" id="video-status-tag"><span class="dpb-dot2"></span>Product Demo</div>
       </div>
       <div class="demo-screen">
-        <canvas id="demo-canvas"></canvas>
+        <video id="demo-video" class="demo-video-el" src="demo.mp4" playsinline preload="auto" poster="og-image.png" onclick="togglePlay()"></video>
+        <div id="video-play-overlay" onclick="togglePlay()" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;transition:opacity 0.25s ease;">
+          <div style="width:68px;height:68px;border-radius:50%;background:rgba(91,138,240,0.92);box-shadow:0 0 35px rgba(91,138,240,0.6);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;cursor:pointer;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" style="margin-left:4px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+          </div>
+        </div>
       </div>
       <div class="demo-controls">
         <button class="demo-play-btn" id="play-btn" title="Play / Pause" onclick="togglePlay()">
@@ -355,13 +359,19 @@ body{animation:pgInD .45s ease both}
           <div class="demo-progress-fill" id="progress-fill" style="width:0%"></div>
           <div class="demo-progress-handle" id="progress-handle" style="left:0%"></div>
         </div>
-        <div class="demo-time" id="demo-time">0:00 / 3:00</div>
+        <div class="demo-time" id="demo-time">0:00 / 0:00</div>
         <div class="demo-chapters">
-          <button class="demo-chapter-btn active" id="ch-0" onclick="gotoChapter(0)">Intro</button>
-          <button class="demo-chapter-btn" id="ch-1" onclick="gotoChapter(1)">Deploy</button>
-          <button class="demo-chapter-btn" id="ch-2" onclick="gotoChapter(2)">Fleet</button>
-          <button class="demo-chapter-btn" id="ch-3" onclick="gotoChapter(3)">Drift</button>
+          <button class="demo-chapter-btn active" id="ch-0" onclick="gotoChapter(0)">01 Intro</button>
+          <button class="demo-chapter-btn" id="ch-1" onclick="gotoChapter(1)">02 Deploy</button>
+          <button class="demo-chapter-btn" id="ch-2" onclick="gotoChapter(2)">03 Fleet</button>
+          <button class="demo-chapter-btn" id="ch-3" onclick="gotoChapter(3)">04 Drift</button>
         </div>
+        <button class="demo-chapter-btn" id="mute-btn" title="Mute / Unmute" onclick="toggleDemoMute()" style="display:inline-flex;align-items:center;padding:.2rem .45rem">
+          <svg id="mute-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        </button>
+        <button class="demo-chapter-btn" id="fs-btn" title="Fullscreen" onclick="toggleDemoFullscreen()" style="display:inline-flex;align-items:center;padding:.2rem .45rem">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -720,432 +730,138 @@ async function apiFetch(path, opts){
 }
 
 /* ══════════════════════════════════════════════════════
-   CINEMATIC DEMO PLAYER
-   4 chapters rendered frame-by-frame on canvas.
-   Each chapter is a scene function that draws to ctx.
-   Timeline: 180 seconds total (3 min), 60fps target.
+   HIGH-PERFORMANCE DEMO VIDEO PLAYER
+   Plays demo.mp4 with synchronized aerospace controls,
+   real-time progress scrubber, chapter bookmarks,
+   audio mute toggling, and fullscreen support.
 ══════════════════════════════════════════════════════ */
-const DEMO_DURATION = 180; // seconds
-const CHAPTERS = [
-  {t:0,   label:'Intro',  title:'The edge ML problem'},
-  {t:30,  label:'Deploy', title:'Push to fleet'},
-  {t:90,  label:'Fleet',  title:'Live fleet view'},
-  {t:145, label:'Drift',  title:'Drift alert fires'},
-];
-
-let demoTime = 0;
-let demoPlaying = false;
-let demoRaf = null;
-let demoLastTs = null;
-
-// Canvas
-const dCanvas = $('demo-canvas');
-const dCtx = dCanvas ? dCanvas.getContext('2d') : null;
-let dW, dH, dDpr;
-
-function resizeDemoCanvas(){
-  if(!dCanvas) return;
-  const rect = dCanvas.parentElement.getBoundingClientRect();
-  dDpr = window.devicePixelRatio||1;
-  dW = rect.width; dH = rect.height;
-  dCanvas.width = dW*dDpr;
-  dCanvas.height = dH*dDpr;
-  dCanvas.style.width = dW+'px';
-  dCanvas.style.height = dH+'px';
-  dCtx.resetTransform();
-  dCtx.scale(dDpr, dDpr);
+function formatDemoTime(sec){
+  if(isNaN(sec) || !isFinite(sec) || sec < 0) return '0:00';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return m + ':' + (s < 10 ? '0' : '') + s;
 }
 
 function updateDemoUI(){
-  const pct = demoTime/DEMO_DURATION;
-  $('progress-fill').style.width = (pct*100)+'%';
-  $('progress-handle').style.left = (pct*100)+'%';
-  const m = Math.floor(demoTime/60);
-  const s = Math.floor(demoTime%60);
-  const tm = Math.floor(DEMO_DURATION/60);
-  const ts = DEMO_DURATION%60;
-  $('demo-time').textContent = m+':'+(s<10?'0':'')+s+' / '+tm+':'+(ts<10?'0':'')+ts;
-  // Chapter buttons
-  let cur = 0;
-  CHAPTERS.forEach((c,i)=>{ if(demoTime>=c.t) cur=i; });
-  CHAPTERS.forEach((c,i)=>$('ch-'+i).classList.toggle('active', i===cur));
-  // Play icon
+  const v = $('demo-video');
+  if(!v) return;
+  const cur = v.currentTime || 0;
+  const dur = (v.duration && isFinite(v.duration)) ? v.duration : 0;
+  const pct = dur > 0 ? (cur / dur) : 0;
+
+  const pFill = $('progress-fill');
+  const pHandle = $('progress-handle');
+  const dTime = $('demo-time');
+  const overlay = $('video-play-overlay');
+
+  if(pFill) pFill.style.width = (pct * 100) + '%';
+  if(pHandle) pHandle.style.left = (pct * 100) + '%';
+  if(dTime) dTime.textContent = formatDemoTime(cur) + ' / ' + formatDemoTime(dur);
+
+  // Chapter buttons highlight (4 quartiles)
+  const chIdx = Math.min(3, Math.floor(pct * 4));
+  [0, 1, 2, 3].forEach(function(i){
+    const b = $('ch-' + i);
+    if(b) b.classList.toggle('active', i === chIdx);
+  });
+
+  // Play icon update
   const pi = $('play-icon');
   if(pi){
-    pi.innerHTML = demoPlaying
+    pi.innerHTML = (!v.paused && !v.ended)
       ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
       : '<path d="M5 3l14 9-14 9V3z"/>';
   }
-}
 
-/* ── Scene rendering ── */
-function easeOut(t){ return 1-Math.pow(1-t,3); }
-function easeInOut(t){ return t<.5?2*t*t:1-((-2*t+2)*(-2*t+2))/2; }
-
-function drawText(txt, x, y, size, weight, color, align){
-  dCtx.font = weight+' '+size+'px "Space Grotesk", sans-serif';
-  dCtx.fillStyle = color;
-  dCtx.textAlign = align||'left';
-  dCtx.fillText(txt, x, y);
-}
-function drawMono(txt, x, y, size, color){
-  dCtx.font = '400 '+size+'px "IBM Plex Mono", monospace';
-  dCtx.fillStyle = color;
-  dCtx.textAlign = 'left';
-  dCtx.fillText(txt, x, y);
-}
-
-// Scene 0: Problem statement (0-30s)
-function sceneIntro(lt){
-  const p = clamp(lt/30, 0, 1);
-  dCtx.clearRect(0,0,dW,dH);
-
-  // Dark bg with grid
-  dCtx.fillStyle = '#060810';
-  dCtx.fillRect(0,0,dW,dH);
-  dCtx.strokeStyle = 'rgba(91,138,240,.05)';
-  dCtx.lineWidth = 1;
-  const gs = 36;
-  for(let x=0;x<dW;x+=gs){dCtx.beginPath();dCtx.moveTo(x,0);dCtx.lineTo(x,dH);dCtx.stroke();}
-  for(let y=0;y<dH;y+=gs){dCtx.beginPath();dCtx.moveTo(0,y);dCtx.lineTo(dW,y);dCtx.stroke();}
-
-  // Broken device icon — animated shake
-  const shk = p>0.3 ? Math.sin(lt*18)*(1-Math.min(1,(lt-9)/3))*5 : 0;
-  const cx = dW*0.38, cy = dH*0.42;
-  const op = easeOut(Math.min(1,lt/1.2));
-
-  // Device rect
-  dCtx.globalAlpha = op;
-  dCtx.strokeStyle = p>0.5?'#FF4560':'#4A5568';
-  dCtx.lineWidth = 1.5;
-  dCtx.beginPath();
-  dCtx.roundRect(cx-50+shk, cy-30, 100, 60, 6);
-  dCtx.stroke();
-
-  // Screen inside
-  dCtx.fillStyle = p>0.5?'rgba(255,69,96,.08)':'rgba(91,138,240,.06)';
-  dCtx.beginPath();
-  dCtx.roundRect(cx-42+shk, cy-22, 84, 44, 3);
-  dCtx.fill();
-
-  // Status line
-  if(p>0.15){
-    const so = easeOut(Math.min(1,(lt-4)/1.5));
-    drawMono(p>0.5?'ERR: drift=71%':'status: OK', cx-38+shk, cy+4, 9, p>0.5?'#FF4560':'#00FFB3');
-    dCtx.globalAlpha = op*so;
-  }
-
-  // Problem text
-  const tp = easeOut(clamp((lt-5)/3, 0, 1));
-  dCtx.globalAlpha = tp;
-  drawText('87% of ML projects', dW*0.55, cy-28, 14, '600', '#E8EDF8', 'left');
-  drawText('fail in production.', dW*0.55, cy-10, 14, '300', '#8896B3', 'left');
-  drawText('Yours doesn\'t have to.', dW*0.55, cy+12, 14, '600', '#5B8AF0', 'left');
-
-  // Arrow pointing right → mlops.dev
-  if(p>0.6){
-    const ap = easeOut(clamp((lt-18)/4, 0, 1));
-    dCtx.globalAlpha = ap;
-    dCtx.strokeStyle = '#5B8AF0';
-    dCtx.lineWidth = 1.5;
-    const ax = dW*0.5;
-    dCtx.beginPath();
-    dCtx.moveTo(ax-20, dH*0.72);
-    dCtx.lineTo(ax+20, dH*0.72);
-    dCtx.moveTo(ax+14, dH*0.72-5);
-    dCtx.lineTo(ax+20, dH*0.72);
-    dCtx.lineTo(ax+14, dH*0.72+5);
-    dCtx.stroke();
-    drawMono('mlops.dev fixes this', ax+28, dH*0.72+4, 10, '#5B8AF0');
-  }
-
-  dCtx.globalAlpha = 1;
-}
-
-// Scene 1: Deploy animation (30-90s)
-function sceneDeploy(lt){
-  dCtx.clearRect(0,0,dW,dH);
-  dCtx.fillStyle='#060810';dCtx.fillRect(0,0,dW,dH);
-
-  // Terminal window
-  const tw=dW*0.82, th=dH*0.75;
-  const tx=(dW-tw)/2, ty=(dH-th)/2;
-  dCtx.fillStyle='#0A0D16';
-  dCtx.strokeStyle='rgba(91,138,240,.25)';
-  dCtx.lineWidth=1;
-  dCtx.beginPath();dCtx.roundRect(tx,ty,tw,th,8);dCtx.fill();dCtx.stroke();
-
-  // Terminal top bar
-  dCtx.fillStyle='#141C32';
-  dCtx.beginPath();dCtx.roundRect(tx,ty,tw,26,{upperLeft:8,upperRight:8,lowerLeft:0,lowerRight:0});
-  dCtx.fill();
-  [[0,'#FF5F57'],[14,'#FEBC2E'],[28,'#28C840']].forEach(([ox,c])=>{
-    dCtx.fillStyle=c;dCtx.beginPath();dCtx.arc(tx+12+ox,ty+13,4,0,Math.PI*2);dCtx.fill();
-  });
-  drawMono('mlops.dev CLI — defect-detector:v4.0',tx+52,ty+17,9,'#4A5568');
-
-  // Animated terminal lines
-  const lines = [
-    {t:0,  type:'cmd', txt:'$ mlops login --token sk-...'},
-    {t:1,  type:'ok',  txt:' Authenticated as you@company.com'},
-    {t:2.5,type:'cmd', txt:'$ mlops model push ./defect.onnx --tag v4.0'},
-    {t:4,  type:'out', txt:' Compressing model (42MB → 7.4MB)…'},
-    {t:6,  type:'out', txt:' Uploading to registry…  ████████░░  80%'},
-    {t:8,  type:'ok',  txt:' defect-detector:v4.0 registered ✓'},
-    {t:10, type:'cmd', txt:'$ mlops deploy defect-detector:v4.0 \\'},
-    {t:11, type:'cmd', txt:'      --strategy canary --pct 10'},
-    {t:13, type:'out', txt:' Targeting canary slice (1 of 6 devices)…'},
-    {t:15, type:'ok',  txt:' jetson-prod-01 → updating… ✓'},
-    {t:17, type:'out', txt:' Health gate: latency 14ms ✓  accuracy 97.2% ✓'},
-    {t:20, type:'ok',  txt:' Canary healthy. Opening to full fleet…'},
-    {t:24, type:'ok',  txt:' 5/6 devices updated to v4.0 ✓'},
-    {t:26, type:'ok',  txt:' Deployment complete in 28s ✓'},
-  ];
-  const colors = {cmd:'#E8EDF8', ok:'#00FFB3', out:'#8896B3', err:'#FF4560'};
-  const lineH = 18;
-  const lx = tx+20, ly = ty+44;
-  lines.forEach((l,i)=>{
-    if(lt<l.t) return;
-    const fade = Math.min(1,(lt-l.t)*4);
-    dCtx.globalAlpha = fade;
-    drawMono(l.txt, lx, ly+i*lineH, 10, colors[l.type]||'#8896B3');
-  });
-
-  // Cursor blink
-  const lastVisible = lines.filter(l=>lt>=l.t);
-  if(lastVisible.length>0 && lt<28){
-    const li = lines.indexOf(lastVisible[lastVisible.length-1]);
-    if(Math.floor(lt*2)%2===0){
-      dCtx.globalAlpha=1;
-      dCtx.fillStyle='#5B8AF0';
-      const cursorY = ly+li*lineH;
-      const m = dCtx.measureText(lines[li].txt);
-      dCtx.fillRect(lx+m.width+2, cursorY-11, 6, 13);
+  // Large play overlay
+  if(overlay){
+    if(!v.paused && !v.ended){
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+    } else {
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
     }
   }
-
-  dCtx.globalAlpha=1;
-
-  // Progress bar overlay at bottom of terminal during upload (t 4-8)
-  if(lt>4 && lt<10){
-    const pp = clamp((lt-4)/4, 0, 1);
-    const bw=tw*0.7, bh=6, bx=tx+(tw-bw)/2, by=ty+th-28;
-    dCtx.fillStyle='rgba(255,255,255,.06)';
-    dCtx.beginPath();dCtx.roundRect(bx,by,bw,bh,3);dCtx.fill();
-    dCtx.fillStyle='#5B8AF0';
-    dCtx.beginPath();dCtx.roundRect(bx,by,bw*easeInOut(pp),bh,3);dCtx.fill();
-  }
-}
-
-// Scene 2: Fleet view (90-145s)
-function sceneFleet(lt){
-  dCtx.clearRect(0,0,dW,dH);
-  dCtx.fillStyle='#060810';dCtx.fillRect(0,0,dW,dH);
-
-  const devices=[
-    {name:'jetson-prod-01',status:'online', drift:12, lat:'14ms', v:'v4.0'},
-    {name:'rpi5-fac-07',   status:'updating',drift:48,lat:'28ms', v:'v4.0↑'},
-    {name:'coral-ret-03',  status:'online', drift:8,  lat:'11ms', v:'v4.0'},
-    {name:'arm-wh-11',     status:'offline',drift:Math.min(80,19+lt*0.8),lat:'—',v:'v2.9'},
-    {name:'jetson-p-02',   status:'online', drift:5,  lat:'16ms', v:'v4.0'},
-    {name:'snap-cam-04',   status:'online', drift:19, lat:'22ms', v:'v4.0'},
-  ];
-  const statCol={online:'#00FFB3', offline:'#FF4560', updating:'#F5A623'};
-
-  // Panel
-  const pw=dW*0.9, ph=dH*0.88;
-  const px=(dW-pw)/2, py=(dH-ph)/2;
-  dCtx.fillStyle='#0A0E1A';
-  dCtx.strokeStyle='rgba(91,138,240,.2)';
-  dCtx.lineWidth=1;
-  dCtx.beginPath();dCtx.roundRect(px,py,pw,ph,10);dCtx.fill();dCtx.stroke();
-
-  // Header
-  drawText('Fleet dashboard — mlops.dev', px+16, py+22, 11, '600', '#E8EDF8', 'left');
-  drawMono('LIVE', px+pw-50, py+22, 9, '#00FFB3');
-
-  // KPI row
-  const kpis=[['TOTAL','6'],['ONLINE','4'],['UPDATING','1'],['DRIFT >50%','1']];
-  const kw=(pw-32)/kpis.length;
-  kpis.forEach(([l,v],i)=>{
-    const kx=px+16+i*kw, ky=py+38;
-    dCtx.fillStyle='#141C32';
-    dCtx.beginPath();dCtx.roundRect(kx,ky,kw-8,40,4);dCtx.fill();
-    drawMono(l,kx+8,ky+12,7,'#4A5568');
-    const vc=i===1?'#00FFB3':i===3?'#F5A623':'#E8EDF8';
-    drawText(v,kx+8,ky+30,15,'700',vc,'left');
-  });
-
-  // Table header
-  const tableY=py+100;
-  const cols=[80,70,60,90,60,55];
-  const heads=['DEVICE','STATE','MODEL','DRIFT','LATENCY','VER'];
-  let cx2=px+16;
-  heads.forEach((h,i)=>{
-    drawMono(h,cx2,tableY,7.5,'#4A5568');
-    cx2+=cols[i];
-  });
-
-  // Divider
-  dCtx.strokeStyle='rgba(91,138,240,.12)';
-  dCtx.lineWidth=1;
-  dCtx.beginPath();dCtx.moveTo(px+8,tableY+6);dCtx.lineTo(px+pw-8,tableY+6);dCtx.stroke();
-
-  // Table rows — animate in one by one
-  devices.forEach((d,i)=>{
-    const rp = easeOut(clamp((lt-i*0.8)/1.5, 0, 1));
-    dCtx.globalAlpha=rp;
-    const ry=tableY+18+i*28;
-    if(i%2===0){
-      dCtx.fillStyle='rgba(91,138,240,.025)';
-      dCtx.beginPath();dCtx.roundRect(px+8,ry-13,pw-16,26,3);dCtx.fill();
-    }
-    let cx3=px+16;
-    drawMono(d.name,cx3,ry,8.5,'#8896B3');cx3+=cols[0];
-    // Status pill
-    const sc=statCol[d.status]||'#8896B3';
-    dCtx.fillStyle=sc+'22';
-    dCtx.beginPath();dCtx.roundRect(cx3,ry-10,50,16,3);dCtx.fill();
-    drawMono(d.status,cx3+4,ry,8,sc);cx3+=cols[1];
-    drawMono(d.v,cx3,ry,8,'#8896B3');cx3+=cols[2];
-    // Drift bar
-    const driftColor=d.drift>60?'#FF4560':d.drift>40?'#F5A623':'#00FFB3';
-    const bw2=60;
-    dCtx.fillStyle='rgba(255,255,255,.06)';
-    dCtx.beginPath();dCtx.roundRect(cx3,ry-5,bw2,4,2);dCtx.fill();
-    dCtx.fillStyle=driftColor;
-    dCtx.beginPath();dCtx.roundRect(cx3,ry-5,bw2*d.drift/100,4,2);dCtx.fill();
-    drawMono(d.drift+'%',cx3+bw2+4,ry,8,driftColor);cx3+=cols[3];
-    drawMono(d.lat,cx3,ry,8,'#8896B3');cx3+=cols[4];
-    drawMono(d.v,cx3,ry,8,'#5B8AF0');
-  });
-  dCtx.globalAlpha=1;
-}
-
-// Scene 3: Drift alert fires (145-180s)
-function sceneDrift(lt){
-  dCtx.clearRect(0,0,dW,dH);
-  dCtx.fillStyle='#060810';dCtx.fillRect(0,0,dW,dH);
-
-  // Background flush red when alert fires
-  const alertFired = lt>5;
-  if(alertFired){
-    const alertP = clamp((lt-5)/2, 0, 1)*0.06;
-    dCtx.fillStyle=`rgba(255,69,96,${alertP})`;
-    dCtx.fillRect(0,0,dW,dH);
-  }
-
-  // Drift graph — arm-wh-11 spiking
-  const graphW=dW*0.55, graphH=dH*0.45;
-  const gx=(dW-graphW-80)/2, gy=(dH-graphH)/2-20;
-
-  // Axes
-  dCtx.strokeStyle='rgba(91,138,240,.2)';
-  dCtx.lineWidth=1;
-  dCtx.beginPath();dCtx.moveTo(gx,gy);dCtx.lineTo(gx,gy+graphH);dCtx.lineTo(gx+graphW,gy+graphH);dCtx.stroke();
-  drawMono('Input drift %',gx,gy-12,9,'#4A5568');
-  drawMono('Time →',gx+graphW,gy+graphH+14,9,'#4A5568');
-
-  // Threshold lines
-  [40,70].forEach(pct=>{
-    const ty2=gy+graphH-graphH*(pct/100);
-    dCtx.setLineDash([4,4]);
-    dCtx.strokeStyle=pct===70?'rgba(255,69,96,.4)':'rgba(245,166,35,.35)';
-    dCtx.beginPath();dCtx.moveTo(gx,ty2);dCtx.lineTo(gx+graphW,ty2);dCtx.stroke();
-    dCtx.setLineDash([]);
-    drawMono((pct==='70'||pct===70?'CRITICAL ':'WARN ')+pct+'%',gx+graphW+4,ty2+3,8,pct===70?'#FF4560':'#F5A623');
-  });
-
-  // Draw drift line
-  const pts=20;
-  const baseVals=[12,14,11,13,15,18,22,28,35,42,51,62,71,71,69,66,35,20,15,12];
-  dCtx.beginPath();
-  for(let i=0;i<pts;i++){
-    const progress=Math.min(1, lt/10);
-    const shown=Math.floor(progress*pts);
-    if(i>shown) break;
-    const fx=gx+(i/(pts-1))*graphW;
-    const fy=gy+graphH-graphH*(baseVals[i]/100);
-    if(i===0) dCtx.moveTo(fx,fy); else dCtx.lineTo(fx,fy);
-  }
-  dCtx.strokeStyle='#5B8AF0';
-  dCtx.lineWidth=2;
-  dCtx.stroke();
-
-  // Fill under line
-  const lastShown=Math.floor(Math.min(1,lt/10)*pts);
-  if(lastShown>1){
-    dCtx.beginPath();
-    for(let i=0;i<lastShown;i++){
-      const fx=gx+(i/(pts-1))*graphW;
-      const fy=gy+graphH-graphH*(baseVals[i]/100);
-      if(i===0){dCtx.moveTo(gx,gy+graphH);dCtx.lineTo(fx,fy);}else dCtx.lineTo(fx,fy);
-    }
-    const lastX=gx+((lastShown-1)/(pts-1))*graphW;
-    dCtx.lineTo(lastX,gy+graphH);dCtx.closePath();
-    dCtx.fillStyle='rgba(91,138,240,.07)';dCtx.fill();
-  }
-
-  // Device label
-  drawMono('arm-wh-11',gx,gy+graphH+26,9,'#8896B3');
-
-  // Alert box
-  if(alertFired){
-    const ap=easeOut(clamp((lt-5)/1.5,0,1));
-    dCtx.globalAlpha=ap;
-    const aw=dW*0.38,ah=90;
-    const ax=dW-aw-16, ay=gy;
-    dCtx.fillStyle='rgba(255,69,96,.1)';
-    dCtx.strokeStyle='rgba(255,69,96,0.5)';
-    dCtx.lineWidth=1;
-    dCtx.beginPath();dCtx.roundRect(ax,ay,aw,ah,7);dCtx.fill();dCtx.stroke();
-    drawMono('⚠ DRIFT ALERT',ax+14,ay+20,10,'#FF4560');
-    drawText('arm-wh-11',ax+14,ay+38,12,'600','#E8EDF8','left');
-    drawMono('drift=71% > threshold 70%',ax+14,ay+54,9,'#8896B3');
-    drawMono('Auto-rollback triggered ✓',ax+14,ay+68,9,'#00FFB3');
-    dCtx.globalAlpha=1;
-  }
-}
-
-function renderDemoFrame(){
-  if(!dCtx||!dW) return;
-  const lt = demoTime; // local time in seconds
-  if(lt<30) sceneIntro(lt);
-  else if(lt<90) sceneDeploy(lt-30);
-  else if(lt<145) sceneFleet(lt-90);
-  else sceneDrift(lt-145);
-}
-
-function demoClock(ts){
-  if(!demoPlaying){ demoLastTs=null; return; }
-  if(!demoLastTs) demoLastTs=ts;
-  const dt=(ts-demoLastTs)/1000;
-  demoLastTs=ts;
-  demoTime=Math.min(DEMO_DURATION, demoTime+dt);
-  renderDemoFrame();
-  updateDemoUI();
-  if(demoTime>=DEMO_DURATION){ demoPlaying=false; demoTime=DEMO_DURATION; updateDemoUI(); return; }
-  demoRaf=requestAnimationFrame(demoClock);
 }
 
 function togglePlay(){
-  demoPlaying=!demoPlaying;
-  if(demoPlaying){ demoLastTs=null; demoRaf=requestAnimationFrame(demoClock); }
-  updateDemoUI();
+  const v = $('demo-video');
+  if(!v) return;
+  if(v.paused || v.ended){
+    v.play().catch(function(e){ console.log('Play prevented:', e); });
+  } else {
+    v.pause();
+  }
 }
-function gotoChapter(i){
-  demoTime=CHAPTERS[i].t;
-  renderDemoFrame();
-  updateDemoUI();
-  if(!demoPlaying){ renderDemoFrame(); }
-}
+
 function seekDemo(e){
-  const rect=$('progress-wrap').getBoundingClientRect();
-  const pct=clamp((e.clientX-rect.left)/rect.width,0,1);
-  demoTime=pct*DEMO_DURATION;
-  renderDemoFrame();
+  const v = $('demo-video');
+  if(!v) return;
+  const rect = $('progress-wrap').getBoundingClientRect();
+  const pct = clamp((e.clientX - rect.left) / rect.width, 0, 1);
+  const dur = (v.duration && isFinite(v.duration)) ? v.duration : 0;
+  if(dur > 0){
+    v.currentTime = pct * dur;
+    updateDemoUI();
+  }
+}
+
+function gotoChapter(i){
+  const v = $('demo-video');
+  if(!v) return;
+  const dur = (v.duration && isFinite(v.duration)) ? v.duration : 0;
+  const fractions = [0, 0.25, 0.50, 0.75];
+  if(dur > 0){
+    v.currentTime = fractions[i] * dur;
+  }
+  if(v.paused){
+    v.play().catch(function(){});
+  }
   updateDemoUI();
 }
+
+function toggleDemoMute(){
+  const v = $('demo-video');
+  if(!v) return;
+  v.muted = !v.muted;
+  const mi = $('mute-icon');
+  if(mi){
+    if(v.muted){
+      mi.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+    } else {
+      mi.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
+    }
+  }
+}
+
+function toggleDemoFullscreen(){
+  const wrap = document.querySelector('.demo-player-wrap') || $('demo-video');
+  if(!wrap) return;
+  if(!document.fullscreenElement){
+    if(wrap.requestFullscreen) wrap.requestFullscreen();
+    else if(wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+  } else {
+    if(document.exitFullscreen) document.exitFullscreen();
+  }
+}
+
+function setupVideoListeners(){
+  const v = $('demo-video');
+  if(!v) return;
+  v.addEventListener('timeupdate', updateDemoUI);
+  v.addEventListener('play', updateDemoUI);
+  v.addEventListener('pause', updateDemoUI);
+  v.addEventListener('ended', updateDemoUI);
+  v.addEventListener('loadedmetadata', function(){
+    updateDemoUI();
+    const tag = $('video-status-tag');
+    if(tag && v.duration && isFinite(v.duration)){
+      tag.innerHTML = '<span class="dpb-dot2"></span>' + Math.round(v.duration) + 's Demo';
+    }
+  });
+}
+
 
 /* ══════════════════════════════════════════════════════
    INTERACTIVE DEMO STEPS
@@ -1443,8 +1159,9 @@ function resetDemo(){
   currentStep=0;
   DRIFT_DEVICES.forEach((d,i)=>{d.drift=[12,48,8,19,5,19][i];});
   gotoStep(0);
-  demoTime=0;demoPlaying=false;
-  renderDemoFrame();updateDemoUI();
+  const v = $('demo-video');
+  if(v){ v.currentTime = 0; v.pause(); }
+  updateDemoUI();
   document.querySelectorAll('.step-tab').forEach(t=>{t.classList.remove('done','active');const n=t.querySelector('.step-tab-n');if(n)n.textContent=t.id.replace('tab-','0'+(parseInt(t.id.replace('tab-',''))+1));});
   $('tab-0').classList.add('active');
   $('reg-result').style.display='none';$('next-0').style.display='none';
@@ -1454,14 +1171,10 @@ function resetDemo(){
 }
 
 /* ── INIT ── */
-window.addEventListener('resize',()=>{resizeDemoCanvas();renderDemoFrame();});
 document.addEventListener('DOMContentLoaded',()=>{
-  resizeDemoCanvas();
-  renderDemoFrame();
+  setupVideoListeners();
   updateDemoUI();
   initDriftChart();
-  // Auto-play after 1.5s
-  setTimeout(()=>{ demoPlaying=true; demoLastTs=null; requestAnimationFrame(demoClock); updateDemoUI(); },1500);
 });
 
 /* ── SHARED FOOTER HELPERS ── */
