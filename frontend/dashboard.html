@@ -3498,7 +3498,24 @@ function startSSE() {
 async function checkAuth() {
   const params = new URLSearchParams(window.location.search);
   const isAuthSuccess = params.get('auth') === 'success';
-  if (isAuthSuccess) {
+  const queryUser = params.get('user');
+  const queryEmail = params.get('email');
+  const queryAvatar = params.get('avatar');
+  const queryProvider = params.get('provider') || 'github';
+
+  if (isAuthSuccess && (queryUser || queryEmail)) {
+    const oauthSession = {
+      name: queryUser || queryEmail.split('@')[0],
+      email: queryEmail || `${queryUser}@users.noreply.github.com`,
+      role: 'developer',
+      is_admin: false,
+      avatar: queryAvatar || '',
+      provider: queryProvider
+    };
+    localStorage.setItem('np_user', JSON.stringify(oauthSession));
+    localStorage.setItem('mlops_user', JSON.stringify(oauthSession));
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else if (isAuthSuccess) {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 

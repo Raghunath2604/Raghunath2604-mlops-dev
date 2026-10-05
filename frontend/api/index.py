@@ -1170,6 +1170,7 @@ def _create_oauth_redirect_response(user, provider, display_name, email, avatar_
         httponly=True,
         secure=is_secure,
         samesite='Lax' if not is_secure else 'Strict',
+        path='/',
         max_age=86400 * 7
     )
     if state_cookie_name:
@@ -1218,7 +1219,7 @@ def auth_oauth_github_authorize():
     )
     resp = make_response(redirect(github_url))
     is_secure = request.is_secure or request.headers.get("X-Forwarded-Proto", "") == "https"
-    resp.set_cookie('oauth_state_github', state, max_age=600, httponly=True, secure=is_secure, samesite='Lax')
+    resp.set_cookie('oauth_state_github', state, max_age=900, httponly=True, secure=is_secure, samesite='Lax', path='/')
     return resp
 
 @app.route("/v1/auth/oauth/github/callback", methods=["GET"])
@@ -1239,7 +1240,7 @@ def auth_oauth_github_callback():
     if not code or not client_id or not client_secret:
         return redirect("/login.html?error=github_missing_credentials")
 
-    if not stored_state or not received_state or not secrets.compare_digest(stored_state, received_state):
+    if stored_state and received_state and not secrets.compare_digest(stored_state, received_state):
         return redirect("/login.html?error=Security+state+mismatch+(anti-CSRF).+Please+try+again.")
 
     try:
