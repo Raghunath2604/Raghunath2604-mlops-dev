@@ -86,12 +86,12 @@
   function initMagneticButtons(){
     if(prefersReducedMotion) return;
 
-    qsa('.mag-btn, .cta-primary, .nav-cta, .plan-btn-solid').forEach(btn => {
+    qsa('.mag-btn, .cta-primary, .nav-cta, .plan-btn-solid, .btn-submit-yellow, .btn-social-pill, .demo-quick-btn, .cta-btn-white, .cta-btn-outline, .wl-submit, .btn-otp-verify').forEach(btn => {
       btn.addEventListener('mousemove', (e) => {
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        btn.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
       });
 
       btn.addEventListener('mouseleave', () => {
@@ -109,7 +109,7 @@
   function initCardSpotlight(){
     if(prefersReducedMotion) return;
 
-    qsa('.plan, .prob-card, .tcard, .how-step, .spec-feat, .spec-num, .kpi, .panel').forEach(card => {
+    qsa('.plan, .prob-card, .tcard, .how-step, .spec-feat, .spec-num, .kpi, .panel, .auth-stage-container, .oauth-modal-card, .fleet-window, .card, .stat-card').forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
