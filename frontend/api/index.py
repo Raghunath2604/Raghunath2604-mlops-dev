@@ -613,6 +613,9 @@ def init_db():
         
         # Safely migrate columns onto existing tables
         safe_migrations = [
+            "ALTER TABLE devices ADD COLUMN owner_id TEXT DEFAULT 'admin'",
+            "ALTER TABLE devices ADD COLUMN os_info TEXT",
+            "ALTER TABLE models ADD COLUMN owner_id TEXT DEFAULT 'admin'",
             "ALTER TABLE audit_log ADD COLUMN owner_id TEXT DEFAULT 'admin'",
             "ALTER TABLE drift_alerts ADD COLUMN resolved_at TIMESTAMP",
             "ALTER TABLE devices ADD COLUMN metadata TEXT DEFAULT '{}'",
@@ -634,6 +637,23 @@ def init_db():
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
                 VALUES ('admin', ?, 'demo@nodepilot.dev', 'enterprise', 10, 'admin', 'approved')
             ''', (demo_hash,))
+
+        # Seed models if empty
+        try:
+            m_count = db.execute("SELECT COUNT(*) FROM models").fetchone()[0]
+            if m_count == 0:
+                demo_models = [
+                    ("m_01", "admin", "defect-detector", "v1.0", "onnx", "all", 7400000, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", json.dumps({"classes": 10, "precision": "FP16"})),
+                    ("m_02", "admin", "defect-detector", "v1.0", "tensorrt", "jetson_orin", 12800000, "b4c2c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b866", json.dumps({"engine": "TRT 10.0", "dla_core": 0})),
+                    ("m_03", "admin", "defect-detector", "v1.0", "tflite", "coral", 4200000, "a1c2c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b877", json.dumps({"quantization": "INT8", "edge_tpu": True}))
+                ]
+                for mod in demo_models:
+                    db.execute("""
+                        INSERT OR IGNORE INTO models (id, owner_id, name, tag, format, variant, size_bytes, sha256, metadata)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, mod)
+        except Exception:
+            pass
             
         db.commit()
         db.close()
@@ -2139,6 +2159,7 @@ def models_push():
         (str(uuid.uuid4()), g.user_id, "model_push", name, tag, "success", f"Pushed model {name}:{tag} ({variant}, {size_bytes//1024}KB)")
     )
     
+    db.commit()
 
     return jsonify({"data": row}), 201
 
