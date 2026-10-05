@@ -885,8 +885,7 @@ async function checkAdminAuth() {
     }
     const isMasterAdmin = Boolean(
       data.user.is_admin ||
-      data.user.role === 'admin' ||
-      (data.user.email && data.user.email.toLowerCase() === 'raghunathareddygr94@gmail.com')
+      data.user.role === 'admin'
     );
     if (!data.success || !data.user || !isMasterAdmin) {
       window.location.href = 'login.html?notice=admin_clearance_denied';

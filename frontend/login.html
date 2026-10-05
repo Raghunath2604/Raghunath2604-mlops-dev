@@ -822,39 +822,77 @@ html, body {
 }
 
 /* ── Responsive Adaptations ── */
-@media (max-width: 960px) {
+@media (max-width: 1024px) and (min-width: 769px) {
+  .auth-stage-container {
+    max-width: 900px;
+    height: 580px;
+    gap: 12px;
+    padding: 14px;
+  }
+  .hero-calendar-glass {
+    width: 220px;
+    right: 14px;
+    padding: 10px 14px;
+  }
+  .hero-white-card {
+    width: 170px;
+    left: 14px;
+    bottom: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 16px 12px;
+    align-items: center;
+  }
+  
   .auth-stage-container {
     grid-template-columns: 1fr;
     height: auto;
     max-height: none;
-    max-width: 500px;
+    max-width: 440px;
+    padding: 24px 20px;
+    border-radius: 26px;
+    box-shadow: 0 20px 50px -10px rgba(26, 36, 51, 0.28);
   }
   
   .auth-hero-column {
-    min-height: 380px;
-    height: 380px;
-    order: -1;
+    display: none !important;
   }
   
   .auth-form-column {
-    padding: 20px 16px 16px;
+    padding: 0;
+  }
+
+  .form-title {
+    font-size: 1.65rem;
+  }
+  
+  .form-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .social-buttons-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   body {
     padding: 10px;
   }
   
   .auth-stage-container {
-    padding: 10px;
-    border-radius: 22px;
+    padding: 20px 14px;
+    border-radius: 20px;
   }
   
   .form-title {
-    font-size: 1.55rem;
+    font-size: 1.45rem;
   }
-  
+
   .social-buttons-grid {
     grid-template-columns: 1fr;
   }
@@ -885,7 +923,7 @@ html, body {
           <span id="notice-banner-title">RESTRICTED CONTROL PLANE</span>
         </div>
         <div id="notice-banner-text" style="font-size:0.72rem; color:#991b1b; line-height:1.4;">
-          Administrator clearance required (<strong style="color:#111;">raghunathareddygr94@gmail.com</strong>).
+          Administrator clearance required. Please sign in with your administrator account.
         </div>
       </div>
 
@@ -1200,13 +1238,12 @@ html, body {
         const loginData = await loginRes.json().catch(() => ({}));
 
         if (loginRes.ok && loginData.success) {
-          const isFounder = (email.toLowerCase() === 'raghunathareddygr94@gmail.com') || email.toLowerCase().includes('raghunath');
           const userSession = {
             id: (loginData.user && loginData.user.id) || 'usr_' + Date.now(),
-            name: (loginData.user && loginData.user.email) || fullname || email.split('@')[0],
+            name: (loginData.user && loginData.user.name) || fullname || email.split('@')[0],
             email: (loginData.user && loginData.user.email) || email,
-            role: isFounder ? 'admin' : ((loginData.user && loginData.user.role) || 'developer'),
-            is_admin: isFounder || (loginData.user && loginData.user.is_admin)
+            role: (loginData.user && loginData.user.role) || 'developer',
+            is_admin: !!(loginData.user && loginData.user.is_admin)
           };
           localStorage.setItem('np_user', JSON.stringify(userSession));
           localStorage.setItem('mlops_user', JSON.stringify(userSession));
@@ -1227,7 +1264,7 @@ html, body {
       }
     }
 
-    // ── Instant 1-Click Evaluation Access ──
+    // ── Instant 1-Click Evaluation (Demo) Access ──
     async function oneClickDemoLogin() {
       showToast('Launching Demo Evaluation Session...', 'info');
       try {
@@ -1235,25 +1272,39 @@ html, body {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({ email: 'admin', password: 'admin' })
+          body: JSON.stringify({ email: 'demo@mlops.dev', password: 'demo1234' })
         });
         const data = await res.json().catch(() => ({}));
 
-        const userSession = {
-          id: 'admin',
-          name: 'raghunathareddygr94@gmail.com',
-          email: 'raghunathareddygr94@gmail.com',
-          role: 'admin',
-          is_admin: true
-        };
-        localStorage.setItem('np_user', JSON.stringify(userSession));
-        localStorage.setItem('mlops_user', JSON.stringify(userSession));
-        showToast('Admin Access Granted! Launching Fleet Control...', 'success');
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 500);
+        if (res.ok && data.success) {
+          const userSession = {
+            id: (data.user && data.user.id) || 'demo_user',
+            name: (data.user && data.user.name) || 'Demo User',
+            email: (data.user && data.user.email) || 'demo@mlops.dev',
+            role: (data.user && data.user.role) || 'viewer',
+            is_admin: false
+          };
+          localStorage.setItem('np_user', JSON.stringify(userSession));
+          localStorage.setItem('mlops_user', JSON.stringify(userSession));
+          showToast('Demo session launched! Loading platform...', 'success');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 500);
+        } else {
+          // Fallback: load dashboard in demo/read-only mode
+          const demoSession = {
+            id: 'demo_' + Date.now(),
+            name: 'Demo Visitor',
+            email: 'visitor@demo.mlops.dev',
+            role: 'viewer',
+            is_admin: false
+          };
+          localStorage.setItem('np_user', JSON.stringify(demoSession));
+          localStorage.setItem('mlops_user', JSON.stringify(demoSession));
+          showToast('Loading demo environment...', 'info');
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
+        }
       } catch (e) {
-        window.location.href = 'dashboard.html';
+        showToast('Could not connect to API. Loading demo view...', 'info');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
       }
     }
 
@@ -1274,37 +1325,18 @@ html, body {
         title.textContent = 'Sign In with Google';
         sub.textContent = 'Authenticate with your Google Workspace or Gmail account';
         inputLabel.textContent = 'Google Account Email';
-        input.placeholder = 'raghunathareddygr94@gmail.com';
-        input.value = 'raghunathareddygr94@gmail.com';
+        input.placeholder = 'yourname@gmail.com';
+        input.value = '';
         icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>`;
-        chips.innerHTML = `
-          <div class="quick-chip founder" onclick="selectQuickChip('raghunathareddygr94@gmail.com', 'Raghunath Reddy')">
-            <span>⚡ raghunathareddygr94@gmail.com</span>
-            <span style="font-size:0.7rem; opacity:0.8;">(Founder &amp; Admin)</span>
-          </div>
-          <div class="quick-chip" onclick="selectQuickChip('alex.chen@mlops.dev', 'Alex Chen')">
-            <span>alex.chen@mlops.dev</span>
-            <span style="font-size:0.7rem; opacity:0.6;">(Engineer)</span>
-          </div>
-        `;
+        chips.innerHTML = '';
       } else if (provider === 'github') {
         title.textContent = 'Sign In with GitHub';
         sub.textContent = 'Authenticate with your verified GitHub developer handle';
         inputLabel.textContent = 'GitHub Username';
-        input.placeholder = 'Raghunath2604';
-        input.value = 'Raghunath2604';
+        input.placeholder = 'your-github-username';
+        input.value = '';
         icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>`;
-        chips.innerHTML = `
-          <div class="quick-chip founder" onclick="selectQuickChip('Raghunath2604', 'Raghunath Reddy')">
-            <span>⚡ @Raghunath2604</span>
-            <span style="font-size:0.7rem; opacity:0.8;">(Founder &amp; Admin)</span>
-          </div>
-          <div class="quick-chip" onclick="selectQuickChip('octocat', 'The Octocat')">
-            <span>@octocat</span>
-            <span style="font-size:0.7rem; opacity:0.6;">(Developer)</span>
-          </div>
-        `;
-        onOauthInputChange('Raghunath2604');
+        chips.innerHTML = '';
       }
 
       modal.classList.add('open');
@@ -1378,7 +1410,7 @@ html, body {
           payload = {
             username: cleanUser,
             name: (verifiedGhProfile && verifiedGhProfile.name) || cleanUser,
-            email: (cleanUser.toLowerCase() === 'raghunath2604') ? 'raghunathareddygr94@gmail.com' : `${cleanUser}@users.noreply.github.com`,
+            email: `${cleanUser}@users.noreply.github.com`,
             avatar_url: (verifiedGhProfile && verifiedGhProfile.avatar_url) || `https://github.com/${cleanUser}.png`
           };
         }
@@ -1393,13 +1425,12 @@ html, body {
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data.success) {
-          const isFounder = (payload.email && payload.email.toLowerCase() === 'raghunathareddygr94@gmail.com') || (payload.username && payload.username.toLowerCase() === 'raghunath2604');
           const userSession = {
             id: (data.user && data.user.id) || 'usr_' + Date.now(),
-            name: payload.name || val,
-            email: payload.email || val,
-            role: isFounder ? 'admin' : ((data.user && data.user.role) || 'admin'),
-            is_admin: isFounder,
+            name: (data.user && data.user.name) || payload.name || val,
+            email: (data.user && data.user.email) || payload.email || val,
+            role: (data.user && data.user.role) || 'developer',
+            is_admin: !!(data.user && data.user.is_admin),
             provider: currentProvider
           };
           localStorage.setItem('np_user', JSON.stringify(userSession));
@@ -1415,22 +1446,9 @@ html, body {
           btn.innerHTML = `<span>Authenticate &amp; Launch Control Plane →</span>`;
         }
       } catch (err) {
-        const isFounder = (val.toLowerCase().includes('raghunath'));
-        const userSession = {
-          id: 'usr_' + Date.now(),
-          name: val.includes('@') ? val.split('@')[0] : val,
-          email: val.includes('@') ? val : `${val}@users.noreply.github.com`,
-          role: isFounder ? 'admin' : 'developer',
-          is_admin: isFounder,
-          provider: currentProvider
-        };
-        localStorage.setItem('np_user', JSON.stringify(userSession));
-        localStorage.setItem('mlops_user', JSON.stringify(userSession));
-        closeOauthModal();
-        showToast(`Authenticated via ${currentProvider.toUpperCase()}! Launching...`, 'success');
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 500);
+        showToast('Network error. Please check your connection and try again.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<span>Authenticate &amp; Launch Control Plane →</span>`;
       }
     }
 
@@ -1453,7 +1471,7 @@ html, body {
           banner.style.display = 'block';
           if (notice === 'admin_clearance_required') {
             if (bannerTitle) bannerTitle.textContent = 'RESTRICTED: ADMIN LOGIN REQUIRED';
-            if (bannerText) bannerText.innerHTML = 'Only the primary administrator (<strong style="color:#111;">raghunathareddygr94@gmail.com</strong>) has access. Please sign in below.';
+            if (bannerText) bannerText.innerHTML = 'This area requires administrator clearance. Please sign in with your administrator account.';
             showToast('🔐 Administrator clearance required.', 'error', 6000);
           } else if (notice === 'admin_clearance_denied') {
             if (bannerTitle) bannerTitle.textContent = 'ACCESS DENIED (403 FORBIDDEN)';

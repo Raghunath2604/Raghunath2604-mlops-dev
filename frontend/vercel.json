@@ -71,6 +71,10 @@
       "destination": "/login.html"
     },
     {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
       "source": "/dashboard",
       "destination": "/dashboard.html"
     },

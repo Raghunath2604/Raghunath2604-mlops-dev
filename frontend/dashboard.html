@@ -1179,8 +1179,87 @@ html, body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
 }
+/* ── Mobile & Tablet Responsive Architecture ── */
+#sb-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 150;
+}
+#sb-backdrop.show { display: block; }
+
 @media (max-width: 1024px) {
   .aerospace-ops-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+  .grid-2col { grid-template-columns: 1fr; }
+  .topbar { padding: 0 1.2rem; }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 160;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.75);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  #sb-toggle-btn {
+    display: inline-flex !important;
+  }
+  .mission-control-ribbon {
+    padding: 6px 14px;
+    font-size: 0.62rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    padding: 0 0.85rem;
+    height: 52px;
+  }
+  .topbar-title {
+    font-size: 0.92rem;
+  }
+  .cluster-pill {
+    display: none;
+  }
+  .mission-control-ribbon {
+    display: none;
+  }
+  .content-area {
+    padding: 1rem 0.75rem;
+  }
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .silicon-summary-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.65rem 0.85rem;
+  }
+  .modal-card {
+    padding: 1.2rem 1rem !important;
+    width: 95vw !important;
+    max-width: 95vw !important;
+  }
+  #auth-screen .auth-card {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+  .overlay-otp-box {
+    width: 40px;
+    height: 46px;
+    font-size: 1.15rem;
+  }
 }
 </style>
 </head>
@@ -1469,7 +1548,7 @@ html, body {
         <span>ADMINISTRATOR AIRSPACE</span>
       </div>
       <div style="font-size:0.72rem; color:var(--text-dim); margin-top:3px; line-height:1.4;">
-        Live cluster nodes and OTA rollouts are strictly restricted to primary administrator (<code style="color:#fca5a5;">raghunathareddygr94@gmail.com</code>).
+        Live cluster nodes and OTA rollouts are strictly restricted to the primary administrator.
       </div>
     </div>
 
@@ -1483,6 +1562,7 @@ html, body {
 
 <!-- APP SHELL -->
 <div id="app">
+  <div id="sb-backdrop" onclick="toggleSidebar(false)"></div>
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <a href="index.html" class="sb-brand">
@@ -1586,6 +1666,9 @@ html, body {
     <!-- TOPBAR -->
     <header class="topbar">
       <div class="topbar-left">
+        <button id="sb-toggle-btn" class="action-btn" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="display: none; padding: 6px 10px; margin-right: 4px;">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <h1 class="topbar-title" id="page-title">Fleet Overview</h1>
         <div class="cluster-pill"><div class="live-dot"></div><span>Connected · TLS 1.3</span></div>
       </div>
@@ -2455,7 +2538,7 @@ async function doOverlayVerifyCode() {
 async function quickDemoLaunch() {
   const errBox = document.getElementById('login-err');
   if (errBox) {
-    errBox.textContent = 'Demo access disabled. Administrator clearance required (raghunathareddygr94@gmail.com).';
+    errBox.textContent = 'Demo access disabled. Administrator clearance is required to access the live control plane.';
     errBox.classList.add('show');
   }
   showToast('Restricted: Live control plane requires Administrator clearance.', 'error');
@@ -3283,7 +3366,22 @@ function execCliCommand(rawCmd) {
   out.scrollTop = out.scrollHeight;
 }
 
+function toggleSidebar(forceState) {
+  const sb = document.querySelector('.sidebar');
+  const bd = document.getElementById('sb-backdrop');
+  if (!sb) return;
+  const shouldOpen = (forceState !== undefined) ? forceState : !sb.classList.contains('open');
+  if (shouldOpen) {
+    sb.classList.add('open');
+    if (bd) bd.classList.add('show');
+  } else {
+    sb.classList.remove('open');
+    if (bd) bd.classList.remove('show');
+  }
+}
+
 function nav(page, btn) {
+  toggleSidebar(false);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const pg = document.getElementById(`page-${page}`);
   if (pg) pg.classList.add('active');
@@ -3412,8 +3510,7 @@ async function checkAuth() {
       if (data && data.user) {
         const isAdmin = Boolean(
           data.user.is_admin ||
-          data.user.role === 'admin' ||
-          (data.user.email && (data.user.email.toLowerCase() === 'raghunathareddygr94@gmail.com' || data.user.email.toLowerCase().includes('raghunath')))
+          data.user.role === 'admin'
         );
         user = {
           name: data.user.name || data.user.email || 'Developer',
@@ -3618,7 +3715,7 @@ window.addEventListener('DOMContentLoaded', checkAuth);
       Administrator Clearance Required
     </h2>
     <p style="color:#94a3b8; font-size:0.9rem; line-height:1.55; margin-bottom:1.5rem;">
-      Real-time fleet control, silicon edge telemetry, and model rollouts are restricted exclusively to the primary administrator (<strong style="color:#f87171;">raghunathareddygr94@gmail.com</strong>). Public visitors and non-admin users cannot access this dashboard.
+      Real-time fleet control, silicon edge telemetry, and model rollouts are restricted exclusively to the primary administrator. Sign in with your administrator credentials to access this dashboard.
     </p>
     <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:0.85rem 1rem; margin-bottom:1.75rem; text-align:left; font-size:0.8rem; color:#cbd5e1; font-family:'IBM Plex Mono',monospace;">
       <div>Authenticated As: <span id="restricted-current-email" style="color:#38bdf8;">None</span></div>
