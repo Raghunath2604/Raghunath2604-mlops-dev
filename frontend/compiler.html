@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Silicon Auto-Compiler & AI Perturbation Lab — MLOps.dev</title>
+<link rel="canonical" href="https://mlopsde.me/compiler.html"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23030712'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%235B8AF0' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300FFB3'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23030712'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300FFB3'/%3E%3C/svg%3E"/>
+<meta name="description" content="1-Click Multi-Silicon Cloud Auto-Compiler, SLSA Level 3 Model Provenance, ESG Energy Tracker, and Physical Drift Perturbation Sandbox."/>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+<!-- Core Tokens & Design System -->
+<link rel="stylesheet" href="tokens.css"/>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--stitch-bg-primary, #030712);
+  color: var(--stitch-text-primary, #f8fafc);
+  font-family: var(--stitch-font-sans, 'Plus Jakarta Sans', sans-serif);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Nav */
+.comp-nav {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+  font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+/* Hero */
+.comp-hero {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 2rem;
+  text-align: center;
+}
+.comp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 255, 179, 0.08);
+  border: 1px solid rgba(0, 255, 179, 0.3);
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-family: var(--stitch-font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #00ffb3;
+  margin-bottom: 1.2rem;
+}
+.comp-title {
+  font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.8rem;
+}
+.comp-desc {
+  color: var(--stitch-text-secondary, #94a3b8);
+  font-size: 1.05rem;
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+}
+
+/* 4-Panel Laboratory Grid */
+.lab-container {
+  max-width: 1140px;
+  margin: 0 auto 5rem;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+.lab-card {
+  background: linear-gradient(135deg, rgba(8, 14, 26, 0.95), rgba(18, 24, 38, 0.95));
+  border: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.lab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.lab-badge {
+  font-family: var(--stitch-font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.badge-green { background: rgba(0, 255, 179, 0.1); border: 1px solid rgba(0, 255, 179, 0.3); color: #00ffb3; }
+.badge-cyan { background: rgba(91, 138, 240, 0.1); border: 1px solid rgba(91, 138, 240, 0.3); color: #7dd3fc; }
+.badge-gold { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; }
+
+/* Drag Drop Zone */
+.drop-zone {
+  border: 2px dashed rgba(91, 138, 240, 0.35);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  background: rgba(3, 7, 18, 0.6);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.drop-zone:hover {
+  border-color: #00ffb3;
+  background: rgba(0, 255, 179, 0.02);
+}
+
+/* Sliders */
+.slider-control {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #1e293b;
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.slider-control::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #5b8af0;
+  box-shadow: 0 0 10px #5b8af0;
+}
+</style>
+</head>
+<body class="dot-grid">
+
+<!-- Ambient Canvas -->
+<canvas id="ambient-canvas" style="position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.6;"></canvas>
+
+<!-- NAV -->
+<nav class="comp-nav">
+  <a href="index.html" class="brand-link">
+    <div style="width:28px; height:28px; background:linear-gradient(135deg, #5B8AF0, #00FFB3); border-radius:6px; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
+    </div>
+    <span>MLOps<span style="color:#5B8AF0;">.dev</span></span>
+  </a>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <a href="benchmarks.html" style="color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Benchmarks</a>
+    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(91,138,240,0.15); border:1px solid rgba(91,138,240,0.4); color:#7dd3fc; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
+      <span>Fleet Dashboard →</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="comp-hero">
+  <div class="comp-chip">
+    <span>⚡ MULTI-SILICON CLOUD COMPILER &amp; DRIFT SIMULATOR</span>
+  </div>
+  <h1 class="comp-title">Silicon Auto-Compiler &amp; AI Perturbation Lab</h1>
+  <p class="comp-desc">Upload 1 model to compile across 17 silicon targets, simulate physical optical drift in real-time, generate cryptographic SBOMs, and track ESG carbon offsets.</p>
+</section>
+
+<!-- MAIN LABORATORY CONTAINERS -->
+<main class="lab-container">
+
+  <!-- 1. Multi-Silicon Auto-Compiler -->
+  <div class="lab-card border-beam">
+    <div class="lab-header">
+      <div>
+        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+          1. 1-Click Multi-Silicon Cloud Auto-Compiler
+        </div>
+        <div style="font-size:0.82rem; color:#94a3b8;">Compile 1 PyTorch `.pt` or ONNX model to native TensorRT, Hailo-8, Edge TPU, and RKNN binaries simultaneously.</div>
+      </div>
+      <span class="lab-badge badge-green">4 TARGETS IN PARALLEL</span>
+    </div>
+
+    <div class="drop-zone" onclick="triggerSimulatedCompile()">
+      <div style="font-size:2.2rem; margin-bottom:0.5rem;">📦</div>
+      <div style="font-size:0.95rem; font-weight:700; color:#fff;">Drop PyTorch (.pt) or ONNX Model Here</div>
+      <div style="font-size:0.78rem; color:#94a3b8; margin-top:4px;">or click to trigger automated cloud compilation pipeline</div>
+    </div>
+
+    <!-- Compilation Outputs Grid -->
+    <div id="compile-results" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:1.5rem;">
+      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#fff;">NVIDIA TensorRT 10</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#00ffb3; margin:4px 0;">yolov9_orin.engine (FP16)</div>
+        <div style="font-size:0.7rem; color:#64748b;">2.8ms · 357 FPS · 28.4 MB</div>
+      </div>
+      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#fff;">Raspberry Pi + Hailo-8L</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#00ffb3; margin:4px 0;">yolov9_hailo.hef (INT8)</div>
+        <div style="font-size:0.7rem; color:#64748b;">6.1ms · 163 FPS · 14.1 MB</div>
+      </div>
+      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#fff;">Google Coral TPU</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#7dd3fc; margin:4px 0;">yolov9_edgetpu.tflite</div>
+        <div style="font-size:0.7rem; color:#64748b;">9.8ms · 102 FPS · 8.6 MB</div>
+      </div>
+      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#fff;">Rockchip RK3588</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#7dd3fc; margin:4px 0;">yolov9_rk3588.rknn</div>
+        <div style="font-size:0.7rem; color:#64748b;">8.2ms · 121 FPS · 12.0 MB</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Physical Optical Drift Perturbation Sandbox -->
+  <div class="lab-card">
+    <div class="lab-header">
+      <div>
+        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+          2. Physical Optical Drift Perturbation Sandbox
+        </div>
+        <div style="font-size:0.82rem; color:#94a3b8;">Inject physical environmental drift (Fog, Rain, Sensor Blur, Glare) and observe real-time KL divergence calculations.</div>
+      </div>
+      <span class="lab-badge badge-cyan" id="drift-status-badge">STANDBY · KL: 0.042</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:center;">
+      <!-- Perturbation Canvas -->
+      <div style="position:relative; width:100%; height:240px; background:#04060a; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
+        <canvas id="perturb-canvas" width="500" height="240" style="width:100%; height:100%; display:block;"></canvas>
+        <div style="position:absolute; top:10px; left:12px; background:rgba(0,0,0,0.7); padding:4px 8px; border-radius:4px; font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#7dd3fc;">
+          Optical Feed: Camera 04 (Factory Ingest)
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div>
+        <div style="margin-bottom:1.2rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:6px;">
+            <span>Environmental Fog &amp; Glare:</span>
+            <span id="lbl-fog-val" style="color:#7dd3fc; font-family:var(--stitch-font-mono, monospace);">0%</span>
+          </div>
+          <input type="range" min="0" max="100" value="0" class="slider-control" id="rng-fog" oninput="updatePerturbEffect()"/>
+        </div>
+
+        <div style="margin-bottom:1.2rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:6px;">
+            <span>Lens Blur / Optical Dirt:</span>
+            <span id="lbl-blur-val" style="color:#7dd3fc; font-family:var(--stitch-font-mono, monospace);">0%</span>
+          </div>
+          <input type="range" min="0" max="100" value="0" class="slider-control" id="rng-blur" oninput="updatePerturbEffect()"/>
+        </div>
+
+        <div style="background:rgba(3,7,18,0.8); padding:10px 14px; border-radius:8px; border:1px solid var(--stitch-border-glass, rgba(255,255,255,0.08)); font-family:var(--stitch-font-mono, monospace); font-size:0.74rem;">
+          <div>• KL Divergence: <strong id="val-kl-score" style="color:#00ffb3;">0.042 (HEALTHY)</strong></div>
+          <div>• Circuit Breaker Status: <strong id="val-circuit-status" style="color:#00ffb3;">ARMED (PASSING)</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SLSA Level 3 Model Provenance & Cryptographic SBOM -->
+  <div class="lab-card">
+    <div class="lab-header">
+      <div>
+        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+          3. SLSA Level 3 Model Provenance &amp; Cryptographic SBOM
+        </div>
+        <div style="font-size:0.82rem; color:#94a3b8;">Cosign cryptographic signatures, SHA-256 weight hashes, and CycloneDX Software Bill of Materials.</div>
+      </div>
+      <span class="lab-badge badge-gold">FDA SaMD &amp; EU AI ACT COMPLIANT</span>
+    </div>
+
+    <div class="code-wrap" style="margin:0;">
+      <div class="code-bar">
+        <span class="code-lang">CYCLONEDX JSON (CRYPTOGRAPHIC PROVENANCE ATTESTATION)</span>
+        <button class="code-copy" onclick="navigator.clipboard.writeText(document.getElementById('sbom-code').textContent); showToast('✓ Copied SBOM JSON Attestation', 'ok');">copy</button>
+      </div>
+      <div class="code-body" id="sbom-code" style="font-size:0.75rem; max-height:160px; overflow-y:auto;">{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:f9a2b8e1-5c82-4e94-91c2-7b89f0e12345",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-10-06T02:35:00Z",
+    "tools": [{ "vendor": "MLOps.dev", "name": "ModelRegistry", "version": "1.0.0" }],
+    "component": {
+      "type": "machine-learning-model",
+      "name": "defect-detector",
+      "version": "v3.2",
+      "hashes": [{ "alg": "SHA-256", "content": "efg012hij345efg012hij345efg012hij345efg012hij345efg012hij345efg0" }]
+    },
+    "cosign": {
+      "signature": "MEQCIFz8...K291wP",
+      "certificate": "CN=MLOps.dev Secure Enclave, O=Enterprise Fleet CA"
+    }
+  }
+}</div>
+    </div>
+  </div>
+
+  <!-- 4. ESG Carbon Footprint & Energy Reduction Tracker -->
+  <div class="lab-card">
+    <div class="lab-header">
+      <div>
+        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+          4. ESG Carbon Footprint &amp; Energy Reduction Tracker
+        </div>
+        <div style="font-size:0.82rem; color:#94a3b8;">Compute energy savings from running inference on 5W-15W edge NPUs vs. 400W centralized cloud GPUs.</div>
+      </div>
+      <span class="lab-badge badge-green">89.4% KWH REDUCTION</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.2rem; text-align:center;">
+      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.74rem; font-weight:700; color:#94a3b8; text-transform:uppercase;">Fleet Energy Saved</div>
+        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#00ffb3; margin:4px 0;">34,200 <span style="font-size:1rem;">kWh/yr</span></div>
+        <div style="font-size:0.7rem; color:#64748b;">vs. continuous cloud streaming</div>
+      </div>
+      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.74rem; font-weight:700; color:#94a3b8; text-transform:uppercase;">CO2 Metric Tons Offset</div>
+        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#7dd3fc; margin:4px 0;">14.8 <span style="font-size:1rem;">tCO2e</span></div>
+        <div style="font-size:0.7rem; color:#64748b;">EPA Grid Equivalent Factor</div>
+      </div>
+      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.74rem; font-weight:700; color:#94a3b8; text-transform:uppercase;">Electricity Cost Cut</div>
+        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#fbbf24; margin:4px 0;">$5,472 <span style="font-size:1rem;">/ yr</span></div>
+        <div style="font-size:0.7rem; color:#64748b;">$0.16/kWh industrial rate</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="canvas-ambient.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
+<script src="motion.js"></script>
+<script>
+// Simulated cloud compiler trigger
+function triggerSimulatedCompile(){
+  showToast('⚡ Ingested model: Optimizing TensorRT 10, Hailo HEF, Edge TPU, and RKNN binaries...', 'ok');
+}
+
+// Perturbation Sandbox rendering engine
+const canvas = document.getElementById('perturb-canvas');
+const ctx = canvas.getContext('2d');
+
+let fogLevel = 0;
+let blurLevel = 0;
+
+function drawPerturbFrame(){
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  // Background factory stream simulation
+  ctx.fillStyle = '#080e1a';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(91,138,240,0.15)';
+  ctx.lineWidth = 1;
+  for(let x=0; x<w; x+=30){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for(let y=0; y<h; y+=25){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+  // Target object bounding box
+  ctx.strokeStyle = '#00ffb3';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(w*0.3, h*0.2, w*0.4, h*0.6);
+  ctx.fillStyle = '#00ffb3';
+  ctx.font = '10px "JetBrains Mono", monospace';
+  ctx.fillText('TARGET_ITEM [98.2%]', w*0.3 + 6, h*0.2 - 6);
+
+  // Apply Fog overlay
+  if (fogLevel > 0) {
+    ctx.fillStyle = `rgba(220, 235, 255, ${fogLevel * 0.75})`;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  requestAnimationFrame(drawPerturbFrame);
+}
+requestAnimationFrame(drawPerturbFrame);
+
+function updatePerturbEffect(){
+  fogLevel = parseInt(document.getElementById('rng-fog').value, 10) / 100;
+  blurLevel = parseInt(document.getElementById('rng-blur').value, 10) / 100;
+
+  document.getElementById('lbl-fog-val').textContent = `${Math.round(fogLevel * 100)}%`;
+  document.getElementById('lbl-blur-val').textContent = `${Math.round(blurLevel * 100)}%`;
+
+  const totalNoise = (fogLevel + blurLevel) / 2;
+  const klScore = (0.042 + totalNoise * 0.65).toFixed(3);
+  
+  const klEl = document.getElementById('val-kl-score');
+  const circuitEl = document.getElementById('val-circuit-status');
+  const badgeEl = document.getElementById('drift-status-badge');
+
+  if (totalNoise > 0.6) {
+    klEl.textContent = `${klScore} (DRIFT DETECTED)`;
+    klEl.style.color = '#ef4444';
+    circuitEl.textContent = 'TRIPPED · AUTO-ROLLBACK ACTIVE';
+    circuitEl.style.color = '#ef4444';
+    badgeEl.textContent = `ALERT · KL: ${klScore} (TRIPPED)`;
+    badgeEl.className = 'lab-badge badge-gold';
+  } else {
+    klEl.textContent = `${klScore} (HEALTHY)`;
+    klEl.style.color = '#00ffb3';
+    circuitEl.textContent = 'ARMED (PASSING)';
+    circuitEl.style.color = '#00ffb3';
+    badgeEl.textContent = `STANDBY · KL: ${klScore}`;
+    badgeEl.className = 'lab-badge badge-cyan';
+  }
+}
+</script>
+</body>
+</html>

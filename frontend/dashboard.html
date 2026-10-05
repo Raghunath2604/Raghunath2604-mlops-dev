@@ -1964,6 +1964,166 @@ html, body {
           </div>
         </div>
 
+        <!-- ROW 1: OFFLINE STORE-AND-FORWARD REPLAY & HARD-EXAMPLE MINING -->
+        <div class="grid-2col" style="margin-bottom:1.5rem;">
+          <!-- Offline Replay Timeline -->
+          <div class="panel border-beam">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="color:#00ffb3;">⏮️</span>
+                <h2 class="panel-title">Offline Store-and-Forward Replay</h2>
+              </div>
+              <span class="panel-tag" style="color:#00ffb3;">100% ZERO-LOSS REPLAY</span>
+            </div>
+            <div class="panel-body">
+              <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:8px;">
+                <span style="color:#94a3b8;">Buffered Telemetry (14m Blackout):</span>
+                <span style="color:#7dd3fc; font-weight:700;">8,412 frames synced</span>
+              </div>
+              <input type="range" min="0" max="100" value="75" class="roi-slider" style="width:100%; margin-bottom:12px;"/>
+              <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-family:var(--font-mono); color:#64748b;">
+                <span>00:00 (Signal Drop)</span>
+                <span style="color:#00ffb3;">00:14 (Reconnected & Synced)</span>
+                <span>Live Telemetry</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Edge Hard-Example Mining Stream -->
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="pulse-dot"></span>
+                <h2 class="panel-title">Edge Hard-Example Mining</h2>
+              </div>
+              <span class="panel-tag" style="color:#f59e0b;">AMBIGUOUS SAMPLES (40-60%)</span>
+            </div>
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:#f8fafc;">📷 frame_9410.jpg</span>
+                <span style="color:#f59e0b;">52.1% [Edge Blur]</span>
+                <span style="color:#00ffb3;">Buffered for Fine-Tune</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:#f8fafc;">📷 frame_9411.jpg</span>
+                <span style="color:#f59e0b;">48.8% [Glare Reflection]</span>
+                <span style="color:#00ffb3;">Buffered for Fine-Tune</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:#f8fafc;">📷 frame_9412.jpg</span>
+                <span style="color:#f59e0b;">44.2% [Low Illumination]</span>
+                <span style="color:#00ffb3;">Buffered for Fine-Tune</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 2: MULTI-ARMED BANDIT A/B ALLOCATOR & THERMAL GOVERNOR -->
+        <div class="grid-2col" style="margin-bottom:1.5rem;">
+          <!-- Multi-Armed Bandit A/B Allocator -->
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="color:#7dd3fc;">⚖️</span>
+                <h2 class="panel-title">Multi-Armed Bandit A/B Allocator</h2>
+              </div>
+              <span class="panel-tag" style="color:#7dd3fc;">EPSILON-GREEDY (ε=0.1)</span>
+            </div>
+            <div class="panel-body">
+              <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:6px;">
+                <span style="color:#5b8af0;">Model A (YOLOv9-Standard · 80% Traffic):</span>
+                <span style="color:#5b8af0; font-weight:700;">98.4% Acc · 2.8ms</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:10px;">
+                <span style="color:#00ffb3;">Model B (YOLOv10-Nano · 20% Traffic):</span>
+                <span style="color:#00ffb3; font-weight:700;">97.8% Acc · 1.6ms</span>
+              </div>
+              <div style="height:8px; border-radius:4px; background:#1e293b; overflow:hidden; display:flex;">
+                <div style="width:80%; background:#5b8af0;"></div>
+                <div style="width:20%; background:#00ffb3;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edge Battery & Thermal Safety Governor -->
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="color:#f59e0b;">🌡️</span>
+                <h2 class="panel-title">Thermal &amp; Battery Governor</h2>
+              </div>
+              <span class="panel-tag" style="color:#00ffb3;">SAFETY ACTIVE · 52.8°C</span>
+            </div>
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
+              <div style="display:flex; justify-content:space-between;">
+                <span>• Die Temp Threshold: <strong style="color:#fff;">75.0°C (Current: 52.8°C)</strong></span>
+                <span style="color:#00ffb3;">NORMAL</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span>• Battery Reserve Limit: <strong style="color:#fff;">20.0% (Current: 94.2%)</strong></span>
+                <span style="color:#00ffb3;">OPTIMAL</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span>• Throttling Policy: <strong style="color:#7dd3fc;">Auto-Switch FP16 → INT8 on Surge</strong></span>
+                <span style="color:#00ffb3;">ARMED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 3: MULTI-REGION GEOFENCING & FEDERATED DIFFERENTIAL PRIVACY -->
+        <div class="grid-2col" style="margin-bottom:1.5rem;">
+          <!-- Geofencing & Airspace Compliance Zones -->
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="color:#5b8af0;">🌐</span>
+                <h2 class="panel-title">Geofencing &amp; Airspace Zones</h2>
+              </div>
+              <span class="panel-tag" style="color:#7dd3fc;">4 ACTIVE ENCLAVES</span>
+            </div>
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:#f8fafc;">🇪🇺 EU-GDPR Enclave (Frankfurt)</span>
+                <span style="color:#00ffb3;">Local Weights Locked</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:#f8fafc;">🇺🇸 US Defense Facility Enclave</span>
+                <span style="color:#00ffb3;">Air-Gap Diode Active</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:#f8fafc;">🇮🇳 APAC Smart Logistics Zone</span>
+                <span style="color:#00ffb3;">Dynamic OTA Enabled</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Federated Differential Privacy Aggregator -->
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="color:#00ffb3;">🛡️</span>
+                <h2 class="panel-title">Federated Privacy Aggregator</h2>
+              </div>
+              <span class="panel-tag" style="color:#00ffb3;">ε = 0.5 (DIFFERENTIAL PRIVACY)</span>
+            </div>
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
+              <div style="display:flex; justify-content:space-between;">
+                <span>• Global Model Version: <strong style="color:#fff;">defect-detector:v3.2-fed</strong></span>
+                <span style="color:#00ffb3;">ROUND #42</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span>• Gradient Aggregation: <strong style="color:#7dd3fc;">Secure Multi-Party Compute</strong></span>
+                <span style="color:#00ffb3;">ENCRYPTED</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span>• Raw Sensor Data Leaving Edge: <strong style="color:#00ffb3;">0.00 KB (ZERO LEAKAGE)</strong></span>
+                <span style="color:#00ffb3;">VERIFIED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- SILICON BENCHMARK & TOPS COMPARISON -->
         <div class="panel">
           <div class="panel-header">
@@ -4049,10 +4209,75 @@ function updateStressSimulation() {
   if (ingest) ingest.textContent = `${heartbeats} heartbeats/sec`;
 }
 
+/* ── REMOTE EDGE WEB TERMINAL HANDLER ── */
+function toggleTerminal() {
+  const t = document.getElementById('remote-edge-terminal');
+  if (t) {
+    t.style.display = t.style.display === 'none' ? 'flex' : 'none';
+    if (t.style.display === 'flex') {
+      const inp = document.getElementById('term-input');
+      if (inp) inp.focus();
+    }
+  }
+}
+
+function handleTermKey(e) {
+  if (e.key === 'Enter') {
+    const inp = document.getElementById('term-input');
+    const log = document.getElementById('term-log');
+    const cmd = inp.value.trim();
+    if (!cmd) return;
+    inp.value = '';
+
+    const cmdRow = document.createElement('div');
+    cmdRow.style.color = '#00ffb3';
+    cmdRow.textContent = `operator@hw-jetson-agx-orin:~$ ${cmd}`;
+    log.appendChild(cmdRow);
+
+    const outRow = document.createElement('div');
+    outRow.style.color = '#94a3b8';
+    outRow.style.margin = '4px 0 8px 0';
+    if (cmd === 'mlops status' || cmd === 'status') {
+      outRow.textContent = '● Daemon: ACTIVE (PID: 1042) · Silicon: Jetson AGX Orin · Model: defect-detector:v3.2 · Latency: 2.8ms · KL: 0.042 (OK)';
+    } else if (cmd === 'mlops models' || cmd === 'models') {
+      outRow.textContent = 'Registered: defect-detector (v1.0, v2.0, v3.2-trt10) · Active: v3.2 (SHA: efg012h...)';
+    } else if (cmd === 'clear') {
+      log.innerHTML = '';
+      return;
+    } else {
+      outRow.textContent = `[mlops-agent] Executed '${cmd}' via TLS 1.3 reverse tunnel. Zero inbound open ports.`;
+    }
+    log.appendChild(outRow);
+    log.scrollTop = log.scrollHeight;
+  }
+}
+
 window.addEventListener('load', initMissionControlFX);
 
 window.addEventListener('DOMContentLoaded', checkAuth);
 </script>
+
+<!-- ZERO-INBOUND REMOTE EDGE WEB TERMINAL MODAL -->
+<div id="remote-edge-terminal" style="display:none; position:fixed; bottom:20px; right:20px; width:min(640px, 92vw); height:380px; background:#030712; border:1px solid rgba(91,138,240,0.4); border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,0.9); z-index:99999; flex-direction:column; overflow:hidden; backdrop-filter:blur(20px);">
+  <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(91,138,240,0.1); border-bottom:1px solid rgba(91,138,240,0.2); padding:8px 14px; font-family:var(--font-mono); font-size:0.75rem;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="width:8px; height:8px; border-radius:50%; background:#00ffb3; box-shadow:0 0 8px #00ffb3;"></span>
+      <span style="color:#fff; font-weight:700;">REMOTE EDGE TERMINAL (TLS 1.3 REVERSE TUNNEL)</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="color:#7dd3fc; font-size:0.68rem;">hw-jetson-agx-orin-01</span>
+      <button onclick="toggleTerminal()" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:1rem;">✕</button>
+    </div>
+  </div>
+  <div id="term-log" style="flex:1; padding:12px 14px; overflow-y:auto; font-family:var(--font-mono); font-size:0.75rem; line-height:1.6; color:#94a3b8;">
+    <div style="color:#7dd3fc;">[TUNNEL_INIT] Zero-inbound reverse SSH session established over TLS 1.3.</div>
+    <div style="color:#64748b;">Type 'status', 'models', or 'help' to run edge diagnostic commands.</div>
+  </div>
+  <div style="display:flex; align-items:center; background:#04060a; border-top:1px solid rgba(255,255,255,0.08); padding:8px 14px; font-family:var(--font-mono); font-size:0.75rem;">
+    <span style="color:#00ffb3; margin-right:8px;">operator@jetson:~$</span>
+    <input type="text" id="term-input" onkeydown="handleTermKey(event)" placeholder="Type edge command and press Enter..." style="flex:1; background:transparent; border:none; outline:none; color:#fff; font-family:inherit; font-size:inherit;"/>
+  </div>
+</div>
 
 <!-- RESTRICTED AIR-GAPPED CONTROL PLANE LOCK SCREEN (SHOWN TO NON-ADMINS) -->
 <div id="admin-restricted-screen" style="display:none; position:fixed; inset:0; z-index:999999; background:radial-gradient(ellipse at 50% 20%, #0d1224 0%, #030611 100%); flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;">
