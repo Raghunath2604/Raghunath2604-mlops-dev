@@ -339,8 +339,22 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
           <div class="fw-kpi"><div class="fw-kpi-l">TOTAL</div><div class="fw-kpi-v">6</div></div>
           <div class="fw-kpi"><div class="fw-kpi-l">ONLINE</div><div class="fw-kpi-v g" id="fw-online">4</div></div>
           <div class="fw-kpi"><div class="fw-kpi-l">OFFLINE</div><div class="fw-kpi-v r">1</div></div>
-          <div class="fw-kpi"><div class="fw-kpi-l">DRIFT ALERT</div><div class="fw-kpi-v a">1</div></div>
+          <div class="fw-kpi"><div class="fw-kpi-l">DRIFT ALERT</div><div class="fw-kpi-v a" id="fw-drift-cnt">1</div></div>
         </div>
+        
+        <!-- Interactive Live Simulation Action Bar -->
+        <div style="display:flex; gap:6px; padding:8px 12px; background:rgba(6,10,18,0.9); border-bottom:1px solid rgba(255,255,255,0.06); flex-wrap:wrap;">
+          <button type="button" class="shimmer-btn" onclick="triggerHeroInference()" style="background:rgba(91,138,240,0.12); border:1px solid rgba(91,138,240,0.35); color:#7dd3fc; border-radius:4px; padding:3px 8px; font-family:'JetBrains Mono',monospace; font-size:0.64rem; font-weight:700; cursor:pointer;">
+            ⚡ TEST INFERENCE (2.8ms)
+          </button>
+          <button type="button" class="shimmer-btn" onclick="triggerHeroDrift()" style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); color:#fbbf24; border-radius:4px; padding:3px 8px; font-family:'JetBrains Mono',monospace; font-size:0.64rem; font-weight:700; cursor:pointer;">
+            ⚠️ INJECT OPTICAL DRIFT (KL 0.58)
+          </button>
+          <button type="button" class="shimmer-btn" onclick="triggerHeroRollback()" style="background:rgba(0,255,179,0.12); border:1px solid rgba(0,255,179,0.4); color:#00ffb3; border-radius:4px; padding:3px 8px; font-family:'JetBrains Mono',monospace; font-size:0.64rem; font-weight:700; cursor:pointer;">
+            ↺ AUTO-HEAL ROLLBACK (294ms)
+          </button>
+        </div>
+
         <div class="fw-devices" id="fw-devices" aria-label="Device list"></div>
         <div class="fw-log" id="fw-log" aria-label="Event log" aria-live="polite"></div>
       </div>
@@ -1163,6 +1177,50 @@ $('wl-form').addEventListener('submit',async function(e){
     }
   });
 })();
+
+/* ── HERO INTERACTIVE SIMULATION HANDLERS ── */
+function triggerHeroInference(){
+  showToast('⚡ Ingested live inference pulse: 2.8ms · 357.1 FPS on Jetson AGX Orin', 'ok');
+  const fwLog = document.getElementById('fw-log');
+  if(fwLog){
+    const row = document.createElement('div');
+    row.style.color = '#7dd3fc';
+    row.style.fontSize = '0.68rem';
+    row.style.marginTop = '4px';
+    row.textContent = `[${new Date().toISOString().substring(11,19)}] INFERENCE_PULSE · hw-jetson-agx-orin · 2.8ms · 100% confidence`;
+    fwLog.prepend(row);
+  }
+}
+
+function triggerHeroDrift(){
+  showToast('⚠️ Optical Sensor Shift: Jetson Nano KL divergence surged to 0.584', 'warn');
+  const driftCnt = document.getElementById('fw-drift-cnt');
+  if(driftCnt) driftCnt.textContent = '2';
+  const fwLog = document.getElementById('fw-log');
+  if(fwLog){
+    const row = document.createElement('div');
+    row.style.color = '#fbbf24';
+    row.style.fontSize = '0.68rem';
+    row.style.marginTop = '4px';
+    row.textContent = `[${new Date().toISOString().substring(11,19)}] DRIFT_ALERT · jetson-floor-b · KL: 0.584 (Threshold 0.40 exceeded)`;
+    fwLog.prepend(row);
+  }
+}
+
+function triggerHeroRollback(){
+  showToast('↺ Circuit Breaker Auto-Heal: Reverted to v1.0-baseline in 294ms', 'ok');
+  const driftCnt = document.getElementById('fw-drift-cnt');
+  if(driftCnt) driftCnt.textContent = '1';
+  const fwLog = document.getElementById('fw-log');
+  if(fwLog){
+    const row = document.createElement('div');
+    row.style.color = '#00ffb3';
+    row.style.fontSize = '0.68rem';
+    row.style.marginTop = '4px';
+    row.textContent = `[${new Date().toISOString().substring(11,19)}] CIRCUIT_BREAKER · Auto-healed to v1.0-baseline · KL: 0.042 (HEALTHY)`;
+    fwLog.prepend(row);
+  }
+}
 
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded',function(){
