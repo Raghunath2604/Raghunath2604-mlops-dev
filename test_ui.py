@@ -17,7 +17,7 @@ def test_login():
     
     try:
         print("Navigating to dashboard...")
-        driver.get("http://localhost:8000/dashboard.html")
+        driver.get("https://mlopsde.me/dashboard.html")
         
         # Wait for the login screen
         WebDriverWait(driver, 10).until(
