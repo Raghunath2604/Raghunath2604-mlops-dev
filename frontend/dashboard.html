@@ -1862,6 +1862,47 @@ html, body {
           </div>
         </div>
 
+        <!-- INTERACTIVE SILICON MESH TOPOLOGY & LIVE MULTI-WAVEFORM OSCILLOSCOPE -->
+        <div class="grid-2col" style="margin-bottom:1.5rem;">
+          <!-- 1. Interactive Cluster Topology Mesh -->
+          <div class="panel border-beam">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="pulse-dot"></span>
+                <h2 class="panel-title">Interactive Fleet Silicon Topology</h2>
+              </div>
+              <span class="panel-tag" style="color:#00ffb3;">⚡ 14.8 MB/s · 17 DUAL-TWIN NODES</span>
+            </div>
+            <div style="position:relative; height:260px; background:#030712; overflow:hidden; border-radius:0 0 var(--radius-md) var(--radius-md);">
+              <canvas id="mesh-topology-canvas" width="600" height="260" style="width:100%; height:100%; display:block;"></canvas>
+              <div style="position:absolute; bottom:8px; left:12px; display:flex; gap:12px; font-family:var(--font-mono); font-size:0.68rem; color:#94a3b8; background:rgba(3,7,18,0.85); padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.08);">
+                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#5b8af0;"></span> Gateway</span>
+                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#00ffb3;"></span> NPU Worker</span>
+                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#f59e0b;"></span> Coral TPU</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Real-time Multi-Waveform Hardware Oscilloscope -->
+          <div class="panel">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="color:#00f0ff;">⚡</span>
+                <h2 class="panel-title">Real-Time Telemetry Oscilloscope</h2>
+              </div>
+              <span class="panel-tag" style="color:#7dd3fc;">60 FPS · 100ms SAMPLE</span>
+            </div>
+            <div style="position:relative; height:260px; background:#040711; overflow:hidden; border-radius:0 0 var(--radius-md) var(--radius-md); padding:10px;">
+              <canvas id="telemetry-oscilloscope-canvas" width="450" height="200" style="width:100%; height:195px; display:block;"></canvas>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-family:var(--font-mono); font-size:0.68rem; padding:0 6px;">
+                <span style="color:#00f0ff; font-weight:700;">● Latency: <span id="osc-lat-val">2.8ms</span></span>
+                <span style="color:#00ffb3; font-weight:700;">● FPS: <span id="osc-fps-val">357.1</span></span>
+                <span style="color:#f59e0b; font-weight:700;">● Die Temp: <span id="osc-temp-val">52.8°C</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- CHARTS & MAP -->
         <div class="grid-2col">
           <div class="panel">
@@ -3691,24 +3732,174 @@ function initMissionControlFX() {
     requestAnimationFrame(drawRadar);
   }
 
-  // 3. Telemetry HUD Fluctuations
-  setInterval(() => {
-    const azEl = document.getElementById('hud-azimuth');
-    const cosEl = document.getElementById('hud-cosine');
-    const anomEl = document.getElementById('hud-anomaly');
-    if (azEl) {
-      const deg = (310 + Math.random() * 8).toFixed(1);
-      azEl.textContent = `${deg}° NNE`;
+  // 4. Interactive Silicon Mesh Topology Engine
+  (function initTopologyMeshFX(){
+    const canvas = document.getElementById('mesh-topology-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    const nodes = [
+      { id: 'gw', x: 0.5, y: 0.45, label: 'Orin AGX Ingest Gateway', type: 'gw', color: '#5b8af0', size: 10, ping: '2.8ms' },
+      { id: 'w1', x: 0.2, y: 0.25, label: 'Hailo-8L Worker 01', type: 'npu', color: '#00ffb3', size: 7, ping: '6.1ms' },
+      { id: 'w2', x: 0.8, y: 0.25, label: 'Coral TPU QA-Inspector', type: 'tpu', color: '#f59e0b', size: 7, ping: '9.4ms' },
+      { id: 'w3', x: 0.18, y: 0.72, label: 'RK3588 Robotics AGV', type: 'npu', color: '#00ffb3', size: 7, ping: '8.2ms' },
+      { id: 'w4', x: 0.82, y: 0.72, label: 'RPi 5 Vision Pod', type: 'npu', color: '#00ffb3', size: 7, ping: '18.5ms' },
+      { id: 'w5', x: 0.5, y: 0.85, label: 'Intel NUC OpenVINO', type: 'gw', color: '#7dd3fc', size: 8, ping: '5.4ms' }
+    ];
+
+    const links = [
+      { from: 'gw', to: 'w1', bw: '4.2 MB/s' },
+      { from: 'gw', to: 'w2', bw: '3.1 MB/s' },
+      { from: 'gw', to: 'w3', bw: '2.8 MB/s' },
+      { from: 'gw', to: 'w4', bw: '1.9 MB/s' },
+      { from: 'gw', to: 'w5', bw: '5.2 MB/s' },
+      { from: 'w1', to: 'w3', bw: '1.1 MB/s' },
+      { from: 'w2', to: 'w4', bw: '0.8 MB/s' }
+    ];
+
+    let t = 0;
+    function renderMesh(){
+      const w = canvas.width = canvas.parentElement.clientWidth || 600;
+      const h = canvas.height = 260;
+      ctx.clearRect(0, 0, w, h);
+
+      t += 0.02;
+
+      // Draw Links
+      links.forEach((l, idx) => {
+        const n1 = nodes.find(n => n.id === l.from);
+        const n2 = nodes.find(n => n.id === l.to);
+        const x1 = n1.x * w, y1 = n1.y * h;
+        const x2 = n2.x * w, y2 = n2.y * h;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = 'rgba(91, 138, 240, 0.18)';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // Flowing Particles
+        const pPhase = (t * 0.8 + idx * 0.3) % 1;
+        const px = x1 + (x2 - x1) * pPhase;
+        const py = y1 + (y2 - y1) * pPhase;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#00ffb3';
+        ctx.shadowColor = '#00ffb3';
+        ctx.shadowBlur = 6;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // Draw Nodes
+      nodes.forEach(n => {
+        const nx = n.x * w;
+        const ny = n.y * h;
+
+        // Outer Glow Pulse Ring
+        const pulse = Math.sin(t * 2 + (n.x * 10)) * 3;
+        ctx.beginPath();
+        ctx.arc(nx, ny, n.size + 4 + pulse, 0, Math.PI * 2);
+        ctx.strokeStyle = n.color === '#5b8af0' ? 'rgba(91, 138, 240, 0.3)' : 'rgba(0, 255, 179, 0.25)';
+        ctx.stroke();
+
+        // Node Body
+        ctx.beginPath();
+        ctx.arc(nx, ny, n.size, 0, Math.PI * 2);
+        ctx.fillStyle = n.color;
+        ctx.shadowColor = n.color;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Node Label
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '600 10px "JetBrains Mono", monospace';
+        ctx.fillText(n.label, nx - 40, ny - 14);
+
+        ctx.fillStyle = '#7dd3fc';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillText(n.ping, nx - 12, ny + 20);
+      });
+
+      requestAnimationFrame(renderMesh);
     }
-    if (cosEl) {
-      const sim = (0.9775 + Math.random() * 0.0018).toFixed(4);
-      cosEl.textContent = `${sim} (GOLDEN)`;
+    requestAnimationFrame(renderMesh);
+  })();
+
+  // 5. Multi-Waveform Hardware Telemetry Oscilloscope Engine
+  (function initOscilloscopeFX(){
+    const canvas = document.getElementById('telemetry-oscilloscope-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const historyLen = 45;
+    const latHistory = Array.from({ length: historyLen }, () => 2.8 + Math.random() * 0.8);
+    const fpsHistory = Array.from({ length: historyLen }, () => 350 + Math.random() * 20);
+    const tempHistory = Array.from({ length: historyLen }, () => 52 + Math.random() * 2);
+
+    function updateOscilloscopeData(){
+      const newLat = 2.8 + (Math.random() - 0.5) * 0.9;
+      const newFps = 357.1 + (Math.random() - 0.5) * 18;
+      const newTemp = 52.8 + (Math.random() - 0.5) * 1.5;
+
+      latHistory.shift(); latHistory.push(newLat);
+      fpsHistory.shift(); fpsHistory.push(newFps);
+      tempHistory.shift(); tempHistory.push(newTemp);
+
+      const latEl = document.getElementById('osc-lat-val');
+      const fpsEl = document.getElementById('osc-fps-val');
+      const tempEl = document.getElementById('osc-temp-val');
+      if (latEl) latEl.textContent = `${newLat.toFixed(1)}ms`;
+      if (fpsEl) fpsEl.textContent = `${newFps.toFixed(1)}`;
+      if (tempEl) tempEl.textContent = `${newTemp.toFixed(1)}°C`;
     }
-    if (anomEl) {
-      const anom = (0.011 + Math.random() * 0.003).toFixed(3);
-      anomEl.textContent = `${anom} (BOUNDED)`;
+    setInterval(updateOscilloscopeData, 100);
+
+    function renderOscilloscope(){
+      const w = canvas.width = canvas.parentElement.clientWidth - 20 || 450;
+      const h = canvas.height = 195;
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw Oscilloscope Grid Lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let y = 0; y < h; y += 24) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+      for (let x = 0; x < w; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+
+      // Helper for drawing continuous spline waveforms
+      function drawWave(data, minVal, maxVal, color, lineWidth = 2) {
+        ctx.beginPath();
+        data.forEach((val, i) => {
+          const x = (i / (historyLen - 1)) * w;
+          const norm = (val - minVal) / (maxVal - minVal || 1);
+          const y = h - norm * (h - 20) - 10;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      // Draw 3 Channels
+      drawWave(latHistory, 1.5, 6.0, '#00f0ff', 2);
+      drawWave(tempHistory, 45, 65, '#f59e0b', 1.8);
+      drawWave(fpsHistory, 300, 400, '#00ffb3', 2);
+
+      requestAnimationFrame(renderOscilloscope);
     }
-  }, 2800);
+    requestAnimationFrame(renderOscilloscope);
+  })();
 }
 window.addEventListener('load', initMissionControlFX);
 
