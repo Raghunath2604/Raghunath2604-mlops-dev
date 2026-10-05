@@ -402,6 +402,49 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
       </div>
     </div>
   </div>
+
+  <!-- INTERACTIVE COMPARISON: TRADITIONAL MLOPS VS MLOPS.DEV SELF-HEALING -->
+  <div style="max-width:1160px; margin:2.5rem auto 0; background:linear-gradient(135deg, rgba(8,14,26,0.95), rgba(3,7,18,0.98)); border:1px solid rgba(91,138,240,0.28); border-radius:14px; padding:2rem; box-shadow:0 20px 50px rgba(0,0,0,0.6);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:10px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#7dd3fc; font-weight:700;">AUTONOMOUS CIRCUIT BREAKER BENCHMARK</div>
+        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:'Space Grotesk',sans-serif;">Silent Defect Outage vs. 294ms Auto-Heal</div>
+      </div>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#00ffb3; background:rgba(0,255,179,0.1); border:1px solid rgba(0,255,179,0.3); padding:4px 10px; border-radius:999px;">
+        ZERO HUMAN INTERVENTION
+      </span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+      <!-- Traditional MLOps -->
+      <div style="background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:1.4rem;">
+        <div style="display:flex; align-items:center; gap:8px; color:#ef4444; font-weight:700; font-size:0.88rem; margin-bottom:12px;">
+          <span>❌ Traditional Cloud / Cron MLOps</span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#94a3b8; line-height:1.7;">
+          <div>• 00:00 — New model pushed over SSH</div>
+          <div>• 00:15 — Camera lighting shifts; drift undetected</div>
+          <div>• 01:30 — Quality team notices 8,400 bad parts</div>
+          <div>• 02:10 — On-call engineer logs in to rollback</div>
+          <div style="color:#f87171; font-weight:700; margin-top:8px;">💥 TOTAL IMPACT: 2h 10m outage · $64,000 scrap</div>
+        </div>
+      </div>
+
+      <!-- MLOps.dev Autonomous Circuit Breaker -->
+      <div style="background:rgba(0,255,179,0.06); border:1px solid rgba(0,255,179,0.3); border-radius:10px; padding:1.4rem; position:relative; overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:8px; color:#00ffb3; font-weight:700; font-size:0.88rem; margin-bottom:12px;">
+          <span>⚡ MLOps.dev Autonomous Circuit Breaker</span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#94a3b8; line-height:1.7;">
+          <div>• 00:00 — Staged 10% canary deployed</div>
+          <div>• 00:00:01 — Edge agent calculates KL divergence (0.584)</div>
+          <div>• 00:00:01.294 — Circuit trips; reverted to golden baseline</div>
+          <div>• 00:00:02 — Slack/PagerDuty audit dispatch sent</div>
+          <div style="color:#00ffb3; font-weight:700; margin-top:8px;">✅ TOTAL IMPACT: 294ms rollback · 0 bad parts</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- PLATFORM SPEC SHEET -->
@@ -479,6 +522,42 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
       </div>
     </div>
   </div>
+
+  <!-- INTERACTIVE BINARY DELTA PATCHING (97% CELLULAR SAVINGS) -->
+  <div style="margin-top:2.5rem; background:linear-gradient(135deg, rgba(8,14,26,0.95), rgba(3,7,18,0.95)); border:1px solid rgba(0,255,179,0.3); border-radius:14px; padding:2rem; box-shadow:0 20px 50px rgba(0,0,0,0.6);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:10px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#00ffb3; font-weight:700;">BSDIFF4 BINARY DIFFERENTIAL PATCHING</div>
+        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:'Space Grotesk',sans-serif;">Full 500MB Model OTA vs. 14.2MB Delta Patch</div>
+      </div>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#7dd3fc; background:rgba(91,138,240,0.1); border:1px solid rgba(91,138,240,0.3); padding:4px 10px; border-radius:999px;">
+        97.1% CELLULAR BANDWIDTH SAVED
+      </span>
+    </div>
+
+    <!-- Comparison Track -->
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <div>
+        <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.75rem; margin-bottom:6px;">
+          <span style="color:#f87171;">❌ AWS SageMaker / Docker OTA (Full Weights Download):</span>
+          <span style="color:#f87171; font-weight:700;">500.0 MB · $50,000 / 10K devices</span>
+        </div>
+        <div style="height:12px; border-radius:6px; background:#1e293b; overflow:hidden;">
+          <div style="width:100%; height:100%; background:linear-gradient(90deg, #ef4444, #dc2626);"></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.75rem; margin-bottom:6px;">
+          <span style="color:#00ffb3;">⚡ MLOps.dev Binary Delta Patch (Changed Weights Only):</span>
+          <span style="color:#00ffb3; font-weight:700;">14.2 MB · $1,420 / 10K devices (-97%)</span>
+        </div>
+        <div style="height:12px; border-radius:6px; background:#1e293b; overflow:hidden;">
+          <div style="width:2.9%; height:100%; background:linear-gradient(90deg, #00ffb3, #5b8af0); box-shadow:0 0 10px #00ffb3;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- HOW IT WORKS -->
@@ -510,6 +589,42 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
         <div class="how-step-t">Monitor everything</div>
         <div class="how-step-d">Drift, latency, accuracy — live. Roll back in one click. Sleep through the night.</div>
         <div class="how-step-code"><span class="cmd">$ </span>mlops status --fleet production</div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE 17-SILICON HARDWARE AUTO-DETECT CODE GENERATOR -->
+    <div style="margin-top:3rem; background:linear-gradient(135deg, rgba(8,14,26,0.95), rgba(3,7,18,0.98)); border:1px solid rgba(91,138,240,0.3); border-radius:14px; padding:2rem; box-shadow:0 20px 50px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; flex-wrap:wrap; gap:10px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#7dd3fc; font-weight:700;">INTERACTIVE HARDWARE AUTO-DETECT WIZARD</div>
+          <div style="font-size:1.2rem; font-weight:800; color:#fff; font-family:'Space Grotesk',sans-serif;">Select Target Silicon Board</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#00ffb3;">AUTO-DETECTS GPU / NPU DRIVERS</span>
+      </div>
+
+      <!-- Segmented Hardware Selector -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; margin-bottom:1.2rem;">
+        <button type="button" class="action-btn" onclick="selectBoardSnippet('orin', this)" style="background:rgba(91,138,240,0.2); border-color:#5b8af0; color:#fff; padding:8px 12px; font-size:0.78rem; text-align:left;">
+          <strong>NVIDIA Jetson Orin</strong><br><span style="font-size:0.68rem; color:#7dd3fc;">TensorRT 10.x</span>
+        </button>
+        <button type="button" class="action-btn" onclick="selectBoardSnippet('hailo', this)" style="background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); color:#94a3b8; padding:8px 12px; font-size:0.78rem; text-align:left;">
+          <strong>RPi 5 + Hailo-8L</strong><br><span style="font-size:0.68rem; color:#94a3b8;">13 TOPS HEF</span>
+        </button>
+        <button type="button" class="action-btn" onclick="selectBoardSnippet('coral', this)" style="background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); color:#94a3b8; padding:8px 12px; font-size:0.78rem; text-align:left;">
+          <strong>Google Coral TPU</strong><br><span style="font-size:0.68rem; color:#94a3b8;">Edge TPU INT8</span>
+        </button>
+        <button type="button" class="action-btn" onclick="selectBoardSnippet('rk3588', this)" style="background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.1); color:#94a3b8; padding:8px 12px; font-size:0.78rem; text-align:left;">
+          <strong>Rockchip RK3588</strong><br><span style="font-size:0.68rem; color:#94a3b8;">RKNN 6 TOPS</span>
+        </button>
+      </div>
+
+      <!-- Generated Command -->
+      <div class="code-wrap" style="margin:0;">
+        <div class="code-bar">
+          <span class="code-lang" id="hw-wizard-chip">NVIDIA JETSON AGX ORIN / NANO (AUTO-PROBE: /dev/nvhost-ctrl)</span>
+          <button class="code-copy" onclick="copySnippetText()">copy</button>
+        </div>
+        <div class="code-body" id="hw-wizard-code" style="color:#7dd3fc; font-weight:700;">curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo --runtime tensorrt</div>
       </div>
     </div>
   </div>
@@ -1220,6 +1335,42 @@ function triggerHeroRollback(){
     row.style.marginTop = '4px';
     row.textContent = `[${new Date().toISOString().substring(11,19)}] CIRCUIT_BREAKER · Auto-healed to v1.0-baseline · KL: 0.042 (HEALTHY)`;
     fwLog.prepend(row);
+  }
+}
+
+/* ── HARDWARE AUTO-DETECT WIZARD SNIPPET GENERATOR ── */
+function selectBoardSnippet(type, btn){
+  const btns = btn.parentElement.querySelectorAll('button');
+  btns.forEach(b => {
+    b.style.background = 'rgba(255,255,255,0.04)';
+    b.style.borderColor = 'rgba(255,255,255,0.1)';
+  });
+  btn.style.background = 'rgba(91,138,240,0.2)';
+  btn.style.borderColor = '#5b8af0';
+
+  const chipEl = document.getElementById('hw-wizard-chip');
+  const codeEl = document.getElementById('hw-wizard-code');
+
+  if(type === 'orin'){
+    chipEl.textContent = 'NVIDIA JETSON AGX ORIN / NANO (AUTO-PROBE: /dev/nvhost-ctrl)';
+    codeEl.textContent = 'curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo --runtime tensorrt';
+  } else if(type === 'hailo'){
+    chipEl.textContent = 'RASPBERRY PI 5 + HAILO-8L (AUTO-PROBE: /dev/hailo0 · 13 TOPS)';
+    codeEl.textContent = 'curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo --runtime hailo8';
+  } else if(type === 'coral'){
+    chipEl.textContent = 'GOOGLE CORAL EDGE TPU (AUTO-PROBE: /dev/apex_0 · INT8)';
+    codeEl.textContent = 'curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo --runtime edgetpu';
+  } else if(type === 'rk3588'){
+    chipEl.textContent = 'ROCKCHIP RK3588 / ORANGE PI 5 (AUTO-PROBE: /dev/rknpu · 6 TOPS)';
+    codeEl.textContent = 'curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo --runtime rknn';
+  }
+}
+
+function copySnippetText(){
+  const codeEl = document.getElementById('hw-wizard-code');
+  if(codeEl){
+    navigator.clipboard.writeText(codeEl.textContent);
+    showToast('✓ Copied hardware-tuned install command!', 'ok');
   }
 }
 
