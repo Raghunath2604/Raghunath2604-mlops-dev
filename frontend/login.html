@@ -1581,8 +1581,14 @@ html, body {
       }
     }
 
-    // ── Dedicated Google and GitHub OAuth Handler ──
+    // ── Dedicated Google and GitHub OAuth 2.0 Direct Redirect ──
     function handleSocialAuth(provider) {
+      currentProvider = provider;
+      showToast(`Redirecting to ${provider === 'google' ? 'Google' : 'GitHub'} authentication...`, 'info');
+      window.location.href = `${API_BASE}/v1/auth/oauth/${provider}/authorize`;
+    }
+
+    function openFallbackModal(provider) {
       currentProvider = provider;
       const modal = document.getElementById('modal-oauth');
       const title = document.getElementById('oauth-modal-title');
@@ -1590,13 +1596,12 @@ html, body {
       const input = document.getElementById('oauth-input-val');
       const inputLabel = document.getElementById('oauth-input-label');
       const icon = document.getElementById('oauth-provider-icon');
-      const chips = document.getElementById('oauth-quick-chips');
       const ghPreview = document.getElementById('gh-live-preview');
       ghPreview.style.display = 'none';
 
       if (provider === 'google') {
         title.textContent = 'Sign In with Google';
-        sub.textContent = 'Authenticate with your Google Workspace or Gmail account';
+        sub.textContent = 'Enter your verified Google Workspace or Gmail address';
         inputLabel.textContent = 'Google Account Email';
         input.placeholder = 'yourname@gmail.com';
         input.value = '';
@@ -1605,7 +1610,7 @@ html, body {
         if (btnLabel) btnLabel.textContent = 'Continue with Google →';
       } else if (provider === 'github') {
         title.textContent = 'Sign In with GitHub';
-        sub.textContent = 'Authenticate with your verified GitHub developer handle';
+        sub.textContent = 'Enter your verified GitHub developer username';
         inputLabel.textContent = 'GitHub Username';
         input.placeholder = 'your-github-username';
         input.value = '';
@@ -1743,6 +1748,11 @@ html, body {
       const params = new URLSearchParams(window.location.search);
       if (params.get('mode') === 'login') {
         toggleAuthMode();
+      }
+      if (params.get('oauth_fallback')) {
+        const prov = params.get('oauth_fallback');
+        openFallbackModal(prov);
+        showToast(`Verify your ${prov === 'google' ? 'Google' : 'GitHub'} account to continue`, 'info');
       }
       if (params.get('error')) {
         showToast(params.get('error'), 'error');
