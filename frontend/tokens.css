@@ -280,3 +280,98 @@
   background: radial-gradient(circle, #00ffb3 0%, transparent 70%);
 }
 
+/* 9. 21st.dev Dot-Grid Matrix with Radial Mask */
+.dot-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 60%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 10. Smooth Infinite Marquee */
+.marquee-container {
+  overflow: hidden;
+  display: flex;
+  user-select: none;
+  gap: 2rem;
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+.marquee-content {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: 2rem;
+  animation: marquee-scroll 28s linear infinite;
+}
+.marquee-container:hover .marquee-content {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - 2rem)); }
+}
+
+/* 11. Interactive Live Multi-Tab Terminal */
+.terminal-window {
+  background: rgba(10, 15, 26, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(91, 138, 240, 0.15);
+  overflow: hidden;
+  font-family: var(--stitch-font-mono);
+}
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(18, 24, 38, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.terminal-dot-red { background: #ff5f56; }
+.terminal-dot-yellow { background: #ffbd2e; }
+.terminal-dot-green { background: #27c93f; }
+
+.terminal-tabs {
+  display: flex;
+  gap: 4px;
+}
+.terminal-tab {
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  color: var(--stitch-text-dim);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.terminal-tab.active {
+  color: var(--stitch-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+.terminal-tab:hover:not(.active) {
+  color: var(--stitch-text-secondary);
+}
+.terminal-body {
+  padding: 18px 20px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--stitch-text-secondary);
+  overflow-x: auto;
+}
+
+
