@@ -45,6 +45,7 @@ body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-
 .cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
 .cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
 </style>
+  <link rel="stylesheet" href="/tokens.css" />
 </head>
 <body>
 <div class="bg-grid"></div>
@@ -102,5 +103,6 @@ function trackJoin(){if(typeof gtag!=='undefined')gtag('event','discord_join_cli
 function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
 function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
 </script>
+  <script src="/motion.js" defer></script>
 </body>
 </html>

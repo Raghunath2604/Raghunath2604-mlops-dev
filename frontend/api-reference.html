@@ -84,6 +84,7 @@ footer{border-top:1px solid var(--border);padding:1.5rem 5%;text-align:center;fo
 footer a{color:#4F7FEF;text-decoration:none}
 @media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{display:none}.content{padding:2rem 1.5rem 4rem}}
 </style>
+  <link rel="stylesheet" href="/tokens.css" />
 </head>
 <body>
 <div id="cookie-banner" role="dialog" aria-label="Cookie consent">
@@ -407,5 +408,6 @@ function copyCode(btn){
 function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
 function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
 </script>
+  <script src="/motion.js" defer></script>
 </body>
 </html>

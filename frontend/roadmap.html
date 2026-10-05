@@ -110,6 +110,7 @@ footer a{color:#4F7FEF;text-decoration:none}
 @media(max-width:900px){.board{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.board{grid-template-columns:1fr}.suggest-form{flex-direction:column;width:100%}.suggest-input{width:100%}}
 </style>
+  <link rel="stylesheet" href="/tokens.css" />
 </head>
 <body>
 <div id="sp"></div>
@@ -442,5 +443,6 @@ function submitSuggestion(){
 function acceptCookies(){localStorage.setItem('cookie_consent','accepted');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';if(typeof gtag!=='undefined')gtag('consent','update',{'analytics_storage':'granted'});}
 function declineCookies(){localStorage.setItem('cookie_consent','declined');var b=document.getElementById('cookie-banner');if(b)b.style.transform='translateY(100%)';}
 </script>
+  <script src="/motion.js" defer></script>
 </body>
 </html>
