@@ -132,9 +132,11 @@ def run_tests():
         "model": (io.BytesIO(raw_model_data), "yolov9.onnx")
     }
     r_upload = client.post("/v1/models", headers=admin_headers, data=upload_data, content_type='multipart/form-data')
+    print(f"  Debug r_upload: {r_upload.status_code} {r_upload.data}")
     assert r_upload.status_code in [200, 201], f"Model upload failed: {r_upload.data}"
     
     r_models = client.get("/v1/models", headers=admin_headers)
+    print(f"  Debug r_models: {r_models.status_code} {r_models.data}")
     assert r_models.status_code == 200, f"Models list failed: {r_models.data}"
     models_data = json.loads(r_models.data).get("data", [])
     assert len(models_data) > 0, "No models found in database"

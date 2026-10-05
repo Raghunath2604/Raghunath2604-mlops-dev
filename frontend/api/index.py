@@ -784,9 +784,7 @@ def require_auth(f):
         db = get_db()
         admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com").strip().lower()
         row = None
-        if cookie_token:
-            row = db_query(db, "SELECT id, name, role FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
-        elif bearer_token:
+        if bearer_token:
             key_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
             demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             demo_hash2 = hashlib.sha256(b'demo').hexdigest()
@@ -796,6 +794,8 @@ def require_auth(f):
                     row = {"id": "admin", "name": admin_email, "role": "admin"}
             else:
                 row = db_query(db, "SELECT id, name, role FROM api_keys WHERE key_hash = ? OR id = ?", (key_hash, bearer_token), fetchone=True)
+        elif cookie_token:
+            row = db_query(db, "SELECT id, name, role FROM api_keys WHERE id = ?", (cookie_token,), fetchone=True)
             
         if not row:
             return jsonify({"error": "Invalid API key or Session. Get yours at mlops.dev/dashboard"}), 401
@@ -2134,7 +2134,7 @@ def models_push():
     # Upsert model version
     mv_id = f"mv_{uuid.uuid4().hex[:8]}"
     try:
-        db.execute("""
+        db_query(db, """
             INSERT INTO models (id, owner_id, name, tag, format, variant, size_bytes, sha256, metadata)
             VALUES (?,?,?,?,?,?,?,?,?)
             ON CONFLICT(name, tag, variant) DO UPDATE SET
@@ -2142,24 +2142,23 @@ def models_push():
                 sha256=excluded.sha256,
                 metadata=excluded.metadata,
                 created_at=CURRENT_TIMESTAMP
-        """, (mv_id, g.user_id, name, tag, fmt, variant, size_bytes, sha256, metadata))
+        """, (mv_id, g.user_id, name, tag, fmt, variant, size_bytes, sha256, metadata), commit=True)
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    row = row_to_dict(db.execute(
+    row = row_to_dict(db_query(db, 
         "SELECT * FROM models WHERE name=? AND tag=? AND variant=?",
-        (name, tag, variant)
-    ).fetchone())
-    row["metadata"] = safe_json(row.get("metadata"))
+        (name, tag, variant), fetchone=True
+    ))
+    if row:
+        row["metadata"] = safe_json(row.get("metadata"))
 
     # Log it
-    db.execute(
+    db_query(db, 
         "INSERT INTO audit_log (id, owner_id, event_type, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?)",
-        (str(uuid.uuid4()), g.user_id, "model_push", name, tag, "success", f"Pushed model {name}:{tag} ({variant}, {size_bytes//1024}KB)")
+        (str(uuid.uuid4()), g.user_id, "model_push", name, tag, "success", f"Pushed model {name}:{tag} ({variant}, {size_bytes//1024}KB)"), commit=True
     )
-    
-    db.commit()
 
     return jsonify({"data": row}), 201
 
