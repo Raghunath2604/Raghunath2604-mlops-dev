@@ -106,9 +106,13 @@ html, body {
 }
 
 .brand-icon-mini {
-  width: 15px;
-  height: 15px;
+  width: 15px !important;
+  height: 15px !important;
+  min-width: 15px !important;
+  max-width: 15px !important;
+  flex-shrink: 0;
   display: inline-block;
+  vertical-align: middle;
 }
 
 /* Header Text */
