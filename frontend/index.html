@@ -265,7 +265,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
         <span class="word"><span class="char" style="animation-delay:.05s">M</span><span class="char" style="animation-delay:.08s">L</span></span>
         <span> </span>
         <span class="word"><span class="char" style="animation-delay:.11s">m</span><span class="char" style="animation-delay:.14s">o</span><span class="char" style="animation-delay:.17s">d</span><span class="char" style="animation-delay:.20s">e</span><span class="char" style="animation-delay:.23s">l</span><span class="char" style="animation-delay:.26s">s</span><span class="char" style="animation-delay:.29s">.</span></span>
-        <span class="line2">At the edge.</span>
+        <span class="line2 shiny-text">At the edge.</span>
         <span class="line3">In production.</span>
       </h1>
 
@@ -281,13 +281,13 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
           <span style="color: #00ffb3; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 700;">$</span>
           <code style="color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo</code>
         </div>
-        <button type="button" onclick="navigator.clipboard.writeText('curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo'); showToast('✓ Copied 1-line edge installer!','ok')" style="background: rgba(91,138,240,0.15); border: 1px solid rgba(91,138,240,0.4); color: #7dd3fc; border-radius: 4px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: all 0.15s; flex-shrink: 0;">
+        <button type="button" class="shimmer-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo'); showToast('✓ Copied 1-line edge installer!','ok')" style="background: rgba(91,138,240,0.15); border: 1px solid rgba(91,138,240,0.4); color: #7dd3fc; border-radius: 4px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: all 0.15s; flex-shrink: 0;">
           COPY
         </button>
       </div>
 
       <div class="hero-ctas">
-        <button class="cta-primary" onclick="smoothTo('wl')">
+        <button class="cta-primary shimmer-btn" onclick="smoothTo('wl')">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
           Start for free
         </button>
@@ -325,13 +325,13 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
     <div class="hero-right">
       <div class="fleet-deco" aria-hidden="true"></div>
       <div class="fleet-deco-2" aria-hidden="true"></div>
-      <div class="fleet-window" role="region" aria-label="Live fleet status">
+      <div class="fleet-window border-beam" role="region" aria-label="Live fleet status">
         <div class="fw-chrome">
           <div class="fw-dot" style="background:#FF5F57"></div>
           <div class="fw-dot" style="background:#FEBC2E"></div>
           <div class="fw-dot" style="background:#28C840"></div>
           <span class="fw-title">mlops.dev — fleet monitor</span>
-          <span class="fw-live"><span class="fw-live-dot"></span>LIVE</span>
+          <span class="fw-live"><span class="fw-live-dot pulse-dot"></span>LIVE</span>
         </div>
         <div class="fw-kpis">
           <div class="fw-kpi"><div class="fw-kpi-l">TOTAL</div><div class="fw-kpi-v">6</div></div>
@@ -552,7 +552,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
         </ul>
         <button class="plan-btn plan-btn-ghost" onclick="location.href='dashboard.html'">Get started free</button>
       </div>
-      <div class="plan featured rv d2">
+      <div class="plan featured border-beam rv d2">
         <span class="plan-ey">MOST POPULAR</span>
         <div class="plan-name">Team</div>
         <div class="plan-desc">For production fleets that need real monitoring and deployment controls.</div>
@@ -567,7 +567,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
           <li>Slack + PagerDuty integration</li>
           <li>Email support — 24h SLA</li>
         </ul>
-        <button class="plan-btn plan-btn-solid" onclick="location.href='dashboard.html?plan=team'">Start 14-day trial</button>
+        <button class="plan-btn plan-btn-solid shimmer-btn" onclick="location.href='dashboard.html?plan=team'">Start 14-day trial</button>
       </div>
       <div class="plan rv d3">
         <span class="plan-ey">ENTERPRISE</span>
@@ -625,7 +625,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
                 <option value="other">Other</option>
               </select>
             </div>
-            <button type="submit" class="wl-submit" id="wl-btn">Join the waitlist →</button>
+            <button type="submit" class="wl-submit shimmer-btn" id="wl-btn">Join the waitlist →</button>
             <div class="fmsg" id="wl-msg" role="status"></div>
           </form>
           <div class="wl-count" id="wl-count">Loading…</div>
@@ -642,7 +642,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
     <h2 class="cta-strip-h">Your models are at the edge.<br/>Start managing them.</h2>
     <p class="cta-strip-p">Free for small fleets. No credit card. Open-source agent.</p>
     <div class="cta-strip-btns">
-      <button class="cta-btn-white" onclick="smoothTo('wl')">
+      <button class="cta-btn-white shimmer-btn" onclick="smoothTo('wl')">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
         Get early access — free
       </button>
