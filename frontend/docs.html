@@ -176,6 +176,39 @@ footer a{color:#4F7FEF;text-decoration:none}
       <h1 class="doc-h1">MLOps.dev Documentation</h1>
       <p class="doc-p">From <code>curl install</code> to your first edge deployment in under 10 minutes. No Kubernetes. No YAML manifests. Just a 7.4MB binary and a CLI.</p>
 
+      <!-- Interactive Colab Quickstart Banner -->
+      <div style="margin: 1.5rem 0 2rem; background: linear-gradient(135deg, rgba(91,138,240,0.12), rgba(0,255,179,0.06)); border: 1px solid rgba(91,138,240,0.3); border-radius: 12px; padding: 1.4rem; position: relative; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.4);">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <span style="font-size:1.5rem;">🚀</span>
+            <div>
+              <div style="font-weight:700; color:#f8fafc; font-size:1.05rem;">Interactive Google Colab Quickstart (60-Second Demo)</div>
+              <div style="font-size:0.8rem; color:#94a3b8;">Train an edge defect-detection model in Colab and deploy live with the Python SDK.</div>
+            </div>
+          </div>
+          <a href="https://colab.research.google.com/github/Raghunath2604/Raghunath2604-mlops-dev/blob/master/notebooks/quickstart.ipynb" target="_blank" rel="noopener" class="shimmer-btn" style="background:rgba(245,158,11,0.18); border:1px solid rgba(245,158,11,0.5); color:#fbbf24; text-decoration:none; padding:0.45rem 1rem; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+            <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style="height:18px; vertical-align:middle;"/>
+          </a>
+        </div>
+        <div class="code-wrap" style="margin:0;">
+          <div class="code-bar"><span class="code-lang">PYTHON (GOOGLE COLAB)</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+          <div class="code-body"><span class="cm"># 1. Install SDK in Colab</span>
+!pip install mlops-dev
+
+<span class="cm"># 2. Connect & Push Model Binary</span>
+<span class="ck">import</span> mlops_dev <span class="ck">as</span> mlops
+client = mlops.Client(api_key=<span class="cs">"demo"</span>, base_url=<span class="cs">"https://mlopsde.me/api"</span>)
+
+version = client.models.push(<span class="cs">"./model.onnx"</span>, name=<span class="cs">"defect-detector"</span>, tag=<span class="cs">"v1.0"</span>)
+print(<span class="cs">f"Uploaded: {version.name}:{version.tag} (SHA: {version.sha256[:8]})"</span>)
+
+<span class="cm"># 3. Deploy Staged Rollout across Edge Fleet</span>
+dep = client.deploy(<span class="cs">"defect-detector:v1.0"</span>, target=<span class="cs">"all"</span>)
+dep.wait()
+print(<span class="cs">f"Deployment Status: {dep.status}"</span>)</div>
+        </div>
+      </div>
+
       <div class="callout callout-tip">
         <span class="callout-icon">✓</span>
         <div class="callout-body"><strong>Early access:</strong> These docs cover the current private beta. <a href="index.html#wl">Join the waitlist</a> to get access. Questions? Email <a href="mailto:hello@mlops.dev">hello@mlops.dev</a>.</div>

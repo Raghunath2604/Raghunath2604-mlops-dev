@@ -1,0 +1,45 @@
+name: Automated Synthetic Health Probes
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    # Run every 6 hours automatically
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  production-health-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e sdk/ flask flask-cors responses pytest
+
+      - name: 1. Live Public Endpoint HTTP Probe
+        run: |
+          echo "Testing live production health endpoint..."
+          curl -fsSL https://mlopsde.me/v1/health | grep -q '"status":"ok"' || { echo "Health endpoint probe failed"; exit 1; }
+          echo "Live health check passed."
+
+      - name: 2. Core 6-Pillar Architecture Verification
+        run: |
+          python verify_6_pillars.py
+
+      - name: 3. Python SDK Test Suite
+        run: |
+          pytest sdk/tests/ -v
