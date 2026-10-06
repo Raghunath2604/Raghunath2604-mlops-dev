@@ -135,6 +135,18 @@
       "destination": "/fleet-map.html"
     },
     {
+      "source": "/investors",
+      "destination": "/investors.html"
+    },
+    {
+      "source": "/incidents",
+      "destination": "/incidents.html"
+    },
+    {
+      "source": "/alerts",
+      "destination": "/alerts.html"
+    },
+    {
       "source": "/vscode",
       "destination": "/vscode.html"
     },

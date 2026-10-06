@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Incident Post-Mortem &amp; Root-Cause Analyzer | MLOps.dev</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23F43F5E' stroke-width='2' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%23F43F5E'/%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="landing.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --neon-rose: #f43f5e;
+  --neon-rose-dim: rgba(244, 63, 94, 0.12);
+  --neon-green: #00ffb3;
+  --neon-blue: #38bdf8;
+  --bg-card: rgba(13, 19, 33, 0.75);
+}
+
+body {
+  background: #03060c;
+  color: #f8fafc;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+}
+
+.incident-wrapper {
+  max-width: 1200px;
+  margin: 80px auto 40px;
+  padding: 0 1.5rem;
+}
+
+.incident-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .incident-grid { grid-template-columns: 1fr; }
+}
+
+.incident-item {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.incident-item:hover, .incident-item.active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+}
+.incident-item.severity-high {
+  border-left: 4px solid var(--neon-rose);
+}
+.incident-item.severity-med {
+  border-left: 4px solid #fbbf24;
+}
+
+.report-panel {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+}
+
+.timeline-step {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 1.2rem;
+}
+.timeline-step::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: -20px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.timeline-step:last-child::before { display: none; }
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #2563eb;
+  border: 2px solid #03060c;
+}
+
+.diff-box {
+  background: #020408;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+.diff-add { color: #86efac; background: rgba(34, 197, 94, 0.1); display: block; }
+.diff-rem { color: #fda4af; background: rgba(244, 63, 94, 0.1); display: block; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav style="position:fixed; top:0; left:0; right:0; height:60px; background:rgba(3,7,18,0.85); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; z-index:1000;">
+  <a href="index.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; font-weight:800; font-size:1.05rem;">
+    <div style="width:28px; height:28px; border-radius:6px; background:#2563eb; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 17 22 12"></polyline></svg>
+    </div>
+    <span>MLOps<span style="color:#38bdf8;">.dev</span> <span style="font-size:0.75rem; color:#f43f5e; font-weight:700; margin-left:4px;">Incident Post-Mortems</span></span>
+  </a>
+
+  <div style="display:flex; align-items:center; gap:1.2rem;">
+    <a href="fleet-map.html" style="color:#00ffb3; text-decoration:none; font-size:0.82rem; font-weight:700;">🌐 Global Fleet Map</a>
+    <a href="investors.html" style="color:#ff8533; text-decoration:none; font-size:0.82rem; font-weight:700;">🟧 YC Data Room</a>
+    <a href="dashboard.html" style="background:#2563eb; color:#fff; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.78rem; font-weight:700;">Open Control Plane →</a>
+  </div>
+</nav>
+
+<div class="incident-wrapper">
+  <div style="margin-bottom:2rem;">
+    <div style="display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--neon-rose); background:var(--neon-rose-dim); border:1px solid rgba(244,63,94,0.3); padding:4px 10px; border-radius:6px; margin-bottom:8px;">
+      <span>● AUTOMATED LLM ROOT-CAUSE ENGINE</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-size:2.2rem; font-weight:800; color:#fff;">Edge AI Incident Post-Mortems</h1>
+    <p style="color:var(--text-muted); font-size:0.95rem;">Cryptographically verified root-cause analysis, statistical drift breakdown, and automated remediation PRs for field anomalies.</p>
+  </div>
+
+  <div class="incident-grid">
+    <!-- INCIDENT LIST -->
+    <div>
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.8rem;">Select Field Incident:</div>
+
+      <div class="incident-item severity-high active" onclick="loadIncident(0, this)">
+        <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--neon-rose); font-family:'JetBrains Mono',monospace; font-weight:700;">
+          <span>INC-8921 · HIGH</span>
+          <span>AUTONOMOUS ROLLBACK</span>
+        </div>
+        <div style="font-size:0.88rem; font-weight:700; color:#fff; margin:4px 0;">Covariate Shift in Munich Fab 4</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Hailo-8L · KL Div: 0.084 (>0.050)</div>
+      </div>
+
+      <div class="incident-item severity-med" onclick="loadIncident(1, this)">
+        <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:#fbbf24; font-family:'JetBrains Mono',monospace; font-weight:700;">
+          <span>INC-8922 · MEDIUM</span>
+          <span>CIRCUIT TRIPPED</span>
+        </div>
+        <div style="font-size:0.88rem; font-weight:700; color:#fff; margin:4px 0;">Lens Dust Occlusion in Austin Giga</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Jetson AGX Orin · Entropy Drop: 42%</div>
+      </div>
+
+      <div class="incident-item severity-high" onclick="loadIncident(2, this)">
+        <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--neon-rose); font-family:'JetBrains Mono',monospace; font-weight:700;">
+          <span>INC-8923 · HIGH</span>
+          <span>FAILOVER ACTIVE</span>
+        </div>
+        <div style="font-size:0.88rem; font-weight:700; color:#fff; margin:4px 0;">Thermal Junction Spike in Tokyo Port</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">RK3588 NPU · Temp: 84.2°C (Throttled)</div>
+      </div>
+    </div>
+
+    <!-- POST MORTEM DETAIL -->
+    <div class="report-panel" id="report-view">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap:wrap; gap:10px;">
+        <div>
+          <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:var(--neon-green);" id="rep-id">INCIDENT: INC-8921 · ISO 26262 AUDITED</div>
+          <h2 style="font-size:1.4rem; font-weight:800; color:#fff; margin-top:4px;" id="rep-title">Covariate Shift in Munich Precision Fab 4</h2>
+        </div>
+        <button onclick="downloadReport()" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#fff; padding:8px 14px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+          📄 Export Audit PDF
+        </button>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:1.5rem;">
+        <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:10px; border-radius:6px;">
+          <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Time to Autonomous Rollback</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; font-weight:800; color:var(--neon-green);" id="rep-ttr">8.4 ms</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:10px; border-radius:6px;">
+          <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">SLSA Attestation Key</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; font-weight:700; color:#7dd3fc;" id="rep-key">cosign:9b8f...e104</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:10px; border-radius:6px;">
+          <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Zero-Downtime Maintained</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; font-weight:800; color:var(--neon-green);">100.0%</div>
+        </div>
+      </div>
+
+      <div style="font-size:0.85rem; font-weight:700; color:#cbd5e1; margin-bottom:1rem;">Executive Root-Cause Analysis (LLM Inferred):</div>
+      <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin-bottom:1.5rem;" id="rep-narrative">
+        At 14:02:11 UTC, factory overhead halogen lighting in Bay 3 was substituted with 4500K LED luminaires, altering spectral reflectance on aluminum engine casings. The active model (<span style="color:#7dd3fc; font-family:'JetBrains Mono',monospace;">defect-detector-hailo:v2.4</span>) observed an abrupt distribution shift resulting in Kullback-Leibler divergence of 0.084 (threshold: 0.050). The MLOps.dev in-situ agent executed an atomic zero-packet-loss rollback to safe baseline <span style="color:#86efac; font-family:'JetBrains Mono',monospace;">v2.3-baseline</span> in 8.4ms.
+      </p>
+
+      <div style="font-size:0.85rem; font-weight:700; color:#cbd5e1; margin-bottom:0.8rem;">Incident Timeline:</div>
+      <div id="rep-timeline">
+        <div class="timeline-step">
+          <div class="timeline-dot"></div>
+          <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:var(--neon-blue);">14:02:11.104 UTC</div>
+          <div style="font-size:0.82rem; color:#fff;">Drift probe detected divergence $D_{KL} = 0.084$ on Camera 02 stream.</div>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot" style="background:#f43f5e;"></div>
+          <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:var(--neon-rose);">14:02:11.109 UTC</div>
+          <div style="font-size:0.82rem; color:#fff;">Circuit breaker tripped; canary traffic paused to Hailo-8L NPU.</div>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot" style="background:#00ffb3;"></div>
+          <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:var(--neon-green);">14:02:11.112 UTC</div>
+          <div style="font-size:0.82rem; color:#fff;">Autonomous fallback switched weights to baseline model; 0 dropped frames.</div>
+        </div>
+      </div>
+
+      <div style="font-size:0.85rem; font-weight:700; color:#cbd5e1; margin-top:1.5rem; margin-bottom:0.4rem;">Automated GitOps Remediation Diff:</div>
+      <div class="diff-box">
+        <span>--- a/deployments/munich-bay3.yaml</span><br/>
+        <span>+++ b/deployments/munich-bay3.yaml</span><br/>
+        <span class="diff-rem">- target_model: "defect-detector-hailo:v2.4"</span><br/>
+        <span class="diff-add">+ target_model: "defect-detector-hailo:v2.3-baseline"</span><br/>
+        <span class="diff-rem">- drift_threshold_kl: 0.050</span><br/>
+        <span class="diff-add">+ drift_threshold_kl: 0.040 # Tightened threshold per INC-8921</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const INCIDENTS = [
+  {
+    id: "INC-8921 · ISO 26262 AUDITED",
+    title: "Covariate Shift in Munich Precision Fab 4",
+    ttr: "8.4 ms",
+    key: "cosign:9b8f...e104",
+    narrative: "At 14:02:11 UTC, factory overhead halogen lighting in Bay 3 was substituted with 4500K LED luminaires, altering spectral reflectance on aluminum engine casings. The active model (defect-detector-hailo:v2.4) observed an abrupt distribution shift resulting in Kullback-Leibler divergence of 0.084 (threshold: 0.050). The MLOps.dev in-situ agent executed an atomic zero-packet-loss rollback to safe baseline v2.3-baseline in 8.4ms."
+  },
+  {
+    id: "INC-8922 · AUDIT PASS",
+    title: "Lens Dust Occlusion in Austin Giga Assembly",
+    ttr: "4.1 ms",
+    key: "cosign:3d21...f819",
+    narrative: "Airborne particulates from welding line 4 coated the protective sapphire lens on Jetson Orin AGX camera node 07, causing a 42% collapse in spatial entropy. MLOps.dev optical perturbation lab triggered a field alert, isolated the inference output from the emergency braking CAN bus, and notified plant operators."
+  },
+  {
+    id: "INC-8923 · FAILOVER COMPLETE",
+    title: "Thermal Junction Spike in Tokyo Port Robotics",
+    ttr: "12.0 ms",
+    key: "cosign:7a11...b392",
+    narrative: "Ambient solar thermal load pushed Rockchip RK3588 SoC junction temperature to 84.2°C, causing hardware thermal throttling and frame latency degradation to 142ms. MLOps.dev load balancer rerouted inference workloads to adjacent twin node with zero dropped container vision records."
+  }
+];
+
+function loadIncident(idx, el) {
+  document.querySelectorAll('.incident-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const d = INCIDENTS[idx];
+  document.getElementById('rep-id').textContent = d.id;
+  document.getElementById('rep-title').textContent = d.title;
+  document.getElementById('rep-ttr').textContent = d.ttr;
+  document.getElementById('rep-key').textContent = d.key;
+  document.getElementById('rep-narrative').textContent = d.narrative;
+}
+
+function downloadReport() {
+  alert("Downloading cryptographically signed ISO 26262 Post-Mortem Audit Report (.pdf)...");
+}
+</script>
+</body>
+</html>

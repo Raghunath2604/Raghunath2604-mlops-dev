@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Investor Data Room & YC Pitch — MLOps.dev</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23080C16'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%2338BDF8' stroke-width='2' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="landing.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --yc-orange: #ff6600;
+  --yc-orange-dim: rgba(255, 102, 0, 0.12);
+  --neon-green: #00ffb3;
+  --neon-blue: #38bdf8;
+  --bg-pitch-card: rgba(13, 19, 33, 0.7);
+}
+
+.pitch-hero {
+  padding: 120px 1.5rem 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.yc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--yc-orange-dim);
+  border: 1px solid rgba(255, 102, 0, 0.4);
+  color: #ff8533;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 0 20px rgba(255, 102, 0, 0.2);
+}
+
+.pitch-headline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 1.2rem;
+}
+
+.pitch-sub {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 780px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 3rem 0;
+}
+
+.kpi-card {
+  background: var(--bg-pitch-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: left;
+  backdrop-filter: blur(16px);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.kpi-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.kpi-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.kpi-growth {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.section-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+/* COMPARISON TABLE */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-pitch-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+.matrix-table th, .matrix-table td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.85rem;
+}
+.matrix-table th {
+  background: rgba(255, 255, 255, 0.03);
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+}
+.matrix-table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.check-green { color: var(--neon-green); font-weight: 800; font-size: 1.1rem; }
+.cross-red { color: #f43f5e; font-weight: 800; font-size: 1.1rem; }
+
+/* CALCULATOR */
+.calc-box {
+  background: var(--bg-pitch-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  backdrop-filter: blur(20px);
+}
+@media (max-width: 768px) {
+  .calc-box { grid-template-columns: 1fr; }
+}
+
+.slider-group {
+  margin-bottom: 1.5rem;
+}
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+.calc-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #1e293b;
+  accent-color: #38bdf8;
+  outline: none;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav style="position:fixed; top:0; left:0; right:0; height:64px; background:rgba(3,7,18,0.85); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; z-index:1000;">
+  <a href="index.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; font-weight:800; font-size:1.05rem;">
+    <div style="width:28px; height:28px; border-radius:6px; background:#2563eb; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 17 22 12"></polyline></svg>
+    </div>
+    <span>MLOps<span style="color:#38bdf8;">.dev</span> <span style="font-size:0.75rem; color:#ff8533; font-weight:700; margin-left:4px;">YC W27 Data Room</span></span>
+  </a>
+
+  <div style="display:flex; align-items:center; gap:1.2rem;">
+    <a href="fleet-map.html" style="color:#00ffb3; text-decoration:none; font-size:0.82rem; font-weight:700;">🌐 Global Fleet Map</a>
+    <a href="playground.html" style="color:var(--text-muted); text-decoration:none; font-size:0.82rem; font-weight:600;">Hardware Simulator</a>
+    <a href="compiler.html" style="color:var(--text-muted); text-decoration:none; font-size:0.82rem; font-weight:600;">Auto-Compiler</a>
+    <a href="login.html" style="background:#2563eb; color:#fff; text-decoration:none; padding:7px 16px; border-radius:6px; font-size:0.8rem; font-weight:700;">Sign In / Console →</a>
+  </div>
+</nav>
+
+<!-- PITCH HERO -->
+<section class="pitch-hero">
+  <div class="yc-badge">
+    <span>🟧 Y COMBINATOR APPLICATION</span>
+    <span>•</span>
+    <span>CONFIDENTIAL INVESTOR MEMO</span>
+  </div>
+
+  <h1 class="pitch-headline">
+    The Universal Control Plane &amp; Auto-Compiler for <span style="background:linear-gradient(135deg, #38bdf8, #00ffb3); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Edge AI</span>
+  </h1>
+
+  <p class="pitch-sub">
+    Deploying vision and LLM models to physical robots, smart cameras, and industrial edge devices is broken across 15+ proprietary toolchains. MLOps.dev is the zero-friction deployment, auto-compilation, and drift circuit-breaker platform for the physical AI era.
+  </p>
+
+  <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+    <a href="#traction" style="background:#2563eb; color:#fff; padding:12px 24px; border-radius:8px; font-weight:700; text-decoration:none; font-size:0.9rem; box-shadow:0 0 25px rgba(37,99,235,0.5);">
+      View Unit Economics &amp; Moat ↓
+    </a>
+    <a href="fleet-map.html" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#fff; padding:12px 24px; border-radius:8px; font-weight:700; text-decoration:none; font-size:0.9rem;">
+      Test Live Global Fleet Map ⚡
+    </a>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Target Market (TAM)</div>
+      <div class="kpi-num">$28.5B</div>
+      <div class="kpi-growth">▲ 32% CAGR by 2028</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Gross Margin</div>
+      <div class="kpi-num">86.4%</div>
+      <div class="kpi-growth">Pure software control plane</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Average Contract Value</div>
+      <div class="kpi-num">$64,000</div>
+      <div class="kpi-growth">Enterprise Tier / Year</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Supported Silicon</div>
+      <div class="kpi-num">17+ Targets</div>
+      <div class="kpi-growth">NVIDIA, Hailo, Coral, RKNN, NPU</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM & SOLUTION -->
+<section class="section-container">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
+    <div style="background:rgba(244,63,94,0.04); border:1px solid rgba(244,63,94,0.2); border-radius:14px; padding:2rem;">
+      <div style="color:#f43f5e; font-weight:800; font-size:0.8rem; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:8px;">❌ The Problem</div>
+      <h3 style="font-size:1.3rem; color:#fff; font-weight:800; margin-bottom:1rem;">Edge AI Is Fractured and Fragile</h3>
+      <ul style="color:var(--text-muted); font-size:0.88rem; line-height:1.7; padding-left:1.2rem;">
+        <li><strong>Toolchain Hell</strong>: Teams write bespoke compilation pipelines for TensorRT, Hailo-8L, OpenVINO, RKNN, and Coral Edge TPU.</li>
+        <li><strong>Silent Field Failures</strong>: When lighting changes or camera lenses get dusty in factories, edge models silently degrade with zero alerting.</li>
+        <li><strong>Bricked Devices</strong>: Standard OTA updates lack atomic rollback and freeze robots in the field during network drops.</li>
+      </ul>
+    </div>
+
+    <div style="background:rgba(0,255,179,0.04); border:1px solid rgba(0,255,179,0.2); border-radius:14px; padding:2rem;">
+      <div style="color:var(--neon-green); font-weight:800; font-size:0.8rem; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:8px;">✅ The MLOps.dev Solution</div>
+      <h3 style="font-size:1.3rem; color:#fff; font-weight:800; margin-bottom:1rem;">Universal Edge Infrastructure</h3>
+      <ul style="color:var(--text-muted); font-size:0.88rem; line-height:1.7; padding-left:1.2rem;">
+        <li><strong>Multi-Silicon Auto-Compiler</strong>: 1 PyTorch model in → 17 hardware-optimized binaries out in under 60 seconds.</li>
+        <li><strong>Automated Drift Circuit Breakers</strong>: In-situ statistical drift detection with instant automatic rollback to baseline models.</li>
+        <li><strong>Sub-10ms Air-Gapped Resilient Sync</strong>: Zero-downtime offline-first telemetry and SLSA Level 3 cryptographic attestations.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETITIVE MATRIX -->
+<section class="section-container" id="traction">
+  <div class="section-title">Competitive Defensibility &amp; Moat</div>
+  <div class="section-desc">Why legacy cloud MLOps tools cannot solve the physical edge:</div>
+
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th>Feature / Capability</th>
+        <th style="color:#38bdf8;">MLOps.dev</th>
+        <th>AWS SageMaker Edge</th>
+        <th>OctoAI / OctoML</th>
+        <th>Scale AI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>17+ Heterogeneous Silicon Targets</strong></td>
+        <td><span class="check-green">✓ Full Matrix</span></td>
+        <td><span class="cross-red">✗ Discontinued</span></td>
+        <td><span class="cross-red">✗ Cloud-Only</span></td>
+        <td><span class="cross-red">✗ Annotation Only</span></td>
+      </tr>
+      <tr>
+        <td><strong>Hardware Auto-Compiler (Hailo/RKNN/Coral)</strong></td>
+        <td><span class="check-green">✓ Automated</span></td>
+        <td><span class="cross-red">✗ Manual Neo</span></td>
+        <td><span class="cross-red">✗ Server GPU Only</span></td>
+        <td><span class="cross-red">✗ None</span></td>
+      </tr>
+      <tr>
+        <td><strong>Air-Gapped Offline-First Sync</strong></td>
+        <td><span class="check-green">✓ Embedded SQLite + Buffer</span></td>
+        <td><span class="cross-red">✗ Requires AWS IAM</span></td>
+        <td><span class="cross-red">✗ Cloud Dependent</span></td>
+        <td><span class="cross-red">✗ Cloud Only</span></td>
+      </tr>
+      <tr>
+        <td><strong>Physical Optical Drift Circuit Breaker</strong></td>
+        <td><span class="check-green">✓ Sub-10ms Rollback</span></td>
+        <td><span class="cross-red">✗ Cloud Batch Only</span></td>
+        <td><span class="cross-red">✗ None</span></td>
+        <td><span class="cross-red">✗ None</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cryptographic SLSA L3 SBOM Attestation</strong></td>
+        <td><span class="check-green">✓ Built-In Cosign KMS</span></td>
+        <td><span class="cross-red">✗ None</span></td>
+        <td><span class="cross-red">✗ None</span></td>
+        <td><span class="cross-red">✗ None</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- REVENUE & SCALE CALCULATOR -->
+<section class="section-container">
+  <div class="section-title">Interactive Unit Economics &amp; ARR Engine</div>
+  <div class="section-desc">Model annual recurring revenue across target enterprise robotics and manufacturing customers:</div>
+
+  <div class="calc-box">
+    <div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span>Active Edge Devices Managed:</span>
+          <span id="calc-devices-val" style="color:var(--neon-green); font-family:'JetBrains Mono',monospace;">2,500 Devices</span>
+        </div>
+        <input type="range" min="100" max="25000" step="100" value="2500" class="calc-slider" id="calc-devices" oninput="updateARRCalc()"/>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <span>Enterprise License Tier:</span>
+          <span id="calc-tier-val" style="color:#38bdf8; font-family:'JetBrains Mono',monospace;">$30 / device / month</span>
+        </div>
+        <input type="range" min="15" max="60" step="5" value="30" class="calc-slider" id="calc-tier" oninput="updateARRCalc()"/>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <span>Auto-Compiler Cloud Jobs / Mo:</span>
+          <span id="calc-jobs-val" style="color:#fbbf24; font-family:'JetBrains Mono',monospace;">500 Jobs ($5/ea)</span>
+        </div>
+        <input type="range" min="50" max="5000" step="50" value="500" class="calc-slider" id="calc-jobs" oninput="updateARRCalc()"/>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:1.5rem; display:flex; flex-direction:column; justify-content:center;">
+      <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Projected Annual Recurring Revenue (ARR)</div>
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:3rem; font-weight:800; color:#fff; margin:8px 0;" id="calc-arr-output">
+        $930,000
+      </div>
+      <div style="font-size:0.8rem; color:var(--neon-green); font-weight:700;">
+        86% Estimated Gross Margin · Payback: 3.8 Months
+      </div>
+      <div style="margin-top:1.2rem; font-size:0.75rem; color:var(--text-muted); line-height:1.5;">
+        Assumes blended SaaS device subscription plus cloud silicon compilation workload units.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER / SAFE REQUEST -->
+<footer style="border-top:1px solid rgba(255,255,255,0.08); padding:3rem 1.5rem; text-align:center; margin-top:4rem;">
+  <div style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:8px;">Ready to review the SAFE Note or Schedule Partner Demo?</div>
+  <div style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1.5rem;">Contact Founder &amp; CEO directly at raghunathareddy@mlops.dev</div>
+  <a href="mailto:raghunathareddy@mlops.dev?subject=YC%20Investment%20Inquiry%20-%20MLOps.dev" style="background:#ff6600; color:#fff; padding:10px 22px; border-radius:6px; font-weight:700; text-decoration:none; font-size:0.85rem;">
+    🟧 Request Term Sheet &amp; Deck →
+  </a>
+</footer>
+
+<script>
+function updateARRCalc() {
+  const devices = parseInt(document.getElementById('calc-devices').value, 10);
+  const tier = parseInt(document.getElementById('calc-tier').value, 10);
+  const jobs = parseInt(document.getElementById('calc-jobs').value, 10);
+
+  document.getElementById('calc-devices-val').textContent = `${devices.toLocaleString()} Devices`;
+  document.getElementById('calc-tier-val').textContent = `$${tier} / device / month`;
+  document.getElementById('calc-jobs-val').textContent = `${jobs.toLocaleString()} Jobs ($5/ea)`;
+
+  const annualDeviceRev = devices * tier * 12;
+  const annualJobsRev = jobs * 5 * 12;
+  const totalARR = annualDeviceRev + annualJobsRev;
+
+  document.getElementById('calc-arr-output').textContent = `$${totalARR.toLocaleString()}`;
+}
+</script>
+</body>
+</html>

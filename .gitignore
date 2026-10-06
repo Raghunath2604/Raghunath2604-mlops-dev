@@ -44,3 +44,4 @@ sdk/server/models/
 
 # Pytest cache
 .pytest_cache/
+scratch/
