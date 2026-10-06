@@ -226,14 +226,15 @@ body {
 
 <!-- HERO -->
 <section class="bench-hero">
-  <div class="bench-chip">
-    <span>⚡ 17 SILICON DIGITAL TWINS BENCHMARKED</span>
+  <div class="wm-badge" style="margin-bottom:1.2rem;">
+    <span class="manus-orbital-ring"></span>
+    <span>17 SILICON DIGITAL TWINS BENCHMARKED</span>
   </div>
   <h1 class="bench-title">Silicon Benchmarks &amp; Fleet ROI Calculator</h1>
   <p class="bench-desc">Compare real hardware inference latency, TOPS per Watt, and calculate monthly dollar savings against cloud GPUs.</p>
 
   <!-- ROI CALCULATOR -->
-  <div class="roi-card border-beam">
+  <div class="wm-glow-card border-beam" style="padding:2.2rem; margin-bottom:3.5rem; text-align:left;">
     <div class="roi-grid">
       <div>
         <div class="roi-control-group">
@@ -260,15 +261,24 @@ body {
         </div>
       </div>
 
-      <div class="savings-display-box">
+      <div class="refero-kpi-box" style="text-align:center;">
         <div class="savings-metric-label">Estimated Annual Cloud Savings</div>
         <div class="savings-metric-value" id="val-savings">$142,500</div>
         <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:14px;">vs. streaming 100% video/sensor data to centralized cloud GPUs.</div>
-        <button class="shimmer-btn" onclick="location.href='index.html#wl'" style="width:100%; background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#fff; font-weight:700; padding:10px; border-radius:8px; cursor:pointer;">
-          Start Free Deployment →
-        </button>
+        <a href="login.html" class="cult-btn" style="width:100%; text-decoration:none; padding:12px; font-size:0.85rem;">
+          Start Free Fleet Sandbox →
+        </a>
       </div>
     </div>
+  </div>
+
+  <!-- FLOATING MANUS.IM COMMAND DOCK -->
+  <div class="manus-dock">
+    <a href="index.html" class="manus-dock-item">Home</a>
+    <a href="benchmarks.html" class="manus-dock-item active">Benchmarks</a>
+    <a href="compiler.html" class="manus-dock-item">Auto-Compiler</a>
+    <a href="pricing.html" class="manus-dock-item">Pricing</a>
+    <a href="dashboard.html" class="manus-dock-item" style="color:#00ffb3;">Dashboard ⚡</a>
   </div>
 
   <!-- BENCHMARK MATRIX TABLE -->

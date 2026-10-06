@@ -182,8 +182,9 @@ body {
 
 <!-- HERO -->
 <section class="comp-hero">
-  <div class="comp-chip">
-    <span>⚡ MULTI-SILICON CLOUD COMPILER &amp; DRIFT SIMULATOR</span>
+  <div class="wm-badge" style="margin-bottom:1.2rem;">
+    <span class="manus-orbital-ring"></span>
+    <span>MULTI-SILICON CLOUD COMPILER &amp; DRIFT SIMULATOR</span>
   </div>
   <h1 class="comp-title">Silicon Auto-Compiler &amp; AI Perturbation Lab</h1>
   <p class="comp-desc">Upload 1 model to compile across 17 silicon targets, simulate physical optical drift in real-time, generate cryptographic SBOMs, and track ESG carbon offsets.</p>
@@ -193,7 +194,7 @@ body {
 <main class="lab-container">
 
   <!-- 1. Multi-Silicon Auto-Compiler -->
-  <div class="lab-card border-beam">
+  <div class="wm-glow-card border-beam" style="padding:2rem;">
     <div class="lab-header">
       <div>
         <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
@@ -355,9 +356,19 @@ body {
 
 </main>
 
+<!-- FLOATING MANUS.IM COMMAND DOCK -->
+<div class="manus-dock">
+  <a href="index.html" class="manus-dock-item">Home</a>
+  <a href="benchmarks.html" class="manus-dock-item">Benchmarks</a>
+  <a href="compiler.html" class="manus-dock-item active">Auto-Compiler</a>
+  <a href="pricing.html" class="manus-dock-item">Pricing</a>
+  <a href="dashboard.html" class="manus-dock-item" style="color:#00ffb3;">Dashboard ⚡</a>
+</div>
+
 <script src="canvas-ambient.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
 <script src="motion.js"></script>
+<script>
 // Real Cloud Compiler API Trigger
 async function triggerSimulatedCompile(){
   showToast('⚡ Ingesting model weights: Dispatching parallel cloud compilation jobs...', 'ok');

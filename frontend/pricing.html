@@ -167,7 +167,7 @@ body {
 <!-- PRICING TIERS -->
 <main class="pricing-grid">
   <!-- Developer Tier -->
-  <div class="price-card">
+  <div class="wm-glow-card" style="padding:2.2rem 2rem; display:flex; flex-direction:column;">
     <div class="tier-name">Developer / Sandbox</div>
     <div style="font-size:0.82rem; color:#94a3b8;">For testing on up to 3 physical edge nodes.</div>
     <div class="tier-price">$0 <span style="font-size:0.95rem; color:#64748b; font-weight:400;">/ month</span></div>
@@ -180,13 +180,13 @@ body {
       <li>Community Support</li>
     </ul>
 
-    <a href="login.html" class="action-btn" style="width:100%; text-align:center; margin-top:auto; padding:10px; font-weight:700; text-decoration:none; display:block;">
+    <a href="login.html" class="cult-btn" style="width:100%; text-decoration:none; margin-top:auto; padding:12px;">
       Start Free Developer Plan →
     </a>
   </div>
 
   <!-- Team Tier -->
-  <div class="price-card featured border-beam">
+  <div class="wm-glow-card border-beam" style="padding:2.2rem 2rem; display:flex; flex-direction:column; position:relative;">
     <div style="position:absolute; top:12px; right:16px; background:rgba(0,255,179,0.12); border:1px solid #00ffb3; color:#00ffb3; font-size:0.68rem; font-weight:800; padding:2px 8px; border-radius:999px; font-family:var(--stitch-font-mono, monospace);">
       MOST POPULAR
     </div>
@@ -209,7 +209,7 @@ body {
   </div>
 
   <!-- Enterprise Tier -->
-  <div class="price-card">
+  <div class="wm-glow-card" style="padding:2.2rem 2rem; display:flex; flex-direction:column;">
     <div class="tier-name">Air-Gapped Enterprise</div>
     <div style="font-size:0.82rem; color:#94a3b8;">For regulated aerospace, defense, and medical devices.</div>
     <div class="tier-price">Custom <span style="font-size:0.95rem; color:#64748b; font-weight:400;">SLA</span></div>
@@ -223,11 +223,20 @@ body {
       <li>24/7 Dedicated Support &amp; 99.99% SLA</li>
     </ul>
 
-    <a href="mailto:hello@mlops.dev" class="action-btn" style="width:100%; text-align:center; margin-top:auto; padding:10px; font-weight:700; text-decoration:none; display:block;">
+    <a href="mailto:hello@mlops.dev" class="cult-btn" style="width:100%; text-decoration:none; margin-top:auto; padding:12px;">
       Contact Enterprise Sales →
     </a>
   </div>
 </main>
+
+<!-- FLOATING MANUS.IM COMMAND DOCK -->
+<div class="manus-dock">
+  <a href="index.html" class="manus-dock-item">Home</a>
+  <a href="benchmarks.html" class="manus-dock-item">Benchmarks</a>
+  <a href="compiler.html" class="manus-dock-item">Auto-Compiler</a>
+  <a href="pricing.html" class="manus-dock-item active">Pricing</a>
+  <a href="dashboard.html" class="manus-dock-item" style="color:#00ffb3;">Dashboard ⚡</a>
+</div>
 
 <script src="canvas-ambient.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
