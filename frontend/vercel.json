@@ -131,6 +131,10 @@
       "destination": "/playground.html"
     },
     {
+      "source": "/fleet-map",
+      "destination": "/fleet-map.html"
+    },
+    {
       "source": "/vscode",
       "destination": "/vscode.html"
     },
