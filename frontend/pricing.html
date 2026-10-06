@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pricing &amp; Enterprise Plans — MLOps.dev</title>
+<link rel="canonical" href="https://mlopsde.me/pricing"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23030712'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%235B8AF0' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300FFB3'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23030712'/%3E%3Ccircle cx='16' cy='16' r='1' fill='%2300FFB3'/%3E%3C/svg%3E"/>
+<meta name="description" content="Predictable, transparent pricing for edge AI fleets. Free developer sandbox, Team clusters, and air-gapped Enterprise deployment."/>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+<!-- Core Tokens & Design System -->
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="landing.css"/>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--stitch-bg-primary, #030712);
+  color: var(--stitch-text-primary, #f8fafc);
+  font-family: var(--stitch-font-sans, 'Plus Jakarta Sans', sans-serif);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.price-nav {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+  font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.price-hero {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 2rem;
+  text-align: center;
+}
+.price-title {
+  font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.8rem;
+}
+.price-desc {
+  color: var(--stitch-text-secondary, #94a3b8);
+  font-size: 1.05rem;
+  max-width: 650px;
+  margin: 0 auto 2.5rem;
+}
+
+.pricing-grid {
+  max-width: 1140px;
+  margin: 0 auto 4rem;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.8rem;
+}
+
+.price-card {
+  background: var(--stitch-bg-secondary, #080e1a);
+  border: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
+  border-radius: 16px;
+  padding: 2.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.price-card.featured {
+  border-color: rgba(91, 138, 240, 0.4);
+  background: linear-gradient(180deg, rgba(13, 22, 40, 0.95), rgba(8, 14, 26, 0.98));
+}
+
+.tier-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  font-family: var(--stitch-font-display, sans-serif);
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+.tier-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-family: var(--stitch-font-display, sans-serif);
+  color: #fff;
+  margin: 0.8rem 0;
+}
+.tier-features {
+  list-style: none;
+  margin: 1.5rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+}
+.tier-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tier-features li::before {
+  content: "✓";
+  color: #00ffb3;
+  font-weight: 800;
+}
+</style>
+</head>
+<body class="dot-grid">
+
+<!-- Ambient Canvas -->
+<canvas id="ambient-canvas" style="position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.6;"></canvas>
+
+<!-- NAV -->
+<nav class="price-nav">
+  <a href="index.html" class="brand-link">
+    <div style="width:28px; height:28px; background:linear-gradient(135deg, #5B8AF0, #00FFB3); border-radius:6px; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
+    </div>
+    <span>MLOps<span style="color:#5B8AF0;">.dev</span></span>
+  </a>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <a href="benchmarks.html" style="color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Benchmarks</a>
+    <a href="compiler.html" style="color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Auto-Compiler</a>
+    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(91,138,240,0.15); border:1px solid rgba(91,138,240,0.4); color:#7dd3fc; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
+      <span>Dashboard →</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="price-hero">
+  <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(0,255,179,0.08); border:1px solid rgba(0,255,179,0.3); padding:6px 16px; border-radius:999px; font-family:var(--stitch-font-mono, monospace); font-size:0.8rem; font-weight:700; color:#00ffb3; margin-bottom:1.2rem;">
+    <span>⚡ TRANSPARENT FLEET PRICING</span>
+  </div>
+  <h1 class="price-title">Predictable Pricing for High-Throughput Edge AI</h1>
+  <p class="price-desc">Scale from 1 physical board to thousands of nodes across factories, autonomous vehicles, and remote medical devices.</p>
+</section>
+
+<!-- PRICING TIERS -->
+<main class="pricing-grid">
+  <!-- Developer Tier -->
+  <div class="price-card">
+    <div class="tier-name">Developer / Sandbox</div>
+    <div style="font-size:0.82rem; color:#94a3b8;">For testing on up to 3 physical edge nodes.</div>
+    <div class="tier-price">$0 <span style="font-size:0.95rem; color:#64748b; font-weight:400;">/ month</span></div>
+    
+    <ul class="tier-features">
+      <li>Up to 3 Connected Silicon Nodes</li>
+      <li>Binary Differential Patching (BSDiff)</li>
+      <li>Local KL Divergence Monitoring</li>
+      <li>CLI &amp; Python SDK Access</li>
+      <li>Community Support</li>
+    </ul>
+
+    <a href="login.html" class="action-btn" style="width:100%; text-align:center; margin-top:auto; padding:10px; font-weight:700; text-decoration:none; display:block;">
+      Start Free Developer Plan →
+    </a>
+  </div>
+
+  <!-- Team Tier -->
+  <div class="price-card featured border-beam">
+    <div style="position:absolute; top:12px; right:16px; background:rgba(0,255,179,0.12); border:1px solid #00ffb3; color:#00ffb3; font-size:0.68rem; font-weight:800; padding:2px 8px; border-radius:999px; font-family:var(--stitch-font-mono, monospace);">
+      MOST POPULAR
+    </div>
+    <div class="tier-name">Production Fleet</div>
+    <div style="font-size:0.82rem; color:#94a3b8;">For growing production computer vision fleets.</div>
+    <div class="tier-price">$149 <span style="font-size:0.95rem; color:#64748b; font-weight:400;">/ month</span></div>
+    
+    <ul class="tier-features">
+      <li>Up to 50 Connected Silicon Nodes</li>
+      <li>Automated Canary Staged Rollouts</li>
+      <li>Autonomous Circuit Breaker Rollbacks (294ms)</li>
+      <li>Cloud Auto-Compiler (TensorRT / Hailo / RKNN)</li>
+      <li>Incident Webhooks (Slack / PagerDuty)</li>
+      <li>Priority Email &amp; Discord SLA</li>
+    </ul>
+
+    <a href="login.html" class="shimmer-btn" style="background:linear-gradient(135deg, #5b8af0, #2563eb); border:none; color:#fff; width:100%; text-align:center; margin-top:auto; padding:12px; font-weight:700; text-decoration:none; display:block; border-radius:8px;">
+      <span>Launch Fleet Plan →</span>
+    </a>
+  </div>
+
+  <!-- Enterprise Tier -->
+  <div class="price-card">
+    <div class="tier-name">Air-Gapped Enterprise</div>
+    <div style="font-size:0.82rem; color:#94a3b8;">For regulated aerospace, defense, and medical devices.</div>
+    <div class="tier-price">Custom <span style="font-size:0.95rem; color:#64748b; font-weight:400;">SLA</span></div>
+    
+    <ul class="tier-features">
+      <li>Unlimited Nodes &amp; Fleets</li>
+      <li>Air-Gapped On-Premises Control Plane</li>
+      <li>SLSA Level 3 SBOM &amp; Cosign Attestation</li>
+      <li>FDA SaMD &amp; EU AI Act Compliance Logs</li>
+      <li>Multi-Region Geofencing Enclaves</li>
+      <li>24/7 Dedicated Support &amp; 99.99% SLA</li>
+    </ul>
+
+    <a href="mailto:hello@mlops.dev" class="action-btn" style="width:100%; text-align:center; margin-top:auto; padding:10px; font-weight:700; text-decoration:none; display:block;">
+      Contact Enterprise Sales →
+    </a>
+  </div>
+</main>
+
+<script src="canvas-ambient.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
+<script src="motion.js"></script>
+</body>
+</html>

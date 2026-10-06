@@ -108,7 +108,7 @@
     },
     {
       "source": "/pricing",
-      "destination": "/index.html"
+      "destination": "/pricing.html"
     },
     {
       "source": "/changelog",
