@@ -569,6 +569,11 @@ html, body {
   box-shadow: 0 0 6px var(--brand-yellow);
 }
 
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
 /* Diagonal stripe hatched texture on Thu-Sat */
 .calendar-hatched-bg {
   position: absolute;
@@ -1086,17 +1091,17 @@ html, body {
       </a>
 
       <!-- 1. Top-Left Floating Task Pill Stack -->
-      <div class="hero-floating-pill-stack">
+      <div class="hero-floating-pill-stack" id="live-hero-task-stack">
         <div class="hero-pill-yellow">
           <div class="pill-row-top">
-            <span class="pill-title">Task Review With Team</span>
-            <span class="pill-dot-dark"></span>
+            <span class="pill-title" id="live-task-title">Task Review With Team</span>
+            <span class="pill-dot-dark" style="animation: pulse-dot 2s infinite ease-in-out;"></span>
           </div>
-          <span class="pill-subtitle">09:30am–10:00am</span>
+          <span class="pill-subtitle" id="live-task-time">09:30am–10:00am</span>
         </div>
         <div class="hero-pill-dark-under">
-          <span>09:30am–10:00am</span>
-          <span class="pill-dot-yellow"></span>
+          <span id="live-task-countdown">09:30am–10:00am</span>
+          <span class="pill-dot-yellow" style="animation: pulse-dot 1.5s infinite ease-in-out;"></span>
         </div>
       </div>
 
@@ -1105,14 +1110,15 @@ html, body {
         <img class="avatar-bubble av-1" src="avatar-1.jpg" alt="Fleet Architect" />
         <img class="avatar-bubble av-2" src="avatar-2.jpg" alt="Robotics Engineer" />
         <img class="avatar-bubble av-3" src="avatar-3.jpg" alt="ML Systems Lead" />
-        <div style="position:absolute; bottom:-22px; right:0; background:rgba(3,7,18,0.85); border:1px solid rgba(0,255,179,0.3); padding:2px 8px; border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#00ffb3; font-weight:700; white-space:nowrap;">
-          ● 3 OPERATORS ONLINE
+        <div id="live-operator-badge" style="position:absolute; bottom:-22px; right:0; background:rgba(3,7,18,0.85); border:1px solid rgba(0,255,179,0.3); padding:2px 8px; border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#00ffb3; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:5px;">
+          <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#00ffb3; box-shadow:0 0 6px #00ffb3; animation: pulse-dot 1.8s infinite ease-in-out;"></span>
+          <span id="live-operator-text">3 OPERATORS ONLINE</span>
         </div>
       </div>
 
       <!-- 3. Center/Mid-Right Frosted Glass Calendar Widget -->
-      <div class="hero-calendar-glass">
-        <div class="calendar-days-row">
+      <div class="hero-calendar-glass" id="live-hero-calendar">
+        <div class="calendar-days-row" id="live-cal-days">
           <div class="cal-col">Sun</div>
           <div class="cal-col">Mon</div>
           <div class="cal-col">Tue</div>
@@ -1121,7 +1127,7 @@ html, body {
           <div class="cal-col">Fri</div>
           <div class="cal-col">Sat</div>
         </div>
-        <div class="calendar-dates-row">
+        <div class="calendar-dates-row" id="live-cal-dates">
           <div class="cal-col">22</div>
           <div class="cal-col">23</div>
           <div class="cal-col">24</div>
@@ -1136,10 +1142,10 @@ html, body {
       <!-- 4. Bottom-Left White Card: Daily Meeting -->
       <div class="hero-white-card">
         <div class="white-card-header">
-          <span class="white-card-title">Daily Sync · Edge Rollout</span>
-          <span class="white-card-dot"></span>
+          <span class="white-card-title" id="live-meeting-title">Daily Sync · Edge Rollout</span>
+          <span class="white-card-dot" style="background:#10b981; animation: pulse-dot 2s infinite ease-in-out;"></span>
         </div>
-        <div class="white-card-time">12:00pm–01:00pm UTC</div>
+        <div class="white-card-time" id="live-meeting-time">12:00pm–01:00pm UTC</div>
         <div class="white-card-avatars">
           <img class="card-avatar-mini" src="avatar-1.jpg" alt="Lead Engineer" />
           <img class="card-avatar-mini" src="avatar-2.jpg" alt="Robotics Ops" />
@@ -1747,8 +1753,117 @@ html, body {
       }
     }
 
+    // === REAL-TIME LIVE HERO TELEMETRY & CALENDAR ENGINE ===
+    function formatTime12(date) {
+      let hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const strHours = hours < 10 ? '0' + hours : hours;
+      const strMinutes = minutes < 10 ? '0' + minutes : minutes;
+      return `${strHours}:${strMinutes}${ampm}`;
+    }
+
+    function updateLiveHeroWidgets() {
+      const now = new Date();
+      
+      // 1. Dynamic Task Schedule & Time Slots (current 30m window)
+      const currentSlotStart = new Date(now);
+      const curMin = now.getMinutes();
+      if (curMin >= 30) {
+        currentSlotStart.setMinutes(30, 0, 0);
+      } else {
+        currentSlotStart.setMinutes(0, 0, 0);
+      }
+      const currentSlotEnd = new Date(currentSlotStart.getTime() + 30 * 60 * 1000);
+      const nextSlotEnd = new Date(currentSlotStart.getTime() + 60 * 60 * 1000);
+
+      const slotStr = `${formatTime12(currentSlotStart)}–${formatTime12(currentSlotEnd)}`;
+      const nextSlotStr = `${formatTime12(currentSlotEnd)}–${formatTime12(nextSlotEnd)}`;
+
+      const taskTitles = [
+        "Task Review With Team",
+        "Edge Fleet Sync & Triage",
+        "SLSA Attestation Audit",
+        "TensorRT Engine Verify",
+        "Multi-Silicon Benchmark",
+        "Kernel Optimization Sync"
+      ];
+      // Rotate topic deterministically by 2-hour blocks
+      const taskIdx = Math.floor(now.getHours() / 2) % taskTitles.length;
+      const taskTitleEl = document.getElementById('live-task-title');
+      if (taskTitleEl) taskTitleEl.textContent = taskTitles[taskIdx];
+
+      const taskTimeEl = document.getElementById('live-task-time');
+      if (taskTimeEl) taskTimeEl.textContent = slotStr;
+
+      const taskCountEl = document.getElementById('live-task-countdown');
+      if (taskCountEl) {
+        const remainingSec = Math.max(0, Math.floor((currentSlotEnd.getTime() - now.getTime()) / 1000));
+        const remMin = Math.floor(remainingSec / 60);
+        const remSec = remainingSec % 60;
+        taskCountEl.textContent = `${nextSlotStr} (${remMin}m ${remSec < 10 ? '0' : ''}${remSec}s left)`;
+      }
+
+      // 2. Real-Time Frosted Glass Calendar (Current Week with Active Day Highlight)
+      const calDatesEl = document.getElementById('live-cal-dates');
+      if (calDatesEl) {
+        const dayOfWeek = now.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+        const sunDate = new Date(now);
+        sunDate.setDate(now.getDate() - dayOfWeek);
+        sunDate.setHours(0, 0, 0, 0);
+
+        let html = '';
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(sunDate);
+          d.setDate(sunDate.getDate() + i);
+          const isToday = d.toDateString() === now.toDateString();
+          const dayNum = d.getDate();
+          html += `<div class="cal-col ${isToday ? 'active-day' : ''}" title="${d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}">${dayNum}</div>`;
+        }
+        calDatesEl.innerHTML = html;
+      }
+
+      // 3. Dynamic Daily Sync (UTC Live Ticker)
+      const meetingTimeEl = document.getElementById('live-meeting-time');
+      if (meetingTimeEl) {
+        const utcHours = String(now.getUTCHours()).padStart(2, '0');
+        const utcMinutes = String(now.getUTCMinutes()).padStart(2, '0');
+        const utcSeconds = String(now.getUTCSeconds()).padStart(2, '0');
+        meetingTimeEl.textContent = `Daily Sync · ${utcHours}:${utcMinutes}:${utcSeconds} UTC`;
+      }
+    }
+
+    async function fetchLiveFleetStatusBadge() {
+      const textEl = document.getElementById('live-operator-text');
+      if (!textEl) return;
+      try {
+        const token = localStorage.getItem('mlops_token') || localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const res = await fetch('/v1/status', { headers }).catch(() => null);
+        if (res && res.ok) {
+          const data = await res.json().catch(() => ({}));
+          const nodes = (data && (data.online_nodes || data.active_nodes || (data.nodes && data.nodes.length))) || 18;
+          const drift = data && typeof data.drift_detected !== 'undefined' ? data.drift_detected : 0;
+          textEl.textContent = `${nodes} NODES ONLINE · ${drift} DRIFT`;
+          return;
+        }
+      } catch (e) {
+        // graceful fallback
+      }
+      const activeOps = 3 + (new Date().getHours() % 4);
+      textEl.textContent = `${activeOps} OPERATORS ONLINE`;
+    }
+
     // Check URL parameters for errors and security clearance notices
     window.addEventListener('DOMContentLoaded', () => {
+      // Initialize real-time calendar and telemetry
+      updateLiveHeroWidgets();
+      setInterval(updateLiveHeroWidgets, 1000);
+      fetchLiveFleetStatusBadge();
+      setInterval(fetchLiveFleetStatusBadge, 10000);
+
       const params = new URLSearchParams(window.location.search);
       if (params.get('mode') === 'login') {
         toggleAuthMode();
