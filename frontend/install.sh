@@ -38,7 +38,7 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-API_URL="${MLOPS_API_URL:-https://www.mlopsde.me/v1}"
+API_URL="${MLOPS_API_URL:-https://mlopsde.me/v1}"
 ARCH=$(uname -m)
 HOSTNAME=$(hostname)
 
@@ -60,8 +60,8 @@ import urllib.error
 import socket
 import platform
 
-API_URL = os.environ.get("MLOPS_API_URL", "https://api.mlopsde.me/v1")
-API_KEY = os.environ.get("MLOPS_API_KEY")
+API_URL = os.environ.get("MLOPS_API_URL", "https://mlopsde.me/v1")
+API_KEY = os.environ.get("MLOPS_API_KEY", "demo")
 DEVICE_NAME = socket.gethostname()
 
 def register():

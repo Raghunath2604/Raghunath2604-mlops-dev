@@ -1348,58 +1348,123 @@ html, body {
   </div>
 </div>
 
-<!-- REGISTER DEVICE MODAL -->
+<!-- REGISTER DEVICE & PHYSICAL HARDWARE ONBOARDING MODAL -->
 <div class="modal-overlay" id="add-dev-modal" onclick="if(event.target===this)closeAddDev()">
-  <div class="modal-card" style="max-width:540px;">
+  <div class="modal-card" style="max-width:640px; max-height:92vh; overflow-y:auto;">
     <button class="modal-close" onclick="closeAddDev()">✕</button>
-    <h3 style="margin-bottom:0.4rem; font-size:1.15rem; font-weight:700; color:var(--text-main);">Register Edge Hardware Node</h3>
-    <div style="font-size:0.78rem; color:var(--text-dim); margin-bottom:1.2rem;">Provision physical or virtual silicon edge device into cluster</div>
-    
-    <div class="form-group">
-      <label>Device Name *</label>
-      <input class="form-control" id="ad-name" placeholder="e.g. factory-qa-orin-01"/>
+    <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.3rem;">
+      <span style="font-size:1.3rem;">⚡</span>
+      <h3 style="margin:0; font-size:1.2rem; font-weight:700; color:var(--text-main);">Edge Hardware Onboarding Hub</h3>
     </div>
-    <div class="form-group">
-      <label>Silicon Platform & Architecture (17 Targets) *</label>
-      <select class="form-control" id="ad-hw">
-        <option value="">Select Target Silicon Platform</option>
-        <optgroup label="Embedded Edge AI Boards">
-          <option value="NVIDIA Jetson AGX Orin (64GB) - TensorRT 10">NVIDIA Jetson AGX Orin (64GB) - TensorRT 10 (275 TOPS)</option>
-          <option value="NVIDIA Jetson Orin Nano / NX - TensorRT 10">NVIDIA Jetson Orin Nano / NX - TensorRT 10 (40 TOPS)</option>
-          <option value="NVIDIA Jetson Nano (4GB) - TensorRT 8.2">NVIDIA Jetson Nano (4GB) - TensorRT 8.2 (0.47 TFLOPS)</option>
-          <option value="Raspberry Pi 5 (8GB) - ARM64 ONNX">Raspberry Pi 5 (8GB) - Broadcom BCM2712 ARM64 ONNX</option>
-          <option value="Raspberry Pi 4 Model B - TFLite INT8">Raspberry Pi 4 Model B - Cortex-A72 TFLite INT8</option>
-          <option value="Raspberry Pi AI Kit (Hailo-8L 13 TOPS)">Raspberry Pi AI Kit (Hailo-8L 13 TOPS HEF)</option>
-          <option value="Google Coral Dev Board (Edge TPU)">Google Coral Dev Board - Edge TPU INT8 (4 TOPS)</option>
-          <option value="Orange Pi 5 Plus (Rockchip RK3588 RKNN)">Orange Pi 5 Plus (Rockchip RK3588 RKNN NPU 6 TOPS)</option>
-          <option value="Khadas VIM4 (Amlogic A311D2 TIM-VX)">Khadas VIM4 (Amlogic A311D2 TIM-VX NPU 3.2 TOPS)</option>
-        </optgroup>
-        <optgroup label="USB Accelerators & Spatial Vision">
-          <option value="Google Coral USB Accelerator (Edge TPU)">Google Coral USB Accelerator - Edge TPU (4 TOPS)</option>
-          <option value="Luxonis OAK-D Pro (Myriad X Blob)">Luxonis OAK-D Spatial AI Camera (Myriad X 4 TOPS)</option>
-          <option value="Intel Neural Compute Stick 2 (OpenVINO IR)">Intel Neural Compute Stick 2 (NCS2 OpenVINO IR)</option>
-          <option value="Intel RealSense D435i Depth Node">Intel RealSense D435i Depth Node (DepthAI)</option>
-        </optgroup>
-        <optgroup label="Industrial Gateways & x86 Mini PCs">
-          <option value="Intel NUC 13 Pro (OpenVINO FP16)">Intel NUC 13 Pro (Core i7 / Iris Xe OpenVINO)</option>
-          <option value="Advantech UNO-2271G - Industrial Gateway">Advantech UNO-2271G Industrial Gateway</option>
-          <option value="Siemens SIMATIC IOT2050 - Industrial IoT">Siemens SIMATIC IOT2050 Industrial Gateway</option>
-          <option value="OnLogic Karbon 800 - Industrial Edge Server">OnLogic Karbon 800 Rugged Industrial Server</option>
-        </optgroup>
-      </select>
+    <div style="font-size:0.78rem; color:var(--text-dim); margin-bottom:1.2rem;">Provision real physical silicon boards, IoT gateways, edge containers, or virtual digital twins into the cluster.</div>
+    
+    <!-- Onboarding Method Navigation Tabs -->
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:1.2rem; background:var(--bg-base); padding:4px; border-radius:8px; border:1px solid var(--border);">
+      <button type="button" class="action-btn active" id="tab-btn-quick" onclick="switchHwTab('quick')" style="font-size:0.72rem; padding:6px 4px; text-align:center; justify-content:center;">🚀 Fast Register</button>
+      <button type="button" class="action-btn" id="tab-btn-curl" onclick="switchHwTab('curl')" style="font-size:0.72rem; padding:6px 4px; text-align:center; justify-content:center;">⚡ 1-Line Installer</button>
+      <button type="button" class="action-btn" id="tab-btn-python" onclick="switchHwTab('python')" style="font-size:0.72rem; padding:6px 4px; text-align:center; justify-content:center;">🐍 Python SDK</button>
+      <button type="button" class="action-btn" id="tab-btn-docker" onclick="switchHwTab('docker')" style="font-size:0.72rem; padding:6px 4px; text-align:center; justify-content:center;">🐳 Docker OCI</button>
     </div>
 
-    <div class="form-group">
-      <label>Edge Provisioning Script One-Liner</label>
-      <div style="background:var(--bg-base); border:1px solid var(--border); border-radius:6px; padding:0.6rem 0.8rem; font-family:var(--font-mono); font-size:0.73rem; color:var(--cobalt-bright); word-break:break-all;">
-        curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo
+    <!-- TAB 1: Fast Register (Web Control Plane) -->
+    <div id="hw-tab-quick" class="hw-tab-content">
+      <div class="form-group">
+        <label>Device Name / Hostname *</label>
+        <input class="form-control" id="ad-name" placeholder="e.g. factory-qa-orin-01"/>
+      </div>
+      <div class="form-group">
+        <label>Silicon Platform & Architecture (17 Targets) *</label>
+        <select class="form-control" id="ad-hw">
+          <option value="">Select Target Silicon Platform</option>
+          <optgroup label="Embedded Edge AI Boards">
+            <option value="NVIDIA Jetson AGX Orin (64GB) - TensorRT 10" selected>NVIDIA Jetson AGX Orin (64GB) - TensorRT 10 (275 TOPS)</option>
+            <option value="NVIDIA Jetson Orin Nano / NX - TensorRT 10">NVIDIA Jetson Orin Nano / NX - TensorRT 10 (40 TOPS)</option>
+            <option value="NVIDIA Jetson Nano (4GB) - TensorRT 8.2">NVIDIA Jetson Nano (4GB) - TensorRT 8.2 (0.47 TFLOPS)</option>
+            <option value="Raspberry Pi 5 (8GB) - ARM64 ONNX">Raspberry Pi 5 (8GB) - Broadcom BCM2712 ARM64 ONNX</option>
+            <option value="Raspberry Pi 4 Model B - TFLite INT8">Raspberry Pi 4 Model B - Cortex-A72 TFLite INT8</option>
+            <option value="Raspberry Pi AI Kit (Hailo-8L 13 TOPS)">Raspberry Pi AI Kit (Hailo-8L 13 TOPS HEF)</option>
+            <option value="Google Coral Dev Board (Edge TPU)">Google Coral Dev Board - Edge TPU INT8 (4 TOPS)</option>
+            <option value="Orange Pi 5 Plus (Rockchip RK3588 RKNN)">Orange Pi 5 Plus (Rockchip RK3588 RKNN NPU 6 TOPS)</option>
+            <option value="Khadas VIM4 (Amlogic A311D2 TIM-VX)">Khadas VIM4 (Amlogic A311D2 TIM-VX NPU 3.2 TOPS)</option>
+          </optgroup>
+          <optgroup label="USB Accelerators & Spatial Vision">
+            <option value="Google Coral USB Accelerator (Edge TPU)">Google Coral USB Accelerator - Edge TPU (4 TOPS)</option>
+            <option value="Luxonis OAK-D Pro (Myriad X Blob)">Luxonis OAK-D Spatial AI Camera (Myriad X 4 TOPS)</option>
+            <option value="Intel Neural Compute Stick 2 (OpenVINO IR)">Intel Neural Compute Stick 2 (NCS2 OpenVINO IR)</option>
+            <option value="Intel RealSense D435i Depth Node">Intel RealSense D435i Depth Node (DepthAI)</option>
+          </optgroup>
+          <optgroup label="Industrial Gateways & x86 Mini PCs">
+            <option value="Intel NUC 13 Pro (OpenVINO FP16)">Intel NUC 13 Pro (Core i7 / Iris Xe OpenVINO)</option>
+            <option value="Advantech UNO-2271G - Industrial Gateway">Advantech UNO-2271G Industrial Gateway</option>
+            <option value="Siemens SIMATIC IOT2050 - Industrial IoT">Siemens SIMATIC IOT2050 Industrial Gateway</option>
+            <option value="OnLogic Karbon 800 - Industrial Edge Server">OnLogic Karbon 800 Rugged Industrial Server</option>
+          </optgroup>
+        </select>
+      </div>
+      <div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:6px; padding:0.75rem 0.9rem; font-size:0.75rem; color:#93c5fd; margin-bottom:1rem; line-height:1.45;">
+        ℹ️ Instant provisioning assigns the hardware to your tenant, sets up the cryptographic device token, and configures the default defect detection model with active circuit breakers.
+      </div>
+    </div>
+
+    <!-- TAB 2: Physical Edge 1-Line Installer -->
+    <div id="hw-tab-curl" class="hw-tab-content" style="display:none;">
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem; line-height:1.4;">
+        Run this command via SSH / terminal on your physical device (NVIDIA Jetson, Raspberry Pi, Intel NUC, or x86 server) with root privileges:
+      </div>
+      <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.73rem; color:var(--cobalt-bright); word-break:break-all; line-height:1.5;">
+        <span id="curl-cmd-text">curl -fsSL https://mlopsde.me/install.sh | sudo bash -s -- --token demo --url https://mlopsde.me/v1</span>
+        <button type="button" class="action-btn" onclick="copyHwSnippet('curl-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
+      </div>
+      <div style="margin-top:0.8rem; font-size:0.72rem; color:var(--text-dim); line-height:1.4;">
+        ✓ Auto-detects ARM64/x86_64, TensorRT, Hailo-8, and Coral Edge TPUs<br>
+        ✓ Configures automatic <code>systemd</code> daemon with auto-recovery and 30s heartbeats
+      </div>
+    </div>
+
+    <!-- TAB 3: Python Edge SDK -->
+    <div id="hw-tab-python" class="hw-tab-content" style="display:none;">
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem;">
+        Use the official Python Edge Client to stream heartbeats and sync models from your embedded script:
+      </div>
+      <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:#94a3b8; line-height:1.5; white-space:pre-wrap;">
+<span style="color:#60a5fa;">pip</span> install mlops-dev
+
+<span style="color:#c084fc;">from</span> mlops_dev <span style="color:#c084fc;">import</span> Client
+client = Client(api_key=<span style="color:#34d399;">"demo"</span>, base_url=<span style="color:#34d399;">"https://mlopsde.me/v1"</span>)
+
+<span style="color:#64748b;"># Register device and start heartbeat</span>
+dev = client.devices.register(name=<span style="color:#34d399;">"orin-edge-01"</span>, hardware=<span style="color:#34d399;">"NVIDIA Jetson AGX Orin"</span>)
+client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], cpu_pct=<span style="color:#fbbf24;">14.2</span>, temp_c=<span style="color:#fbbf24;">42.5</span>)
+        <button type="button" class="action-btn" onclick="copyHwPythonCode()" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
+      </div>
+    </div>
+
+    <!-- TAB 4: Docker OCI Container -->
+    <div id="hw-tab-docker" class="hw-tab-content" style="display:none;">
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem;">
+        Deploy as a background container with full GPU/NPU device pass-through:
+      </div>
+      <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:var(--emerald); word-break:break-all; line-height:1.5;">
+        <span id="docker-cmd-text">docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="demo" -e MLOPS_API_URL="https://mlopsde.me/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest</span>
+        <button type="button" class="action-btn" onclick="copyHwSnippet('docker-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
     </div>
 
     <div class="error-msg" id="ad-err"></div>
-    <div style="display:flex; justify-content:flex-end; gap:0.6rem; margin-top:1.2rem;">
-      <button class="action-btn" onclick="closeAddDev()">Cancel</button>
-      <button class="btn-primary" id="ad-btn" onclick="doAddDev()">Provision Device Token</button>
+
+    <!-- Post-Registration Success Box -->
+    <div id="ad-success-box" style="display:none; margin-top:1rem; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:6px; padding:0.8rem 1rem;">
+      <div style="font-size:0.84rem; font-weight:700; color:var(--emerald); margin-bottom:0.3rem;">✓ Node Successfully Provisioned!</div>
+      <div id="ad-success-details" style="font-size:0.74rem; color:var(--text-muted); line-height:1.4;">Device ID: <span id="ad-new-dev-id" class="td-mono" style="color:var(--text-main);">dev_xxx</span></div>
+      <div style="display:flex; gap:0.5rem; margin-top:0.7rem;">
+        <button type="button" class="btn-primary" id="btn-open-new-dev" style="font-size:0.75rem; padding:4px 10px;">⚡ Test Inference Pulse Now →</button>
+        <button type="button" class="action-btn" onclick="closeAddDev()" style="font-size:0.75rem; padding:4px 10px;">Done</button>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:0.6rem; margin-top:1.2rem;" id="ad-action-footer">
+      <button class="action-btn" onclick="closeAddDev()">Close</button>
+      <button class="btn-primary" id="ad-btn" onclick="doAddDev()">Provision Edge Node →</button>
     </div>
   </div>
 </div>
@@ -3294,8 +3359,73 @@ async function doDeploy() {
   }
 }
 
-function openAddDev() { document.getElementById('add-dev-modal').classList.add('open'); }
-function closeAddDev() { document.getElementById('add-dev-modal').classList.remove('open'); }
+function switchHwTab(tab) {
+  const tabs = ['quick', 'curl', 'python', 'docker'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`tab-btn-${t}`);
+    const content = document.getElementById(`hw-tab-${t}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (content) content.style.display = (t === tab) ? 'block' : 'none';
+  });
+  const footerBtn = document.getElementById('ad-btn');
+  if (footerBtn) {
+    if (tab === 'quick') {
+      footerBtn.style.display = 'inline-block';
+      footerBtn.textContent = 'Provision Edge Node →';
+    } else {
+      footerBtn.style.display = 'none';
+    }
+  }
+}
+
+function copyHwSnippet(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim());
+  showToast('Copied command to clipboard!', 'ok');
+}
+
+function copyHwPythonCode() {
+  const userToken = localStorage.getItem('mlops_token') || 'demo';
+  const code = `pip install mlops-dev
+
+from mlops_dev import Client
+client = Client(api_key="${userToken}", base_url="https://mlopsde.me/v1")
+
+# Register device and start heartbeat
+dev = client.devices.register(name="orin-edge-01", hardware="NVIDIA Jetson AGX Orin")
+client.devices.heartbeat(dev["device_id"], cpu_pct=14.2, temp_c=42.5)`;
+  navigator.clipboard.writeText(code);
+  showToast('Copied Python snippet to clipboard!', 'ok');
+}
+
+function openAddDev() {
+  const modal = document.getElementById('add-dev-modal');
+  if (modal) {
+    modal.classList.add('open');
+    const succBox = document.getElementById('ad-success-box');
+    if (succBox) succBox.style.display = 'none';
+    const errBox = document.getElementById('ad-err');
+    if (errBox) errBox.classList.remove('show');
+    switchHwTab('quick');
+    
+    const userToken = localStorage.getItem('mlops_token') || 'demo';
+    const curlEl = document.getElementById('curl-cmd-text');
+    if (curlEl) {
+      curlEl.textContent = `curl -fsSL https://mlopsde.me/install.sh | sudo bash -s -- --token ${userToken} --url https://mlopsde.me/v1`;
+    }
+    const dockerEl = document.getElementById('docker-cmd-text');
+    if (dockerEl) {
+      dockerEl.textContent = `docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="${userToken}" -e MLOPS_API_URL="https://mlopsde.me/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest`;
+    }
+  }
+}
+
+function closeAddDev() {
+  const modal = document.getElementById('add-dev-modal');
+  if (modal) modal.classList.remove('open');
+}
+
 async function doAddDev() {
   const name = document.getElementById('ad-name').value.trim();
   const hw = document.getElementById('ad-hw').value;
@@ -3310,21 +3440,33 @@ async function doAddDev() {
 
   const btn = document.getElementById('ad-btn');
   btn.disabled = true;
-  btn.textContent = 'Registering Node...';
+  btn.textContent = 'Provisioning Hardware Node...';
 
   try {
-    await apiFetch('/devices/register', {method: 'POST', body: JSON.stringify({name, hardware: hw})});
-    closeAddDev();
+    const res = await apiFetch('/devices/register', {method: 'POST', body: JSON.stringify({name, hardware: hw})});
+    const devId = (res && res.device_id) || `dev_${Date.now().toString(36)}`;
+    
+    const succBox = document.getElementById('ad-success-box');
+    const newIdSpan = document.getElementById('ad-new-dev-id');
+    const testPulseBtn = document.getElementById('btn-open-new-dev');
+    if (newIdSpan) newIdSpan.textContent = `${devId} (${name} · ${hw})`;
+    if (testPulseBtn) {
+      testPulseBtn.onclick = () => {
+        closeAddDev();
+        openModal(devId);
+      };
+    }
+    if (succBox) succBox.style.display = 'block';
+    
+    showToast(`✓ Node "${name}" provisioned into cluster!`, 'ok');
     document.getElementById('ad-name').value = '';
-    document.getElementById('ad-hw').value = '';
-    showToast(`Node ${name} provisioned`);
-    refreshAll();
+    await refreshAll();
   } catch(e) {
     errBox.textContent = e.message || 'Registration failed.';
     errBox.classList.add('show');
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Provision Device Token';
+    btn.textContent = 'Provision Edge Node →';
   }
 }
 
