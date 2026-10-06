@@ -234,7 +234,8 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   </div>
   <div class="nav-links">
     <a onclick="smoothTo('platform')" data-s="platform">Platform</a>
-    <a href="compiler.html" style="color:#00ffb3; font-weight:600;">Auto-Compiler</a>
+    <a href="playground.html" style="color:#00ffb3; font-weight:600;">AI Playground</a>
+    <a href="compiler.html">Auto-Compiler</a>
     <a href="benchmarks.html">Benchmarks</a>
     <a onclick="smoothTo('how')" data-s="how">How it works</a>
     <a onclick="smoothTo('pricing')" data-s="pricing">Pricing</a>
@@ -291,17 +292,16 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
       </div>
 
       <div class="hero-ctas">
-        <button class="cta-primary shimmer-btn" onclick="smoothTo('wl')">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
-          Start for free
+        <button class="cta-primary shimmer-btn" onclick="location.href='playground.html'">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,3 3,7.5 3,16.5 12,21 21,16.5 21,7.5"/><circle cx="12" cy="12" r="2"/></svg>
+          Launch AI Playground
         </button>
-        <button class="cta-ghost" onclick="location.href='demo.html'">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
-          Watch 3-min demo
-        </button>
-        <button class="cta-ghost" onclick="location.href='dashboard.html'" style="border-color:rgba(0,229,160,.2);color:#00E5A0">
+        <button class="cta-ghost" onclick="location.href='dashboard.html'" style="border-color:rgba(0,229,160,.3);color:#00E5A0">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          Live dashboard
+          Live Dashboard
+        </button>
+        <button class="cta-ghost" onclick="smoothTo('wl')">
+          Get Started
         </button>
       </div>
 

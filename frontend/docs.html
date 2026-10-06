@@ -156,6 +156,7 @@ footer a{color:#4F7FEF;text-decoration:none}
       <span class="sb-section-title">Guides</span>
       <a class="sb-link" onclick="scrollTo('hardware')">Supported hardware</a>
       <a class="sb-link" onclick="scrollTo('formats')">Model formats</a>
+      <a class="sb-link" onclick="scrollTo('cicd')">GitHub Actions CI/CD <span class="sb-badge sb-new">NEW</span></a>
       <a class="sb-link" onclick="scrollTo('compliance')">Compliance &amp; audit</a>
     </div>
     <div class="sb-section">
@@ -437,6 +438,55 @@ logging:
         <span class="callout-icon">⚠</span>
         <div class="callout-body"><strong>TensorRT engines are device-specific.</strong> A TRT engine compiled for Jetson Orin will not run on Jetson Nano. Register hardware-specific variants using <code>mlops push --variant</code> and the agent selects the correct file automatically.</div>
       </div>
+    <!-- CI/CD GITHUB ACTIONS -->
+    <div class="doc-section" id="cicd">
+      <h2 class="doc-h2">1-Click GitHub Actions CI/CD Pipeline</h2>
+      <p class="doc-p">Automate model compilation, SLSA cryptographic signing, and canary OTA deployments directly from your repository on every <code>git push</code>.</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-lang">YAML — .github/workflows/mlops-edge-deploy.yml</span><button class="code-copy" onclick="copyCode(this)">copy</button></div>
+        <div class="code-body"><span class="ck">name</span>: MLOps.dev Edge Continuous Deployment
+
+<span class="ck">on</span>:
+  <span class="ck">push</span>:
+    <span class="ck">branches</span>: [ master, main ]
+    <span class="ck">tags</span>: [ 'v*.*.*' ]
+
+<span class="ck">jobs</span>:
+  <span class="ck">compile-and-deploy</span>:
+    <span class="ck">runs-on</span>: ubuntu-latest
+    <span class="ck">steps</span>:
+      - <span class="ck">uses</span>: actions/checkout@v4
+
+      - <span class="ck">name</span>: Set up Python
+        <span class="ck">uses</span>: actions/setup-python@v5
+        <span class="ck">with</span>:
+          <span class="ck">python-version</span>: <span class="cs">"3.12"</span>
+
+      - <span class="ck">name</span>: Install MLOps.dev SDK & Cosign
+        <span class="ck">run</span>: |
+          pip install mlops-dev
+          curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
+          sudo mv cosign-linux-amd64 /usr/local/bin/cosign && sudo chmod +x /usr/local/bin/cosign
+
+      - <span class="ck">name</span>: Compile Multi-Silicon Targets (TensorRT, Hailo, RKNN)
+        <span class="ck">env</span>:
+          <span class="ck">MLOPS_API_KEY</span>: ${{ secrets.MLOPS_API_KEY }}
+          <span class="ck">MLOPS_API_URL</span>: <span class="cs">"https://mlopsde.me/v1"</span>
+        <span class="ck">run</span>: |
+          mlops compile --model ./models/best.pt --targets tensorrt,hailo8,rknn --quantize fp16,int8 --out ./dist
+
+      - <span class="ck">name</span>: Generate SLSA Level-3 Cryptographic Provenance SBOM
+        <span class="ck">run</span>: |
+          mlops audit sbom --artifacts ./dist --output sbom.cyclonedx.json
+          cosign sign-blob --key env://COSIGN_PRIVATE_KEY ./dist/yolov9_orin.engine
+
+      - <span class="ck">name</span>: Trigger Automated Canary Staged Rollout (10% -> 50% -> 100%)
+        <span class="ck">env</span>:
+          <span class="ck">MLOPS_API_KEY</span>: ${{ secrets.MLOPS_API_KEY }}
+        <span class="ck">run</span>: |
+          mlops deploy --model defect-detector:latest --strategy canary --canary-step 10 --health-check-period 300s</div>
+      </div>
     </div>
 
     <!-- COMPLIANCE -->
@@ -500,7 +550,7 @@ function copyCode(btn){
 }
 // Active sidebar on scroll
 (function(){
-  var sections=['quickstart','install','first-deploy','agent','sync','drift','canary','cli','config','hardware','formats','compliance','api'];
+  var sections=['quickstart','install','first-deploy','agent','sync','drift','canary','cli','config','hardware','formats','cicd','compliance','api'];
   var links=document.querySelectorAll('.sb-link');
   window.addEventListener('scroll',function(){
     var cur='';

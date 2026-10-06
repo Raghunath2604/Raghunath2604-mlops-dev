@@ -127,6 +127,10 @@
       "destination": "/compiler.html"
     },
     {
+      "source": "/playground",
+      "destination": "/playground.html"
+    },
+    {
       "source": "/vscode",
       "destination": "/vscode.html"
     },

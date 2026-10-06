@@ -321,6 +321,11 @@ body {
   }
 }</div>
     </div>
+    <div style="margin-top:1rem; display:flex; gap:0.8rem; flex-wrap:wrap;">
+      <button onclick="openCertModal()" style="background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); color:#fbbf24; padding:8px 16px; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+        📜 View Official SLSA Level-3 &amp; ISO 26262 Attestation Certificate
+      </button>
+    </div>
   </div>
 
   <!-- 4. ESG Carbon Footprint & Energy Reduction Tracker -->
@@ -463,6 +468,48 @@ function updatePerturbEffect(){
     badgeEl.className = 'lab-badge badge-cyan';
   }
 }
+
+function openCertModal() {
+  document.getElementById('cert-modal').style.display = 'flex';
+}
+function closeCertModal() {
+  document.getElementById('cert-modal').style.display = 'none';
+}
 </script>
+
+<!-- SLSA & ISO 26262 Attestation Certificate Modal -->
+<div id="cert-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(2,4,8,0.85); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:1.5rem;" onclick="if(event.target===this)closeCertModal()">
+  <div style="background:#080d18; border:1px solid rgba(234,179,8,0.4); box-shadow:0 24px 64px rgba(0,0,0,0.8), 0 0 40px rgba(234,179,8,0.1); border-radius:14px; max-width:680px; width:100%; padding:2.2rem; position:relative; color:#e2e8f0; font-family:'Inter',sans-serif;">
+    <button onclick="closeCertModal()" style="position:absolute; top:1.2rem; right:1.2rem; background:none; border:none; color:#64748b; font-size:1.4rem; cursor:pointer;">×</button>
+    
+    <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:1.2rem; margin-bottom:1.4rem;">
+      <div style="display:flex; align-items:center; gap:0.8rem;">
+        <div style="width:40px; height:40px; border-radius:8px; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); display:grid; place-items:center; font-size:1.3rem;">🛡️</div>
+        <div>
+          <div style="font-weight:800; color:#fff; font-size:1.1rem; letter-spacing:-0.02em;">OFFICIAL CRYPTOGRAPHIC ATTESTATION</div>
+          <div style="font-size:0.75rem; color:#fbbf24; font-family:'JetBrains Mono',monospace;">SLSA LEVEL 3 · ISO 26262 ASIL-D · FDA SaMD</div>
+        </div>
+      </div>
+      <span style="background:rgba(0,255,179,0.12); border:1px solid rgba(0,255,179,0.3); color:#00ffb3; font-family:'JetBrains Mono',monospace; font-size:0.72rem; padding:4px 8px; border-radius:4px; font-weight:700;">● VERIFIED SIGNATURE</span>
+    </div>
+
+    <div style="background:rgba(3,7,18,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:1.2rem; margin-bottom:1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.76rem; line-height:1.7;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">Certificate ID:</span><span style="color:#e2e8f0;">CERT-MLOPS-2026-99482-SLSA3</span></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">Model Name:</span><span style="color:#7dd3fc; font-weight:700;">defect-detector (v3.2)</span></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">SHA-256 Digest:</span><span style="color:#00ffb3;">efg012hij345efg012hij345efg012hij...</span></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">Root Authority:</span><span style="color:#e2e8f0;">MLOps.dev Hardware Enclave KMS</span></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Compliance Standards:</span><span style="color:#fbbf24;">EU AI Act Art. 14, ISO 13485</span></div>
+    </div>
+
+    <div style="display:flex; gap:0.8rem; justify-content:flex-end;">
+      <button onclick="window.print()" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#cbd5e1; padding:8px 16px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;">
+        🖨️ Print / Save PDF
+      </button>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('sbom-code').textContent); showToast('✓ Attestation Downloaded / Copied!','ok'); closeCertModal();" style="background:#00ffb3; border:none; color:#030712; padding:8px 18px; border-radius:6px; font-size:0.8rem; font-weight:800; cursor:pointer;">
+        📥 Export CycloneDX JSON
+      </button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

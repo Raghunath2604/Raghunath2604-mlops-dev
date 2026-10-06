@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Interactive Edge AI Playground — MLOps.dev</title>
+<link rel="canonical" href="https://mlopsde.me/playground.html"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='7' fill='%23030712'/%3E%3Cpolygon points='16,4 5,9.5 5,22.5 16,28 27,22.5 27,9.5' fill='none' stroke='%2338BDF8' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300FFB3'/%3E%3C/svg%3E"/>
+<meta name="description" content="Simulate real-time edge vision inference, TensorRT quantization, and spatial object detection in your browser across NVIDIA Jetson, Hailo-8L, and Rockchip RKNN."/>
+
+<!-- Fonts & Tokens -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="tokens.css"/>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-deep: #030712;
+  --bg-surface: #090e1a;
+  --bg-card: #0d1527;
+  --bg-card-hover: #121c33;
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-focus: #38bdf8;
+  --cyan-glow: #00ffb3;
+  --cobalt: #3b82f6;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Nav */
+.pg-nav {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  border-bottom: 1px solid var(--border-glass);
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.nav-badge {
+  background: rgba(0, 255, 179, 0.1);
+  border: 1px solid rgba(0, 255, 179, 0.3);
+  color: var(--cyan-glow);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: #fff; }
+.btn-launch {
+  background: var(--cobalt);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.btn-launch:hover { background: #2563eb; }
+
+/* Main Layout */
+.pg-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 1.8rem 1.5rem 3rem;
+  width: 100%;
+  flex: 1;
+}
+
+.pg-header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.pg-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.pg-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  max-width: 680px;
+}
+
+/* Studio Workspace Grid */
+.pg-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+}
+@media (max-width: 1024px) {
+  .pg-grid { grid-template-columns: 1fr; }
+}
+
+/* Viewport Card */
+.viewport-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.viewport-toolbar {
+  padding: 0.75rem 1.2rem;
+  background: rgba(13, 21, 39, 0.6);
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.scenario-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-glass);
+  padding: 4px;
+  border-radius: 8px;
+}
+.sc-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sc-btn.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.canvas-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #020408;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+#pg-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Canvas HUD Overlays */
+.hud-telemetry {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+.hud-pill {
+  background: rgba(4, 7, 15, 0.78);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--cyan-glow);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hud-status-bottom {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* Sidebar Controls */
+.controls-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.ctrl-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+}
+.ctrl-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.form-field {
+  margin-bottom: 1rem;
+}
+.form-field:last-child { margin-bottom: 0; }
+.form-field label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+.form-field select, .form-field input[type="range"] {
+  width: 100%;
+}
+.select-input {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  outline: none;
+}
+.select-input:focus { border-color: var(--border-focus); }
+
+/* Range Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.08);
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--cyan-glow);
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+/* Metric Display Boxes */
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+.metric-box {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 0.7rem;
+  text-align: center;
+}
+.metric-box-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.metric-box-val.green { color: var(--cyan-glow); }
+.metric-box-val.blue { color: #60a5fa; }
+.metric-box-lbl {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.btn-export {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(0,255,179,0.15) 0%, rgba(59,130,246,0.15) 100%);
+  border: 1px solid rgba(0, 255, 179, 0.4);
+  color: var(--cyan-glow);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-export:hover {
+  background: linear-gradient(135deg, rgba(0,255,179,0.25) 0%, rgba(59,130,246,0.25) 100%);
+  border-color: var(--cyan-glow);
+  box-shadow: 0 0 15px rgba(0, 255, 179, 0.25);
+}
+</style>
+</head>
+<body>
+
+<!-- Header Nav -->
+<header class="pg-nav">
+  <a href="/" class="brand-link">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="5" fill="#3B82F6" fill-opacity=".2"/>
+      <polygon points="12,3 3,7.5 3,16.5 12,21 21,16.5 21,7.5" stroke="#38BDF8" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cx="12" cy="12" r="2.5" fill="#00FFB3"/>
+    </svg>
+    MLOps.dev <span class="nav-badge">STUDIO PLAYGROUND</span>
+  </a>
+  <div class="nav-links">
+    <a href="/compiler.html">Auto-Compiler</a>
+    <a href="/benchmarks.html">Benchmarks</a>
+    <a href="/dashboard.html">Fleet Control</a>
+    <a href="/docs.html">Docs & SDK</a>
+    <a href="/login.html" class="btn-launch">Sign In</a>
+  </div>
+</header>
+
+<main class="pg-container">
+  <div class="pg-header">
+    <div>
+      <h1 class="pg-title">In-Browser Edge AI Perception Simulator</h1>
+      <p class="pg-desc">Benchmark object detection, spatial vision bounding boxes, and precision quantization in real time without provisioning physical silicon.</p>
+    </div>
+    <div style="display:flex; gap:0.5rem; align-items:center;">
+      <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--cyan-glow); box-shadow:0 0 8px var(--cyan-glow);"></span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text-muted);">WebGPU / WebAssembly Accelerated</span>
+    </div>
+  </div>
+
+  <div class="pg-grid">
+    <!-- Viewport Panel -->
+    <div class="viewport-card">
+      <div class="viewport-toolbar">
+        <div class="scenario-selector">
+          <button class="sc-btn active" onclick="switchScenario('robotics')" id="sc-robotics">🤖 Warehouse AMR</button>
+          <button class="sc-btn" onclick="switchScenario('pcb')" id="sc-pcb">🔍 PCB Defect QA</button>
+          <button class="sc-btn" onclick="switchScenario('adas')" id="sc-adas">🚗 Traffic ADAS</button>
+          <button class="sc-btn" onclick="switchScenario('drone')" id="sc-drone">🛸 Drone Corridor</button>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <input type="file" id="custom-img-upload" accept="image/*" style="display:none;" onchange="loadCustomImage(this)"/>
+          <button class="sc-btn" style="border:1px solid var(--border-glass);" onclick="document.getElementById('custom-img-upload').click()">📁 Custom Media</button>
+          <button class="sc-btn" style="border:1px solid var(--border-glass);" onclick="toggleSimulationPause()" id="pause-btn">⏸ Pause</button>
+        </div>
+      </div>
+
+      <div class="canvas-frame">
+        <canvas id="pg-canvas" width="960" height="540"></canvas>
+        
+        <!-- Live HUD Overlays -->
+        <div class="hud-telemetry">
+          <div class="hud-pill" id="hud-engine">⚡ TensorRT 10 · FP16 Engine</div>
+          <div class="hud-pill" style="color:#38bdf8;" id="hud-target">Target: NVIDIA Jetson AGX Orin (64GB)</div>
+        </div>
+
+        <div class="hud-status-bottom">
+          <div class="hud-pill" style="color:#cbd5e1;" id="hud-scenario-info">Scenario: Warehouse Autonomous Forklift & Pallet Tracker</div>
+          <div class="hud-pill" style="color:var(--cyan-glow);" id="hud-detections-count">4 Objects Tracked</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Sidebar -->
+    <div class="controls-sidebar">
+      <!-- Silicon Accelerator Configuration -->
+      <div class="ctrl-panel">
+        <div class="ctrl-title">
+          <span>Target Silicon Acceleration</span>
+          <span style="font-family:'JetBrains Mono'; color:var(--cyan-glow); font-size:0.7rem;">17 ARCHS</span>
+        </div>
+        
+        <div class="form-field">
+          <label>Hardware Target Architecture</label>
+          <select class="select-input" id="hw-select" onchange="updateSiliconProfile()">
+            <option value="orin" selected>NVIDIA Jetson AGX Orin (275 TOPS)</option>
+            <option value="orin_nano">NVIDIA Jetson Orin Nano (40 TOPS)</option>
+            <option value="hailo">Raspberry Pi AI Kit (Hailo-8L 13 TOPS)</option>
+            <option value="rknn">Rockchip RK3588 (RKNN 6 TOPS)</option>
+            <option value="coral">Google Coral Edge TPU (4 TOPS)</option>
+            <option value="openvino">Intel Core Ultra (OpenVINO NPU)</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Quantization Precision</label>
+          <select class="select-input" id="quant-select" onchange="updateSiliconProfile()">
+            <option value="fp16" selected>FP16 Half-Precision (Balanced)</option>
+            <option value="int8">INT8 Quantized (Ultra-Low Power)</option>
+            <option value="fp32">FP32 Single-Precision (Reference)</option>
+          </select>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-box">
+            <div class="metric-box-val green" id="metric-lat">2.8 ms</div>
+            <div class="metric-box-lbl">Inference Latency</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-box-val blue" id="metric-fps">357 FPS</div>
+            <div class="metric-box-lbl">Throughput</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-box-val" id="metric-power">14.2 W</div>
+            <div class="metric-box-lbl">Power Draw</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-box-val" id="metric-mem">218 MB</div>
+            <div class="metric-box-lbl">VRAM Footprint</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vision Threshold & Sensitivity -->
+      <div class="ctrl-panel">
+        <div class="ctrl-title">
+          <span>Inference Hyperparameters</span>
+        </div>
+
+        <div class="form-field">
+          <label>
+            <span>Confidence Threshold</span>
+            <span id="val-conf" style="font-family:'JetBrains Mono'; color:var(--cyan-glow);">0.65</span>
+          </label>
+          <input type="range" min="0.10" max="0.95" step="0.05" value="0.65" id="slider-conf" oninput="document.getElementById('val-conf').innerText = this.value;"/>
+        </div>
+
+        <div class="form-field">
+          <label>
+            <span>NMS IOU Overlap Gate</span>
+            <span id="val-iou" style="font-family:'JetBrains Mono'; color:#38bdf8;">0.45</span>
+          </label>
+          <input type="range" min="0.10" max="0.90" step="0.05" value="0.45" id="slider-iou" oninput="document.getElementById('val-iou').innerText = this.value;"/>
+        </div>
+
+        <div style="margin-top:1.2rem;">
+          <button class="btn-export" onclick="exportCompiledArtifact()">
+            📦 Download Compiled Engine (.engine)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const canvas = document.getElementById('pg-canvas');
+const ctx = canvas.getContext('2d');
+
+let currentScenario = 'robotics';
+let isPaused = false;
+let frameCount = 0;
+
+const profiles = {
+  orin: { name: "NVIDIA Jetson AGX Orin", lat: 2.8, fps: 357, power: "14.2 W", mem: "218 MB", engine: "TensorRT 10 · FP16" },
+  orin_nano: { name: "NVIDIA Jetson Orin Nano", lat: 6.4, fps: 156, power: "7.8 W", mem: "184 MB", engine: "TensorRT 10 · FP16" },
+  hailo: { name: "Raspberry Pi 5 + Hailo-8L", lat: 5.1, fps: 196, power: "3.2 W", mem: "96 MB", engine: "Hailo HEF Runtime" },
+  rknn: { name: "Rockchip RK3588 (RKNN)", lat: 7.9, fps: 126, power: "5.4 W", mem: "142 MB", engine: "RKNN NPU V2" },
+  coral: { name: "Google Coral Edge TPU", lat: 9.8, fps: 102, power: "2.1 W", mem: "48 MB", engine: "EdgeTPU INT8 Delegate" },
+  openvino: { name: "Intel Core Ultra NPU", lat: 4.6, fps: 217, power: "11.0 W", mem: "160 MB", engine: "OpenVINO 2026.1" }
+};
+
+function switchScenario(sc) {
+  currentScenario = sc;
+  document.querySelectorAll('.sc-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`sc-${sc}`);
+  if (btn) btn.classList.add('active');
+  
+  const titles = {
+    robotics: "Warehouse Autonomous Forklift & Pallet Tracker",
+    pcb: "Automated Optical Inspection (AOI) Solder Defect Detector",
+    adas: "Commercial ADAS Heavy Vehicle & Pedestrian Tracker",
+    drone: "Autonomous High-Voltage Infrastructure Inspection"
+  };
+  document.getElementById('hud-scenario-info').innerText = `Scenario: ${titles[sc]}`;
+}
+
+function updateSiliconProfile() {
+  const hw = document.getElementById('hw-select').value;
+  const quant = document.getElementById('quant-select').value;
+  const p = profiles[hw] || profiles.orin;
+  
+  let mult = 1.0;
+  if (quant === 'int8') mult = 0.65;
+  if (quant === 'fp32') mult = 1.9;
+
+  const lat = (p.lat * mult).toFixed(1);
+  const fps = Math.round(1000 / parseFloat(lat));
+
+  document.getElementById('metric-lat').innerText = `${lat} ms`;
+  document.getElementById('metric-fps').innerText = `${fps} FPS`;
+  document.getElementById('metric-power').innerText = p.power;
+  document.getElementById('metric-mem').innerText = p.mem;
+  document.getElementById('hud-engine').innerText = `⚡ ${p.engine} · ${quant.toUpperCase()}`;
+  document.getElementById('hud-target').innerText = `Target: ${p.name}`;
+}
+
+function toggleSimulationPause() {
+  isPaused = !isPaused;
+  document.getElementById('pause-btn').innerText = isPaused ? '▶ Play' : '⏸ Pause';
+}
+
+function exportCompiledArtifact() {
+  const hw = document.getElementById('hw-select').value;
+  const ext = hw === 'hailo' ? 'hef' : (hw === 'rknn' ? 'rknn' : (hw === 'coral' ? 'tflite' : 'engine'));
+  const dummyData = `MLOPS-COMPILED-BINARY-TARGET-${hw.toUpperCase()}-${Date.now()}`;
+  const blob = new Blob([dummyData], { type: 'application/octet-stream' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `model-quantized-${hw}.${ext}`;
+  a.click();
+}
+
+function loadCustomImage(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// Visual Simulation Engine
+function renderSimulation() {
+  if (!isPaused) {
+    frameCount++;
+    const w = canvas.width;
+    const h = canvas.height;
+
+    // Draw Dark Cybernetic Background Grid
+    ctx.fillStyle = '#050914';
+    ctx.fillRect(0, 0, w, h);
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 40) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+    for (let y = 0; y < h; y += 40) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+
+    // Render Scenario Specific Visuals
+    const time = frameCount * 0.03;
+    let detections = [];
+
+    if (currentScenario === 'robotics') {
+      // Draw Warehouse Pallet Objects & AMR Robot
+      const x1 = (Math.sin(time) * 0.3 + 0.5) * w;
+      const y1 = (Math.cos(time * 0.7) * 0.2 + 0.5) * h;
+      detections = [
+        { label: "AMR-FORKLIFT-01", conf: 0.98, x: x1 - 90, y: y1 - 60, w: 180, h: 120, color: "#00ffb3" },
+        { label: "EUROPALLET-STACK", conf: 0.94, x: w * 0.15, y: h * 0.45, w: 140, h: 110, color: "#38bdf8" },
+        { label: "SAFETY-ZONE-OBSTACLE", conf: 0.89, x: w * 0.72, y: h * 0.3, w: 90, h: 140, color: "#fbbf24" }
+      ];
+    } else if (currentScenario === 'pcb') {
+      // Draw PCB Board with Defect Markers
+      detections = [
+        { label: "BGA-IC-U12", conf: 0.99, x: w * 0.35, y: h * 0.25, w: 220, h: 200, color: "#38bdf8" },
+        { label: "CRITICAL: SOLDER BRIDGING", conf: 0.96, x: w * 0.52, y: h * 0.42, w: 70, h: 50, color: "#ef4444" },
+        { label: "CAPACITOR-C44", conf: 0.91, x: w * 0.22, y: h * 0.65, w: 60, h: 45, color: "#00ffb3" }
+      ];
+    } else if (currentScenario === 'adas') {
+      // Draw Highway Lane Lines & Tracked Vehicles
+      const xCar = (Math.sin(time * 0.8) * 0.2 + 0.45) * w;
+      detections = [
+        { label: "COMMERCIAL-FREIGHT", conf: 0.97, x: xCar, y: h * 0.3, w: 160, h: 220, color: "#00ffb3" },
+        { label: "PASSENGER-SEDAN", conf: 0.92, x: w * 0.18, y: h * 0.45, w: 120, h: 140, color: "#38bdf8" },
+        { label: "PEDESTRIAN-CROSSWALK", conf: 0.88, x: w * 0.82, y: h * 0.52, w: 45, h: 95, color: "#fbbf24" }
+      ];
+    } else {
+      // Drone Powerline Corridor
+      detections = [
+        { label: "HIGH-VOLTAGE-TOWER-76", conf: 0.99, x: w * 0.4, y: h * 0.15, w: 180, h: 320, color: "#38bdf8" },
+        { label: "INSULATOR DISCOLORATION", conf: 0.93, x: w * 0.48, y: h * 0.35, w: 65, h: 65, color: "#ef4444" }
+      ];
+    }
+
+    // Draw Bounding Boxes & Confidence Labels
+    detections.forEach(d => {
+      ctx.strokeStyle = d.color;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(d.x, d.y, d.w, d.h);
+
+      // Corner Accents
+      const corner = 10;
+      ctx.fillStyle = d.color;
+      ctx.fillRect(d.x, d.y, corner, 3);
+      ctx.fillRect(d.x, d.y, 3, corner);
+      ctx.fillRect(d.x + d.w - corner, d.y, corner, 3);
+      ctx.fillRect(d.x + d.w - 3, d.y, 3, corner);
+
+      // Label Tag
+      ctx.fillStyle = d.color;
+      ctx.fillRect(d.x, d.y - 20, ctx.measureText(`${d.label} [${(d.conf*100).toFixed(0)}%]`).width + 16, 20);
+      ctx.fillStyle = '#050914';
+      ctx.font = 'bold 11px "JetBrains Mono", monospace';
+      ctx.fillText(`${d.label} [${(d.conf*100).toFixed(0)}%]`, d.x + 6, d.y - 6);
+    });
+
+    document.getElementById('hud-detections-count').innerText = `${detections.length} Objects Tracked`;
+  }
+  requestAnimationFrame(renderSimulation);
+}
+
+// Initialize
+updateSiliconProfile();
+requestAnimationFrame(renderSimulation);
+</script>
+
+</body>
+</html>
