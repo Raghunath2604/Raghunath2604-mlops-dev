@@ -6,8 +6,9 @@
 (function(){
   'use strict';
 
-  /* ── User Motion Preference ── */
+  /* ── User Motion & Device Preferences ── */
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
 
   /* ── Helpers ── */
   function qs(sel, ctx){ return (ctx||document).querySelector(sel); }
@@ -74,7 +75,7 @@
      3. FRAMER MOTION MAGNETIC SPRING BUTTONS (21st.dev Style)
      ══════════════════════════════════════════════════════════════ */
   function initMagneticButtons(){
-    if(prefersReducedMotion) return;
+    if(prefersReducedMotion || isTouchDevice) return;
 
     const selectors = '.mag-btn, .cta-primary, .nav-cta, .plan-btn-solid, .btn-submit-yellow, .btn-social-pill, .demo-quick-btn, .cta-btn-white, .cta-btn-outline, .wl-submit, .btn-otp-verify';
     
@@ -129,7 +130,7 @@
      5. 3D CARD PERSPECTIVE TILT (OriginKit / 21st.dev)
      ══════════════════════════════════════════════════════════════ */
   function initTilt(){
-    if(prefersReducedMotion) return;
+    if(prefersReducedMotion || isTouchDevice) return;
 
     qsa('.plan, .fleet-window, .tcard, .bento-card').forEach(card => {
       card.addEventListener('mousemove', (e) => {

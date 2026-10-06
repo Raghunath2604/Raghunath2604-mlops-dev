@@ -374,4 +374,41 @@
   overflow-x: auto;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   12. UNIVERSAL MOBILE TOUCH & INSTANT TAP ENGINE
+   ══════════════════════════════════════════════════════════════ */
+html, body {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(91, 138, 240, 0.25);
+  touch-action: manipulation;
+}
+
+a, button, input, select, textarea, [role="button"],
+.action-btn, .shimmer-btn, .mag-btn, .btn-submit-yellow,
+.plan-btn, .board-btn, .terminal-tab, .drop-zone {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.roi-slider, .slider-control, input[type="range"] {
+  touch-action: pan-x;
+  cursor: pointer;
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+  a, button, input[type="button"], input[type="submit"], [role="button"],
+  .action-btn, .shimmer-btn, .mag-btn, .btn-submit-yellow {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .roi-slider::-webkit-slider-thumb,
+  .slider-control::-webkit-slider-thumb {
+    width: 26px !important;
+    height: 26px !important;
+  }
+}
+
 
