@@ -107,6 +107,10 @@
       "destination": "/faq.html"
     },
     {
+      "source": "/pricing",
+      "destination": "/index.html"
+    },
+    {
       "source": "/changelog",
       "destination": "/changelog.html"
     },
