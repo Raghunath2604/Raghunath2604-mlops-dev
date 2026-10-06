@@ -1197,6 +1197,13 @@ def _create_oauth_redirect_response(user, provider, display_name, email, avatar_
         resp.delete_cookie(state_cookie_name, httponly=True, secure=is_secure, samesite='Lax')
     return resp
 
+def _get_base_url():
+    proto = request.headers.get("X-Forwarded-Proto", "https" if request.is_secure else "http")
+    host = request.headers.get("X-Forwarded-Host") or request.headers.get("Host") or "mlopsde.me"
+    if "localhost" in host or "127.0.0.1" in host:
+        return f"{proto}://{host}"
+    return "https://mlopsde.me"
+
 def _get_oauth_env(key):
     val = os.environ.get(key, "").strip()
     if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
