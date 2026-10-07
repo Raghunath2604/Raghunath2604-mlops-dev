@@ -1,70 +1,71 @@
 /**
  * ══════════════════════════════════════════════════════════════════════════════
- * MLOps.dev — Bespoke Aerospace Mission Control Design Tokens
- * Generated via Google Stitch MCP (Project: 6238397156815965385)
- * Handcrafted Human-Engineered Anti-AI Aesthetic
+ * MLOps.dev — Professional Deep-Tech Enterprise Design System Tokens
+ * Crafted for Edge AI, Robotics & Autonomous Systems Engineering
+ * High-Precision Contrast · Zero AI Artifacts · Native Hardware Acceleration
  * ══════════════════════════════════════════════════════════════════════════════
  */
 
 :root {
-  /* ── Spatial Surfaces (Obsidian Obsidian Layering) ── */
-  --stitch-void: #030712;
-  --stitch-surface-lowest: #080e1a;
-  --stitch-surface-low: #0e131f;
-  --stitch-surface-card: #121826;
-  --stitch-surface-container: #161c28;
-  --stitch-surface-high: #1a202c;
-  --stitch-surface-highest: #242a36;
-  --stitch-surface-elevated: #2f3542;
+  /* ── Precision Spatial Obsidian Surfaces (OLED True Black Layering) ── */
+  --stitch-void: #06090e;
+  --stitch-surface-lowest: #0a0e17;
+  --stitch-surface-low: #0e1420;
+  --stitch-surface-card: #121927;
+  --stitch-surface-container: #162030;
+  --stitch-surface-high: #1c273a;
+  --stitch-surface-highest: #243248;
+  --stitch-surface-elevated: #2c3c54;
 
-  /* ── Technical Neon & Chromatic Accents ── */
-  --stitch-cobalt: #5b8af0;
-  --stitch-cobalt-glow: rgba(91, 138, 240, 0.42);
-  --stitch-cobalt-subtle: rgba(91, 138, 240, 0.12);
+  /* ── Engineering Telemetry & Status Accents ── */
+  --stitch-cobalt: #3b82f6;
+  --stitch-cobalt-glow: rgba(59, 130, 246, 0.25);
+  --stitch-cobalt-subtle: rgba(59, 130, 246, 0.10);
   
-  --stitch-emerald: #00ffb3;
-  --stitch-emerald-glow: rgba(0, 255, 179, 0.38);
-  --stitch-emerald-subtle: rgba(0, 255, 179, 0.12);
+  --stitch-emerald: #10b981;
+  --stitch-emerald-glow: rgba(16, 185, 129, 0.25);
+  --stitch-emerald-subtle: rgba(16, 185, 129, 0.10);
 
-  --stitch-cyan: #00f0ff;
-  --stitch-cyan-glow: rgba(0, 240, 255, 0.35);
+  --stitch-cyan: #06b6d4;
+  --stitch-cyan-glow: rgba(6, 182, 212, 0.22);
 
-  --stitch-crimson: #ff3b6b;
-  --stitch-crimson-glow: rgba(255, 59, 107, 0.42);
-  --stitch-crimson-subtle: rgba(255, 59, 107, 0.12);
+  --stitch-crimson: #ef4444;
+  --stitch-crimson-glow: rgba(239, 68, 68, 0.25);
+  --stitch-crimson-subtle: rgba(239, 68, 68, 0.10);
 
   --stitch-amber: #f59e0b;
-  --stitch-amber-glow: rgba(245, 158, 11, 0.35);
+  --stitch-amber-glow: rgba(245, 158, 11, 0.25);
 
-  /* ── High-Contrast Typography ── */
+  /* ── Calibrated High-Contrast Typography (WCAG AAA Compliant) ── */
   --stitch-text-primary: #f8fafc;
   --stitch-text-secondary: #94a3b8;
   --stitch-text-dim: #64748b;
-  --stitch-text-muted: #334155;
-  --stitch-text-mono-cyan: #7dd3fc;
-  --stitch-text-mono-mint: #86efac;
+  --stitch-text-muted: #475569;
+  --stitch-text-mono-cyan: #38bdf8;
+  --stitch-text-mono-mint: #34d399;
 
-  /* ── Font Stacks (Artisanal Anti-AI Typography) ── */
-  --stitch-font-display: 'Space Grotesk', -apple-system, sans-serif;
-  --stitch-font-mono: 'JetBrains Mono', 'IBM Plex Mono', Consolas, monospace;
-  --stitch-font-body: 'Geist', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  /* ── Precision Font Stacks ── */
+  --stitch-font-display: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --stitch-font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+  --stitch-font-body: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 
-  /* ── Precision Borders & Dividers ── */
-  --stitch-border-subtle: rgba(255, 255, 255, 0.06);
-  --stitch-border-default: rgba(91, 138, 240, 0.18);
-  --stitch-border-active: rgba(91, 138, 240, 0.55);
-  --stitch-border-emerald: rgba(0, 255, 179, 0.35);
-  --stitch-border-crimson: rgba(255, 59, 107, 0.4);
+  /* ── Sub-Pixel 1px Borders & Bevels ── */
+  --stitch-border-subtle: rgba(255, 255, 255, 0.08);
+  --stitch-border-default: rgba(255, 255, 255, 0.12);
+  --stitch-border-active: rgba(59, 130, 246, 0.50);
+  --stitch-border-emerald: rgba(16, 185, 129, 0.40);
+  --stitch-border-crimson: rgba(239, 68, 68, 0.40);
 
-  /* ── Industrial Metrics & Radii ── */
-  --stitch-radius-sm: 4px;
-  --stitch-radius-md: 8px;
-  --stitch-radius-lg: 12px;
+  /* ── Metric Radii & Spacing ── */
+  --stitch-radius-xs: 4px;
+  --stitch-radius-sm: 6px;
+  --stitch-radius-md: 10px;
+  --stitch-radius-lg: 14px;
   --stitch-radius-full: 9999px;
   
-  --stitch-topbar-h: 46px;
+  --stitch-topbar-h: 48px;
   --stitch-ribbon-h: 34px;
-  --stitch-rail-w: 220px;
+  --stitch-rail-w: 240px;
 }
 
 /* Global Industrial Utilities */
