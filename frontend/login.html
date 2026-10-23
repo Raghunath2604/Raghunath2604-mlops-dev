@@ -305,32 +305,6 @@ html, body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-/* Quick Sandbox Demo Access Bar */
-.demo-quick-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 6px;
-  font-size: 0.76rem;
-  color: #71717a;
-}
-
-.demo-quick-btn {
-  background: none;
-  border: none;
-  color: #18181b;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.15s ease;
-}
-
-.demo-quick-btn:hover {
-  color: #eab308;
-}
-
 /* Footer Links */
 .form-footer-row {
   display: flex;
@@ -1057,13 +1031,6 @@ html, body {
               <span>GitHub</span>
             </button>
           </div>
-
-          <!-- Instant 1-Click Evaluation Link -->
-          <div class="demo-quick-bar">
-            <span>Evaluating the platform?</span>
-            <button type="button" class="demo-quick-btn" onclick="oneClickDemoLogin()">⚡ 1-Click Demo Access →</button>
-          </div>
-
         </div>
       </form>
 
@@ -1548,52 +1515,6 @@ html, body {
         showToast('Network error connecting to control plane API.', 'error');
         btn.disabled = false;
         btn.innerHTML = `<span id="btn-submit-label">${origText}</span>`;
-      }
-    }
-
-    // ── Instant 1-Click Evaluation (Demo) Access ──
-    async function oneClickDemoLogin() {
-      showToast('Launching Demo Evaluation Session...', 'info');
-      try {
-        const res = await fetch(`${API_BASE}/v1/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ email: 'demo@mlops.dev', password: 'demo1234' })
-        });
-        const data = await res.json().catch(() => ({}));
-
-        if (res.ok && data.success) {
-          const userSession = {
-            id: (data.user && data.user.id) || 'demo_user',
-            name: (data.user && data.user.name) || 'Demo User',
-            email: (data.user && data.user.email) || 'demo@mlops.dev',
-            role: (data.user && data.user.role) || 'viewer',
-            is_admin: false
-          };
-          localStorage.setItem('np_user', JSON.stringify(userSession));
-          localStorage.setItem('mlops_user', JSON.stringify(userSession));
-          localStorage.setItem('mlops_token', data.session || data.token || 'demo');
-          showToast('Demo session launched! Loading platform...', 'success');
-          setTimeout(() => { window.location.href = 'dashboard.html'; }, 500);
-        } else {
-          // Fallback: load dashboard in demo/read-only mode
-          const demoSession = {
-            id: 'demo_' + Date.now(),
-            name: 'Demo Visitor',
-            email: 'visitor@demo.mlops.dev',
-            role: 'viewer',
-            is_admin: false
-          };
-          localStorage.setItem('np_user', JSON.stringify(demoSession));
-          localStorage.setItem('mlops_user', JSON.stringify(demoSession));
-          localStorage.setItem('mlops_token', 'demo');
-          showToast('Loading demo environment...', 'info');
-          setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
-        }
-      } catch (e) {
-        showToast('Could not connect to API. Loading demo view...', 'info');
-        setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
       }
     }
 

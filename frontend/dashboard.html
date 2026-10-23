@@ -1410,7 +1410,7 @@ html, body {
         Run this command via SSH / terminal on your physical device (NVIDIA Jetson, Raspberry Pi, Intel NUC, or x86 server) with root privileges:
       </div>
       <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.73rem; color:var(--cobalt-bright); word-break:break-all; line-height:1.5;">
-        <span id="curl-cmd-text">curl -fsSL https://mlopsde.me/install.sh | sudo bash -s -- --token demo --url https://mlopsde.me/v1</span>
+        <span id="curl-cmd-text">curl -fsSL https://mlopsde.me/install.sh | sudo bash -s -- --token YOUR_API_KEY --url https://mlopsde.me/v1</span>
         <button type="button" class="action-btn" onclick="copyHwSnippet('curl-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
       <div style="margin-top:0.8rem; font-size:0.72rem; color:var(--text-dim); line-height:1.4;">
@@ -1428,7 +1428,7 @@ html, body {
 <span style="color:#60a5fa;">pip</span> install mlops-dev
 
 <span style="color:#c084fc;">from</span> mlops_dev <span style="color:#c084fc;">import</span> Client
-client = Client(api_key=<span style="color:#34d399;">"demo"</span>, base_url=<span style="color:#34d399;">"https://mlopsde.me/v1"</span>)
+client = Client(api_key=<span style="color:#34d399;">"sk_live_..."</span>, base_url=<span style="color:#34d399;">"https://mlopsde.me/v1"</span>)
 
 <span style="color:#64748b;"># Register device and start heartbeat</span>
 dev = client.devices.register(name=<span style="color:#34d399;">"orin-edge-01"</span>, hardware=<span style="color:#34d399;">"NVIDIA Jetson AGX Orin"</span>)
@@ -1443,7 +1443,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
         Deploy as a background container with full GPU/NPU device pass-through:
       </div>
       <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:var(--emerald); word-break:break-all; line-height:1.5;">
-        <span id="docker-cmd-text">docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="demo" -e MLOPS_API_URL="https://mlopsde.me/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest</span>
+        <span id="docker-cmd-text">docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="YOUR_API_KEY" -e MLOPS_API_URL="https://mlopsde.me/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest</span>
         <button type="button" class="action-btn" onclick="copyHwSnippet('docker-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
     </div>
@@ -1564,10 +1564,6 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
             <input type="text" maxlength="1" class="overlay-otp-box" id="od5" inputmode="numeric"/>
             <input type="text" maxlength="1" class="overlay-otp-box" id="od6" inputmode="numeric"/>
           </div>
-          <div id="overlay-dev-code-pill" class="auth-demo-pill" style="display:none; margin:0 0 10px; background:rgba(0,240,255,0.08); border-color:rgba(0,240,255,0.3);">
-            <span style="font-size:0.74rem; color:var(--text-main);">Dev Code: <strong id="overlay-dev-code-val" style="color:#00f0ff;"></strong></span>
-            <button class="auth-demo-btn" type="button" onclick="autofillOverlayDevCode()">Auto-Fill</button>
-          </div>
         </div>
         <button class="btn-primary" id="btn-overlay-verify-code" type="button" onclick="doOverlayVerifyCode()">
           Verify & Launch Console →
@@ -1583,7 +1579,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
       <div class="error-msg" id="login-err"></div>
       <div class="form-group">
         <label>Operator Email / ID</label>
-        <input class="form-control" id="li-email" type="email" placeholder="demo@nodepilot.dev" autocomplete="email"/>
+        <input class="form-control" id="li-email" type="email" placeholder="operator@enterprise.io" autocomplete="email"/>
       </div>
       <div class="form-group">
         <label>Password or Cluster API Key</label>
@@ -2500,7 +2496,10 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
               </div>
               <div class="form-group" style="margin-top:1.5rem;">
                 <label>Physical Edge Node Install Command</label>
-                <input class="form-control td-mono" value="curl -sSL https://www.mlopsde.me/install.sh | bash -s -- --token demo" readonly/>
+                <div style="display:flex; gap:0.5rem;">
+                  <input class="form-control td-mono" id="inp-install-cmd" value="curl -sSL https://www.mlopsde.me/install.sh | bash -s -- --token YOUR_API_KEY" readonly/>
+                  <button class="action-btn" onclick="navigator.clipboard.writeText(document.getElementById('inp-install-cmd').value); showToast('Copied Install Command', 'ok');">Copy</button>
+                </div>
               </div>
             </div>
           </div>
@@ -2887,16 +2886,17 @@ async function quickDemoLaunch() {
   showToast('Restricted: Live control plane requires Administrator clearance.', 'error');
 }
 
-function fillDemoAuth() {
-  quickDemoLaunch();
-}
-
 async function doLogin() {
-  const email = (document.getElementById('li-email').value.trim()) || 'demo@nodepilot.dev';
+  const email = document.getElementById('li-email').value.trim();
   const pw = document.getElementById('li-pw').value.trim();
   const errBox = document.getElementById('login-err');
   errBox.classList.remove('show');
   
+  if (!email) {
+    errBox.textContent = 'Operator email or ID is required.';
+    errBox.classList.add('show');
+    return;
+  }
   if (!pw) {
     errBox.textContent = 'Password is required.';
     errBox.classList.add('show');
@@ -3003,6 +3003,11 @@ function bootApp(user) {
   if (document.getElementById('nav-admin')) {
     document.getElementById('nav-admin').style.display = (user.role === 'admin' || user.provider) ? 'flex' : 'none';
   }
+
+  const activeToken = user.token || localStorage.getItem('mlops_token') || user.id || 'sk_live_' + (user.id || 'primary');
+  if (document.getElementById('s-key')) document.getElementById('s-key').value = activeToken;
+  if (document.getElementById('inp-install-cmd')) document.getElementById('inp-install-cmd').value = `curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token ${activeToken}`;
+  if (document.getElementById('curl-cmd-text')) document.getElementById('curl-cmd-text').textContent = `curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token ${activeToken} --url https://www.mlopsde.me/v1`;
 
   refreshAll();
   initChart();
