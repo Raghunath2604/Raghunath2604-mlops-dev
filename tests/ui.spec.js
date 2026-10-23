@@ -16,14 +16,17 @@ test.describe('Landing Page UI', () => {
   test('Navigation bar becomes sticky on scroll', async ({ page }) => {
     const nav = page.locator('#nav');
     
-    // Scroll down 200 pixels
-    await page.evaluate(() => window.scrollBy(0, 200));
+    // Scroll down 200 pixels with instant behavior to trigger the scroll handler immediately
+    await page.evaluate(() => {
+      window.scrollTo({ top: 200, behavior: 'instant' });
+      window.dispatchEvent(new Event('scroll'));
+    });
     
     // Wait for the class to be applied on scroll
     await page.waitForFunction(() => {
       const navEl = document.querySelector('#nav');
       return navEl && navEl.classList.contains('scrolled');
-    });
+    }, null, { timeout: 5000 });
     
     // Nav should gain the "scrolled" class for glassmorphism
     await expect(nav).toHaveClass(/scrolled/);
@@ -46,23 +49,37 @@ test.describe('Landing Page UI', () => {
   });
 });
 
-test.describe('Dashboard UI', () => {
-  test.beforeEach(async ({ page }) => {
+test.describe('Dashboard UI & Access Control', () => {
+  test('Unauthenticated dashboard access enforces air-gapped RBAC clearance redirect', async ({ page }) => {
     await page.goto('/dashboard.html');
+    await expect(page).toHaveURL(/login\.html\?notice=admin_clearance_required/);
+    const authStage = page.locator('.auth-stage-container');
+    await expect(authStage).toBeVisible();
   });
 
-  test('Dashboard loads the auth screen initially', async ({ page }) => {
-    const authScreen = page.locator('#auth-screen');
-    await expect(authScreen).toBeVisible();
-  });
-
-  test('Dark mode default styling applies correctly', async ({ page }) => {
-    const authWrap = page.locator('.auth-wrap');
-    await expect(authWrap).toBeVisible();
+  test('Authenticated operator loads fleet control plane and silicon metrics', async ({ page }) => {
+    await page.goto('/login.html');
+    await page.evaluate(() => {
+      localStorage.setItem('mlops_user', JSON.stringify({
+        name: 'Lead Architect',
+        email: 'demo@nodepilot.dev',
+        role: 'admin',
+        is_admin: true,
+        token: 'demo'
+      }));
+      localStorage.setItem('mlops_token', 'demo');
+    });
+    await page.goto('/dashboard.html');
+    const appEl = page.locator('#app');
+    await expect(appEl).toBeVisible();
     
-    // Check if the background color of body is dark.
-    // By default body background is var(--ink) which is #080B14 rgb(8, 11, 20).
+    // Check dark mode background (--bg-base #06090e -> rgb(6, 9, 14))
     const bodyBg = await page.evaluate(() => window.getComputedStyle(document.body).backgroundColor);
-    expect(bodyBg).toBe('rgb(8, 11, 20)');
+    expect(bodyBg).toBe('rgb(6, 9, 14)');
+
+    // Verify KPIs
+    const totalDevices = page.locator('#k-total');
+    await expect(totalDevices).toBeVisible();
   });
 });
+

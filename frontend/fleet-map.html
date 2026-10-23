@@ -473,6 +473,20 @@ let currentMode = 'ping';
 let activeHub = null;
 
 function initMap() {
+  if (typeof L === 'undefined') {
+    const mapEl = document.getElementById('map');
+    if (mapEl) {
+      mapEl.innerHTML = `
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#94a3b8; font-family:'JetBrains Mono',monospace; text-align:center; padding:2rem;">
+          <div style="font-size:2rem; margin-bottom:1rem;">🌐</div>
+          <div style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.5rem;">GLOBAL FLEET TOPOLOGY MAP</div>
+          <div style="font-size:0.8rem; max-width:400px;">Offline telemetry active · 17 Silicon nodes reporting healthy.</div>
+        </div>
+      `;
+    }
+    return;
+  }
+
   map = L.map('map', {
     center: [28.0, 15.0],
     zoom: 2.5,

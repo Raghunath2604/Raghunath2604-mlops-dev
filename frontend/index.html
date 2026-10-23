@@ -190,7 +190,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   <button class="mn-link" onclick="location.href='about.html';closeMobNav()">About<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-link" onclick="location.href='blog.html';closeMobNav()">Blog<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-link" onclick="location.href='demo.html';closeMobNav()">Watch demo<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg></button>
-  <button class="mn-link" onclick="location.href='login.html';closeMobNav()">Sign In<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="location.href='login.html?mode=login';closeMobNav()">Sign In<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-cta" onclick="smoothTo('wl');closeMobNav()">Get early access — free</button>
 </div>
 
@@ -245,7 +245,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   <div class="nav-right">
     <div class="nav-tag" aria-label="Live status">● LIVE</div>
     <button class="nav-ghost" onclick="location.href='demo.html'">Watch demo</button>
-    <button class="nav-ghost" onclick="location.href='login.html'" style="font-weight:600; color:#fff; border:1px solid rgba(79,127,239,0.4);">Sign In</button>
+    <button class="nav-ghost" onclick="location.href='login.html?mode=login'" style="font-weight:600; color:#fff; border:1px solid rgba(79,127,239,0.4);">Sign In</button>
     <button class="nav-ghost" onclick="openCmd()" title="Command palette (⌘K)" style="font-family:'Courier New',monospace;font-size:.7rem;letter-spacing:.02em">⌘K</button>
     <button class="nav-cta" onclick="smoothTo('wl')">Get early access</button>
     <button class="nav-mob-btn" id="mob-btn" aria-label="Menu" aria-expanded="false" onclick="toggleMobNav()">
@@ -285,7 +285,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
           <span style="color: #00ffb3; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 700;">$</span>
           <code style="color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo</code>
         </div>
-        <button type="button" class="shimmer-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo'); showToast('✓ Copied 1-line edge installer!','ok')" style="background: rgba(91,138,240,0.15); border: 1px solid rgba(91,138,240,0.4); color: #7dd3fc; border-radius: 4px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: all 0.15s; flex-shrink: 0;">
+        <button type="button" class="shimmer-btn" onclick="(navigator.clipboard ? navigator.clipboard.writeText('curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo') : Promise.resolve()).catch(()=>{}); showToast('✓ Copied 1-line edge installer!','ok')" style="background: rgba(91,138,240,0.15); border: 1px solid rgba(91,138,240,0.4); color: #7dd3fc; border-radius: 4px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: all 0.15s; flex-shrink: 0;">
           COPY
         </button>
       </div>
@@ -852,11 +852,14 @@ let _tt;
 function toast(msg,type='ok'){
   clearTimeout(_tt);
   const t=$('toast');
-  $('ti').textContent=type==='ok'?'✓':type==='er'?'✕':'ℹ';
-  $('tm').textContent=msg;
-  t.className=`toast ${type} show`;
+  if(!t) return;
+  const ti=$('ti'); if(ti) ti.textContent=(type==='ok'||type==='success')?'✓':(type==='er'||type==='error')?'✕':'ℹ';
+  const tm=$('tm'); if(tm) tm.textContent=msg;
+  t.className=`toast ${type==='success'?'ok':type==='error'?'er':type} show`;
   _tt=setTimeout(()=>t.classList.remove('show'),4200);
 }
+const showToast = toast;
+window.showToast = toast;
 
 /* ── MODAL ── */
 function closeModal(){$('modal').classList.remove('open');document.body.style.overflow='';}
@@ -1376,7 +1379,7 @@ function selectBoardSnippet(type, btn){
 function copySnippetText(){
   const codeEl = document.getElementById('hw-wizard-code');
   if(codeEl){
-    navigator.clipboard.writeText(codeEl.textContent);
+    (navigator.clipboard ? navigator.clipboard.writeText(codeEl.textContent) : Promise.resolve()).catch(()=>{});
     showToast('✓ Copied hardware-tuned install command!', 'ok');
   }
 }
@@ -1393,6 +1396,8 @@ document.addEventListener('DOMContentLoaded',function(){
   if(!p)return;
   api('/waitlist',{method:'POST',body:JSON.stringify({email:p,source:'offline_sync'})})
     .then(()=>localStorage.removeItem('pending_wl')).catch(()=>{});
+})();
+
 // ── Zulu Mission Clock for Homepage ──
 (function(){
   const zuluHome = document.getElementById('zulu-clock-home');

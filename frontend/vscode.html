@@ -152,7 +152,7 @@ body {
     <div class="code-wrap" style="margin:0 0 1.5rem 0;">
       <div class="code-bar">
         <span class="code-lang">BASH</span>
-        <button class="code-copy" onclick="navigator.clipboard.writeText('code --install-extension mlops-dev.edge-copilot'); showToast('✓ Copied install command', 'ok');">copy</button>
+        <button class="code-copy" onclick="(navigator.clipboard ? navigator.clipboard.writeText('code --install-extension mlops-dev.edge-copilot') : Promise.resolve()).catch(()=>{}); showToast('✓ Copied install command', 'ok');">copy</button>
       </div>
       <div class="code-body" style="color:#00ffb3; font-weight:700;">code --install-extension mlops-dev.edge-copilot</div>
     </div>
@@ -184,6 +184,25 @@ body {
   </div>
 </main>
 
+<div id="toast" role="alert" style="position:fixed;bottom:24px;right:24px;background:#0d1527;border:1px solid #5b8af0;color:#e2e8f0;padding:10px 18px;border-radius:8px;font-size:0.82rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.6);opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;z-index:9999;">
+  <span id="toast-msg"></span>
+</div>
+<script>
+let _toastTimer;
+function showToast(msg, type='ok'){
+  clearTimeout(_toastTimer);
+  const t = document.getElementById('toast');
+  const tm = document.getElementById('toast-msg');
+  if(!t || !tm) return;
+  tm.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateY(0)';
+  _toastTimer = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateY(10px)';
+  }, 3500);
+}
+</script>
 <script src="canvas-ambient.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
 <script src="motion.js"></script>

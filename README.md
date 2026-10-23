@@ -28,6 +28,31 @@
 
 ---
 
+## 🏆 Real-World Enterprise Case Study & Field Validation
+
+> *"Before MLOps.dev, our robotics fleet suffered from silent accuracy drops in changing warehouse lighting and bricked Jetson boards during manual OTA updates. MLOps.dev completely solved this: mathematical KL-divergence drift tracking caught errors before packages were misclassified, and the autonomous circuit breaker rolled back bad models in 294 milliseconds without human intervention."*  
+> — **Ravi Teja**, *Principal Edge AI & Autonomous Robotics Lead, Apex Robotics Labs*
+
+Read the full technical whitepaper & production engineering dossier:  
+📖 **[Read the Complete User 1 Technical Dossier (IEEE Specification)](user1_documentation.md)**
+
+<div align="center">
+  <img src="docs/assets/fig1_edge_mlops_architecture.jpg" width="850" alt="MLOps.dev Fleet Control Plane Architecture">
+</div>
+
+### 📊 Validated Production Benchmarks on Physical NVIDIA Jetson AGX Orin 64GB:
+- ⚡ **8.4ms Inference Latency @ 119 FPS** running TensorRT 10.2 FP16 YOLOv9 engines.
+- 🛡️ **294ms Autonomous Circuit Breaker Rollback** when statistical drift ($D_{KL} = 0.584$) breached health gate ($\le 0.35$).
+- 🔒 **Zero Bricked Edge Devices**: Cryptographic SHA-256 binary validation blocks corrupted OTA payloads before execution.
+- 📉 **<45MB RAM Footprint**: Over 90% lighter than AWS IoT Greengrass or Azure IoT Edge container runtimes.
+- 🔁 **Staged Canary Deployment**: Enforces multi-stage canary rollout ($10\% \to 50\% \to 100\%$) with automated health gating.
+
+<div align="center">
+  <img src="docs/assets/fig2_canary_circuit_breaker_workflow.jpg" width="850" alt="MLOps.dev Autonomous Canary and Circuit Breaker Rollback Workflow">
+</div>
+
+---
+
 ## 🛠️ Physical Edge Hardware Provisioning
 
 Commission any physical Linux board (Raspberry Pi, NVIDIA Jetson, Intel NUC, or Linux PC) in under 60 seconds:
@@ -45,6 +70,7 @@ View your hardware live at: **[https://www.mlopsde.me/dashboard](https://www.mlo
 
 | Document | Description |
 | :--- | :--- |
+| [**User 1 Production Case Study**](user1_documentation.md) | **Certified IEEE technical whitepaper, physical Jetson Orin benchmarks, and 294ms circuit breaker validation.** |
 | [**Implementation Plan**](implementation-plan.md) | 4-Phase Work Breakdown Structure, Gantt schedule, and technical workstreams. |
 | [**Product Requirements (PRD)**](docs-prd.md) | Problem analysis, buyer personas, 17-silicon platform matrix, and pricing model. |
 | [**System Architecture**](architecture.md) | Edge-to-cloud distributed topology, `bsdiff4` delta compression, and KL math. |

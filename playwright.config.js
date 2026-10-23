@@ -14,7 +14,7 @@ module.exports = defineConfig({
   use: {
     actionTimeout: 0,
     trace: 'on-first-retry',
-    baseURL: 'http://127.0.0.1:8081',
+    baseURL: process.env.BASE_URL || 'https://www.mlopsde.me',
   },
   projects: [
     {

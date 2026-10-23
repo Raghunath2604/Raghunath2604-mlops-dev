@@ -1533,13 +1533,13 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
 
     <!-- Segmented Mode Pills -->
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-auth-otp" type="button" onclick="switchOverlayTab('otp')">⚡ Email OTP</button>
-      <button class="auth-tab" id="tab-auth-pw" type="button" onclick="switchOverlayTab('pw')">🔑 Password</button>
-      <button class="auth-tab" id="tab-auth-reg" type="button" onclick="switchOverlayTab('reg')">🛡️ Request Access</button>
+      <button class="auth-tab" id="tab-auth-otp" type="button" onclick="switchOverlayTab('otp')">⚡ Email OTP</button>
+      <button class="auth-tab atab active" id="tab-auth-pw" type="button" onclick="switchOverlayTab('pw')">🔑 Password</button>
+      <button class="auth-tab atab" id="tab-auth-reg" type="button" onclick="switchOverlayTab('reg')">🛡️ Request Access</button>
     </div>
 
     <!-- 1. Email OTP Tab -->
-    <div class="auth-panel active" id="ap-otp">
+    <div class="auth-panel" id="ap-otp">
       <div id="overlay-otp-step-1">
         <div class="form-group">
           <label>Work Email Address</label>
@@ -1579,7 +1579,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
     </div>
 
     <!-- 2. Password Tab -->
-    <div class="auth-panel" id="ap-login">
+    <div class="auth-panel active" id="ap-login">
       <div class="error-msg" id="login-err"></div>
       <div class="form-group">
         <label>Operator Email / ID</label>
@@ -2662,7 +2662,15 @@ function escapeHTML(str) {
 }
 
 async function apiFetch(path, opts={}) {
-  const h = {'Content-Type':'application/json', ...(opts.headers||{})};
+  let token = localStorage.getItem('mlops_token') || localStorage.getItem('token') || localStorage.getItem('np_token');
+  if (!token) {
+    try {
+      const u = JSON.parse(localStorage.getItem('mlops_user') || localStorage.getItem('np_user') || '{}');
+      token = u.token || u.id || (u.is_admin ? 'demo' : null);
+    } catch(e) {}
+  }
+  const authHeader = token ? { 'Authorization': `Bearer ${token}` } : {};
+  const h = {'Content-Type':'application/json', ...authHeader, ...(opts.headers||{})};
   const res = await fetch(API + path, {...opts, headers:h, credentials:'include'});
   const d = await res.json().catch(()=>({}));
   if (!res.ok) throw Object.assign(new Error(d.error || 'Request failed'), {status: res.status});
@@ -2946,7 +2954,7 @@ async function doRegister() {
     const data = await res.json().catch(()=>({}));
     if (!res.ok) throw new Error(data.error || 'Registration failed');
     
-    errBox.textContent = 'Access request submitted. An admin will approve shortly.';
+    errBox.textContent = 'Success! Access request submitted. An admin will approve shortly.';
     errBox.style.color = '#34d399';
     errBox.style.background = 'rgba(16,185,129,0.1)';
     errBox.classList.add('show');
@@ -2971,12 +2979,12 @@ function bootApp(user) {
   document.getElementById('app').classList.add('on');
   
   const avaEl = document.getElementById('sb-ava');
-  if (user && user.avatar) {
-    avaEl.innerHTML = `<img src="${user.avatar}" alt="Avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover; display:block;">`;
+  const initials = (user && (user.name || user.email) || 'Admin').slice(0, 2).toUpperCase();
+  if (user && user.avatar && typeof user.avatar === 'string' && user.avatar.trim() && !user.avatar.includes('undefined')) {
+    avaEl.innerHTML = `<img src="${user.avatar}" alt="Avatar" onerror="this.onerror=null; this.parentElement.textContent='${initials}';" style="width:100%; height:100%; border-radius:50%; object-fit:cover; display:block;">`;
     avaEl.style.padding = '0';
     avaEl.style.overflow = 'hidden';
   } else {
-    const initials = (user.name || user.email || 'Admin').slice(0, 2).toUpperCase();
     avaEl.textContent = initials;
   }
 
@@ -3616,6 +3624,8 @@ async function triggerInferenceTest() {
     btn.textContent = '⚡ Test Inference Pulse';
   }
 }
+const triggerInferencePulse = triggerInferenceTest;
+window.triggerInferencePulse = triggerInferenceTest;
 
 async function triggerEmergencyRollback() {
   if (!currentModalDevId) return;
@@ -3702,11 +3712,18 @@ function runFleetBenchmarkPulse() {
 
 function toggleTerminal() {
   const d = document.getElementById('cli-drawer');
-  d.classList.toggle('open');
-  if (d.classList.contains('open')) {
-    setTimeout(() => document.getElementById('cli-input').focus(), 150);
+  if (d) {
+    d.classList.toggle('open');
+    if (d.classList.contains('open')) {
+      setTimeout(() => {
+        const inp = document.getElementById('cli-input');
+        if (inp) inp.focus();
+      }, 150);
+    }
   }
 }
+window.toggleTerminal = toggleTerminal;
+window.toggleCliDrawer = toggleTerminal;
 
 function handleCliKey(e) {
   if (e.key === 'Enter') {
@@ -3969,7 +3986,12 @@ async function checkAuth() {
       localStorage.removeItem('np_user');
       localStorage.removeItem('mlops_user');
       document.getElementById('app').classList.remove('on');
-      window.location.href = 'login.html?notice=admin_clearance_required';
+      const authScr = document.getElementById('auth-screen');
+      if (authScr) {
+        authScr.style.display = 'flex';
+      } else {
+        window.location.href = 'login.html?notice=admin_clearance_required';
+      }
       return;
     }
 
@@ -3993,7 +4015,12 @@ async function checkAuth() {
     localStorage.removeItem('np_user');
     localStorage.removeItem('mlops_user');
     document.getElementById('app').classList.remove('on');
-    window.location.href = 'login.html?notice=admin_clearance_required';
+    const authScr = document.getElementById('auth-screen');
+    if (authScr) {
+      authScr.style.display = 'flex';
+    } else {
+      window.location.href = 'login.html?notice=admin_clearance_required';
+    }
   }
 }
 
@@ -4385,7 +4412,7 @@ function updateStressSimulation() {
 }
 
 /* ── REMOTE EDGE WEB TERMINAL HANDLER ── */
-function toggleTerminal() {
+function toggleRemoteTerminal() {
   const t = document.getElementById('remote-edge-terminal');
   if (t) {
     t.style.display = t.style.display === 'none' ? 'flex' : 'none';
@@ -4395,6 +4422,7 @@ function toggleTerminal() {
     }
   }
 }
+window.toggleRemoteTerminal = toggleRemoteTerminal;
 
 function handleTermKey(e) {
   if (e.key === 'Enter') {
@@ -4441,7 +4469,7 @@ window.addEventListener('DOMContentLoaded', checkAuth);
     </div>
     <div style="display:flex; align-items:center; gap:10px;">
       <span style="color:#7dd3fc; font-size:0.68rem;">hw-jetson-agx-orin-01</span>
-      <button onclick="toggleTerminal()" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:1rem;">✕</button>
+      <button onclick="toggleRemoteTerminal()" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:1rem;">✕</button>
     </div>
   </div>
   <div id="term-log" style="flex:1; padding:12px 14px; overflow-y:auto; font-family:var(--font-mono); font-size:0.75rem; line-height:1.6; color:#94a3b8;">

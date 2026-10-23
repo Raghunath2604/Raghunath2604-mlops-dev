@@ -410,7 +410,8 @@ var POSTS = [
 ];
 
 function renderPosts(filter){
-  var grid = document.getElementById('posts-grid');
+  var grid = document.getElementById('posts-grid') || document.querySelector('.blog-articles-grid');
+  if (!grid) return;
   var filtered = filter==='all' ? POSTS : POSTS.filter(function(p){return p.tag===filter;});
   grid.innerHTML = filtered.map(function(p){
     return '<a class="post-card" href="#post-'+p.id+'" onclick="openPost('+p.id+');return false;">'
@@ -521,7 +522,6 @@ function acceptCookies(){
   var b = document.getElementById('cookie-banner');
   if(b){b.style.transform='translateY(100%)';}
   // Enable GA4 if present
-  if(typeof gtag !== 'undefined'){
   if(typeof gtag !== 'undefined'){
     gtag('consent','update',{'analytics_storage':'granted'});
   }

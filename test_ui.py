@@ -16,8 +16,10 @@ def test_login():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     
     try:
-        print("Navigating to dashboard...")
-        driver.get("https://mlopsde.me/dashboard.html")
+        import os
+        test_url = os.environ.get("TEST_URL", "http://localhost:8000/dashboard.html")
+        print(f"Navigating to {test_url}...")
+        driver.get(test_url)
         
         # Wait for the login screen
         WebDriverWait(driver, 10).until(
@@ -25,8 +27,15 @@ def test_login():
         )
         print("Login screen loaded.")
         
+        try:
+            driver.find_element(By.ID, "tab-auth-pw").click()
+        except Exception:
+            pass
+        
         # Enter credentials
-        email_input = driver.find_element(By.ID, "li-email")
+        email_input = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.ID, "li-email"))
+        )
         email_input.clear()
         email_input.send_keys("demo@nodepilot.dev")
 

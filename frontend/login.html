@@ -1402,6 +1402,8 @@ html, body {
           };
           localStorage.setItem('np_user', JSON.stringify(userSession));
           localStorage.setItem('mlops_user', JSON.stringify(userSession));
+          const token = data.session || data.token || (data.user && data.user.id);
+          if (token) localStorage.setItem('mlops_token', token);
           closeOtpModal();
           showToast('✓ Email verified successfully! Loading Dashboard...', 'success');
           setTimeout(() => {
@@ -1531,6 +1533,8 @@ html, body {
           };
           localStorage.setItem('np_user', JSON.stringify(userSession));
           localStorage.setItem('mlops_user', JSON.stringify(userSession));
+          const token = loginData.session || loginData.token || (loginData.user && loginData.user.id);
+          if (token) localStorage.setItem('mlops_token', token);
           showToast('Credentials accepted! Launching control plane...', 'success');
           setTimeout(() => {
             window.location.href = 'dashboard.html';
@@ -1569,6 +1573,7 @@ html, body {
           };
           localStorage.setItem('np_user', JSON.stringify(userSession));
           localStorage.setItem('mlops_user', JSON.stringify(userSession));
+          localStorage.setItem('mlops_token', data.session || data.token || 'demo');
           showToast('Demo session launched! Loading platform...', 'success');
           setTimeout(() => { window.location.href = 'dashboard.html'; }, 500);
         } else {
@@ -1582,6 +1587,7 @@ html, body {
           };
           localStorage.setItem('np_user', JSON.stringify(demoSession));
           localStorage.setItem('mlops_user', JSON.stringify(demoSession));
+          localStorage.setItem('mlops_token', 'demo');
           showToast('Loading demo environment...', 'info');
           setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
         }
@@ -1736,6 +1742,8 @@ html, body {
           };
           localStorage.setItem('np_user', JSON.stringify(userSession));
           localStorage.setItem('mlops_user', JSON.stringify(userSession));
+          const token = data.session || data.token || (data.user && data.user.id);
+          if (token) localStorage.setItem('mlops_token', token);
           closeOauthModal();
           showToast(`Authenticated via ${currentProvider.toUpperCase()}! Launching...`, 'success');
           setTimeout(() => {
