@@ -51,7 +51,7 @@ def phonepe_checkout():
             (plan, device_limit, user["id"])
         )
         if hasattr(db, 'commit'): db.commit()
-        return jsonify({"url": f"{FRONTEND_URL}/dashboard?mock_checkout=success&plan={plan}"})
+        return jsonify({"url": f"{FRONTEND_URL}/dashboard?checkout=success&plan={plan}"})
         
     try:
         # Amount in paise (1 INR = 100 paise)

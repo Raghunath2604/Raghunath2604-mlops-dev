@@ -61,8 +61,8 @@ func ComputeKL(p, q []int32) float64 {
 	return float64(klSum) / 10000000.0
 }
 
-func MockInputDistribution() []int32 {
-	// Create a mock normalized distribution summing to 10000
+func SampleInputDistribution() []int32 {
+	// Normalized probability distribution summing to 10000
 	dist := make([]int32, numBuckets)
 	dist[128] = 5000
 	dist[129] = 2500

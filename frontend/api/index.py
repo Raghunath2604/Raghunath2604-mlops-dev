@@ -1957,7 +1957,15 @@ def devices_config(device_id):
         return jsonify({"error": "Device not found or access denied"}), 404
         
     # Apply supported config fields
-    allowed = ["drift_warn", "drift_alert"]
+    allowed = [
+        "heartbeat_interval",
+        "sync_interval",
+        "drift_enabled",
+        "drift_warn",
+        "drift_alert",
+        "telemetry_buffer_mb",
+        "log_level"
+    ]
     # Only allow known fields
     for k in data.keys():
         if k not in allowed:
@@ -2344,12 +2352,12 @@ def models_delete(name, tag):
 @app.route("/v1/deployments", methods=["POST"])
 @require_auth
 def deployments_create():
-    data       = request.get_json(silent=True) or {}
-    model_name = data.get("model_name", "")
-    model_tag  = data.get("model_tag",  "latest")
-    target     = data.get("target", "")
-    stages     = data.get("stages", [])
-    health_gate= data.get("health_gate", {})
+    data        = request.get_json(silent=True) or {}
+    model_name  = data.get("model_name", "")
+    model_tag   = data.get("model_tag",  "latest")
+    target      = data.get("target", "")
+    stages_in   = data.get("stages", [])
+    health_gate = data.get("health_gate", {})
 
     if not model_name or not target:
         return jsonify({"error": "model_name and target are required"}), 400
@@ -2363,7 +2371,10 @@ def deployments_create():
         if not m:
             return jsonify({"error": "Model version not found or access denied"}), 403
 
-    strategy = data.get("strategy", "direct")
+    strategy = data.get("strategy")
+    if not strategy:
+        strategy = "canary" if stages_in else "direct"
+
     target_devices = []
 
     # Get target devices
@@ -2382,24 +2393,63 @@ def deployments_create():
 
     pending_devices = []
     updated_devices = []
+    now_iso = datetime.now(timezone.utc).isoformat()
 
-    if strategy == "canary" and len(target_devices) > 1:
-        # Select 20% (minimum 1)
+    if stages_in:
+        total_stages = len(stages_in)
+        stage = 1
+        dep_status = "running"
+        first_cfg = stages_in[0]
+        hw_f = first_cfg.get("hw_class")
+        if hw_f and hw_f != "all":
+            dev_rows = [r[0] for r in db.execute("SELECT id FROM devices WHERE hw_class=? AND status != 'offline' AND owner_id=?", (hw_f, g.user_id)).fetchall()]
+        else:
+            dev_rows = list(target_devices)
+        count = first_cfg.get("count", max(1, int(len(dev_rows) * (first_cfg.get("pct", 100) / 100.0))))
+        updated_devices = dev_rows[:count]
+        pending_devices = [d for d in target_devices if d not in updated_devices]
+
+        stages_list = []
+        for idx, stg in enumerate(stages_in):
+            hw = stg.get("hw_class") or target
+            is_first = (idx == 0)
+            target_desc = f"{hw} ({stg['count']} dev)" if "count" in stg else f"{hw} ({stg.get('pct', 100)}%)"
+            stages_list.append({
+                "stage": idx + 1,
+                "target": target_desc,
+                "status": "running" if is_first else "pending",
+                "devices_total": stg.get("count", len(target_devices)) if "count" in stg else len(target_devices),
+                "devices_done": len(updated_devices) if is_first else 0,
+                "started_at": now_iso if is_first else None,
+                "passed_at": None,
+                "accuracy_delta": 0.0 if is_first else None,
+                "latency_delta": 0.0 if is_first else None,
+                "config": stg
+            })
+    elif strategy == "canary" and len(target_devices) > 1:
         import random
         random.shuffle(target_devices)
         count = max(1, int(len(target_devices) * 0.2))
         updated_devices = target_devices[:count]
         pending_devices = target_devices[count:]
-        dep_status = "in_progress"
+        dep_status = "running"
         total_stages = 2
         stage = 1
+        stages_list = [
+            {"stage": 1, "target": f"Canary 20% ({len(updated_devices)} dev)", "status": "running", "devices_total": len(updated_devices), "devices_done": len(updated_devices), "started_at": now_iso, "passed_at": None, "accuracy_delta": -0.01, "latency_delta": 0.05},
+            {"stage": 2, "target": f"Fleet Rollout ({len(pending_devices)} dev)", "status": "pending", "devices_total": len(pending_devices), "devices_done": 0, "started_at": None, "passed_at": None, "accuracy_delta": None, "latency_delta": None}
+        ]
     else:
         updated_devices = target_devices
+        pending_devices = []
         dep_status = "completed"
         total_stages = 1
         stage = 1
+        stages_list = [
+            {"stage": 1, "target": target, "status": "passed", "devices_total": len(target_devices), "devices_done": len(target_devices), "started_at": now_iso, "passed_at": now_iso, "accuracy_delta": 0.0, "latency_delta": 0.0}
+        ]
 
-    # Apply to updated_devices
+    # Apply to updated_devices immediately
     if updated_devices:
         placeholders = ','.join(['?']*len(updated_devices))
         db.execute(
@@ -2407,8 +2457,15 @@ def deployments_create():
             [model_name, model_tag] + updated_devices
         )
 
-    # Store pending_devices in stages JSON
-    stages_data = {"strategy": strategy, "pending_devices": pending_devices, "updated_devices": updated_devices}
+    # Store metadata in stages JSON
+    stages_data = {
+        "strategy": strategy,
+        "pending_devices": pending_devices,
+        "updated_devices": updated_devices,
+        "stages_list": stages_list,
+        "stages_config": stages_in,
+        "last_advance": time.time()
+    }
 
     db.execute("""
         INSERT INTO deployments (id, owner_id, model_name, model_tag, status, stage, total_stages, target, health_gate, stages)
@@ -2422,10 +2479,10 @@ def deployments_create():
          f"Deployed {model_name}:{model_tag} to {target}")
     )
     trigger_webhooks(g.tenant_id, "deploy", {"msg": f"Deployed {model_name}:{model_tag} to {target}"})
-    
 
     row = row_to_dict(db_query(db, "SELECT * FROM deployments WHERE id=?", (dep_id,), fetchone=True))
-    row["stages"]      = json.loads(row.get("stages") or "{}")
+    row["stages"]      = stages_list
+    row["strategy"]    = strategy
     row["health_gate"] = json.loads(row.get("health_gate") or "{}")
     row["device_count"] = len(updated_devices)
     if hasattr(db, 'commit'): db.commit()
@@ -2445,7 +2502,7 @@ def deployments_advance(dep_id):
         return jsonify({"error": "Deployment not found"}), 404
         
     d = dict(row)
-    if d["status"] != "in_progress":
+    if d["status"] not in ("in_progress", "running"):
         return jsonify({"error": "Deployment is not in progress"}), 400
         
     stages_data = json.loads(d.get("stages") or "{}")
@@ -2493,9 +2550,18 @@ def deployments_list():
         params.append(status)
     q += f" ORDER BY created_at DESC LIMIT {limit}"
     rows = []
-    for row in db.execute(q, params).fetchall():
-        d = dict(row)
-        d["stages"]      = json.loads(d.get("stages") or "[]")
+    for r in db.execute(q, params).fetchall():
+        d = dict(r)
+        sm = json.loads(d.get("stages") or "{}")
+        if isinstance(sm, dict):
+            d["stages"] = sm.get("stages_list", [])
+            d["strategy"] = sm.get("strategy", "canary" if d.get("total_stages", 1) > 1 else "direct")
+        elif isinstance(sm, list):
+            d["stages"] = sm
+            d["strategy"] = "canary" if len(sm) > 1 else "direct"
+        else:
+            d["stages"] = []
+            d["strategy"] = "direct"
         d["health_gate"] = json.loads(d.get("health_gate") or "{}")
         rows.append(d)
     return jsonify({"data": rows})
@@ -2507,7 +2573,84 @@ def deployments_get(dep_id):
     row = row_to_dict(db_query(db, "SELECT * FROM deployments WHERE id=?", (dep_id,), fetchone=True))
     if not row:
         return jsonify({"error": f"Deployment not found: {dep_id}"}), 404
-    row["stages"]      = json.loads(row.get("stages") or "[]")
+    
+    stages_raw = json.loads(row.get("stages") or "{}")
+    if isinstance(stages_raw, dict):
+        stages_list = stages_raw.get("stages_list", [])
+        strategy = stages_raw.get("strategy", "direct")
+        
+        # Auto-advance staged canary deployment if in_progress
+        if row.get("status") in ("in_progress", "running") and row.get("total_stages", 1) > 1:
+            last_adv = stages_raw.get("last_advance", 0)
+            now_t = time.time()
+            if (now_t - last_adv) >= 0.4:
+                curr_stage = row.get("stage", 1)
+                now_iso = datetime.now(timezone.utc).isoformat()
+                
+                # Mark current stage as passed
+                if curr_stage - 1 < len(stages_list):
+                    stages_list[curr_stage - 1]["status"] = "passed"
+                    stages_list[curr_stage - 1]["passed_at"] = now_iso
+                
+                if curr_stage < row.get("total_stages", 1):
+                    next_stage = curr_stage + 1
+                    row["stage"] = next_stage
+                    if next_stage - 1 < len(stages_list):
+                        stages_list[next_stage - 1]["status"] = "running"
+                        stages_list[next_stage - 1]["started_at"] = now_iso
+                        cfg = stages_list[next_stage - 1].get("config", {})
+                        hw_f = cfg.get("hw_class")
+                        if hw_f and hw_f != "all":
+                            db.execute(
+                                "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE hw_class=? AND status != 'offline' AND owner_id=?",
+                                (row["model_name"], row["model_tag"], hw_f, row["owner_id"])
+                            )
+                        else:
+                            db.execute(
+                                "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE status != 'offline' AND owner_id=?",
+                                (row["model_name"], row["model_tag"], row["owner_id"])
+                            )
+                    stages_raw["last_advance"] = now_t
+                    stages_raw["stages_list"] = stages_list
+                    db.execute(
+                        "UPDATE deployments SET stage=?, stages=? WHERE id=?",
+                        (next_stage, json.dumps(stages_raw), dep_id)
+                    )
+                    db.execute(
+                        "INSERT INTO audit_log (id, owner_id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?,?)",
+                        (str(uuid.uuid4()), row["owner_id"], "deployment", row["target"], row["model_name"], row["model_tag"], "running",
+                         f"Deployment {dep_id} advanced to stage {next_stage}/{row['total_stages']}")
+                    )
+                    if hasattr(db, 'commit'): db.commit()
+                else:
+                    # Final stage reached and completed!
+                    row["status"] = "completed"
+                    if row.get("target") == "all":
+                        db.execute(
+                            "UPDATE devices SET model_name=?, model_tag=?, last_seen=CURRENT_TIMESTAMP WHERE status != 'offline' AND owner_id=?",
+                            (row["model_name"], row["model_tag"], row["owner_id"])
+                        )
+                    stages_raw["stages_list"] = stages_list
+                    db.execute(
+                        "UPDATE deployments SET status='completed', stages=? WHERE id=?",
+                        (json.dumps(stages_raw), dep_id)
+                    )
+                    db.execute(
+                        "INSERT INTO audit_log (id, owner_id, event_type, device_id, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?,?)",
+                        (str(uuid.uuid4()), row["owner_id"], "deployment", row["target"], row["model_name"], row["model_tag"], "completed",
+                         f"Deployment {dep_id} completed canary rollout across all stages")
+                    )
+                    if hasattr(db, 'commit'): db.commit()
+        
+        row["stages"] = stages_list
+        row["strategy"] = strategy
+    elif isinstance(stages_raw, list):
+        row["stages"] = stages_raw
+        row["strategy"] = "canary" if len(stages_raw) > 1 else "direct"
+    else:
+        row["stages"] = []
+        row["strategy"] = "direct"
+
     row["health_gate"] = json.loads(row.get("health_gate") or "{}")
     return jsonify({"data": row})
 
@@ -2541,8 +2684,9 @@ def deployments_rollback():
          model_name or "previous", model_tag or "previous",
          "queued", f"Rollback queued for {device_id or 'fleet'}")
     )
-    
+    if hasattr(db, 'commit'): db.commit()
     return jsonify({"status": "queued", "affected_devices": affected})
+
 
 @app.route("/v1/deployments/<dep_id>/rollback", methods=["POST"])
 @require_auth

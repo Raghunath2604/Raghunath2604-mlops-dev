@@ -62,7 +62,15 @@ class DeploymentStage:
     latency_delta:  Optional[float] = None
 
     @classmethod
-    def from_dict(cls, d: Dict) -> "DeploymentStage":
+    def from_dict(cls, d: Any) -> "DeploymentStage":
+        if not isinstance(d, dict):
+            return cls(
+                stage=0,
+                target=str(d),
+                status="pending",
+                devices_total=1,
+                devices_done=0,
+            )
         return cls(
             stage=d.get("stage", 0),
             target=d.get("target", ""),
@@ -113,14 +121,34 @@ class Deployment:
 
     @classmethod
     def from_dict(cls, d: Dict, http=None) -> "Deployment":
-        stages = [DeploymentStage.from_dict(s) for s in d.get("stages", [])]
+        raw_stages = d.get("stages", [])
+        if isinstance(raw_stages, dict):
+            raw_stages = raw_stages.get("stages_list", [])
+        elif not isinstance(raw_stages, list):
+            raw_stages = []
+
+        stages = []
+        for s in raw_stages:
+            if isinstance(s, dict):
+                stages.append(DeploymentStage.from_dict(s))
+            elif isinstance(s, str):
+                import json
+                try:
+                    ps = json.loads(s)
+                    if isinstance(ps, dict):
+                        stages.append(DeploymentStage.from_dict(ps))
+                    else:
+                        stages.append(DeploymentStage(stage=len(stages)+1, target=str(s), status="passed", devices_total=1, devices_done=1))
+                except Exception:
+                    stages.append(DeploymentStage(stage=len(stages)+1, target=str(s), status="passed", devices_total=1, devices_done=1))
+
         return cls(
             id=d.get("id", ""),
             model_name=d.get("model_name", ""),
             model_tag=d.get("model_tag", ""),
             status=d.get("status", "pending"),
             stage=d.get("stage", 0),
-            total_stages=d.get("total_stages", 1),
+            total_stages=d.get("total_stages", max(1, len(stages))),
             target=d.get("target", ""),
             created_at=d.get("created_at", ""),
             stages=stages,
