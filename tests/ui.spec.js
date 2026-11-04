@@ -50,8 +50,14 @@ test.describe('Landing Page UI', () => {
 });
 
 test.describe('Dashboard UI & Access Control', () => {
-  test('Unauthenticated dashboard access enforces air-gapped RBAC clearance redirect', async ({ page }) => {
+  test('Unauthenticated dashboard access enforces air-gapped RBAC clearance modal', async ({ page }) => {
     await page.goto('/dashboard.html');
+    const authScreen = page.locator('#auth-screen');
+    await expect(authScreen).toBeVisible();
+  });
+
+  test('Unauthenticated admin access enforces server-side RBAC redirect', async ({ page }) => {
+    await page.goto('/admin.html');
     await expect(page).toHaveURL(/login\.html\?notice=admin_clearance_required/);
     const authStage = page.locator('.auth-stage-container');
     await expect(authStage).toBeVisible();
