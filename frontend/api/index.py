@@ -848,11 +848,19 @@ def health():
 @require_auth
 def status():
     db = get_db()
-    total    = (db_query(db, "SELECT COUNT(*) FROM devices", fetchone=True) or [0])[0]
-    online   = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status='online'", fetchone=True) or [0])[0]
-    offline  = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status='offline'", fetchone=True) or [0])[0]
-    drifting = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status IN ('drift','warning')", fetchone=True) or [0])[0]
-    active_d = (db_query(db, "SELECT COUNT(*) FROM deployments WHERE status='running'", fetchone=True) or [0])[0]
+    if getattr(g, "role", "user") == "admin":
+        total    = (db_query(db, "SELECT COUNT(*) FROM devices", fetchone=True) or [0])[0]
+        online   = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status='online'", fetchone=True) or [0])[0]
+        offline  = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status='offline'", fetchone=True) or [0])[0]
+        drifting = (db_query(db, "SELECT COUNT(*) FROM devices WHERE status IN ('drift','warning')", fetchone=True) or [0])[0]
+        active_d = (db_query(db, "SELECT COUNT(*) FROM deployments WHERE status='running'", fetchone=True) or [0])[0]
+    else:
+        uid = g.user_id
+        total    = (db_query(db, "SELECT COUNT(*) FROM devices WHERE owner_id=?", (uid,), fetchone=True) or [0])[0]
+        online   = (db_query(db, "SELECT COUNT(*) FROM devices WHERE owner_id=? AND status='online'", (uid,), fetchone=True) or [0])[0]
+        offline  = (db_query(db, "SELECT COUNT(*) FROM devices WHERE owner_id=? AND status='offline'", (uid,), fetchone=True) or [0])[0]
+        drifting = (db_query(db, "SELECT COUNT(*) FROM devices WHERE owner_id=? AND status IN ('drift','warning')", (uid,), fetchone=True) or [0])[0]
+        active_d = (db_query(db, "SELECT COUNT(*) FROM deployments WHERE owner_id=? AND status='running'", (uid,), fetchone=True) or [0])[0]
     return jsonify({
         "total_devices": total, "online": online,
         "offline": offline, "drifting": drifting,
@@ -947,7 +955,7 @@ def auth_login():
         
     admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com").strip().lower()
     user_email = (row.get("name") or "").strip().lower()
-    is_admin = (row.get("role") == "admin") or (user_email == admin_email) or ("raghunath" in user_email) or (row.get("id") == "admin")
+    is_admin = bool(row.get("role") == "admin" or user_email == admin_email or row.get("id") == "admin")
 
     resp = make_response(jsonify({
         "success": True,
@@ -1028,7 +1036,7 @@ def _create_auth_response(row):
     avatar = (row.get("avatar_url") if isinstance(row, dict) else "") or ""
     admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com").strip().lower()
     user_email = (email or "").strip().lower()
-    is_admin = (role == "admin") or (user_email == admin_email) or ("raghunath" in user_email) or (user_id == "admin")
+    is_admin = bool(role == "admin" or user_email == admin_email or user_id == "admin")
     if is_admin:
         role = "admin"
 
@@ -1145,7 +1153,7 @@ def _link_or_create_oauth_user(provider, provider_user_id, email, name, avatar_u
     avatar_url = (avatar_url or "").strip()
     admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com").strip().lower()
 
-    is_admin = (email == admin_email) or (provider_user_id.lower() == "raghunath2604") or (name.lower() == "raghunath2604") or ("raghunath" in email)
+    is_admin = bool(email == admin_email or (provider_user_id.lower() == "raghunath2604" and provider == "github"))
     role = 'admin' if is_admin else 'developer'
     tier = 'enterprise' if is_admin else 'pro'
 
@@ -1518,6 +1526,18 @@ def devices_register():
     device_id = f"dev_{uuid.uuid4().hex[:12]}"
     
     db = get_db()
+    # Enforce tier-based hardware device limits for non-admin accounts
+    if getattr(g, "role", "user") != "admin":
+        user_row = db_query(db, "SELECT device_limit, subscription_tier FROM api_keys WHERE id=?", (owner,), fetchone=True)
+        limit = (user_row.get("device_limit") if isinstance(user_row, dict) else user_row[0]) if user_row else 10
+        current_count = (db_query(db, "SELECT COUNT(*) FROM devices WHERE owner_id=?", (owner,), fetchone=True) or [0])[0]
+        if current_count >= limit:
+            return jsonify({
+                "error": f"Device limit ({limit}) reached for your tier ({user_row.get('subscription_tier', 'starter') if isinstance(user_row, dict) else 'starter'}). Upgrade at https://www.mlopsde.me/pricing to register additional hardware.",
+                "code": "DEVICE_QUOTA_EXCEEDED",
+                "limit": limit,
+                "current_count": current_count
+            }), 402
     db_query(db,
         "INSERT INTO devices (id, owner_id, name, status, hw_class, os_info, last_seen, drift_score, latency_ms) VALUES (?, ?, ?, 'online', ?, ?, CURRENT_TIMESTAMP, 0.0, 0.0)",
         (device_id, owner, name, hw_class, os_name), commit=True
@@ -3187,7 +3207,7 @@ def register():
         
     user_id = 'user_' + os.urandom(8).hex()
     admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com").strip().lower()
-    is_admin = (email == admin_email) or ("raghunath" in email)
+    is_admin = bool(email == admin_email)
     role = 'admin' if is_admin else 'developer'
     tier = 'enterprise' if is_admin else 'pro'
     approval_status = 'approved' if is_admin else 'pending'
