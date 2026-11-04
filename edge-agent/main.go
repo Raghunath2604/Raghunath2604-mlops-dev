@@ -43,8 +43,8 @@ func main() {
 		log.Fatal("Failed to init SQLite:", err)
 	}
 
-	// Capture baseline
-	baseline = SampleInputDistribution()
+	// Capture baseline (mocked for now)
+	baseline = MockInputDistribution()
 
 	// Sync loop
 	for {
@@ -69,7 +69,7 @@ func getDeviceID() string {
 
 func syncWithControlPlane() error {
 	// Calculate current drift
-	currentDist := SampleInputDistribution()
+	currentDist := MockInputDistribution() // mocked
 	klScore := ComputeKL(baseline, currentDist)
 
 	status := "online"
@@ -136,12 +136,12 @@ func flushOfflineBuffer() {
 	}
 	log.Printf("Flushing %d offline events", len(events))
 	for _, e := range events {
-		// Ingest cached telemetry payload; delete upon successful synchronization
+		// Mock: just push the payload. If success, delete from DB.
 		deleteEvent(e.ID)
 	}
 }
 
-// System stat telemetry providers
+// System stat mocks
 func getCPU() float64  { return 12.5 }
 func getRAM() int      { return 1024 }
 func getTemp() float64 { return 45.0 }
