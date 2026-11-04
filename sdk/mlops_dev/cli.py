@@ -33,6 +33,11 @@ import json
 import argparse
 from typing import Optional
 
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 
 def get_client(api_key: Optional[str] = None, base_url: Optional[str] = None):
     """Build a Client from CLI args or env."""
@@ -436,8 +441,14 @@ jobs:
 # ── MAIN ──────────────────────────────────────────────────────────
 
 def main():
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument("--api-key", metavar="KEY", help="API key (or set MLOPS_API_KEY)")
+    parent_parser.add_argument("--url", metavar="URL", help="API base URL (or set MLOPS_API_URL)")
+    parent_parser.add_argument("--json", action="store_true", help="Output raw JSON")
+
     parser = argparse.ArgumentParser(
         prog="mlops",
+        parents=[parent_parser],
         description="MLOps.dev CLI — deploy and monitor ML models on edge devices",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
@@ -458,20 +469,17 @@ Docs:    https://docs.mlopsde.me
 Discord: https://discord.gg/Tb47N9NaPk
         """,
     )
-    parser.add_argument("--api-key", metavar="KEY", help="API key (or set MLOPS_API_KEY)")
-    parser.add_argument("--url", metavar="URL", help="API base URL (or set MLOPS_API_URL)")
-    parser.add_argument("--json", action="store_true", help="Output raw JSON")
 
     sub = parser.add_subparsers(dest="command")
 
     # status
-    sub.add_parser("status", help="Fleet health summary")
+    sub.add_parser("status", parents=[parent_parser], help="Fleet health summary")
 
     # health
-    sub.add_parser("health", help="API health check")
+    sub.add_parser("health", parents=[parent_parser], help="API health check")
 
     # audit
-    aud = sub.add_parser("audit", help="Export immutable audit logs")
+    aud = sub.add_parser("audit", parents=[parent_parser], help="Export immutable audit logs")
     aud.add_argument("--device", help="Filter by device ID")
     aud.add_argument("--type", help="Filter by event type (deployment, drift, rollback, auth)")
     aud.add_argument("--since", help="Start date (ISO 8601)")
@@ -479,32 +487,32 @@ Discord: https://discord.gg/Tb47N9NaPk
     aud.add_argument("--limit", type=int, default=100)
 
     # generate-cicd
-    sub.add_parser("generate-cicd", help="Generate GitHub Actions CI/CD workflow")
+    sub.add_parser("generate-cicd", parents=[parent_parser], help="Generate GitHub Actions CI/CD workflow")
 
     # devices
-    dev = sub.add_parser("devices", help="Manage edge devices")
+    dev = sub.add_parser("devices", parents=[parent_parser], help="Manage edge devices")
     dev_sub = dev.add_subparsers(dest="subcommand")
 
-    dl = dev_sub.add_parser("list", help="List all devices")
+    dl = dev_sub.add_parser("list", parents=[parent_parser], help="List all devices")
     dl.add_argument("--status",   help="Filter: online|offline|drift|warning|error")
     dl.add_argument("--hw-class", dest="hw_class", help="Filter by hardware class")
     dl.add_argument("--limit",    type=int, default=100)
 
-    dg = dev_sub.add_parser("get", help="Get one device")
+    dg = dev_sub.add_parser("get", parents=[parent_parser], help="Get one device")
     dg.add_argument("device_id")
 
-    dlg = dev_sub.add_parser("logs", help="Device event log")
+    dlg = dev_sub.add_parser("logs", parents=[parent_parser], help="Device event log")
     dlg.add_argument("device_id")
     dlg.add_argument("--limit", type=int, default=50)
     dlg.add_argument("--level", help="info|warn|error")
 
     # models
-    mod = sub.add_parser("models", help="Manage model registry")
+    mod = sub.add_parser("models", parents=[parent_parser], help="Manage model registry")
     mod_sub = mod.add_subparsers(dest="subcommand")
 
-    mod_sub.add_parser("list", help="List all models")
+    mod_sub.add_parser("list", parents=[parent_parser], help="List all models")
 
-    mp = mod_sub.add_parser("push", help="Push a model file")
+    mp = mod_sub.add_parser("push", parents=[parent_parser], help="Push a model file")
     mp.add_argument("file")
     mp.add_argument("--name",     required=True, help="Model name")
     mp.add_argument("--tag",      default="latest", help="Version tag")
@@ -512,13 +520,13 @@ Discord: https://discord.gg/Tb47N9NaPk
     mp.add_argument("--variant",  help="jetson_orin|jetson_nano|rpi5|all")
     mp.add_argument("--metadata", nargs="*", metavar="key=value")
 
-    md = mod_sub.add_parser("delete", help="Delete a model version")
+    md = mod_sub.add_parser("delete", parents=[parent_parser], help="Delete a model version")
     md.add_argument("name")
     md.add_argument("tag")
     md.add_argument("--yes", "-y", action="store_true")
 
     # deploy
-    dp = sub.add_parser("deploy", help="Deploy a model to devices")
+    dp = sub.add_parser("deploy", parents=[parent_parser], help="Deploy a model to devices")
     dp.add_argument("model", help="name:tag e.g. defect-detector:v1.0")
     dp.add_argument("--target",         required=True, help="Device ID, hw_class, or all")
     dp.add_argument("--stage",          dest="stages", action="append", metavar="hw_class=X,count=N")
@@ -529,17 +537,17 @@ Discord: https://discord.gg/Tb47N9NaPk
     dp.add_argument("--timeout",        type=float, default=600.0)
 
     # rollback
-    rb = sub.add_parser("rollback", help="Roll back fleet or device")
+    rb = sub.add_parser("rollback", parents=[parent_parser], help="Roll back fleet or device")
     rb.add_argument("--device",  help="Device ID (omit for fleet-wide)")
     rb.add_argument("--to",      help="Model version e.g. defect-detector:v1.0")
 
     # drift
-    dr = sub.add_parser("drift", help="Drift monitoring")
+    dr = sub.add_parser("drift", parents=[parent_parser], help="Drift monitoring")
     dr_sub = dr.add_subparsers(dest="subcommand")
-    dr_sub.add_parser("report", help="Fleet-wide drift report")
-    dra = dr_sub.add_parser("alerts", help="Active drift alerts")
+    dr_sub.add_parser("report", parents=[parent_parser], help="Fleet-wide drift report")
+    dra = dr_sub.add_parser("alerts", parents=[parent_parser], help="Active drift alerts")
     dra.add_argument("--resolved", action="store_true")
-    drr = dr_sub.add_parser("reset", help="Reset drift baseline")
+    drr = dr_sub.add_parser("reset", parents=[parent_parser], help="Reset drift baseline")
     drr.add_argument("device_id", nargs="?")
     drr.add_argument("--fleet",    action="store_true")
     drr.add_argument("--hw-class", dest="hw_class")
