@@ -17,6 +17,8 @@ services:
         sync: false
       - key: FRONTEND_URL
         value: "https://www.mlopsde.me"
+      - key: THEME_PALETTE
+        value: "midnight-black,pure-white,lime-green"
 
 databases:
   - name: mlops-db

@@ -1,12 +1,28 @@
 services:
   - type: web
     name: mlops-dev-server
-    plan: free
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -w 4 -b 0.0.0.0:$PORT api:app
+    region: ohio
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -k gevent -b 0.0.0.0:$PORT app:app"
     envVars:
-      - key: PORT
-        value: 8000
-      - key: RESEND_API_KEY
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mlops-db
+          property: connectionString
+      - key: STRIPE_SECRET_KEY
         sync: false
+      - key: FRONTEND_URL
+        value: "https://www.mlopsde.me"
+      - key: THEME_PALETTE
+        value: "midnight-black,pure-white,lime-green"
+
+databases:
+  - name: mlops-db
+    region: ohio
+    plan: free
+    databaseName: mlops
+    user: mlops
