@@ -8,26 +8,26 @@
 
 :root {
   /* ── Precision Spatial Obsidian Surfaces (OLED True Black Layering) ── */
-  --stitch-void: #06090e;
-  --stitch-surface-lowest: #0a0e17;
-  --stitch-surface-low: #0e1420;
-  --stitch-surface-card: #121927;
-  --stitch-surface-container: #162030;
-  --stitch-surface-high: #1c273a;
-  --stitch-surface-highest: #243248;
-  --stitch-surface-elevated: #2c3c54;
+  --stitch-void: #0B0B0C;
+  --stitch-surface-lowest: #0B0B0C;
+  --stitch-surface-low: #111113;
+  --stitch-surface-card: #141417;
+  --stitch-surface-container: #18181C;
+  --stitch-surface-high: #1E1E24;
+  --stitch-surface-highest: #26262E;
+  --stitch-surface-elevated: #2E2E38;
 
   /* ── Engineering Telemetry & Status Accents ── */
-  --stitch-cobalt: #3b82f6;
-  --stitch-cobalt-glow: rgba(59, 130, 246, 0.25);
-  --stitch-cobalt-subtle: rgba(59, 130, 246, 0.10);
+  --stitch-cobalt: #C6F432;
+  --stitch-cobalt-glow: rgba(198, 244, 50, 0.28);
+  --stitch-cobalt-subtle: rgba(198, 244, 50, 0.12);
   
-  --stitch-emerald: #10b981;
-  --stitch-emerald-glow: rgba(16, 185, 129, 0.25);
+  --stitch-emerald: #C6F432;
+  --stitch-emerald-glow: rgba(198, 244, 50, 0.28);
   --stitch-emerald-subtle: rgba(16, 185, 129, 0.10);
 
-  --stitch-cyan: #06b6d4;
-  --stitch-cyan-glow: rgba(6, 182, 212, 0.22);
+  --stitch-cyan: #C6F432;
+  --stitch-cyan-glow: rgba(198, 244, 50, 0.25);
 
   --stitch-crimson: #ef4444;
   --stitch-crimson-glow: rgba(239, 68, 68, 0.25);
@@ -37,12 +37,12 @@
   --stitch-amber-glow: rgba(245, 158, 11, 0.25);
 
   /* ── Calibrated High-Contrast Typography (WCAG AAA Compliant) ── */
-  --stitch-text-primary: #f8fafc;
+  --stitch-text-primary: #FFFFFF;
   --stitch-text-secondary: #94a3b8;
   --stitch-text-dim: #64748b;
   --stitch-text-muted: #475569;
-  --stitch-text-mono-cyan: #38bdf8;
-  --stitch-text-mono-mint: #34d399;
+  --stitch-text-mono-cyan: #C6F432;
+  --stitch-text-mono-mint: #C6F432;
 
   /* ── Precision Font Stacks ── */
   --stitch-font-display: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
@@ -52,8 +52,8 @@
   /* ── Sub-Pixel 1px Borders & Bevels ── */
   --stitch-border-subtle: rgba(255, 255, 255, 0.08);
   --stitch-border-default: rgba(255, 255, 255, 0.12);
-  --stitch-border-active: rgba(59, 130, 246, 0.50);
-  --stitch-border-emerald: rgba(16, 185, 129, 0.40);
+  --stitch-border-active: rgba(198, 244, 50, 0.60);
+  --stitch-border-emerald: rgba(198, 244, 50, 0.50);
   --stitch-border-crimson: rgba(239, 68, 68, 0.40);
 
   /* ── Metric Radii & Spacing ── */
@@ -590,3 +590,41 @@ a, button, input, select, textarea, [role="button"],
 }
 
 
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   THEME PALETTE OVERRIDES: Midnight Black (#0B0B0C), Pure White (#FFFFFF), Lime Green (#C6F432)
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  --theme-midnight: #0B0B0C;
+  --theme-white: #FFFFFF;
+  --theme-lime: #C6F432;
+  --theme-lime-hover: #b5e424;
+}
+
+body {
+  background-color: #0B0B0C !important;
+  color: #FFFFFF !important;
+}
+
+/* Primary CTA and action buttons */
+.cta-primary, .nav-cta, .btn-primary, .btn-submit-yellow, .plan-btn-solid, .wl-submit {
+  background: #C6F432 !important;
+  color: #0B0B0C !important;
+  font-weight: 700 !important;
+  border-color: #C6F432 !important;
+}
+.cta-primary:hover, .nav-cta:hover, .btn-primary:hover, .btn-submit-yellow:hover, .plan-btn-solid:hover, .wl-submit:hover {
+  background: #b5e424 !important;
+  color: #0B0B0C !important;
+}
+
+/* High-contrast brand markers and badges */
+.hero-h .line2, .brand-accent, .nav-logo em, .term-prompt, .term-ok {
+  color: #C6F432 !important;
+}
+
+/* Active navigation links & indicators */
+.nav-links a:hover, .sb-link.active, .step-tab.active, .tab-btn.active {
+  color: #C6F432 !important;
+}

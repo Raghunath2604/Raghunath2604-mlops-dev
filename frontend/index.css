@@ -5,10 +5,10 @@
 
 /* --- DARK MODE (enhanced) --- */
 body.dark-mode {
-  --bg: #0a0a0a;
-  --bg-card: #111111;
-  --bg-hover: #1a1a1a;
-  --text: #ededed;
+  --bg: #0B0B0C;
+  --bg-card: #141417;
+  --bg-hover: #1A1A1E;
+  --text: #FFFFFF;
   --muted: #a1a1aa;
   --border: rgba(255,255,255,0.08);
   --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
@@ -32,8 +32,8 @@ body.dark-mode .sb-link:hover {
 }
 
 body.dark-mode .sb-link.active {
-  background: rgba(0, 112, 243, 0.08);
-  color: #0070F3;
+  background: rgba(198, 244, 50, 0.12);
+  color: #C6F432;
 }
 
 body.dark-mode .panel, body.dark-mode .kpi {
@@ -55,8 +55,8 @@ body.dark-mode input, body.dark-mode select {
 }
 
 body.dark-mode input:focus, body.dark-mode select:focus {
-  border-color: #0070F3;
-  box-shadow: 0 0 0 3px rgba(0,112,243,0.1);
+  border-color: #C6F432;
+  box-shadow: 0 0 0 3px rgba(198, 244, 50, 0.2);
 }
 
 body.dark-mode .ftable th {
@@ -110,7 +110,7 @@ body.dark-mode .ftable tr:hover td {
   width: 16px;
 }
 input:checked + .slider {
-  background-color: #0070F3;
+  background-color: #C6F432;
 }
 input:checked + .slider:before {
   transform: translateX(20px);

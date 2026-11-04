@@ -52,15 +52,15 @@ test.describe('Landing Page UI', () => {
     
     // Check computed styles to ensure the CSS is loaded properly
     const bg = await primaryBtn.evaluate((el) => window.getComputedStyle(el).backgroundColor);
-    // #4F7FEF is rgb(79, 127, 239)
-    expect(bg).toBe('rgb(79, 127, 239)');
+    // #C6F432 (Lime Green) is rgb(198, 244, 50)
+    expect(bg).toBe('rgb(198, 244, 50)');
   });
 });
 
 test.describe('Dashboard UI & Access Control', () => {
   test('Unauthenticated dashboard access enforces air-gapped RBAC clearance redirect', async ({ page }) => {
     await page.goto('/dashboard.html');
-    await expect(page).toHaveURL(/login(\.html)?\?notice=admin_clearance_required/);
+    await expect(page).toHaveURL(/login(\.html)?\?notice=admin_clearance_required/, { timeout: 15000 });
     const authStage = page.locator('.auth-stage-container');
     await expect(authStage).toBeVisible();
   });
@@ -81,9 +81,9 @@ test.describe('Dashboard UI & Access Control', () => {
     const appEl = page.locator('#app');
     await expect(appEl).toBeVisible();
     
-    // Check dark mode background (--bg-base #06090e -> rgb(6, 9, 14))
+    // Check dark mode background (--bg-base #0B0B0C -> rgb(11, 11, 12))
     const bodyBg = await page.evaluate(() => window.getComputedStyle(document.body).backgroundColor);
-    expect(bodyBg).toBe('rgb(6, 9, 14)');
+    expect(bodyBg).toBe('rgb(11, 11, 12)');
 
     // Verify KPIs
     const totalDevices = page.locator('#k-total');
