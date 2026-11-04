@@ -19,8 +19,8 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background-color: var(--stitch-bg-primary, #030712);
-  color: var(--stitch-text-primary, #f8fafc);
+  background-color: var(--stitch-bg-primary, #0B0B0C);
+  color: var(--stitch-text-primary, #FFFFFF);
   font-family: var(--stitch-font-sans, 'Plus Jakarta Sans', sans-serif);
   line-height: 1.6;
   min-height: 100vh;
@@ -36,7 +36,7 @@ body {
   justify-content: space-between;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
   border-bottom: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
-  background: rgba(3, 7, 18, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
@@ -47,7 +47,7 @@ body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #fff;
+  color: #FFFFFF;
   font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
   font-weight: 700;
   font-size: 1.05rem;
@@ -65,16 +65,16 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: rgba(0, 255, 179, 0.08);
-  border: 1px solid rgba(0, 255, 179, 0.3);
+  background: rgba(198, 244, 50, 0.08);
+  border: 1px solid rgba(198, 244, 50, 0.3);
   padding: 12px 24px;
   border-radius: 999px;
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.95rem;
   font-weight: 700;
-  color: #00ffb3;
+  color: #C6F432;
   margin-bottom: 1.5rem;
-  box-shadow: 0 0 30px rgba(0, 255, 179, 0.15);
+  box-shadow: 0 0 30px rgba(198, 244, 50, 0.15);
 }
 
 .status-title {
@@ -83,10 +83,10 @@ body {
   font-weight: 800;
   letter-spacing: -0.03em;
   margin-bottom: 0.6rem;
-  color: #f8fafc;
+  color: #FFFFFF;
 }
 .status-desc {
-  color: var(--stitch-text-secondary, #94a3b8);
+  color: var(--stitch-text-secondary, #C6F432);
   font-size: 1.02rem;
   max-width: 600px;
   margin: 0 auto 2.5rem;
@@ -99,7 +99,7 @@ body {
   padding: 0 1.5rem 4rem;
 }
 .service-card {
-  background: var(--stitch-bg-secondary, #080e1a);
+  background: var(--stitch-bg-secondary, #0B0B0C);
   border: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
   border-radius: 12px;
   padding: 1.4rem 1.6rem;
@@ -107,7 +107,7 @@ body {
   transition: all 0.2s ease;
 }
 .service-card:hover {
-  border-color: rgba(91, 138, 240, 0.35);
+  border-color: rgba(198, 244, 50, 0.35);
   transform: translateY(-1px);
 }
 .service-header {
@@ -119,7 +119,7 @@ body {
 .service-name {
   font-size: 1rem;
   font-weight: 700;
-  color: #fff;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -128,7 +128,7 @@ body {
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.72rem;
   font-weight: 700;
-  color: #00ffb3;
+  color: #C6F432;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -145,7 +145,7 @@ body {
 .uptime-bar {
   flex: 1;
   height: 24px;
-  background: #00ffb3;
+  background: #C6F432;
   border-radius: 2px;
   opacity: 0.85;
   transition: all 0.15s ease;
@@ -154,14 +154,14 @@ body {
 .uptime-bar:hover {
   opacity: 1;
   transform: scaleY(1.15);
-  background: #7dd3fc;
+  background: #C6F432;
 }
 .uptime-labels {
   display: flex;
   justify-content: space-between;
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.7rem;
-  color: var(--stitch-text-muted, #64748b);
+  color: var(--stitch-text-muted, #C6F432);
 }
 
 /* Regions Grid */
@@ -172,7 +172,7 @@ body {
   margin: 2.5rem 0 3.5rem;
 }
 .region-card {
-  background: var(--stitch-bg-surface, #121826);
+  background: var(--stitch-bg-surface, #0B0B0C);
   border: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
   border-radius: 10px;
   padding: 1.2rem;
@@ -181,20 +181,20 @@ body {
 .region-name {
   font-size: 0.84rem;
   font-weight: 700;
-  color: #fff;
+  color: #FFFFFF;
   margin-bottom: 4px;
 }
 .region-code {
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.7rem;
-  color: #7dd3fc;
+  color: #C6F432;
   margin-bottom: 10px;
 }
 .region-latency {
   font-family: var(--stitch-font-mono, monospace);
   font-size: 1.45rem;
   font-weight: 800;
-  color: #00ffb3;
+  color: #C6F432;
 }
 
 @media(max-width: 800px) {
@@ -213,13 +213,13 @@ body {
 <!-- NAV -->
 <nav class="status-nav">
   <a href="index.html" class="brand-link">
-    <div style="width:28px; height:28px; background:linear-gradient(135deg, #5B8AF0, #00FFB3); border-radius:6px; display:grid; place-items:center;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
+    <div style="width:28px; height:28px; background:linear-gradient(135deg, #C6F432, #C6F432); border-radius:6px; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
     </div>
-    <span>MLOps<span style="color:#5B8AF0;">.dev</span></span>
+    <span>MLOps<span style="color:#C6F432;">.dev</span></span>
   </a>
   <div class="nav-actions">
-    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(91,138,240,0.15); border:1px solid rgba(91,138,240,0.4); color:#7dd3fc; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.4); color:#C6F432; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
       <span>Fleet Dashboard →</span>
     </a>
   </div>
@@ -243,29 +243,29 @@ body {
       <div class="region-name">US East Gateway</div>
       <div class="region-code">iad1 · N. Virginia</div>
       <div class="region-latency" id="lat-iad">14.2ms</div>
-      <div style="font-size:0.68rem; color:#64748b; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
+      <div style="font-size:0.68rem; color:#C6F432; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
     </div>
     <div class="region-card">
       <div class="region-name">EU Central Gateway</div>
       <div class="region-code">fra1 · Frankfurt</div>
       <div class="region-latency" id="lat-fra">21.8ms</div>
-      <div style="font-size:0.68rem; color:#64748b; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
+      <div style="font-size:0.68rem; color:#C6F432; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
     </div>
     <div class="region-card">
       <div class="region-name">AP South Gateway</div>
       <div class="region-code">bom1 · Mumbai</div>
       <div class="region-latency" id="lat-bom">18.4ms</div>
-      <div style="font-size:0.68rem; color:#64748b; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
+      <div style="font-size:0.68rem; color:#C6F432; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
     </div>
     <div class="region-card">
       <div class="region-name">AP East Gateway</div>
       <div class="region-code">hkg1 · Hong Kong</div>
       <div class="region-latency" id="lat-hkg">24.1ms</div>
-      <div style="font-size:0.68rem; color:#64748b; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
+      <div style="font-size:0.68rem; color:#C6F432; font-family:var(--stitch-font-mono, monospace); margin-top:4px;">100% HEALTHY</div>
     </div>
   </div>
 
-  <h2 style="font-size:1.15rem; font-weight:700; color:#fff; margin-bottom:1rem; font-family:var(--stitch-font-display, sans-serif);">Core Platform Services (90-Day History)</h2>
+  <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF; margin-bottom:1rem; font-family:var(--stitch-font-display, sans-serif);">Core Platform Services (90-Day History)</h2>
 
   <!-- Service 1: Core API & Telemetry Ingestion -->
   <div class="service-card">

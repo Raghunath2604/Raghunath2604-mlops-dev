@@ -19,8 +19,8 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background-color: var(--stitch-bg-primary, #030712);
-  color: var(--stitch-text-primary, #f8fafc);
+  background-color: var(--stitch-bg-primary, #0B0B0C);
+  color: var(--stitch-text-primary, #FFFFFF);
   font-family: var(--stitch-font-sans, 'Plus Jakarta Sans', sans-serif);
   line-height: 1.6;
   min-height: 100vh;
@@ -36,7 +36,7 @@ body {
   justify-content: space-between;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
   border-bottom: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
-  background: rgba(3, 7, 18, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
@@ -47,7 +47,7 @@ body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #fff;
+  color: #FFFFFF;
   font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
   font-weight: 700;
   font-size: 1.05rem;
@@ -64,14 +64,14 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(91, 138, 240, 0.1);
-  border: 1px solid rgba(91, 138, 240, 0.35);
+  background: rgba(198, 244, 50, 0.1);
+  border: 1px solid rgba(198, 244, 50, 0.35);
   padding: 6px 16px;
   border-radius: 999px;
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.8rem;
   font-weight: 700;
-  color: #7dd3fc;
+  color: #C6F432;
   margin-bottom: 1.2rem;
 }
 .bench-title {
@@ -82,7 +82,7 @@ body {
   margin-bottom: 0.8rem;
 }
 .bench-desc {
-  color: var(--stitch-text-secondary, #94a3b8);
+  color: var(--stitch-text-secondary, #C6F432);
   font-size: 1.05rem;
   max-width: 650px;
   margin: 0 auto 2.5rem;
@@ -90,12 +90,12 @@ body {
 
 /* Interactive ROI Calculator Card */
 .roi-card {
-  background: linear-gradient(135deg, rgba(8, 14, 26, 0.95), rgba(18, 24, 38, 0.95));
-  border: 1px solid rgba(91, 138, 240, 0.28);
+  background: linear-gradient(135deg, rgba(11, 11, 12, 0.95), rgba(11, 11, 12, 0.95));
+  border: 1px solid rgba(198, 244, 50, 0.28);
   border-radius: 16px;
   padding: 2.2rem;
   margin-bottom: 3.5rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 50px rgba(11, 11, 12, 0.6);
 }
 .roi-grid {
   display: grid;
@@ -109,14 +109,14 @@ body {
   justify-content: space-between;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #fff;
+  color: #FFFFFF;
   margin-bottom: 8px;
 }
 .roi-slider {
   width: 100%;
   height: 6px;
   border-radius: 3px;
-  background: #1e293b;
+  background: #0B0B0C;
   outline: none;
   -webkit-appearance: none;
   cursor: pointer;
@@ -126,15 +126,15 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #00ffb3;
-  box-shadow: 0 0 12px #00ffb3;
+  background: #C6F432;
+  box-shadow: 0 0 12px #C6F432;
   cursor: pointer;
 }
 
 /* Savings Display Box */
 .savings-display-box {
-  background: rgba(3, 7, 18, 0.9);
-  border: 1px solid rgba(0, 255, 179, 0.3);
+  background: rgba(11, 11, 12, 0.9);
+  border: 1px solid rgba(198, 244, 50, 0.3);
   border-radius: 12px;
   padding: 1.8rem;
   text-align: center;
@@ -143,21 +143,21 @@ body {
   font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--stitch-text-secondary, #94a3b8);
+  color: var(--stitch-text-secondary, #C6F432);
   letter-spacing: 0.06em;
 }
 .savings-metric-value {
   font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
   font-size: 3rem;
   font-weight: 800;
-  color: #00ffb3;
+  color: #C6F432;
   margin: 6px 0 12px;
 }
 
 /* 17 Hardware Benchmark Matrix Table */
 .bench-table-wrap {
   overflow-x: auto;
-  background: var(--stitch-bg-secondary, #080e1a);
+  background: var(--stitch-bg-secondary, #0B0B0C);
   border: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
   border-radius: 14px;
 }
@@ -172,31 +172,31 @@ body {
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--stitch-text-muted, #64748b);
+  color: var(--stitch-text-muted, #C6F432);
   text-transform: uppercase;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(11, 11, 12, 0.3);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .bench-table td {
   padding: 1rem 1.2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  color: var(--stitch-text-secondary, #94a3b8);
+  color: var(--stitch-text-secondary, #C6F432);
 }
 .bench-table tr:hover td {
-  background: rgba(91, 138, 240, 0.04);
-  color: #fff;
+  background: rgba(198, 244, 50, 0.04);
+  color: #FFFFFF;
 }
 .chip-name {
   font-weight: 700;
-  color: #fff;
+  color: #FFFFFF;
 }
 .metric-val {
   font-family: var(--stitch-font-mono, monospace);
   font-weight: 700;
 }
-.val-green { color: #00ffb3; }
-.val-cyan { color: #7dd3fc; }
-.val-gold { color: #f59e0b; }
+.val-green { color: #C6F432; }
+.val-cyan { color: #C6F432; }
+.val-gold { color: #C6F432; }
 
 @media(max-width: 900px) {
   .roi-grid { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -211,14 +211,14 @@ body {
 <!-- NAV -->
 <nav class="bench-nav">
   <a href="index.html" class="brand-link">
-    <div style="width:28px; height:28px; background:linear-gradient(135deg, #5B8AF0, #00FFB3); border-radius:6px; display:grid; place-items:center;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
+    <div style="width:28px; height:28px; background:linear-gradient(135deg, #C6F432, #C6F432); border-radius:6px; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
     </div>
-    <span>MLOps<span style="color:#5B8AF0;">.dev</span></span>
+    <span>MLOps<span style="color:#C6F432;">.dev</span></span>
   </a>
   <div style="display:flex; gap:12px;">
-    <a href="docs.html" style="color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Documentation</a>
-    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(91,138,240,0.15); border:1px solid rgba(91,138,240,0.4); color:#7dd3fc; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
+    <a href="docs.html" style="color:#C6F432; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Documentation</a>
+    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.4); color:#C6F432; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
       <span>Launch Console →</span>
     </a>
   </div>
@@ -240,7 +240,7 @@ body {
         <div class="roi-control-group">
           <div class="roi-label-row">
             <span>Fleet Hardware Node Count:</span>
-            <span id="lbl-fleet-size" style="color:#00ffb3; font-family:var(--stitch-font-mono, monospace);">250 Devices</span>
+            <span id="lbl-fleet-size" style="color:#C6F432; font-family:var(--stitch-font-mono, monospace);">250 Devices</span>
           </div>
           <input type="range" min="10" max="5000" value="250" step="10" class="roi-slider" id="rng-fleet" oninput="calcROI()"/>
         </div>
@@ -248,7 +248,7 @@ body {
         <div class="roi-control-group">
           <div class="roi-label-row">
             <span>Inference Precision Optimization:</span>
-            <span id="lbl-precision" style="color:#7dd3fc; font-family:var(--stitch-font-mono, monospace);">INT8 Quantized (4x Speedup)</span>
+            <span id="lbl-precision" style="color:#C6F432; font-family:var(--stitch-font-mono, monospace);">INT8 Quantized (4x Speedup)</span>
           </div>
           <input type="range" min="1" max="3" value="3" step="1" class="roi-slider" id="rng-precision" oninput="calcROI()"/>
         </div>
@@ -256,7 +256,7 @@ body {
         <div class="roi-control-group">
           <div class="roi-label-row">
             <span>Cloud GPU Comparison Baseline:</span>
-            <span style="color:#f59e0b; font-family:var(--stitch-font-mono, monospace);">AWS g4dn.xlarge ($0.526/hr)</span>
+            <span style="color:#C6F432; font-family:var(--stitch-font-mono, monospace);">AWS g4dn.xlarge ($0.526/hr)</span>
           </div>
         </div>
       </div>
@@ -264,7 +264,7 @@ body {
       <div class="refero-kpi-box" style="text-align:center;">
         <div class="savings-metric-label">Estimated Annual Cloud Savings</div>
         <div class="savings-metric-value" id="val-savings">$142,500</div>
-        <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:14px;">vs. streaming 100% video/sensor data to centralized cloud GPUs.</div>
+        <div style="font-size:0.75rem; color:#C6F432; margin-bottom:14px;">vs. streaming 100% video/sensor data to centralized cloud GPUs.</div>
         <a href="login.html" class="cult-btn" style="width:100%; text-decoration:none; padding:12px; font-size:0.85rem;">
           Start Free Fleet Sandbox →
         </a>
@@ -278,11 +278,11 @@ body {
     <a href="benchmarks.html" class="manus-dock-item active">Benchmarks</a>
     <a href="compiler.html" class="manus-dock-item">Auto-Compiler</a>
     <a href="pricing.html" class="manus-dock-item">Pricing</a>
-    <a href="dashboard.html" class="manus-dock-item" style="color:#00ffb3;">Dashboard ⚡</a>
+    <a href="dashboard.html" class="manus-dock-item" style="color:#C6F432;">Dashboard ⚡</a>
   </div>
 
   <!-- BENCHMARK MATRIX TABLE -->
-  <h2 style="font-size:1.35rem; font-weight:800; color:#fff; text-align:left; margin-bottom:1.2rem; font-family:var(--stitch-font-display, sans-serif);">17-Platform Silicon Benchmark Matrix</h2>
+  <h2 style="font-size:1.35rem; font-weight:800; color:#FFFFFF; text-align:left; margin-bottom:1.2rem; font-family:var(--stitch-font-display, sans-serif);">17-Platform Silicon Benchmark Matrix</h2>
   <div class="bench-table-wrap">
     <table class="bench-table">
       <thead>

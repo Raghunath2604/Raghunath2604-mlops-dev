@@ -6,29 +6,29 @@
 /* --- DARK MODE (enhanced) --- */
 body.dark-mode {
   --bg: #0B0B0C;
-  --bg-card: #141417;
-  --bg-hover: #1A1A1E;
+  --bg-card: #0B0B0C;
+  --bg-hover: #0B0B0C;
   --text: #FFFFFF;
-  --muted: #a1a1aa;
-  --border: rgba(255,255,255,0.08);
-  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --muted: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 1px 3px rgba(11, 11, 12, 0.3), 0 1px 2px rgba(11, 11, 12, 0.2);
   background: var(--bg);
   color: var(--text);
 }
 
 body.dark-mode .sidebar {
-  background: #0a0a0a;
+  background: #0B0B0C;
   border-right: 1px solid var(--border);
 }
 
 body.dark-mode .sb-link {
-  color: #a1a1aa;
+  color: #FFFFFF;
   transition: all 0.15s ease;
 }
 
 body.dark-mode .sb-link:hover {
-  background: rgba(255,255,255,0.04);
-  color: #ededed;
+  background: rgba(255, 255, 255, 0.04);
+  color: #FFFFFF;
 }
 
 body.dark-mode .sb-link.active {
@@ -37,20 +37,20 @@ body.dark-mode .sb-link.active {
 }
 
 body.dark-mode .panel, body.dark-mode .kpi {
-  background: #111111;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: #0B0B0C;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: none;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 body.dark-mode .panel:hover, body.dark-mode .kpi:hover {
-  border-color: rgba(255,255,255,0.15);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 body.dark-mode input, body.dark-mode select {
-  background: #0a0a0a;
+  background: #0B0B0C;
   color: var(--text);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -60,19 +60,19 @@ body.dark-mode input:focus, body.dark-mode select:focus {
 }
 
 body.dark-mode .ftable th {
-  color: #666;
-  border-bottom-color: rgba(255,255,255,0.06);
+  color: #FFFFFF;
+  border-bottom-color: rgba(255, 255, 255, 0.06);
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 body.dark-mode .ftable td {
-  border-bottom-color: rgba(255,255,255,0.04);
+  border-bottom-color: rgba(255, 255, 255, 0.04);
 }
 
 body.dark-mode .ftable tr:hover td {
-  background: rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 /* --- THEME SWITCH (refined) --- */
@@ -90,7 +90,7 @@ body.dark-mode .ftable tr:hover td {
   display: none;
 }
 .slider {
-  background-color: #333;
+  background-color: #0B0B0C;
   bottom: 0;
   cursor: pointer;
   left: 0;
@@ -100,7 +100,7 @@ body.dark-mode .ftable tr:hover td {
   transition: background-color 0.3s ease;
 }
 .slider:before {
-  background-color: #fff;
+  background-color: #FFFFFF;
   bottom: 4px;
   content: "";
   height: 16px;
@@ -127,7 +127,7 @@ input:checked + .slider:before {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(11, 11, 12, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 9999;
@@ -141,13 +141,13 @@ input:checked + .slider:before {
 }
 
 .modal-content {
-  background: #111;
+  background: #0B0B0C;
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
   padding: 24px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 48px rgba(11, 11, 12, 0.4);
   animation: modalIn 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 @keyframes modalIn {
@@ -156,21 +156,21 @@ input:checked + .slider:before {
 }
 
 body.dark-mode .modal-content {
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #0B0B0C;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   padding-bottom: 12px;
   margin-bottom: 16px;
 }
 
 body.dark-mode .modal-header {
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .modal-header h2 {
@@ -186,31 +186,31 @@ body.dark-mode .modal-header {
   gap: 12px;
 }
 .mod-card {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   padding: 16px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   transition: border-color 0.2s ease;
 }
 .mod-card:hover {
-  border-color: rgba(255,255,255,0.12);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 body.dark-mode .mod-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .mod-lbl {
   font-size: 0.7rem;
-  color: #666;
+  color: #FFFFFF;
   text-transform: uppercase;
   font-weight: 600;
   margin-bottom: 4px;
   letter-spacing: 0.06em;
 }
 body.dark-mode .mod-lbl {
-  color: #666;
+  color: #FFFFFF;
 }
 .mod-val {
   font-size: 1.5rem;
@@ -221,7 +221,7 @@ body.dark-mode .mod-lbl {
 
 /* Leaflet dark mode overrides */
 body.dark-mode .leaflet-container {
-  background: #0a0a0a;
+  background: #0B0B0C;
 }
 
 /* --- CARD SPOTLIGHT EFFECT (dashboard) --- */
@@ -236,7 +236,7 @@ body.dark-mode .leaflet-container {
   border-radius: inherit;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: radial-gradient(circle 200px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(0,112,243,0.06), transparent 70%);
+  background: radial-gradient(circle 200px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(198, 244, 50, 0.06), transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -248,7 +248,7 @@ body.dark-mode .leaflet-container {
 .ripple-effect {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   transform: scale(0);
   animation: dashRipple 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   pointer-events: none;

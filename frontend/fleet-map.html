@@ -13,16 +13,16 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg-base: #03060c;
-  --bg-panel: rgba(8, 14, 26, 0.85);
+  --bg-base: #0B0B0C;
+  --bg-panel: rgba(11, 11, 12, 0.85);
   --border: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(0, 255, 179, 0.3);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --neon-green: #00ffb3;
-  --neon-blue: #38bdf8;
-  --neon-amber: #fbbf24;
-  --neon-rose: #f43f5e;
+  --border-glow: rgba(198, 244, 50, 0.3);
+  --text-main: #FFFFFF;
+  --text-muted: #C6F432;
+  --neon-green: #C6F432;
+  --neon-blue: #C6F432;
+  --neon-amber: #C6F432;
+  --neon-rose: #C6F432;
 }
 html, body {
   width: 100%;
@@ -38,7 +38,7 @@ html, body {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 60px;
-  background: rgba(3, 6, 12, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -52,17 +52,17 @@ html, body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #fff;
+  color: #FFFFFF;
   font-weight: 800;
   font-size: 1rem;
 }
 .logo-badge {
   width: 28px; height: 28px;
   border-radius: 6px;
-  background: #2563eb;
+  background: #C6F432;
   display: grid;
   place-items: center;
-  box-shadow: 0 0 16px rgba(37,99,235,0.6);
+  box-shadow: 0 0 16px rgba(198, 244, 50, 0.6);
 }
 .nav-links {
   display: flex;
@@ -77,18 +77,18 @@ html, body {
   transition: color 0.2s;
 }
 .nav-link:hover, .nav-link.active {
-  color: #fff;
+  color: #FFFFFF;
 }
 
 /* MAP CONTAINER */
 #map {
   width: 100%;
   height: 100%;
-  background: #020408;
+  background: #0B0B0C;
   z-index: 1;
 }
 .leaflet-container {
-  background: #020408 !important;
+  background: #0B0B0C !important;
 }
 
 /* FLOATING CONTROLS PANEL */
@@ -103,13 +103,13 @@ html, body {
   border-radius: 12px;
   padding: 1.2rem;
   width: 320px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 50px rgba(11, 11, 12, 0.6);
 }
 .panel-title {
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: -0.01em;
-  color: #fff;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -144,7 +144,7 @@ html, body {
   margin-bottom: 1rem;
 }
 .layer-btn {
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text-muted);
@@ -156,10 +156,10 @@ html, body {
   transition: all 0.2s;
 }
 .layer-btn.active {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
-  color: #fff;
-  box-shadow: 0 0 12px rgba(59,130,246,0.3);
+  background: rgba(198, 244, 50, 0.2);
+  border-color: #C6F432;
+  color: #FFFFFF;
+  box-shadow: 0 0 12px rgba(198, 244, 50, 0.3);
 }
 
 /* STATS ROW */
@@ -172,13 +172,13 @@ html, body {
   border-top: 1px solid var(--border);
 }
 .stat-box {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 6px;
   padding: 6px 10px;
 }
 .stat-box-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-.stat-box-val { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 800; color: #fff; margin-top: 2px; }
+.stat-box-val { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 800; color: #FFFFFF; margin-top: 2px; }
 
 /* DRAWER / INSPECTOR */
 .inspector-drawer {
@@ -193,7 +193,7 @@ html, body {
   border-radius: 14px;
   padding: 1.5rem;
   z-index: 1000;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  box-shadow: 0 20px 60px rgba(11, 11, 12, 0.8);
   display: flex;
   flex-direction: column;
   transform: translateX(420px);
@@ -212,7 +212,7 @@ html, body {
   font-size: 1.2rem;
   cursor: pointer;
 }
-.drawer-close:hover { color: #fff; }
+.drawer-close:hover { color: #FFFFFF; }
 
 /* CUSTOM LEAFLET PIN */
 .custom-pin {
@@ -225,7 +225,7 @@ html, body {
   width: 14px; height: 14px;
   border-radius: 50%;
   background: var(--neon-green);
-  border: 2px solid #03060c;
+  border: 2px solid #0B0B0C;
   box-shadow: 0 0 12px var(--neon-green);
 }
 .pin-ring {
@@ -243,13 +243,13 @@ html, body {
 
 /* MINI TERMINAL */
 .mini-term {
-  background: #020408;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: #0B0B0C;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 10px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem;
-  color: #7dd3fc;
+  color: #C6F432;
   height: 120px;
   overflow-y: auto;
   line-height: 1.5;
@@ -264,13 +264,13 @@ html, body {
   <div style="display:flex; align-items:center; gap:2rem;">
     <a href="index.html" class="logo-grp">
       <div class="logo-badge">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
       </div>
-      <span>MLOps<span style="color:#38bdf8;">.dev</span></span>
+      <span>MLOps<span style="color:#C6F432;">.dev</span></span>
     </a>
     <div class="nav-links">
       <a href="dashboard.html" class="nav-link">Control Plane</a>
-      <a href="fleet-map.html" class="nav-link active" style="color:#00ffb3;">🌐 Global Fleet Map</a>
+      <a href="fleet-map.html" class="nav-link active" style="color:#C6F432;">🌐 Global Fleet Map</a>
       <a href="playground.html" class="nav-link">Hardware Simulator</a>
       <a href="compiler.html" class="nav-link">Auto-Compiler</a>
       <a href="docs.html" class="nav-link">Docs</a>
@@ -278,7 +278,7 @@ html, body {
   </div>
   <div style="display:flex; align-items:center; gap:0.8rem;">
     <span class="pulse-indicator"><span class="pulse-dot"></span> 18 LIVE SATELLITE NODES</span>
-    <a href="dashboard.html" style="background:#2563eb; color:#fff; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.78rem; font-weight:700;">Open Dashboard →</a>
+    <a href="dashboard.html" style="background:#C6F432; color:#FFFFFF; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.78rem; font-weight:700;">Open Dashboard →</a>
   </div>
 </nav>
 
@@ -322,7 +322,7 @@ html, body {
   </div>
 
   <div style="margin-top:1rem;">
-    <button onclick="pingAllNodes()" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#fff; font-size:0.75rem; font-weight:700; padding:8px; border-radius:6px; cursor:pointer; transition:all 0.2s;">
+    <button onclick="pingAllNodes()" style="width:100%; background:rgba(255, 255, 255, 0.06); border:1px solid rgba(255, 255, 255, 0.12); color:#FFFFFF; font-size:0.75rem; font-weight:700; padding:8px; border-radius:6px; cursor:pointer; transition:all 0.2s;">
       ⚡ Send Fleet Ping Sweep
     </button>
   </div>
@@ -333,11 +333,11 @@ html, body {
   <button class="drawer-close" onclick="closeDrawer()">×</button>
   
   <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
-    <div style="width:36px; height:36px; border-radius:8px; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); display:grid; place-items:center; font-size:1.2rem;" id="drawer-icon">
+    <div style="width:36px; height:36px; border-radius:8px; background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.3); display:grid; place-items:center; font-size:1.2rem;" id="drawer-icon">
       🤖
     </div>
     <div>
-      <div style="font-size:1rem; font-weight:800; color:#fff;" id="drawer-title">Hub Name</div>
+      <div style="font-size:1rem; font-weight:800; color:#FFFFFF;" id="drawer-title">Hub Name</div>
       <div style="font-size:0.72rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;" id="drawer-loc">Location</div>
     </div>
   </div>
@@ -361,7 +361,7 @@ html, body {
     </div>
   </div>
 
-  <div style="font-size:0.75rem; font-weight:700; color:#cbd5e1; margin-bottom:4px;">Diagnostic Stream:</div>
+  <div style="font-size:0.75rem; font-weight:700; color:#FFFFFF; margin-bottom:4px;">Diagnostic Stream:</div>
   <div class="mini-term" id="drawer-logs">
     [INIT] Connected to WSS telemetry broker<br/>
     [STREAM] Ingesting 60 FPS Camera 01 optical feed<br/>
@@ -370,10 +370,10 @@ html, body {
   </div>
 
   <div style="margin-top:auto; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-    <button onclick="triggerNodeOTA()" style="background:#2563eb; border:none; color:#fff; padding:10px; border-radius:6px; font-weight:700; font-size:0.78rem; cursor:pointer;">
+    <button onclick="triggerNodeOTA()" style="background:#C6F432; border:none; color:#FFFFFF; padding:10px; border-radius:6px; font-weight:700; font-size:0.78rem; cursor:pointer;">
       🚀 Trigger OTA Update
     </button>
-    <button onclick="triggerNodeReboot()" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; padding:10px; border-radius:6px; font-weight:700; font-size:0.78rem; cursor:pointer;">
+    <button onclick="triggerNodeReboot()" style="background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.3); color:#C6F432; padding:10px; border-radius:6px; font-weight:700; font-size:0.78rem; cursor:pointer;">
       🔄 Soft Reboot Agent
     </button>
   </div>
@@ -477,9 +477,9 @@ function initMap() {
     const mapEl = document.getElementById('map');
     if (mapEl) {
       mapEl.innerHTML = `
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#94a3b8; font-family:'JetBrains Mono',monospace; text-align:center; padding:2rem;">
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#C6F432; font-family:'JetBrains Mono',monospace; text-align:center; padding:2rem;">
           <div style="font-size:2rem; margin-bottom:1rem;">🌐</div>
-          <div style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.5rem;">GLOBAL FLEET TOPOLOGY MAP</div>
+          <div style="font-size:1rem; font-weight:700; color:#FFFFFF; margin-bottom:0.5rem;">GLOBAL FLEET TOPOLOGY MAP</div>
           <div style="font-size:0.8rem; max-width:400px;">Offline telemetry active · 17 Silicon nodes reporting healthy.</div>
         </div>
       `;
@@ -508,11 +508,11 @@ function initMap() {
 
 function getMarkerColor(hub) {
   if (currentMode === 'ping') {
-    return hub.ping < 20 ? '#00ffb3' : (hub.ping < 40 ? '#38bdf8' : '#fbbf24');
+    return hub.ping < 20 ? '#C6F432' : (hub.ping < 40 ? '#C6F432' : '#C6F432');
   } else if (currentMode === 'temp') {
-    return hub.temp < 40 ? '#38bdf8' : (hub.temp < 50 ? '#fbbf24' : '#f43f5e');
+    return hub.temp < 40 ? '#C6F432' : (hub.temp < 50 ? '#C6F432' : '#C6F432');
   } else {
-    return hub.drift < 0.04 ? '#00ffb3' : (hub.drift < 0.05 ? '#fbbf24' : '#f43f5e');
+    return hub.drift < 0.04 ? '#C6F432' : (hub.drift < 0.05 ? '#C6F432' : '#C6F432');
   }
 }
 
@@ -585,13 +585,13 @@ function pingAllNodes() {
 
 function triggerNodeOTA() {
   const logsEl = document.getElementById('drawer-logs');
-  logsEl.innerHTML += `<br/><span style="color:#00ffb3;">[DEPLOY] Staged OTA Rollout initiated for ${activeHub.name}...</span>`;
+  logsEl.innerHTML += `<br/><span style="color:#C6F432;">[DEPLOY] Staged OTA Rollout initiated for ${activeHub.name}...</span>`;
   logsEl.scrollTop = logsEl.scrollHeight;
 }
 
 function triggerNodeReboot() {
   const logsEl = document.getElementById('drawer-logs');
-  logsEl.innerHTML += `<br/><span style="color:#fbbf24;">[REBOOT] Sending SIGTERM to edge agent process... ACK received.</span>`;
+  logsEl.innerHTML += `<br/><span style="color:#C6F432;">[REBOOT] Sending SIGTERM to edge agent process... ACK received.</span>`;
   logsEl.scrollTop = logsEl.scrollHeight;
 }
 

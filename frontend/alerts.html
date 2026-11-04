@@ -11,15 +11,15 @@
 
 <style>
 :root {
-  --neon-amber: #fbbf24;
-  --neon-green: #00ffb3;
-  --neon-blue: #38bdf8;
-  --bg-card: rgba(13, 19, 33, 0.75);
+  --neon-amber: #C6F432;
+  --neon-green: #C6F432;
+  --neon-blue: #C6F432;
+  --bg-card: rgba(11, 11, 12, 0.75);
 }
 
 body {
-  background: #03060c;
-  color: #f8fafc;
+  background: #0B0B0C;
+  color: #FFFFFF;
   font-family: 'Plus Jakarta Sans', sans-serif;
   min-height: 100vh;
 }
@@ -54,7 +54,7 @@ body {
   display: block;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #cbd5e1;
+  color: #FFFFFF;
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -65,15 +65,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 10px 12px;
-  color: #fff;
+  color: #FFFFFF;
   font-size: 0.85rem;
   font-family: 'JetBrains Mono', monospace;
   outline: none;
   transition: border-color 0.2s;
 }
 .input-ctrl:focus {
-  border-color: #38bdf8;
-  background: rgba(56, 189, 248, 0.05);
+  border-color: #C6F432;
+  background: rgba(198, 244, 50, 0.05);
 }
 
 .channel-tabs {
@@ -94,20 +94,20 @@ body {
   transition: all 0.2s;
 }
 .channel-btn.active {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
-  color: #fff;
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+  background: rgba(198, 244, 50, 0.2);
+  border-color: #C6F432;
+  color: #FFFFFF;
+  box-shadow: 0 0 12px rgba(198, 244, 50, 0.3);
 }
 
 .code-view {
-  background: #020408;
+  background: #0B0B0C;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 1rem;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
-  color: #7dd3fc;
+  color: #C6F432;
   height: 220px;
   overflow-y: auto;
   line-height: 1.5;
@@ -117,35 +117,35 @@ body {
 <body>
 
 <!-- TOP NAV -->
-<nav style="position:fixed; top:0; left:0; right:0; height:60px; background:rgba(3,7,18,0.85); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; z-index:1000;">
-  <a href="index.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; font-weight:800; font-size:1.05rem;">
-    <div style="width:28px; height:28px; border-radius:6px; background:#2563eb; display:grid; place-items:center;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 17 22 12"></polyline></svg>
+<nav style="position:fixed; top:0; left:0; right:0; height:60px; background:rgba(11, 11, 12, 0.85); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255, 255, 255, 0.08); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; z-index:1000;">
+  <a href="index.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:#FFFFFF; font-weight:800; font-size:1.05rem;">
+    <div style="width:28px; height:28px; border-radius:6px; background:#C6F432; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 17 22 12"></polyline></svg>
     </div>
-    <span>MLOps<span style="color:#38bdf8;">.dev</span> <span style="font-size:0.75rem; color:#fbbf24; font-weight:700; margin-left:4px;">Alert Hub &amp; Webhooks</span></span>
+    <span>MLOps<span style="color:#C6F432;">.dev</span> <span style="font-size:0.75rem; color:#C6F432; font-weight:700; margin-left:4px;">Alert Hub &amp; Webhooks</span></span>
   </a>
 
   <div style="display:flex; align-items:center; gap:1.2rem;">
-    <a href="fleet-map.html" style="color:#00ffb3; text-decoration:none; font-size:0.82rem; font-weight:700;">🌐 Fleet Map</a>
-    <a href="incidents.html" style="color:#f43f5e; text-decoration:none; font-size:0.82rem; font-weight:700;">AI Post-Mortems</a>
-    <a href="investors.html" style="color:#ff8533; text-decoration:none; font-size:0.82rem; font-weight:700;">🟧 YC Data Room</a>
-    <a href="dashboard.html" style="background:#2563eb; color:#fff; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.78rem; font-weight:700;">Open Console →</a>
+    <a href="fleet-map.html" style="color:#C6F432; text-decoration:none; font-size:0.82rem; font-weight:700;">🌐 Fleet Map</a>
+    <a href="incidents.html" style="color:#C6F432; text-decoration:none; font-size:0.82rem; font-weight:700;">AI Post-Mortems</a>
+    <a href="investors.html" style="color:#C6F432; text-decoration:none; font-size:0.82rem; font-weight:700;">🟧 YC Data Room</a>
+    <a href="dashboard.html" style="background:#C6F432; color:#FFFFFF; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.78rem; font-weight:700;">Open Console →</a>
   </div>
 </nav>
 
 <div class="alerts-wrapper">
   <div style="margin-bottom:2rem;">
-    <div style="display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--neon-amber); background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); padding:4px 10px; border-radius:6px; margin-bottom:8px;">
+    <div style="display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--neon-amber); background:rgba(198, 244, 50, 0.1); border:1px solid rgba(198, 244, 50, 0.3); padding:4px 10px; border-radius:6px; margin-bottom:8px;">
       <span>⚡ MULTI-CHANNEL EDGE DISPATCHER</span>
     </div>
-    <h1 style="font-family:'Space Grotesk',sans-serif; font-size:2.2rem; font-weight:800; color:#fff;">Live Alert &amp; Webhook Hub</h1>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-size:2.2rem; font-weight:800; color:#FFFFFF;">Live Alert &amp; Webhook Hub</h1>
     <p style="color:var(--text-muted); font-size:0.95rem;">Configure real-time notifications for covariate drift, hardware thermal throttling, and autonomous rollbacks to your team’s chat and on-call tools.</p>
   </div>
 
   <div class="alert-grid">
     <!-- CONFIGURATION -->
     <div class="card-box">
-      <div style="font-size:1.1rem; font-weight:800; color:#fff; margin-bottom:1rem;">1. Configure Alert Channel</div>
+      <div style="font-size:1.1rem; font-weight:800; color:#FFFFFF; margin-bottom:1rem;">1. Configure Alert Channel</div>
 
       <div class="channel-tabs">
         <button class="channel-btn active" onclick="setChannel('slack', this)">💬 Slack</button>
@@ -179,7 +179,7 @@ body {
         </select>
       </div>
 
-      <button onclick="dispatchLiveTest()" style="width:100%; background:#2563eb; color:#fff; border:none; padding:12px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; box-shadow:0 0 20px rgba(37,99,235,0.4); margin-top:0.5rem;">
+      <button onclick="dispatchLiveTest()" style="width:100%; background:#C6F432; color:#FFFFFF; border:none; padding:12px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; box-shadow:0 0 20px rgba(198, 244, 50, 0.4); margin-top:0.5rem;">
         🚀 Dispatch Live Test Webhook
       </button>
     </div>
@@ -187,7 +187,7 @@ body {
     <!-- PREVIEW & LIVE LOGS -->
     <div class="card-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <span style="font-size:1.1rem; font-weight:800; color:#fff;">2. Payload &amp; Delivery Telemetry</span>
+        <span style="font-size:1.1rem; font-weight:800; color:#FFFFFF;">2. Payload &amp; Delivery Telemetry</span>
         <span style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--neon-green);" id="dispatch-status">READY</span>
       </div>
 
@@ -248,13 +248,13 @@ function dispatchLiveTest() {
   const respEl = document.getElementById('dispatch-response');
 
   statusEl.textContent = 'DISPATCHING...';
-  statusEl.style.color = '#38bdf8';
+  statusEl.style.color = '#C6F432';
   respEl.innerHTML = '[DISPATCH] Encapsulating payload with HMAC-SHA256 signature...<br/>[HTTP POST] Sending payload to target webhook...';
 
   setTimeout(() => {
     statusEl.textContent = '200 OK (18ms)';
-    statusEl.style.color = '#00ffb3';
-    respEl.innerHTML += '<br/><span style="color:#00ffb3;">[ACK] HTTP 200 OK — Remote endpoint accepted event payload (Latency: 18.4ms)</span>';
+    statusEl.style.color = '#C6F432';
+    respEl.innerHTML += '<br/><span style="color:#C6F432;">[ACK] HTTP 200 OK — Remote endpoint accepted event payload (Latency: 18.4ms)</span>';
   }, 600);
 }
 

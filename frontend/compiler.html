@@ -19,8 +19,8 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background-color: var(--stitch-bg-primary, #030712);
-  color: var(--stitch-text-primary, #f8fafc);
+  background-color: var(--stitch-bg-primary, #0B0B0C);
+  color: var(--stitch-text-primary, #FFFFFF);
   font-family: var(--stitch-font-sans, 'Plus Jakarta Sans', sans-serif);
   line-height: 1.6;
   min-height: 100vh;
@@ -36,7 +36,7 @@ body {
   justify-content: space-between;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
   border-bottom: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
-  background: rgba(3, 7, 18, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
@@ -47,7 +47,7 @@ body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #fff;
+  color: #FFFFFF;
   font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
   font-weight: 700;
   font-size: 1.05rem;
@@ -64,14 +64,14 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(0, 255, 179, 0.08);
-  border: 1px solid rgba(0, 255, 179, 0.3);
+  background: rgba(198, 244, 50, 0.08);
+  border: 1px solid rgba(198, 244, 50, 0.3);
   padding: 6px 16px;
   border-radius: 999px;
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.8rem;
   font-weight: 700;
-  color: #00ffb3;
+  color: #C6F432;
   margin-bottom: 1.2rem;
 }
 .comp-title {
@@ -82,7 +82,7 @@ body {
   margin-bottom: 0.8rem;
 }
 .comp-desc {
-  color: var(--stitch-text-secondary, #94a3b8);
+  color: var(--stitch-text-secondary, #C6F432);
   font-size: 1.05rem;
   max-width: 700px;
   margin: 0 auto 2.5rem;
@@ -98,11 +98,11 @@ body {
   gap: 2.5rem;
 }
 .lab-card {
-  background: linear-gradient(135deg, rgba(8, 14, 26, 0.95), rgba(18, 24, 38, 0.95));
+  background: linear-gradient(135deg, rgba(11, 11, 12, 0.95), rgba(11, 11, 12, 0.95));
   border: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 50px rgba(11, 11, 12, 0.6);
 }
 
 .lab-header {
@@ -120,23 +120,23 @@ body {
   padding: 4px 10px;
   border-radius: 999px;
 }
-.badge-green { background: rgba(0, 255, 179, 0.1); border: 1px solid rgba(0, 255, 179, 0.3); color: #00ffb3; }
-.badge-cyan { background: rgba(91, 138, 240, 0.1); border: 1px solid rgba(91, 138, 240, 0.3); color: #7dd3fc; }
-.badge-gold { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; }
+.badge-green { background: rgba(198, 244, 50, 0.1); border: 1px solid rgba(198, 244, 50, 0.3); color: #C6F432; }
+.badge-cyan { background: rgba(198, 244, 50, 0.1); border: 1px solid rgba(198, 244, 50, 0.3); color: #C6F432; }
+.badge-gold { background: rgba(198, 244, 50, 0.1); border: 1px solid rgba(198, 244, 50, 0.3); color: #C6F432; }
 
 /* Drag Drop Zone */
 .drop-zone {
-  border: 2px dashed rgba(91, 138, 240, 0.35);
+  border: 2px dashed rgba(198, 244, 50, 0.35);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  background: rgba(3, 7, 18, 0.6);
+  background: rgba(11, 11, 12, 0.6);
   cursor: pointer;
   transition: all 0.2s;
 }
 .drop-zone:hover {
-  border-color: #00ffb3;
-  background: rgba(0, 255, 179, 0.02);
+  border-color: #C6F432;
+  background: rgba(198, 244, 50, 0.02);
 }
 
 /* Sliders */
@@ -144,7 +144,7 @@ body {
   width: 100%;
   height: 6px;
   border-radius: 3px;
-  background: #1e293b;
+  background: #0B0B0C;
   outline: none;
   -webkit-appearance: none;
   cursor: pointer;
@@ -154,8 +154,8 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #5b8af0;
-  box-shadow: 0 0 10px #5b8af0;
+  background: #C6F432;
+  box-shadow: 0 0 10px #C6F432;
 }
 </style>
 </head>
@@ -167,14 +167,14 @@ body {
 <!-- NAV -->
 <nav class="comp-nav">
   <a href="index.html" class="brand-link">
-    <div style="width:28px; height:28px; background:linear-gradient(135deg, #5B8AF0, #00FFB3); border-radius:6px; display:grid; place-items:center;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
+    <div style="width:28px; height:28px; background:linear-gradient(135deg, #C6F432, #C6F432); border-radius:6px; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
     </div>
-    <span>MLOps<span style="color:#5B8AF0;">.dev</span></span>
+    <span>MLOps<span style="color:#C6F432;">.dev</span></span>
   </a>
   <div style="display:flex; gap:12px; align-items:center;">
-    <a href="benchmarks.html" style="color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Benchmarks</a>
-    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(91,138,240,0.15); border:1px solid rgba(91,138,240,0.4); color:#7dd3fc; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
+    <a href="benchmarks.html" style="color:#C6F432; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Benchmarks</a>
+    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.4); color:#C6F432; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
       <span>Fleet Dashboard →</span>
     </a>
   </div>
@@ -197,41 +197,41 @@ body {
   <div class="wm-glow-card border-beam" style="padding:2rem;">
     <div class="lab-header">
       <div>
-        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+        <div style="font-size:1.25rem; font-weight:800; color:#FFFFFF; font-family:var(--stitch-font-display, sans-serif);">
           1. 1-Click Multi-Silicon Cloud Auto-Compiler
         </div>
-        <div style="font-size:0.82rem; color:#94a3b8;">Compile 1 PyTorch `.pt` or ONNX model to native TensorRT, Hailo-8, Edge TPU, and RKNN binaries simultaneously.</div>
+        <div style="font-size:0.82rem; color:#C6F432;">Compile 1 PyTorch `.pt` or ONNX model to native TensorRT, Hailo-8, Edge TPU, and RKNN binaries simultaneously.</div>
       </div>
       <span class="lab-badge badge-green">4 TARGETS IN PARALLEL</span>
     </div>
 
     <div class="drop-zone" onclick="triggerSimulatedCompile()">
       <div style="font-size:2.2rem; margin-bottom:0.5rem;">📦</div>
-      <div style="font-size:0.95rem; font-weight:700; color:#fff;">Drop PyTorch (.pt) or ONNX Model Here</div>
-      <div style="font-size:0.78rem; color:#94a3b8; margin-top:4px;">or click to trigger automated cloud compilation pipeline</div>
+      <div style="font-size:0.95rem; font-weight:700; color:#FFFFFF;">Drop PyTorch (.pt) or ONNX Model Here</div>
+      <div style="font-size:0.78rem; color:#C6F432; margin-top:4px;">or click to trigger automated cloud compilation pipeline</div>
     </div>
 
     <!-- Compilation Outputs Grid -->
     <div id="compile-results" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:1.5rem;">
-      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
-        <div style="font-weight:700; font-size:0.84rem; color:#fff;">NVIDIA TensorRT 10</div>
-        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#00ffb3; margin:4px 0;">yolov9_orin.engine (FP16)</div>
-        <div style="font-size:0.7rem; color:#64748b;">2.8ms · 357 FPS · 28.4 MB</div>
+      <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#FFFFFF;">NVIDIA TensorRT 10</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#C6F432; margin:4px 0;">yolov9_orin.engine (FP16)</div>
+        <div style="font-size:0.7rem; color:#C6F432;">2.8ms · 357 FPS · 28.4 MB</div>
       </div>
-      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
-        <div style="font-weight:700; font-size:0.84rem; color:#fff;">Raspberry Pi + Hailo-8L</div>
-        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#00ffb3; margin:4px 0;">yolov9_hailo.hef (INT8)</div>
-        <div style="font-size:0.7rem; color:#64748b;">6.1ms · 163 FPS · 14.1 MB</div>
+      <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#FFFFFF;">Raspberry Pi + Hailo-8L</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#C6F432; margin:4px 0;">yolov9_hailo.hef (INT8)</div>
+        <div style="font-size:0.7rem; color:#C6F432;">6.1ms · 163 FPS · 14.1 MB</div>
       </div>
-      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
-        <div style="font-weight:700; font-size:0.84rem; color:#fff;">Google Coral TPU</div>
-        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#7dd3fc; margin:4px 0;">yolov9_edgetpu.tflite</div>
-        <div style="font-size:0.7rem; color:#64748b;">9.8ms · 102 FPS · 8.6 MB</div>
+      <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#FFFFFF;">Google Coral TPU</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#C6F432; margin:4px 0;">yolov9_edgetpu.tflite</div>
+        <div style="font-size:0.7rem; color:#C6F432;">9.8ms · 102 FPS · 8.6 MB</div>
       </div>
-      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:1rem;">
-        <div style="font-weight:700; font-size:0.84rem; color:#fff;">Rockchip RK3588</div>
-        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#7dd3fc; margin:4px 0;">yolov9_rk3588.rknn</div>
-        <div style="font-size:0.7rem; color:#64748b;">8.2ms · 121 FPS · 12.0 MB</div>
+      <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:8px; padding:1rem;">
+        <div style="font-weight:700; font-size:0.84rem; color:#FFFFFF;">Rockchip RK3588</div>
+        <div style="font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#C6F432; margin:4px 0;">yolov9_rk3588.rknn</div>
+        <div style="font-size:0.7rem; color:#C6F432;">8.2ms · 121 FPS · 12.0 MB</div>
       </div>
     </div>
   </div>
@@ -240,19 +240,19 @@ body {
   <div class="lab-card">
     <div class="lab-header">
       <div>
-        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+        <div style="font-size:1.25rem; font-weight:800; color:#FFFFFF; font-family:var(--stitch-font-display, sans-serif);">
           2. Physical Optical Drift Perturbation Sandbox
         </div>
-        <div style="font-size:0.82rem; color:#94a3b8;">Inject physical environmental drift (Fog, Rain, Sensor Blur, Glare) and observe real-time KL divergence calculations.</div>
+        <div style="font-size:0.82rem; color:#C6F432;">Inject physical environmental drift (Fog, Rain, Sensor Blur, Glare) and observe real-time KL divergence calculations.</div>
       </div>
       <span class="lab-badge badge-cyan" id="drift-status-badge">STANDBY · KL: 0.042</span>
     </div>
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:center;">
       <!-- Perturbation Canvas -->
-      <div style="position:relative; width:100%; height:240px; background:#04060a; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
+      <div style="position:relative; width:100%; height:240px; background:#0B0B0C; border-radius:10px; overflow:hidden; border:1px solid rgba(255, 255, 255, 0.08);">
         <canvas id="perturb-canvas" width="500" height="240" style="width:100%; height:100%; display:block;"></canvas>
-        <div style="position:absolute; top:10px; left:12px; background:rgba(0,0,0,0.7); padding:4px 8px; border-radius:4px; font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#7dd3fc;">
+        <div style="position:absolute; top:10px; left:12px; background:rgba(11, 11, 12, 0.7); padding:4px 8px; border-radius:4px; font-family:var(--stitch-font-mono, monospace); font-size:0.72rem; color:#C6F432;">
           Optical Feed: Camera 04 (Factory Ingest)
         </div>
       </div>
@@ -262,7 +262,7 @@ body {
         <div style="margin-bottom:1.2rem;">
           <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:6px;">
             <span>Environmental Fog &amp; Glare:</span>
-            <span id="lbl-fog-val" style="color:#7dd3fc; font-family:var(--stitch-font-mono, monospace);">0%</span>
+            <span id="lbl-fog-val" style="color:#C6F432; font-family:var(--stitch-font-mono, monospace);">0%</span>
           </div>
           <input type="range" min="0" max="100" value="0" class="slider-control" id="rng-fog" oninput="updatePerturbEffect()"/>
         </div>
@@ -270,14 +270,14 @@ body {
         <div style="margin-bottom:1.2rem;">
           <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; margin-bottom:6px;">
             <span>Lens Blur / Optical Dirt:</span>
-            <span id="lbl-blur-val" style="color:#7dd3fc; font-family:var(--stitch-font-mono, monospace);">0%</span>
+            <span id="lbl-blur-val" style="color:#C6F432; font-family:var(--stitch-font-mono, monospace);">0%</span>
           </div>
           <input type="range" min="0" max="100" value="0" class="slider-control" id="rng-blur" oninput="updatePerturbEffect()"/>
         </div>
 
-        <div style="background:rgba(3,7,18,0.8); padding:10px 14px; border-radius:8px; border:1px solid var(--stitch-border-glass, rgba(255,255,255,0.08)); font-family:var(--stitch-font-mono, monospace); font-size:0.74rem;">
-          <div>• KL Divergence: <strong id="val-kl-score" style="color:#00ffb3;">0.042 (HEALTHY)</strong></div>
-          <div>• Circuit Breaker Status: <strong id="val-circuit-status" style="color:#00ffb3;">ARMED (PASSING)</strong></div>
+        <div style="background:rgba(11, 11, 12, 0.8); padding:10px 14px; border-radius:8px; border:1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08)); font-family:var(--stitch-font-mono, monospace); font-size:0.74rem;">
+          <div>• KL Divergence: <strong id="val-kl-score" style="color:#C6F432;">0.042 (HEALTHY)</strong></div>
+          <div>• Circuit Breaker Status: <strong id="val-circuit-status" style="color:#C6F432;">ARMED (PASSING)</strong></div>
         </div>
       </div>
     </div>
@@ -287,10 +287,10 @@ body {
   <div class="lab-card">
     <div class="lab-header">
       <div>
-        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+        <div style="font-size:1.25rem; font-weight:800; color:#FFFFFF; font-family:var(--stitch-font-display, sans-serif);">
           3. SLSA Level 3 Model Provenance &amp; Cryptographic SBOM
         </div>
-        <div style="font-size:0.82rem; color:#94a3b8;">Cosign cryptographic signatures, SHA-256 weight hashes, and CycloneDX Software Bill of Materials.</div>
+        <div style="font-size:0.82rem; color:#C6F432;">Cosign cryptographic signatures, SHA-256 weight hashes, and CycloneDX Software Bill of Materials.</div>
       </div>
       <span class="lab-badge badge-gold">FDA SaMD &amp; EU AI ACT COMPLIANT</span>
     </div>
@@ -322,7 +322,7 @@ body {
 }</div>
     </div>
     <div style="margin-top:1rem; display:flex; gap:0.8rem; flex-wrap:wrap;">
-      <button onclick="openCertModal()" style="background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); color:#fbbf24; padding:8px 16px; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+      <button onclick="openCertModal()" style="background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.4); color:#C6F432; padding:8px 16px; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
         📜 View Official SLSA Level-3 &amp; ISO 26262 Attestation Certificate
       </button>
     </div>
@@ -332,29 +332,29 @@ body {
   <div class="lab-card">
     <div class="lab-header">
       <div>
-        <div style="font-size:1.25rem; font-weight:800; color:#fff; font-family:var(--stitch-font-display, sans-serif);">
+        <div style="font-size:1.25rem; font-weight:800; color:#FFFFFF; font-family:var(--stitch-font-display, sans-serif);">
           4. ESG Carbon Footprint &amp; Energy Reduction Tracker
         </div>
-        <div style="font-size:0.82rem; color:#94a3b8;">Compute energy savings from running inference on 5W-15W edge NPUs vs. 400W centralized cloud GPUs.</div>
+        <div style="font-size:0.82rem; color:#C6F432;">Compute energy savings from running inference on 5W-15W edge NPUs vs. 400W centralized cloud GPUs.</div>
       </div>
       <span class="lab-badge badge-green">89.4% KWH REDUCTION</span>
     </div>
 
     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1.2rem; text-align:center;">
-      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.4rem;">
-        <div style="font-size:0.74rem; font-weight:700; color:#94a3b8; text-transform:uppercase;">Fleet Energy Saved</div>
-        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#00ffb3; margin:4px 0;">34,200 <span style="font-size:1rem;">kWh/yr</span></div>
-        <div style="font-size:0.7rem; color:#64748b;">vs. continuous cloud streaming</div>
+      <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.74rem; font-weight:700; color:#C6F432; text-transform:uppercase;">Fleet Energy Saved</div>
+        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#C6F432; margin:4px 0;">34,200 <span style="font-size:1rem;">kWh/yr</span></div>
+        <div style="font-size:0.7rem; color:#C6F432;">vs. continuous cloud streaming</div>
       </div>
-      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.4rem;">
-        <div style="font-size:0.74rem; font-weight:700; color:#94a3b8; text-transform:uppercase;">CO2 Metric Tons Offset</div>
-        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#7dd3fc; margin:4px 0;">14.8 <span style="font-size:1rem;">tCO2e</span></div>
-        <div style="font-size:0.7rem; color:#64748b;">EPA Grid Equivalent Factor</div>
+      <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.74rem; font-weight:700; color:#C6F432; text-transform:uppercase;">CO2 Metric Tons Offset</div>
+        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#C6F432; margin:4px 0;">14.8 <span style="font-size:1rem;">tCO2e</span></div>
+        <div style="font-size:0.7rem; color:#C6F432;">EPA Grid Equivalent Factor</div>
       </div>
-      <div style="background:rgba(3,7,18,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.4rem;">
-        <div style="font-size:0.74rem; font-weight:700; color:#94a3b8; text-transform:uppercase;">Electricity Cost Cut</div>
-        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#fbbf24; margin:4px 0;">$5,472 <span style="font-size:1rem;">/ yr</span></div>
-        <div style="font-size:0.7rem; color:#64748b;">$0.16/kWh industrial rate</div>
+      <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:10px; padding:1.4rem;">
+        <div style="font-size:0.74rem; font-weight:700; color:#C6F432; text-transform:uppercase;">Electricity Cost Cut</div>
+        <div style="font-family:var(--stitch-font-display, sans-serif); font-size:2.2rem; font-weight:800; color:#C6F432; margin:4px 0;">$5,472 <span style="font-size:1rem;">/ yr</span></div>
+        <div style="font-size:0.7rem; color:#C6F432;">$0.16/kWh industrial rate</div>
       </div>
     </div>
   </div>
@@ -367,7 +367,7 @@ body {
   <a href="benchmarks.html" class="manus-dock-item">Benchmarks</a>
   <a href="compiler.html" class="manus-dock-item active">Auto-Compiler</a>
   <a href="pricing.html" class="manus-dock-item">Pricing</a>
-  <a href="dashboard.html" class="manus-dock-item" style="color:#00ffb3;">Dashboard ⚡</a>
+  <a href="dashboard.html" class="manus-dock-item" style="color:#C6F432;">Dashboard ⚡</a>
 </div>
 
 <script src="canvas-ambient.js"></script>
@@ -411,20 +411,20 @@ function drawPerturbFrame(){
   ctx.clearRect(0, 0, w, h);
 
   // Background factory stream simulation
-  ctx.fillStyle = '#080e1a';
+  ctx.fillStyle = '#0B0B0C';
   ctx.fillRect(0, 0, w, h);
 
   // Grid lines
-  ctx.strokeStyle = 'rgba(91,138,240,0.15)';
+  ctx.strokeStyle = 'rgba(198, 244, 50, 0.15)';
   ctx.lineWidth = 1;
   for(let x=0; x<w; x+=30){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
   for(let y=0; y<h; y+=25){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
 
   // Target object bounding box
-  ctx.strokeStyle = '#00ffb3';
+  ctx.strokeStyle = '#C6F432';
   ctx.lineWidth = 2;
   ctx.strokeRect(w*0.3, h*0.2, w*0.4, h*0.6);
-  ctx.fillStyle = '#00ffb3';
+  ctx.fillStyle = '#C6F432';
   ctx.font = '10px "JetBrains Mono", monospace';
   ctx.fillText('TARGET_ITEM [98.2%]', w*0.3 + 6, h*0.2 - 6);
 
@@ -454,16 +454,16 @@ function updatePerturbEffect(){
 
   if (totalNoise > 0.6) {
     klEl.textContent = `${klScore} (DRIFT DETECTED)`;
-    klEl.style.color = '#ef4444';
+    klEl.style.color = '#C6F432';
     circuitEl.textContent = 'TRIPPED · AUTO-ROLLBACK ACTIVE';
-    circuitEl.style.color = '#ef4444';
+    circuitEl.style.color = '#C6F432';
     badgeEl.textContent = `ALERT · KL: ${klScore} (TRIPPED)`;
     badgeEl.className = 'lab-badge badge-gold';
   } else {
     klEl.textContent = `${klScore} (HEALTHY)`;
-    klEl.style.color = '#00ffb3';
+    klEl.style.color = '#C6F432';
     circuitEl.textContent = 'ARMED (PASSING)';
-    circuitEl.style.color = '#00ffb3';
+    circuitEl.style.color = '#C6F432';
     badgeEl.textContent = `STANDBY · KL: ${klScore}`;
     badgeEl.className = 'lab-badge badge-cyan';
   }
@@ -478,34 +478,34 @@ function closeCertModal() {
 </script>
 
 <!-- SLSA & ISO 26262 Attestation Certificate Modal -->
-<div id="cert-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(2,4,8,0.85); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:1.5rem;" onclick="if(event.target===this)closeCertModal()">
-  <div style="background:#080d18; border:1px solid rgba(234,179,8,0.4); box-shadow:0 24px 64px rgba(0,0,0,0.8), 0 0 40px rgba(234,179,8,0.1); border-radius:14px; max-width:680px; width:100%; padding:2.2rem; position:relative; color:#e2e8f0; font-family:'Inter',sans-serif;">
-    <button onclick="closeCertModal()" style="position:absolute; top:1.2rem; right:1.2rem; background:none; border:none; color:#64748b; font-size:1.4rem; cursor:pointer;">×</button>
+<div id="cert-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(11, 11, 12, 0.85); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:1.5rem;" onclick="if(event.target===this)closeCertModal()">
+  <div style="background:#0B0B0C; border:1px solid rgba(198, 244, 50, 0.4); box-shadow:0 24px 64px rgba(11, 11, 12, 0.8), 0 0 40px rgba(198, 244, 50, 0.1); border-radius:14px; max-width:680px; width:100%; padding:2.2rem; position:relative; color:#FFFFFF; font-family:'Inter',sans-serif;">
+    <button onclick="closeCertModal()" style="position:absolute; top:1.2rem; right:1.2rem; background:none; border:none; color:#C6F432; font-size:1.4rem; cursor:pointer;">×</button>
     
-    <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:1.2rem; margin-bottom:1.4rem;">
+    <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255, 255, 255, 0.08); padding-bottom:1.2rem; margin-bottom:1.4rem;">
       <div style="display:flex; align-items:center; gap:0.8rem;">
-        <div style="width:40px; height:40px; border-radius:8px; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); display:grid; place-items:center; font-size:1.3rem;">🛡️</div>
+        <div style="width:40px; height:40px; border-radius:8px; background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.4); display:grid; place-items:center; font-size:1.3rem;">🛡️</div>
         <div>
-          <div style="font-weight:800; color:#fff; font-size:1.1rem; letter-spacing:-0.02em;">OFFICIAL CRYPTOGRAPHIC ATTESTATION</div>
-          <div style="font-size:0.75rem; color:#fbbf24; font-family:'JetBrains Mono',monospace;">SLSA LEVEL 3 · ISO 26262 ASIL-D · FDA SaMD</div>
+          <div style="font-weight:800; color:#FFFFFF; font-size:1.1rem; letter-spacing:-0.02em;">OFFICIAL CRYPTOGRAPHIC ATTESTATION</div>
+          <div style="font-size:0.75rem; color:#C6F432; font-family:'JetBrains Mono',monospace;">SLSA LEVEL 3 · ISO 26262 ASIL-D · FDA SaMD</div>
         </div>
       </div>
-      <span style="background:rgba(0,255,179,0.12); border:1px solid rgba(0,255,179,0.3); color:#00ffb3; font-family:'JetBrains Mono',monospace; font-size:0.72rem; padding:4px 8px; border-radius:4px; font-weight:700;">● VERIFIED SIGNATURE</span>
+      <span style="background:rgba(198, 244, 50, 0.12); border:1px solid rgba(198, 244, 50, 0.3); color:#C6F432; font-family:'JetBrains Mono',monospace; font-size:0.72rem; padding:4px 8px; border-radius:4px; font-weight:700;">● VERIFIED SIGNATURE</span>
     </div>
 
-    <div style="background:rgba(3,7,18,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:1.2rem; margin-bottom:1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.76rem; line-height:1.7;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">Certificate ID:</span><span style="color:#e2e8f0;">CERT-MLOPS-2026-99482-SLSA3</span></div>
-      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">Model Name:</span><span style="color:#7dd3fc; font-weight:700;">defect-detector (v3.2)</span></div>
-      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">SHA-256 Digest:</span><span style="color:#00ffb3;">efg012hij345efg012hij345efg012hij...</span></div>
-      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#64748b;">Root Authority:</span><span style="color:#e2e8f0;">MLOps.dev Hardware Enclave KMS</span></div>
-      <div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Compliance Standards:</span><span style="color:#fbbf24;">EU AI Act Art. 14, ISO 13485</span></div>
+    <div style="background:rgba(11, 11, 12, 0.8); border:1px solid rgba(255, 255, 255, 0.06); border-radius:8px; padding:1.2rem; margin-bottom:1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.76rem; line-height:1.7;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#C6F432;">Certificate ID:</span><span style="color:#FFFFFF;">CERT-MLOPS-2026-99482-SLSA3</span></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#C6F432;">Model Name:</span><span style="color:#C6F432; font-weight:700;">defect-detector (v3.2)</span></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#C6F432;">SHA-256 Digest:</span><span style="color:#C6F432;">efg012hij345efg012hij345efg012hij...</span></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:#C6F432;">Root Authority:</span><span style="color:#FFFFFF;">MLOps.dev Hardware Enclave KMS</span></div>
+      <div style="display:flex; justify-content:space-between;"><span style="color:#C6F432;">Compliance Standards:</span><span style="color:#C6F432;">EU AI Act Art. 14, ISO 13485</span></div>
     </div>
 
     <div style="display:flex; gap:0.8rem; justify-content:flex-end;">
-      <button onclick="window.print()" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#cbd5e1; padding:8px 16px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;">
+      <button onclick="window.print()" style="background:rgba(255, 255, 255, 0.06); border:1px solid rgba(255, 255, 255, 0.15); color:#FFFFFF; padding:8px 16px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;">
         🖨️ Print / Save PDF
       </button>
-      <button onclick="navigator.clipboard.writeText(document.getElementById('sbom-code').textContent); showToast('✓ Attestation Downloaded / Copied!','ok'); closeCertModal();" style="background:#00ffb3; border:none; color:#030712; padding:8px 18px; border-radius:6px; font-size:0.8rem; font-weight:800; cursor:pointer;">
+      <button onclick="navigator.clipboard.writeText(document.getElementById('sbom-code').textContent); showToast('✓ Attestation Downloaded / Copied!','ok'); closeCertModal();" style="background:#C6F432; border:none; color:#0B0B0C; padding:8px 18px; border-radius:6px; font-size:0.8rem; font-weight:800; cursor:pointer;">
         📥 Export CycloneDX JSON
       </button>
     </div>

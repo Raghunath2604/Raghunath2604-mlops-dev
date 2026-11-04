@@ -28,15 +28,15 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 <meta name="twitter:card" content="summary_large_image"/>
 <meta property="og:url" content="https://www.mlops.dev/demo"/>
 <meta name="author" content="Raghunathareddy GR"/>
-<meta name="theme-color" content="#5B8AF0"/>
+<meta name="theme-color" content="#C6F432"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#0B0B0C;--bg1:#111113;--bg2:#161618;--bg3:#1C1C20;
-  --blue:#C6F432;--blue2:#4A73D4;--green:#C6F432;--red:#FF4560;--amber:#F5A623;
-  --snow:#FFFFFF;--muted:#8896B3;--dim:#4A5568;
-  --border:rgba(91,138,240,.15);--border2:rgba(91,138,240,.3);
+  --bg:#0B0B0C;--bg1:#0B0B0C;--bg2:#0B0B0C;--bg3:#0B0B0C;
+  --blue:#C6F432;--blue2:#C6F432;--green:#C6F432;--red:#C6F432;--amber:#C6F432;
+  --snow:#FFFFFF;--muted:#C6F432;--dim:#C6F432;
+  --border:rgba(198, 244, 50, .15);--border2:rgba(198, 244, 50, .3);
   --fh:'Space Grotesk',sans-serif;--fm:'IBM Plex Mono',monospace;--fb:'Inter',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -49,19 +49,19 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 .demo-nav{
   position:fixed;top:0;left:0;right:0;z-index:500;
   height:54px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 4%;background:rgba(6,8,16,.96);backdrop-filter:blur(16px);
+  padding:0 4%;background:rgba(11, 11, 12, .96);backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
 }
 .dnav-logo{display:flex;align-items:center;gap:9px;font-family:var(--fh);font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none;color:var(--snow)}
 .dnav-logo em{font-style:normal;font-family:var(--fm);color:var(--blue);font-size:.85rem}
 .dnav-right{display:flex;align-items:center;gap:.7rem}
-.dnav-pill{font-family:var(--fm);font-size:.68rem;color:var(--green);border:1px solid rgba(0,255,179,.2);background:rgba(0,255,179,.04);border-radius:4px;padding:.22rem .65rem;display:flex;align-items:center;gap:.4rem}
+.dnav-pill{font-family:var(--fm);font-size:.68rem;color:var(--green);border:1px solid rgba(198, 244, 50, .2);background:rgba(198, 244, 50, .04);border-radius:4px;padding:.22rem .65rem;display:flex;align-items:center;gap:.4rem}
 .dnav-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pls 2s infinite}
 @keyframes pls{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
 .btn-sm{padding:.35rem .85rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:var(--fh);border:none;transition:all .2s}
 .btn-sm-ghost{background:none;border:1px solid var(--border2);color:var(--snow)}
-.btn-sm-ghost:hover{background:rgba(91,138,240,.1)}
-.btn-sm-solid{background:var(--blue);color:#fff;box-shadow:0 0 14px rgba(91,138,240,.3)}
+.btn-sm-ghost:hover{background:rgba(198, 244, 50, .1)}
+.btn-sm-solid{background:var(--blue);color:#FFFFFF;box-shadow:0 0 14px rgba(198, 244, 50, .3)}
 .btn-sm-solid:hover{background:var(--blue2);transform:translateY(-1px)}
 
 /* ── HERO BAND ── */
@@ -77,8 +77,8 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 .dh-steps{display:flex;flex-direction:column;gap:.6rem}
 .dh-step{display:flex;align-items:center;gap:.7rem;font-size:.87rem;color:var(--muted)}
 .dh-step-n{width:22px;height:22px;border-radius:50%;border:1px solid var(--blue);display:grid;place-items:center;font-family:var(--fm);font-size:.62rem;color:var(--blue);flex-shrink:0;transition:all .3s}
-.dh-step-n.done{background:var(--blue);border-color:var(--blue);color:#fff}
-.dh-step-n.active{background:rgba(91,138,240,.15);box-shadow:0 0 12px rgba(91,138,240,.4)}
+.dh-step-n.done{background:var(--blue);border-color:var(--blue);color:#FFFFFF}
+.dh-step-n.active{background:rgba(198, 244, 50, .15);box-shadow:0 0 12px rgba(198, 244, 50, .4)}
 .dh-step span{transition:color .3s}
 .dh-step.active-step span{color:var(--snow);font-weight:500}
 .dh-step.done-step span{color:var(--green)}
@@ -86,7 +86,7 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 /* ── DEMO PLAYER (right side hero) ── */
 .demo-player-wrap{
   background:var(--bg2);border:1px solid var(--border);border-radius:14px;
-  overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6);
+  overflow:hidden;box-shadow:0 24px 60px rgba(11, 11, 12, .6);
 }
 .demo-player-bar{
   background:var(--bg3);border-bottom:1px solid var(--border);
@@ -97,8 +97,8 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 .dpb-status{font-family:var(--fm);font-size:.64rem;color:var(--green);display:flex;align-items:center;gap:.35rem}
 .dpb-dot2{width:4px;height:4px;background:var(--green);border-radius:50%;animation:pls 1.5s infinite}
 /* The "screen" inside the player */
-.demo-screen{min-height:360px;max-height:480px;position:relative;overflow:hidden;background:#030509;display:flex;align-items:center;justify-content:center}
-.demo-video-el{width:100%;height:100%;min-height:360px;max-height:480px;object-fit:contain;background:#030509;display:block;cursor:pointer}
+.demo-screen{min-height:360px;max-height:480px;position:relative;overflow:hidden;background:#0B0B0C;display:flex;align-items:center;justify-content:center}
+.demo-video-el{width:100%;height:100%;min-height:360px;max-height:480px;object-fit:contain;background:#0B0B0C;display:block;cursor:pointer}
 /* Controls */
 .demo-controls{padding:.7rem 1rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.8rem}
 .demo-play-btn{
@@ -107,15 +107,15 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
   transition:all .2s;flex-shrink:0;
 }
 .demo-play-btn:hover{background:var(--blue2);transform:scale(1.08)}
-.demo-play-btn svg{fill:#fff;width:10px;height:10px}
-.demo-progress-wrap{flex:1;position:relative;height:4px;background:rgba(255,255,255,.08);border-radius:2px;cursor:pointer}
+.demo-play-btn svg{fill:#FFFFFF;width:10px;height:10px}
+.demo-progress-wrap{flex:1;position:relative;height:4px;background:rgba(255, 255, 255, .08);border-radius:2px;cursor:pointer}
 .demo-progress-fill{height:100%;border-radius:2px;background:var(--blue);transition:width .1s linear}
 .demo-progress-handle{position:absolute;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;background:var(--snow);border-radius:50%;pointer-events:none;transition:left .1s linear}
 .demo-time{font-family:var(--fm);font-size:.67rem;color:var(--dim);white-space:nowrap}
 .demo-chapters{display:flex;gap:.4rem}
 .demo-chapter-btn{background:none;border:1px solid var(--border);border-radius:4px;padding:.18rem .5rem;font-family:var(--fm);font-size:.6rem;color:var(--dim);cursor:pointer;transition:all .2s}
 .demo-chapter-btn:hover{color:var(--snow);border-color:var(--border2)}
-.demo-chapter-btn.active{color:var(--blue);border-color:var(--blue);background:rgba(91,138,240,.08)}
+.demo-chapter-btn.active{color:var(--blue);border-color:var(--blue);background:rgba(198, 244, 50, .08)}
 
 /* ── INTERACTIVE DEMO SECTION ── */
 .demo-section{padding:5rem 4%;max-width:1100px;margin:0 auto}
@@ -141,11 +141,11 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 .step-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
 .step-desc h3{font-family:var(--fh);font-size:1.05rem;font-weight:600;color:var(--snow);margin-bottom:.5rem}
 .step-desc p{font-size:.87rem;color:var(--muted);line-height:1.68;font-weight:300;margin-bottom:1rem}
-.step-desc .note{font-family:var(--fm);font-size:.72rem;color:var(--blue);background:rgba(91,138,240,.07);border:1px solid var(--border);border-radius:5px;padding:.5rem .8rem;display:block}
+.step-desc .note{font-family:var(--fm);font-size:.72rem;color:var(--blue);background:rgba(198, 244, 50, .07);border:1px solid var(--border);border-radius:5px;padding:.5rem .8rem;display:block}
 
 /* Terminal emulator */
 .terminal{
-  background:#0A0D16;border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  background:#0B0B0C;border:1px solid var(--border);border-radius:8px;overflow:hidden;
   font-family:var(--fm);font-size:.78rem;
 }
 .term-bar{background:var(--bg3);padding:.5rem .85rem;display:flex;align-items:center;gap:.45rem;border-bottom:1px solid var(--border)}
@@ -166,11 +166,11 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
 /* Input row */
-.term-input-row{display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-top:1px solid var(--border);background:rgba(0,0,0,.2)}
+.term-input-row{display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-top:1px solid var(--border);background:rgba(11, 11, 12, .2)}
 .term-input-prompt{color:var(--blue);font-family:var(--fm);font-size:.78rem;flex-shrink:0}
 .term-input{background:none;border:none;outline:none;color:var(--snow);font-family:var(--fm);font-size:.78rem;flex:1}
 .term-input::placeholder{color:var(--dim)}
-.term-run-btn{background:var(--blue);border:none;border-radius:4px;color:#fff;font-family:var(--fm);font-size:.7rem;padding:.28rem .65rem;cursor:pointer;transition:all .2s;flex-shrink:0}
+.term-run-btn{background:var(--blue);border:none;border-radius:4px;color:#FFFFFF;font-family:var(--fm);font-size:.7rem;padding:.28rem .65rem;cursor:pointer;transition:all .2s;flex-shrink:0}
 .term-run-btn:hover{background:var(--blue2)}
 .term-run-btn:disabled{opacity:.5;cursor:default}
 
@@ -178,14 +178,14 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 .demo-form{display:flex;flex-direction:column;gap:.75rem}
 .demo-fg label{display:block;font-family:var(--fh);font-size:.77rem;font-weight:500;color:var(--muted);margin-bottom:.32rem;letter-spacing:.01em}
 .demo-fg input,.demo-fg select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.55rem .8rem;color:var(--snow);font-size:.86rem;outline:none;transition:border-color .2s,box-shadow .2s;font-family:var(--fb)}
-.demo-fg input:focus,.demo-fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,138,240,.12)}
+.demo-fg input:focus,.demo-fg select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(198, 244, 50, .12)}
 .demo-fg input::placeholder{color:var(--dim)}
 .demo-fg select option{background:var(--bg3)}
 
 /* Result cards */
 .result-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.2rem}
 .rc-label{font-family:var(--fm);font-size:.64rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.7rem}
-.rc-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(91,138,240,.06)}
+.rc-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(198, 244, 50, .06)}
 .rc-row:last-child{border-bottom:none}
 .rc-key{font-size:.82rem;color:var(--muted)}
 .rc-val{font-family:var(--fm);font-size:.78rem;color:var(--snow)}
@@ -194,7 +194,7 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 /* Progress bar */
 .prog-wrap{margin-top:1rem}
 .prog-label{font-size:.8rem;color:var(--muted);margin-bottom:.35rem;display:flex;justify-content:space-between}
-.prog-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.prog-bar{height:4px;background:rgba(255, 255, 255, .06);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;border-radius:2px;background:var(--blue);transition:width .4s ease}
 .prog-fill.green{background:var(--green)}
 
@@ -202,27 +202,27 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 .drift-chart{margin-top:.8rem}
 .drift-bar-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
 .drift-label{font-family:var(--fm);font-size:.67rem;color:var(--muted);width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.drift-bar-bg{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.drift-bar-bg{flex:1;height:5px;background:rgba(255, 255, 255, .06);border-radius:3px;overflow:hidden}
 .drift-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
 .drift-pct{font-family:var(--fm);font-size:.67rem;width:32px;text-align:right;flex-shrink:0}
 
 /* Alert card */
 .alert-card{
-  background:rgba(255,69,96,.06);border:1px solid rgba(255,69,96,.25);
+  background:rgba(198, 244, 50, .06);border:1px solid rgba(198, 244, 50, .25);
   border-radius:8px;padding:1rem 1.1rem;
   display:flex;align-items:flex-start;gap:.75rem;
   animation:alertPulse 2s ease-in-out infinite;
 }
-@keyframes alertPulse{0%,100%{border-color:rgba(255,69,96,.25)}50%{border-color:rgba(255,69,96,.5)}}
-.alert-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,69,96,.15);display:grid;place-items:center;flex-shrink:0}
+@keyframes alertPulse{0%,100%{border-color:rgba(198, 244, 50, .25)}50%{border-color:rgba(198, 244, 50, .5)}}
+.alert-icon{width:28px;height:28px;border-radius:50%;background:rgba(198, 244, 50, .15);display:grid;place-items:center;flex-shrink:0}
 .alert-icon svg{width:13px;height:13px;stroke:var(--red);fill:none;stroke-width:2.2;stroke-linecap:round}
 .alert-title{font-family:var(--fh);font-size:.88rem;font-weight:600;color:var(--red);margin-bottom:.2rem}
 .alert-body{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.55}
 .alert-actions{display:flex;gap:.5rem;margin-top:.65rem}
 .alert-btn{font-family:var(--fm);font-size:.68rem;padding:.28rem .65rem;border-radius:4px;cursor:pointer;border:1px solid;transition:all .2s}
-.alert-btn-rb{background:rgba(255,69,96,.12);border-color:rgba(255,69,96,.3);color:var(--red)}
-.alert-btn-rb:hover{background:rgba(255,69,96,.22)}
-.alert-btn-ig{background:rgba(255,255,255,.04);border-color:var(--border);color:var(--muted)}
+.alert-btn-rb{background:rgba(198, 244, 50, .12);border-color:rgba(198, 244, 50, .3);color:var(--red)}
+.alert-btn-rb:hover{background:rgba(198, 244, 50, .22)}
+.alert-btn-ig{background:rgba(255, 255, 255, .04);border-color:var(--border);color:var(--muted)}
 .alert-btn-ig:hover{color:var(--snow)}
 
 /* Completion state */
@@ -230,16 +230,16 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
   text-align:center;padding:2.5rem 1rem;
   animation:fadeIn .5s ease;
 }
-.completion-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,255,179,.1);border:1px solid rgba(0,255,179,.3);display:grid;place-items:center;margin:0 auto 1.2rem}
+.completion-icon{width:64px;height:64px;border-radius:50%;background:rgba(198, 244, 50, .1);border:1px solid rgba(198, 244, 50, .3);display:grid;place-items:center;margin:0 auto 1.2rem}
 .completion-icon svg{width:28px;height:28px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .completion-h{font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--snow);margin-bottom:.4rem}
 .completion-p{font-size:.9rem;color:var(--muted);font-weight:300;line-height:1.65;max-width:380px;margin:0 auto 1.6rem}
 .completion-btns{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.1rem;display:flex;align-items:center;gap:.6rem;font-size:.83rem;box-shadow:0 8px 40px rgba(0,0,0,.6);transform:translateY(130%);transition:transform .3s cubic-bezier(.22,1,.36,1);max-width:300px}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.1rem;display:flex;align-items:center;gap:.6rem;font-size:.83rem;box-shadow:0 8px 40px rgba(11, 11, 12, .6);transform:translateY(130%);transition:transform .3s cubic-bezier(.22,1,.36,1);max-width:300px}
 .toast.show{transform:translateY(0)}
-.toast.ok{border-color:rgba(0,255,179,.25)}.toast.er{border-color:rgba(255,69,96,.25)}.toast.info{border-color:rgba(91,138,240,.35)}
+.toast.ok{border-color:rgba(198, 244, 50, .25)}.toast.er{border-color:rgba(198, 244, 50, .25)}.toast.info{border-color:rgba(198, 244, 50, .35)}
 
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
@@ -274,21 +274,21 @@ body{background:var(--bg);color:var(--snow);font-family:var(--fb);line-height:1.
 
 </style>
 <style>
-:focus-visible{outline:2px solid #5B8AF0;outline-offset:3px;border-radius:3px}
+:focus-visible{outline:2px solid #C6F432;outline-offset:3px;border-radius:3px}
 body{animation:pgInD .45s ease both}
 @keyframes pgInD{from{opacity:0}to{opacity:1}}
-#scroll-prog-d{position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#5B8AF0,#00FFB3);pointer-events:none}
+#scroll-prog-d{position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#C6F432,#C6F432);pointer-events:none}
 
 /* ── COOKIE CONSENT ── */
-#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(11, 11, 12, .97);backdrop-filter:blur(20px);border-top:1px solid rgba(198, 244, 50, .15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
 #cookie-banner.show{transform:translateY(0)}
-.cb-text{font-size:.78rem;color:#5A6A8A;line-height:1.55;max-width:580px;font-weight:300}
-.cb-text a{color:#4F7FEF;text-decoration:none}.cb-text a:hover{text-decoration:underline}
+.cb-text{font-size:.78rem;color:#C6F432;line-height:1.55;max-width:580px;font-weight:300}
+.cb-text a{color:#C6F432;text-decoration:none}.cb-text a:hover{text-decoration:underline}
 .cb-actions{display:flex;gap:.6rem;flex-shrink:0;flex-wrap:wrap}
-.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
-.cb-accept:hover{background:#3D65CC}
-.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
-.cb-decline:hover{color:#CDD6F0;border-color:rgba(255,255,255,.2)}
+.cb-accept{background:#C6F432;border:none;border-radius:6px;color:#FFFFFF;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-accept:hover{background:#C6F432}
+.cb-decline{background:none;border:1px solid rgba(255, 255, 255, .1);border-radius:6px;color:#C6F432;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer;transition:all .2s}
+.cb-decline:hover{color:#C6F432;border-color:rgba(255, 255, 255, .2)}
 </style>
 <link rel="manifest" href="/manifest.json"/>
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='180' height='180' rx='40' fill='%23080C16'/%3E%3Cpolygon points='90,22 28,54 28,126 90,158 152,126 152,54' fill='none' stroke='%234F7FEF' stroke-width='8' stroke-linejoin='round'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%2300E5A0'/%3E%3Ccircle cx='90' cy='90' r='11' fill='%23080C16'/%3E%3Ccircle cx='90' cy='90' r='5.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
@@ -298,7 +298,7 @@ body{animation:pgInD .45s ease both}
 <meta name="apple-mobile-web-app-title" content="MLOps.dev"/>
   <link rel="stylesheet" href="/tokens.css" />
 </head>
-<div id="scroll-prog-d" style="position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#5B8AF0,#00FFB3);pointer-events:none;transition:width .06s linear;" aria-hidden="true"></div>
+<div id="scroll-prog-d" style="position:fixed;top:0;left:0;height:2px;width:0%;z-index:9999;background:linear-gradient(90deg,#C6F432,#C6F432);pointer-events:none;transition:width .06s linear;" aria-hidden="true"></div>
 <body>
 <div id="cookie-banner" role="dialog" aria-label="Cookie consent">
   <div class="cb-text">We use cookies to understand how people use MLOps.dev and to improve the product. See our <a href="privacy.html">Privacy Policy</a>.</div>
@@ -338,17 +338,17 @@ body{animation:pgInD .45s ease both}
   <div>
     <div class="demo-player-wrap">
       <div class="demo-player-bar">
-        <div class="dpb-dot" style="background:#FF5F57"></div>
-        <div class="dpb-dot" style="background:#FEBC2E"></div>
-        <div class="dpb-dot" style="background:#28C840"></div>
+        <div class="dpb-dot" style="background:#C6F432"></div>
+        <div class="dpb-dot" style="background:#C6F432"></div>
+        <div class="dpb-dot" style="background:#C6F432"></div>
         <span class="dpb-title">mlops.dev — product walkthrough</span>
         <div class="dpb-status" id="video-status-tag"><span class="dpb-dot2"></span>Product Demo</div>
       </div>
       <div class="demo-screen">
         <video id="demo-video" class="demo-video-el" src="demo.mp4" playsinline preload="auto" poster="og-image.png" onclick="togglePlay()"></video>
-        <div id="video-play-overlay" onclick="togglePlay()" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;transition:opacity 0.25s ease;">
-          <div style="width:68px;height:68px;border-radius:50%;background:rgba(91,138,240,0.92);box-shadow:0 0 35px rgba(91,138,240,0.6);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;cursor:pointer;">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" style="margin-left:4px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+        <div id="video-play-overlay" onclick="togglePlay()" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(11, 11, 12, 0.35);cursor:pointer;transition:opacity 0.25s ease;">
+          <div style="width:68px;height:68px;border-radius:50%;background:rgba(198, 244, 50, 0.92);box-shadow:0 0 35px rgba(198, 244, 50, 0.6);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;cursor:pointer;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="#FFFFFF" style="margin-left:4px;"><path d="M5 3l14 9-14 9V3z"/></svg>
           </div>
         </div>
       </div>
@@ -428,9 +428,9 @@ body{animation:pgInD .45s ease both}
       <div>
         <div class="terminal">
           <div class="term-bar">
-            <div class="term-dot" style="background:#FF5F57"></div>
-            <div class="term-dot" style="background:#FEBC2E"></div>
-            <div class="term-dot" style="background:#28C840"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
             <span class="term-title">mlops.dev CLI</span>
           </div>
           <div class="term-body" id="term-0">
@@ -483,9 +483,9 @@ body{animation:pgInD .45s ease both}
       <div>
         <div class="terminal">
           <div class="term-bar">
-            <div class="term-dot" style="background:#FF5F57"></div>
-            <div class="term-dot" style="background:#FEBC2E"></div>
-            <div class="term-dot" style="background:#28C840"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
             <span class="term-title">jetson-prod-01 — SSH</span>
           </div>
           <div class="term-body" id="term-1">
@@ -542,9 +542,9 @@ body{animation:pgInD .45s ease both}
       <div>
         <div class="terminal" id="dep-terminal">
           <div class="term-bar">
-            <div class="term-dot" style="background:#FF5F57"></div>
-            <div class="term-dot" style="background:#FEBC2E"></div>
-            <div class="term-dot" style="background:#28C840"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
             <span class="term-title">mlops.dev — deployment log</span>
           </div>
           <div class="term-body" id="term-2">
@@ -606,9 +606,9 @@ body{animation:pgInD .45s ease both}
         </div>
         <div class="terminal" style="margin-top:.8rem">
           <div class="term-bar">
-            <div class="term-dot" style="background:#FF5F57"></div>
-            <div class="term-dot" style="background:#FEBC2E"></div>
-            <div class="term-dot" style="background:#28C840"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
+            <div class="term-dot" style="background:#C6F432"></div>
             <span class="term-title">mlops.dev — drift monitor</span>
           </div>
           <div class="term-body" id="term-3">
@@ -659,7 +659,7 @@ body{animation:pgInD .45s ease both}
         <li><a onclick="sfNav('pricing')">Pricing</a></li>
         <li><a onclick="sfModal('Changelog','Release notes at changelog.mlops.dev','https://changelog.mlops.dev')">Changelog</a></li>
         <li><a onclick="sfModal('Roadmap','Public roadmap at roadmap.mlops.dev','roadmap.html')">Roadmap</a></li>
-        <li><a onclick="location.href='status.html'">Status</a> · <a href='changelog.html' style='color:#4F7FEF;text-decoration:none'>Changelog</a> · <a href='faq.html' style='color:#4F7FEF;text-decoration:none'>FAQ</a></li>
+        <li><a onclick="location.href='status.html'">Status</a> · <a href='changelog.html' style='color:#C6F432;text-decoration:none'>Changelog</a> · <a href='faq.html' style='color:#C6F432;text-decoration:none'>FAQ</a></li>
       </ul>
     </div>
     <div class="sf-col">
@@ -1066,7 +1066,7 @@ const DRIFT_DEVICES=[
   {name:'jetson-p-02',drift:5},{name:'snap-cam-04',drift:19},
 ];
 
-function getDriftColor(d){ return d>60?'#FF4560':d>40?'#F5A623':'#00FFB3'; }
+function getDriftColor(d){ return d>60?'#C6F432':d>40?'#C6F432':'#C6F432'; }
 
 function renderDriftChart(){
   const el=$('drift-chart');if(!el)return;
@@ -1184,25 +1184,25 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(!document.getElementById('sf-modal')){
     const ov = document.createElement('div');
     ov.id = 'sf-modal';
-    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9000;display:none;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px)';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(11, 11, 12, .82);z-index:9000;display:none;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px)';
     ov.innerHTML = `
-      <div style="background:#0F1628;border:1px solid rgba(91,138,240,.3);border-radius:12px;width:100%;max-width:440px;padding:2rem;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.7)">
-        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#5B8AF0,transparent);border-radius:12px 12px 0 0"></div>
+      <div style="background:#0B0B0C;border:1px solid rgba(198, 244, 50, .3);border-radius:12px;width:100%;max-width:440px;padding:2rem;position:relative;box-shadow:0 24px 60px rgba(11, 11, 12, .7)">
+        <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#C6F432,transparent);border-radius:12px 12px 0 0"></div>
         <button onclick="document.getElementById('sf-modal').style.display='none';document.body.style.overflow=''"
-          style="position:absolute;top:.9rem;right:.9rem;background:none;border:none;color:#4A5568;font-size:1.2rem;cursor:pointer;padding:.2rem .4rem;border-radius:4px;transition:color .2s;font-family:inherit"
-          onmouseover="this.style.color='#E8EDF8'" onmouseout="this.style.color='#4A5568'">×</button>
-        <div id="sf-modal-title" style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:#E8EDF8;margin-bottom:.45rem"></div>
-        <div id="sf-modal-body" style="font-size:.88rem;color:#8896B3;margin-bottom:1rem;font-weight:300;line-height:1.65"></div>
+          style="position:absolute;top:.9rem;right:.9rem;background:none;border:none;color:#C6F432;font-size:1.2rem;cursor:pointer;padding:.2rem .4rem;border-radius:4px;transition:color .2s;font-family:inherit"
+          onmouseover="this.style.color='#FFFFFF'" onmouseout="this.style.color='#C6F432'">×</button>
+        <div id="sf-modal-title" style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:#FFFFFF;margin-bottom:.45rem"></div>
+        <div id="sf-modal-body" style="font-size:.88rem;color:#C6F432;margin-bottom:1rem;font-weight:300;line-height:1.65"></div>
         <a id="sf-modal-url" href="#" target="_blank" rel="noopener"
-          style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:#5B8AF0;background:rgba(91,138,240,.07);border:1px solid rgba(91,138,240,.2);border-radius:5px;padding:.45rem .8rem;display:block;margin-bottom:1.1rem;word-break:break-all;text-decoration:none;transition:background .2s"
-          onmouseover="this.style.background='rgba(91,138,240,.14)'" onmouseout="this.style.background='rgba(91,138,240,.07)'"></a>
+          style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:#C6F432;background:rgba(198, 244, 50, .07);border:1px solid rgba(198, 244, 50, .2);border-radius:5px;padding:.45rem .8rem;display:block;margin-bottom:1.1rem;word-break:break-all;text-decoration:none;transition:background .2s"
+          onmouseover="this.style.background='rgba(198, 244, 50, .14)'" onmouseout="this.style.background='rgba(198, 244, 50, .07)'"></a>
         <div style="display:flex;gap:.7rem;flex-wrap:wrap">
           <button onclick="document.getElementById('sf-modal').style.display='none';document.body.style.overflow=''"
-            style="background:#5B8AF0;border:none;border-radius:6px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:600;padding:.52rem 1.1rem;cursor:pointer;transition:all .2s"
-            onmouseover="this.style.background='#4A73D4'" onmouseout="this.style.background='#5B8AF0'">Close</button>
+            style="background:#C6F432;border:none;border-radius:6px;color:#FFFFFF;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:600;padding:.52rem 1.1rem;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.background='#C6F432'" onmouseout="this.style.background='#C6F432'">Close</button>
           <button id="sf-modal-wl-btn"
-            style="background:none;border:1px solid rgba(91,138,240,.3);border-radius:6px;color:#E8EDF8;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:500;padding:.52rem 1.1rem;cursor:pointer;transition:all .2s"
-            onmouseover="this.style.background='rgba(91,138,240,.1)'" onmouseout="this.style.background='none'">Join waitlist</button>
+            style="background:none;border:1px solid rgba(198, 244, 50, .3);border-radius:6px;color:#FFFFFF;font-family:'Space Grotesk',sans-serif;font-size:.84rem;font-weight:500;padding:.52rem 1.1rem;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.background='rgba(198, 244, 50, .1)'" onmouseout="this.style.background='none'">Join waitlist</button>
         </div>
       </div>`;
     document.body.appendChild(ov);

@@ -22,7 +22,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 <meta name="description" content="Enterprise Edge MLOps Fleet Control Plane — Telemetry, Canary Deployments, and Drift Detection across heterogeneous silicon."/>
 <meta property="og:title" content="MLOps.dev — Edge Fleet Control Plane"/>
 <meta property="og:description" content="Monitor, orchestrate, and deploy AI models across 17+ edge hardware platforms."/>
-<meta name="theme-color" content="#06090e"/>
+<meta name="theme-color" content="#0B0B0C"/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -42,11 +42,11 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 
 :root {
   --bg-base: #0B0B0C;
-  --bg-surface: #101012;
-  --bg-card: #141417;
-  --bg-card-hover: #1A1A1E;
-  --bg-lift: #202026;
-  --bg-input: #101012;
+  --bg-surface: #0B0B0C;
+  --bg-card: #0B0B0C;
+  --bg-card-hover: #0B0B0C;
+  --bg-lift: #0B0B0C;
+  --bg-input: #0B0B0C;
   
   --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.04);
@@ -54,8 +54,8 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   --border-accent: rgba(198, 244, 50, 0.35);
 
   --text-main: #FFFFFF;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
+  --text-muted: #C6F432;
+  --text-dim: #C6F432;
   --text-inverse: #0B0B0C;
 
   --cobalt: #C6F432;
@@ -65,10 +65,10 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   
   --emerald: #C6F432;
   --emerald-dim: rgba(198, 244, 50, 0.12);
-  --amber: #f59e0b;
-  --amber-dim: rgba(245, 158, 11, 0.12);
-  --rose: #ef4444;
-  --rose-dim: rgba(239, 68, 68, 0.12);
+  --amber: #C6F432;
+  --amber-dim: rgba(198, 244, 50, 0.12);
+  --rose: #C6F432;
+  --rose-dim: rgba(198, 244, 50, 0.12);
 
   --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -98,7 +98,7 @@ html, body {
 
 /* ── SKELETON LOADERS ── */
 .skeleton {
-  background: linear-gradient(90deg, #0e1526 25%, #18233c 50%, #0e1526 75%);
+  background: linear-gradient(90deg, #0B0B0C 25%, #0B0B0C 50%, #0B0B0C 75%);
   background-size: 200% 100%;
   animation: sk-shimmer 1.5s infinite ease-in-out;
   border-radius: var(--radius-sm);
@@ -114,7 +114,7 @@ html, body {
 #auth-screen {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% 15%, rgba(59, 130, 246, 0.12) 0%, #05070e 80%);
+  background: radial-gradient(circle at 50% 15%, rgba(198, 244, 50, 0.12) 0%, #0B0B0C 80%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   z-index: 999;
@@ -125,7 +125,7 @@ html, body {
   overflow-y: auto;
 }
 #auth-screen .auth-card {
-  background: rgba(14, 20, 36, 0.94);
+  background: rgba(11, 11, 12, 0.94);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -133,7 +133,7 @@ html, body {
   padding: 32px 32px 28px;
   width: 100%;
   max-width: 440px;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  box-shadow: 0 25px 70px rgba(11, 11, 12, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   position: relative;
   overflow: hidden;
 }
@@ -144,7 +144,7 @@ html, body {
   left: 15%;
   right: 15%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #3b82f6 40%, #00f0ff 60%, transparent);
+  background: linear-gradient(90deg, transparent, #C6F432 40%, #C6F432 60%, transparent);
 }
 .auth-header {
   display: flex;
@@ -155,16 +155,16 @@ html, body {
 .auth-logo-box {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(0, 240, 255, 0.25));
-  border: 1px solid rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, rgba(198, 244, 50, 0.3), rgba(198, 244, 50, 0.25));
+  border: 1px solid rgba(198, 244, 50, 0.5);
   border-radius: var(--radius-sm);
   display: grid;
   place-items: center;
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 16px rgba(198, 244, 50, 0.35);
 }
-.auth-logo-box svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2.2; }
+.auth-logo-box svg { width: 20px; height: 20px; fill: none; stroke: #FFFFFF; stroke-width: 2.2; }
 .auth-title-wrap { display: flex; flex-direction: column; }
-.auth-title-text { font-size: 1.15rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+.auth-title-text { font-size: 1.15rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em; }
 .auth-subtitle-text { font-family: var(--font-mono); font-size: 0.72rem; color: var(--cobalt-bright); font-weight: 600; }
 
 /* Social OAuth Grid */
@@ -218,7 +218,7 @@ html, body {
 /* Tabs */
 .auth-tabs {
   display: flex;
-  background: rgba(6, 9, 18, 0.6);
+  background: rgba(11, 11, 12, 0.6);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 3px;
@@ -239,11 +239,11 @@ html, body {
   transition: all 0.15s;
   text-align: center;
 }
-.auth-tab:hover { color: #fff; }
+.auth-tab:hover { color: #FFFFFF; }
 .auth-tab.active {
   background: var(--bg-lift);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(11, 11, 12, 0.35);
 }
 .auth-panel { display: none; }
 .auth-panel.active { display: block; animation: fadeInAuth 0.2s ease-out; }
@@ -272,7 +272,7 @@ html, body {
 }
 .form-control:focus {
   border-color: var(--cobalt-bright);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 0 2px rgba(198, 244, 50, 0.25);
 }
 .form-control::placeholder { color: var(--text-dim); }
 
@@ -293,13 +293,13 @@ html, body {
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 8px;
-  color: #00f0ff;
+  color: #C6F432;
   transition: all 0.15s;
 }
 .overlay-otp-box:focus {
   outline: none;
-  border-color: #00f0ff;
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+  border-color: #C6F432;
+  box-shadow: 0 0 12px rgba(198, 244, 50, 0.25);
   transform: translateY(-1px);
 }
 
@@ -322,7 +322,7 @@ html, body {
   gap: 6px;
 }
 .btn-primary:hover {
-  background: #b5e424;
+  background: #C6F432;
   color: #0B0B0C;
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(198, 244, 50, 0.45);
@@ -331,8 +331,8 @@ html, body {
 
 .auth-demo-pill {
   margin-top: 14px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(0, 240, 255, 0.05));
-  border: 1px dashed rgba(59, 130, 246, 0.35);
+  background: linear-gradient(135deg, rgba(198, 244, 50, 0.08), rgba(198, 244, 50, 0.05));
+  border: 1px dashed rgba(198, 244, 50, 0.35);
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 0.78rem;
@@ -346,7 +346,7 @@ html, body {
 .auth-demo-btn {
   background: var(--cobalt);
   border: none;
-  color: #fff;
+  color: #FFFFFF;
   border-radius: 4px;
   font-size: 0.7rem;
   font-weight: 600;
@@ -355,8 +355,8 @@ html, body {
 }
 .error-msg {
   background: var(--rose-dim);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  border: 1px solid rgba(198, 244, 50, 0.3);
+  color: #C6F432;
   border-radius: var(--radius-sm);
   padding: 0.5rem 0.8rem;
   font-size: 0.8rem;
@@ -471,7 +471,7 @@ html, body {
 .sb-footer {
   border-top: 1px solid var(--border);
   padding: 0.9rem 1.1rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(11, 11, 12, 0.2);
 }
 .sb-user-card {
   display: flex;
@@ -519,7 +519,7 @@ html, body {
 }
 .btn-logout:hover {
   color: var(--rose);
-  border-color: rgba(239, 68, 68, 0.3);
+  border-color: rgba(198, 244, 50, 0.3);
   background: var(--rose-dim);
 }
 
@@ -558,7 +558,7 @@ html, body {
   align-items: center;
   gap: 6px;
   background: var(--emerald-dim);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(198, 244, 50, 0.25);
   border-radius: 999px;
   padding: 0.2rem 0.65rem;
   font-size: 0.7rem;
@@ -601,7 +601,7 @@ html, body {
 .action-btn.primary {
   background: var(--cobalt);
   border-color: var(--cobalt-bright);
-  color: #fff;
+  color: #FFFFFF;
 }
 .action-btn.primary:hover { background: var(--cobalt-hover); }
 
@@ -743,7 +743,7 @@ html, body {
   letter-spacing: 0.06em;
   color: var(--text-dim);
   border-bottom: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(11, 11, 12, 0.15);
 }
 .data-table td {
   padding: 0.75rem 1rem;
@@ -816,7 +816,7 @@ html, body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(11, 11, 12, 0.75);
   backdrop-filter: blur(8px);
   z-index: 600;
   display: none;
@@ -832,7 +832,7 @@ html, body {
   padding: 1.8rem;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 25px 60px rgba(11, 11, 12, 0.7);
   position: relative;
 }
 .modal-close {
@@ -862,12 +862,12 @@ html, body {
   align-items: center;
   gap: 8px;
   font-size: 0.84rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(11, 11, 12, 0.5);
   transform: translateY(140%);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .toast-notice.show { transform: translateY(0); }
-.toast-notice.ok { border-color: rgba(16, 185, 129, 0.3); }
+.toast-notice.ok { border-color: rgba(198, 244, 50, 0.3); }
 /* In-Dashboard Edge CLI Terminal Drawer */
 .cli-drawer {
   position: fixed;
@@ -876,12 +876,12 @@ html, body {
   width: 640px;
   max-width: calc(100vw - 3rem);
   height: 380px;
-  background: #04060a;
+  background: #0B0B0C;
   border: 1px solid var(--border);
   border-bottom: none;
   border-top-left-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
-  box-shadow: 0 -20px 50px rgba(0,0,0,0.85);
+  box-shadow: 0 -20px 50px rgba(11, 11, 12, 0.85);
   z-index: 550;
   display: flex;
   flex-direction: column;
@@ -890,7 +890,7 @@ html, body {
 }
 .cli-drawer.open { transform: translateY(0); }
 .cli-header {
-  background: #090e17;
+  background: #0B0B0C;
   padding: 0.65rem 1rem;
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -900,7 +900,7 @@ html, body {
   border-top-right-radius: var(--radius-lg);
 }
 .cli-btn {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border);
   color: var(--text-muted);
   border-radius: 4px;
@@ -911,9 +911,9 @@ html, body {
   transition: all 0.15s;
 }
 .cli-btn:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   color: var(--text-main);
-  border-color: rgba(255,255,255,0.2);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 .cli-output {
   flex: 1;
@@ -922,14 +922,14 @@ html, body {
   font-family: var(--font-mono);
   font-size: 0.74rem;
   line-height: 1.55;
-  color: #cbd5e1;
+  color: #FFFFFF;
 }
 .cli-input-bar {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.65rem 1rem;
-  background: #070b12;
+  background: #0B0B0C;
   border-top: 1px solid var(--border-subtle);
 }
 .cli-prompt {
@@ -945,7 +945,7 @@ html, body {
   outline: none;
   font-family: var(--font-mono);
   font-size: 0.76rem;
-  color: #f8fafc;
+  color: #FFFFFF;
 }
 
 /* Responsive Adjustments */
@@ -965,11 +965,11 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 6px 24px;
-  background: rgba(3, 7, 18, 0.95);
-  border-bottom: 1px solid rgba(91, 138, 240, 0.2);
+  background: rgba(11, 11, 12, 0.95);
+  border-bottom: 1px solid rgba(198, 244, 50, 0.2);
   font-family: var(--stitch-font-mono, 'JetBrains Mono', monospace);
   font-size: 0.68rem;
-  color: #94a3b8;
+  color: #C6F432;
   z-index: 100;
   flex-shrink: 0;
   backdrop-filter: blur(16px);
@@ -984,15 +984,15 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(91, 138, 240, 0.08);
-  border: 1px solid rgba(91, 138, 240, 0.28);
+  background: rgba(198, 244, 50, 0.08);
+  border: 1px solid rgba(198, 244, 50, 0.28);
   border-radius: 4px;
   padding: 3px 8px;
-  color: #7dd3fc;
+  color: #C6F432;
   font-weight: 700;
 }
 .zulu-clock {
-  color: #fff;
+  color: #FFFFFF;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.05em;
 }
@@ -1000,19 +1000,19 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(0, 255, 179, 0.06);
-  border: 1px solid rgba(0, 255, 179, 0.25);
+  background: rgba(198, 244, 50, 0.06);
+  border: 1px solid rgba(198, 244, 50, 0.25);
   border-radius: 4px;
   padding: 3px 8px;
-  color: #00ffb3;
+  color: #C6F432;
 }
 .btn-emergency-rollback {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 59, 107, 0.15);
-  border: 1px solid rgba(255, 59, 107, 0.5);
-  color: #ff3b6b;
+  background: rgba(198, 244, 50, 0.15);
+  border: 1px solid rgba(198, 244, 50, 0.5);
+  color: #C6F432;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
   font-weight: 700;
@@ -1022,8 +1022,8 @@ html, body {
   transition: all 0.15s;
 }
 .btn-emergency-rollback:hover {
-  background: rgba(255, 59, 107, 0.3);
-  box-shadow: 0 0 14px rgba(255, 59, 107, 0.4);
+  background: rgba(198, 244, 50, 0.3);
+  box-shadow: 0 0 14px rgba(198, 244, 50, 0.4);
 }
 
 /* Aerospace Tactical Radar & Airspace Grid */
@@ -1034,8 +1034,8 @@ html, body {
   margin-bottom: 1.5rem;
 }
 .radar-panel-tactical {
-  background: #050913;
-  border: 1px solid rgba(91, 138, 240, 0.24);
+  background: #0B0B0C;
+  border: 1px solid rgba(198, 244, 50, 0.24);
   border-radius: 10px;
   padding: 1.2rem;
   position: relative;
@@ -1048,8 +1048,8 @@ html, body {
   left: 0;
   width: 14px;
   height: 14px;
-  border-top: 2px solid #5b8af0;
-  border-left: 2px solid #5b8af0;
+  border-top: 2px solid #C6F432;
+  border-left: 2px solid #C6F432;
   pointer-events: none;
 }
 .radar-panel-tactical::after {
@@ -1059,8 +1059,8 @@ html, body {
   right: 0;
   width: 14px;
   height: 14px;
-  border-bottom: 2px solid #00ffb3;
-  border-right: 2px solid #00ffb3;
+  border-bottom: 2px solid #C6F432;
+  border-right: 2px solid #C6F432;
   pointer-events: none;
 }
 .radar-hud-bar {
@@ -1081,9 +1081,9 @@ html, body {
   height: 220px;
   position: relative;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(14, 25, 45, 0.7) 0%, #030712 70%);
-  border: 1px solid rgba(91, 138, 240, 0.35);
-  box-shadow: 0 0 25px rgba(91, 138, 240, 0.15), inset 0 0 25px rgba(0, 255, 179, 0.08);
+  background: radial-gradient(circle, rgba(11, 11, 12, 0.7) 0%, #0B0B0C 70%);
+  border: 1px solid rgba(198, 244, 50, 0.35);
+  box-shadow: 0 0 25px rgba(198, 244, 50, 0.15), inset 0 0 25px rgba(198, 244, 50, 0.08);
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -1108,14 +1108,14 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 4px;
 }
-.hud-val-cyan { color: #00f0ff; font-weight: 700; }
-.hud-val-mint { color: #00ffb3; font-weight: 700; }
-.hud-val-gold { color: #f59e0b; font-weight: 700; }
+.hud-val-cyan { color: #C6F432; font-weight: 700; }
+.hud-val-mint { color: #C6F432; font-weight: 700; }
+.hud-val-gold { color: #C6F432; font-weight: 700; }
 
 /* Optical Diode Queue & Canary Traffic Splitter */
 .airgap-canary-panel {
-  background: #050913;
-  border: 1px solid rgba(0, 255, 179, 0.22);
+  background: #0B0B0C;
+  border: 1px solid rgba(198, 244, 50, 0.22);
   border-radius: 10px;
   padding: 1.2rem;
   display: flex;
@@ -1142,14 +1142,14 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 6px 10px;
-  background: rgba(8, 14, 26, 0.85);
-  border: 1px solid rgba(91, 138, 240, 0.16);
+  background: rgba(11, 11, 12, 0.85);
+  border: 1px solid rgba(198, 244, 50, 0.16);
   border-radius: 4px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
 }
 .canary-splitter-box {
-  background: rgba(3, 7, 18, 0.8);
+  background: rgba(11, 11, 12, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   padding: 10px;
@@ -1157,18 +1157,18 @@ html, body {
 .canary-bar-track {
   height: 8px;
   border-radius: 4px;
-  background: #1e293b;
+  background: #0B0B0C;
   overflow: hidden;
   display: flex;
   margin: 8px 0;
 }
 .canary-base-fill {
-  background: #5b8af0;
+  background: #C6F432;
   height: 100%;
   transition: width 0.3s ease;
 }
 .canary-canary-fill {
-  background: #00ffb3;
+  background: #C6F432;
   height: 100%;
   transition: width 0.3s ease;
 }
@@ -1183,7 +1183,7 @@ html, body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(11, 11, 12, 0.72);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 150;
@@ -1206,7 +1206,7 @@ html, body {
     z-index: 160;
     transform: translateX(-100%);
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.75);
+    box-shadow: 4px 0 32px rgba(11, 11, 12, 0.75);
   }
   .sidebar.open {
     transform: translateX(0);
@@ -1311,22 +1311,22 @@ html, body {
         </div>
         <div style="display:flex; align-items:center; gap:6px;">
           <input type="file" id="vision-file-input" accept="image/*" style="display:none;" onchange="handleVisionImageUpload(this)"/>
-          <button class="action-btn" onclick="document.getElementById('vision-file-input').click()" style="font-size:0.72rem; padding:3px 8px; background:rgba(91,138,240,0.12); border-color:#5b8af0; color:#7dd3fc;">
+          <button class="action-btn" onclick="document.getElementById('vision-file-input').click()" style="font-size:0.72rem; padding:3px 8px; background:rgba(198, 244, 50, 0.12); border-color:#C6F432; color:#C6F432;">
             📷 Test Custom Image
           </button>
           <span class="td-mono" style="font-size:0.72rem; color:var(--text-dim);">Sony IMX477 · 4K GMSL2</span>
         </div>
       </div>
 
-      <div style="position:relative; width:100%; height:200px; background:#04060a; border-radius:6px; overflow:hidden; border:1px solid rgba(255,255,255,0.06);">
+      <div style="position:relative; width:100%; height:200px; background:#0B0B0C; border-radius:6px; overflow:hidden; border:1px solid rgba(255, 255, 255, 0.06);">
         <canvas id="vision-canvas" width="680" height="200" style="width:100%; height:100%; display:block;"></canvas>
-        <div id="mod-fps" style="position:absolute; top:8px; left:10px; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.1); padding:0.2rem 0.5rem; border-radius:4px; font-family:var(--font-mono); font-size:0.7rem; color:var(--emerald);">
+        <div id="mod-fps" style="position:absolute; top:8px; left:10px; background:rgba(11, 11, 12, 0.7); backdrop-filter:blur(4px); border:1px solid rgba(255, 255, 255, 0.1); padding:0.2rem 0.5rem; border-radius:4px; font-family:var(--font-mono); font-size:0.7rem; color:var(--emerald);">
           ⚡ 43.4 FPS · TensorRT FP16
         </div>
-        <div id="mod-cur-model" style="position:absolute; bottom:8px; left:10px; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.1); padding:0.2rem 0.5rem; border-radius:4px; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">
+        <div id="mod-cur-model" style="position:absolute; bottom:8px; left:10px; background:rgba(11, 11, 12, 0.7); backdrop-filter:blur(4px); border:1px solid rgba(255, 255, 255, 0.1); padding:0.2rem 0.5rem; border-radius:4px; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">
           Model: defect-detector:v2.0
         </div>
-        <div id="mod-det-label" style="position:absolute; bottom:8px; right:10px; background:rgba(239,68,68,0.25); border:1px solid var(--rose); padding:0.2rem 0.5rem; border-radius:4px; font-family:var(--font-mono); font-size:0.7rem; color:var(--rose);">
+        <div id="mod-det-label" style="position:absolute; bottom:8px; right:10px; background:rgba(198, 244, 50, 0.25); border:1px solid var(--rose); padding:0.2rem 0.5rem; border-radius:4px; font-family:var(--font-mono); font-size:0.7rem; color:var(--rose);">
           DEFECT: [94.2% Surface Scratch]
         </div>
       </div>
@@ -1340,7 +1340,7 @@ html, body {
       </div>
       <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
         <button class="action-btn" onclick="triggerInferencePulse()" id="btn-infer-pulse">⚡ Test Inference Pulse</button>
-        <button class="action-btn" style="color:var(--rose); border-color:rgba(239,68,68,0.35);" onclick="triggerEmergencyRollback()" id="btn-rollback">↺ Rollback (300ms)</button>
+        <button class="action-btn" style="color:var(--rose); border-color:rgba(198, 244, 50, 0.35);" onclick="triggerEmergencyRollback()" id="btn-rollback">↺ Rollback (300ms)</button>
         <button class="action-btn" onclick="rebootDaemon()" id="btn-reboot">↻ Restart Daemon</button>
       </div>
     </div>
@@ -1400,7 +1400,7 @@ html, body {
           </optgroup>
         </select>
       </div>
-      <div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:6px; padding:0.75rem 0.9rem; font-size:0.75rem; color:#93c5fd; margin-bottom:1rem; line-height:1.45;">
+      <div style="background:rgba(198, 244, 50, 0.08); border:1px solid rgba(198, 244, 50, 0.25); border-radius:6px; padding:0.75rem 0.9rem; font-size:0.75rem; color:#C6F432; margin-bottom:1rem; line-height:1.45;">
         ℹ️ Instant provisioning assigns the hardware to your tenant, sets up the cryptographic device token, and configures the default defect detection model with active circuit breakers.
       </div>
     </div>
@@ -1410,7 +1410,7 @@ html, body {
       <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem; line-height:1.4;">
         Run this command via SSH / terminal on your physical device (NVIDIA Jetson, Raspberry Pi, Intel NUC, or x86 server) with root privileges:
       </div>
-      <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.73rem; color:var(--cobalt-bright); word-break:break-all; line-height:1.5;">
+      <div style="position:relative; background:#0B0B0C; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.73rem; color:var(--cobalt-bright); word-break:break-all; line-height:1.5;">
         <span id="curl-cmd-text">curl -fsSL https://mlopsde.me/install.sh | sudo bash -s -- --token YOUR_API_KEY --url https://mlopsde.me/v1</span>
         <button type="button" class="action-btn" onclick="copyHwSnippet('curl-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
@@ -1425,15 +1425,15 @@ html, body {
       <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem;">
         Use the official Python Edge Client to stream heartbeats and sync models from your embedded script:
       </div>
-      <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:#94a3b8; line-height:1.5; white-space:pre-wrap;">
-<span style="color:#60a5fa;">pip</span> install mlops-dev
+      <div style="position:relative; background:#0B0B0C; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:#C6F432; line-height:1.5; white-space:pre-wrap;">
+<span style="color:#C6F432;">pip</span> install mlops-dev
 
-<span style="color:#c084fc;">from</span> mlops_dev <span style="color:#c084fc;">import</span> Client
-client = Client(api_key=<span style="color:#34d399;">"sk_live_..."</span>, base_url=<span style="color:#34d399;">"https://mlopsde.me/v1"</span>)
+<span style="color:#C6F432;">from</span> mlops_dev <span style="color:#C6F432;">import</span> Client
+client = Client(api_key=<span style="color:#C6F432;">"sk_live_..."</span>, base_url=<span style="color:#C6F432;">"https://mlopsde.me/v1"</span>)
 
-<span style="color:#64748b;"># Register device and start heartbeat</span>
-dev = client.devices.register(name=<span style="color:#34d399;">"orin-edge-01"</span>, hardware=<span style="color:#34d399;">"NVIDIA Jetson AGX Orin"</span>)
-client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], cpu_pct=<span style="color:#fbbf24;">14.2</span>, temp_c=<span style="color:#fbbf24;">42.5</span>)
+<span style="color:#C6F432;"># Register device and start heartbeat</span>
+dev = client.devices.register(name=<span style="color:#C6F432;">"orin-edge-01"</span>, hardware=<span style="color:#C6F432;">"NVIDIA Jetson AGX Orin"</span>)
+client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], cpu_pct=<span style="color:#C6F432;">14.2</span>, temp_c=<span style="color:#C6F432;">42.5</span>)
         <button type="button" class="action-btn" onclick="copyHwPythonCode()" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
     </div>
@@ -1443,7 +1443,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
       <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem;">
         Deploy as a background container with full GPU/NPU device pass-through:
       </div>
-      <div style="position:relative; background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:var(--emerald); word-break:break-all; line-height:1.5;">
+      <div style="position:relative; background:#0B0B0C; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:var(--emerald); word-break:break-all; line-height:1.5;">
         <span id="docker-cmd-text">docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="YOUR_API_KEY" -e MLOPS_API_URL="https://mlopsde.me/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest</span>
         <button type="button" class="action-btn" onclick="copyHwSnippet('docker-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
@@ -1452,7 +1452,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
     <div class="error-msg" id="ad-err"></div>
 
     <!-- Post-Registration Success Box -->
-    <div id="ad-success-box" style="display:none; margin-top:1rem; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:6px; padding:0.8rem 1rem;">
+    <div id="ad-success-box" style="display:none; margin-top:1rem; background:rgba(198, 244, 50, 0.1); border:1px solid rgba(198, 244, 50, 0.3); border-radius:6px; padding:0.8rem 1rem;">
       <div style="font-size:0.84rem; font-weight:700; color:var(--emerald); margin-bottom:0.3rem;">✓ Node Successfully Provisioned!</div>
       <div id="ad-success-details" style="font-size:0.74rem; color:var(--text-muted); line-height:1.4;">Device ID: <span id="ad-new-dev-id" class="td-mono" style="color:var(--text-main);">dev_xxx</span></div>
       <div style="display:flex; gap:0.5rem; margin-top:0.7rem;">
@@ -1502,7 +1502,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
   <div class="auth-card">
     <div class="auth-header">
       <div class="auth-logo-box">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="22" y2="17"/></svg>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="7" x2="22" y2="17"/><line x1="22" y1="7" x2="22" y2="17"/></svg>
       </div>
       <div class="auth-title-wrap">
         <span class="auth-title-text">MLOps.dev</span>
@@ -1514,10 +1514,10 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
     <div class="auth-social-grid">
       <button class="btn-social-auth" type="button" onclick="doSocialAuth('google')">
         <svg width="18" height="18" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          <path fill="#C6F432" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#C6F432" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#C6F432" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#C6F432" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
         </svg>
         <span>Google</span>
       </button>
@@ -1608,8 +1608,8 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
     </div>
 
     <!-- Master Admin Protection Notice -->
-    <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:0.75rem 1rem; margin-top:10px; text-align:left;">
-      <div style="display:flex; align-items:center; gap:6px; color:#f87171; font-weight:700; font-size:0.75rem;">
+    <div style="background:rgba(198, 244, 50, 0.08); border:1px solid rgba(198, 244, 50, 0.25); border-radius:10px; padding:0.75rem 1rem; margin-top:10px; text-align:left;">
+      <div style="display:flex; align-items:center; gap:6px; color:#C6F432; font-weight:700; font-size:0.75rem;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <span>ADMINISTRATOR AIRSPACE</span>
       </div>
@@ -1674,10 +1674,10 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         <span>Cluster Settings</span>
       </button>
-      <a href="admin.html" class="sb-item" id="nav-master-admin" style="color:var(--ruby, #ef4444); font-weight:700;">
+      <a href="admin.html" class="sb-item" id="nav-master-admin" style="color:var(--ruby, #C6F432); font-weight:700;">
         <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         <span>Master Admin Suite</span>
-        <span class="sb-badge alert" style="background:#ef4444; color:#fff; display:inline-block; margin-left:auto;">ADMIN</span>
+        <span class="sb-badge alert" style="background:#C6F432; color:#FFFFFF; display:inline-block; margin-left:auto;">ADMIN</span>
       </a>
       <button class="sb-item" onclick="nav('admin',this)" id="nav-admin" style="display:none;">
         <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -1714,15 +1714,15 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <span>🛡️ FIPS 140-3 L4 ENCLAVE</span>
           <span style="opacity:0.75; font-size:0.62rem; margin-left:4px;">SHA256:9b8f...e104</span>
         </div>
-        <div style="display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; color:#94a3b8;">
-          <span style="width:6px; height:6px; border-radius:50%; background:#00ffb3; box-shadow:0 0 6px #00ffb3;"></span>
+        <div style="display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; color:#C6F432;">
+          <span style="width:6px; height:6px; border-radius:50%; background:#C6F432; box-shadow:0 0 6px #C6F432;"></span>
           <span>4,128 / 4,130 TWINS ONLINE</span>
         </div>
       </div>
       <div class="ribbon-group">
-        <span style="color:#7dd3fc; font-weight:600;">SUB-10MS AIR-GAP DIODE</span>
-        <span style="color:#64748b;">•</span>
-        <span style="color:#86efac; font-weight:600;">0.0000% PACKET LOSS</span>
+        <span style="color:#C6F432; font-weight:600;">SUB-10MS AIR-GAP DIODE</span>
+        <span style="color:#C6F432;">•</span>
+        <span style="color:#C6F432; font-weight:600;">0.0000% PACKET LOSS</span>
         <button type="button" class="btn-emergency-rollback" onclick="triggerEmergencyRollback()" title="Guarded Instant Model Rollback Trigger">
           <span>⚠ ROLLBACK TRIGGER</span>
         </button>
@@ -1739,7 +1739,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
         <div class="cluster-pill"><div class="live-dot"></div><span>Connected · TLS 1.3</span></div>
       </div>
       <div class="topbar-right">
-        <a href="admin.html" class="action-btn" style="background:rgba(239,68,68,0.14); border-color:rgba(239,68,68,0.4); color:#fca5a5; font-weight:700; text-decoration:none;" title="Open Master Admin Control Suite">
+        <a href="admin.html" class="action-btn" style="background:rgba(198, 244, 50, 0.14); border-color:rgba(198, 244, 50, 0.4); color:#C6F432; font-weight:700; text-decoration:none;" title="Open Master Admin Control Suite">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           <span>Admin Suite</span>
         </a>
@@ -1773,10 +1773,10 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="radar-panel-tactical">
             <div class="radar-hud-bar">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#00ffb3; box-shadow:0 0 8px #00ffb3;"></span>
-                <span style="font-weight:700; color:#fff; letter-spacing:0.04em;">TACTICAL VECTOR DRIFT RADAR</span>
+                <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#C6F432; box-shadow:0 0 8px #C6F432;"></span>
+                <span style="font-weight:700; color:#FFFFFF; letter-spacing:0.04em;">TACTICAL VECTOR DRIFT RADAR</span>
               </div>
-              <span style="color:#7dd3fc;">BAND: 5.8 GHz FHSS · AZIMUTH SWEEP</span>
+              <span style="color:#C6F432;">BAND: 5.8 GHz FHSS · AZIMUTH SWEEP</span>
             </div>
             
             <div class="radar-stage-flex">
@@ -1788,23 +1788,23 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
               <!-- Real-time HUD Telemetry Data -->
               <div class="radar-live-hud-data">
                 <div class="hud-data-row">
-                  <span style="color:#64748b;">RADIAL AZIMUTH:</span>
+                  <span style="color:#C6F432;">RADIAL AZIMUTH:</span>
                   <span class="hud-val-cyan" id="hud-azimuth">314.2° NNE</span>
                 </div>
                 <div class="hud-data-row">
-                  <span style="color:#64748b;">RADAR ELEVATION:</span>
+                  <span style="color:#C6F432;">RADAR ELEVATION:</span>
                   <span class="hud-val-cyan" id="hud-elevation">+18.4° TILT</span>
                 </div>
                 <div class="hud-data-row">
-                  <span style="color:#64748b;">MEAN COSINE SIM:</span>
+                  <span style="color:#C6F432;">MEAN COSINE SIM:</span>
                   <span class="hud-val-mint" id="hud-cosine">0.9782 (GOLDEN)</span>
                 </div>
                 <div class="hud-data-row">
-                  <span style="color:#64748b;">DRIFT ANOMALY:</span>
+                  <span style="color:#C6F432;">DRIFT ANOMALY:</span>
                   <span class="hud-val-mint" id="hud-anomaly">0.012 (BOUNDED)</span>
                 </div>
                 <div class="hud-data-row">
-                  <span style="color:#64748b;">QUANT STATUS:</span>
+                  <span style="color:#C6F432;">QUANT STATUS:</span>
                   <span class="hud-val-gold" id="hud-quant">INT8 ACTIVE · 275 TOPS</span>
                 </div>
               </div>
@@ -1816,27 +1816,27 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
             <div>
               <div class="diode-header">
                 <div style="display:flex; align-items:center; gap:6px;">
-                  <span style="color:#00ffb3;">⚡</span>
-                  <span style="font-weight:700; color:#fff;">AIR-GAP OPTICAL DIODE LINK</span>
+                  <span style="color:#C6F432;">⚡</span>
+                  <span style="font-weight:700; color:#FFFFFF;">AIR-GAP OPTICAL DIODE LINK</span>
                 </div>
-                <span style="color:#00ffb3; font-size:0.65rem;">RX-ONLY LASER</span>
+                <span style="color:#C6F432; font-size:0.65rem;">RX-ONLY LASER</span>
               </div>
 
               <div class="diode-queue-stream" id="diode-stream">
                 <div class="diode-packet-item">
-                  <span style="color:#7dd3fc;">[CHUNK_001]</span>
-                  <span style="color:#f8fafc;">weights-int8.bin</span>
-                  <span style="color:#86efac; font-weight:700;">VERIFIED (SHA-256)</span>
+                  <span style="color:#C6F432;">[CHUNK_001]</span>
+                  <span style="color:#FFFFFF;">weights-int8.bin</span>
+                  <span style="color:#C6F432; font-weight:700;">VERIFIED (SHA-256)</span>
                 </div>
                 <div class="diode-packet-item">
-                  <span style="color:#7dd3fc;">[CHUNK_002]</span>
-                  <span style="color:#f8fafc;">yolov8-engine.plan</span>
-                  <span style="color:#86efac; font-weight:700;">100% INGESTED</span>
+                  <span style="color:#C6F432;">[CHUNK_002]</span>
+                  <span style="color:#FFFFFF;">yolov8-engine.plan</span>
+                  <span style="color:#C6F432; font-weight:700;">100% INGESTED</span>
                 </div>
                 <div class="diode-packet-item">
-                  <span style="color:#7dd3fc;">[CHUNK_003]</span>
-                  <span style="color:#f8fafc;">telemetry-buffer</span>
-                  <span style="color:#00ffb3; font-weight:700;">SYNCING (3.2 MB/s)</span>
+                  <span style="color:#C6F432;">[CHUNK_003]</span>
+                  <span style="color:#FFFFFF;">telemetry-buffer</span>
+                  <span style="color:#C6F432; font-weight:700;">SYNCING (3.2 MB/s)</span>
                 </div>
               </div>
             </div>
@@ -1844,8 +1844,8 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
             <!-- Canary Traffic Splitter -->
             <div class="canary-splitter-box">
               <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; font-weight:700; color:#fff;">CANARY TRAFFIC SPLITTER</span>
-                <span style="font-family:'JetBrains Mono', monospace; font-size:0.68rem; color:#f59e0b;" id="canary-circuit-status">CIRCUIT ARMED</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; font-weight:700; color:#FFFFFF;">CANARY TRAFFIC SPLITTER</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.68rem; color:#C6F432;" id="canary-circuit-status">CIRCUIT ARMED</span>
               </div>
 
               <div class="canary-bar-track">
@@ -1854,8 +1854,8 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
               </div>
 
               <div class="canary-labels-row">
-                <span style="color:#5b8af0;">Base v4.17.9: <strong id="lbl-canary-base">88%</strong></span>
-                <span style="color:#00ffb3;">Canary v4.18.2: <strong id="lbl-canary-canary">12%</strong></span>
+                <span style="color:#C6F432;">Base v4.17.9: <strong id="lbl-canary-base">88%</strong></span>
+                <span style="color:#C6F432;">Canary v4.18.2: <strong id="lbl-canary-canary">12%</strong></span>
               </div>
             </div>
           </div>
@@ -1912,17 +1912,17 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           </div>
 
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <div id="sim-status-indicator" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--emerald); background:rgba(0, 229, 153, 0.1); border:1px solid rgba(0,229,153,0.3); padding:5px 12px; border-radius:12px; display:flex; align-items:center; gap:6px;">
+            <div id="sim-status-indicator" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--emerald); background:rgba(198, 244, 50, 0.1); border:1px solid rgba(198, 244, 50, 0.3); padding:5px 12px; border-radius:12px; display:flex; align-items:center; gap:6px;">
               <span style="width:6px; height:6px; background:var(--emerald); border-radius:50%; display:inline-block; box-shadow:0 0 8px var(--emerald);"></span>
               <span id="sim-status-label">SIMULATOR READY</span>
             </div>
-            <button class="action-btn" id="btn-toggle-sim" onclick="toggleHardwareSimulation()" style="background:linear-gradient(135deg, var(--cobalt), var(--cobalt-bright)); color:#fff; border:none; padding:6px 14px; font-size:0.78rem; font-weight:700; border-radius:8px; cursor:pointer;" title="Boot and stream live telemetry from all 17 silicon platforms">
+            <button class="action-btn" id="btn-toggle-sim" onclick="toggleHardwareSimulation()" style="background:linear-gradient(135deg, var(--cobalt), var(--cobalt-bright)); color:#FFFFFF; border:none; padding:6px 14px; font-size:0.78rem; font-weight:700; border-radius:8px; cursor:pointer;" title="Boot and stream live telemetry from all 17 silicon platforms">
               ▶ Boot 17 Silicon Twins
             </button>
-            <button class="action-btn" onclick="injectSimulationDrift()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--text-main); padding:6px 12px; font-size:0.78rem; font-weight:600; border-radius:8px; cursor:pointer;" title="Inject real-time model drift into Jetson Nano">
+            <button class="action-btn" onclick="injectSimulationDrift()" style="background:rgba(255, 255, 255, 0.06); border:1px solid var(--border); color:var(--text-main); padding:6px 12px; font-size:0.78rem; font-weight:600; border-radius:8px; cursor:pointer;" title="Inject real-time model drift into Jetson Nano">
               ⚡ Inject Drift
             </button>
-            <button class="action-btn" onclick="toggleSimulationDisconnect()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--text-main); padding:6px 12px; font-size:0.78rem; font-weight:600; border-radius:8px; cursor:pointer;" title="Simulate edge node network disconnect">
+            <button class="action-btn" onclick="toggleSimulationDisconnect()" style="background:rgba(255, 255, 255, 0.06); border:1px solid var(--border); color:var(--text-main); padding:6px 12px; font-size:0.78rem; font-weight:600; border-radius:8px; cursor:pointer;" title="Simulate edge node network disconnect">
               📶 Disconnect Node
             </button>
           </div>
@@ -1937,14 +1937,14 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
                 <span class="pulse-dot"></span>
                 <h2 class="panel-title">Interactive Fleet Silicon Topology</h2>
               </div>
-              <span class="panel-tag" style="color:#00ffb3;">⚡ 14.8 MB/s · 17 DUAL-TWIN NODES</span>
+              <span class="panel-tag" style="color:#C6F432;">⚡ 14.8 MB/s · 17 DUAL-TWIN NODES</span>
             </div>
-            <div style="position:relative; height:260px; background:#030712; overflow:hidden; border-radius:0 0 var(--radius-md) var(--radius-md);">
+            <div style="position:relative; height:260px; background:#0B0B0C; overflow:hidden; border-radius:0 0 var(--radius-md) var(--radius-md);">
               <canvas id="mesh-topology-canvas" width="600" height="260" style="width:100%; height:100%; display:block;"></canvas>
-              <div style="position:absolute; bottom:8px; left:12px; display:flex; gap:12px; font-family:var(--font-mono); font-size:0.68rem; color:#94a3b8; background:rgba(3,7,18,0.85); padding:4px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.08);">
-                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#5b8af0;"></span> Gateway</span>
-                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#00ffb3;"></span> NPU Worker</span>
-                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#f59e0b;"></span> Coral TPU</span>
+              <div style="position:absolute; bottom:8px; left:12px; display:flex; gap:12px; font-family:var(--font-mono); font-size:0.68rem; color:#C6F432; background:rgba(11, 11, 12, 0.85); padding:4px 10px; border-radius:4px; border:1px solid rgba(255, 255, 255, 0.08);">
+                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#C6F432;"></span> Gateway</span>
+                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#C6F432;"></span> NPU Worker</span>
+                <span style="display:flex; align-items:center; gap:5px;"><span style="width:7px; height:7px; border-radius:50%; background:#C6F432;"></span> Coral TPU</span>
               </div>
             </div>
           </div>
@@ -1953,17 +1953,17 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel">
             <div class="panel-header">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="color:#00f0ff;">⚡</span>
+                <span style="color:#C6F432;">⚡</span>
                 <h2 class="panel-title">Real-Time Telemetry Oscilloscope</h2>
               </div>
-              <span class="panel-tag" style="color:#7dd3fc;">60 FPS · 100ms SAMPLE</span>
+              <span class="panel-tag" style="color:#C6F432;">60 FPS · 100ms SAMPLE</span>
             </div>
-            <div style="position:relative; height:260px; background:#040711; overflow:hidden; border-radius:0 0 var(--radius-md) var(--radius-md); padding:10px;">
+            <div style="position:relative; height:260px; background:#0B0B0C; overflow:hidden; border-radius:0 0 var(--radius-md) var(--radius-md); padding:10px;">
               <canvas id="telemetry-oscilloscope-canvas" width="450" height="200" style="width:100%; height:195px; display:block;"></canvas>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-family:var(--font-mono); font-size:0.68rem; padding:0 6px;">
-                <span style="color:#00f0ff; font-weight:700;">● Latency: <span id="osc-lat-val">2.8ms</span></span>
-                <span style="color:#00ffb3; font-weight:700;">● FPS: <span id="osc-fps-val">357.1</span></span>
-                <span style="color:#f59e0b; font-weight:700;">● Die Temp: <span id="osc-temp-val">52.8°C</span></span>
+                <span style="color:#C6F432; font-weight:700;">● Latency: <span id="osc-lat-val">2.8ms</span></span>
+                <span style="color:#C6F432; font-weight:700;">● FPS: <span id="osc-fps-val">357.1</span></span>
+                <span style="color:#C6F432; font-weight:700;">● Die Temp: <span id="osc-temp-val">52.8°C</span></span>
               </div>
             </div>
           </div>
@@ -2030,20 +2030,20 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel border-beam">
             <div class="panel-header">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="color:#00ffb3;">⏮️</span>
+                <span style="color:#C6F432;">⏮️</span>
                 <h2 class="panel-title">Offline Store-and-Forward Replay</h2>
               </div>
-              <span class="panel-tag" style="color:#00ffb3;">100% ZERO-LOSS REPLAY</span>
+              <span class="panel-tag" style="color:#C6F432;">100% ZERO-LOSS REPLAY</span>
             </div>
             <div class="panel-body">
               <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:8px;">
-                <span style="color:#94a3b8;">Buffered Telemetry (14m Blackout):</span>
-                <span style="color:#7dd3fc; font-weight:700;">8,412 frames synced</span>
+                <span style="color:#C6F432;">Buffered Telemetry (14m Blackout):</span>
+                <span style="color:#C6F432; font-weight:700;">8,412 frames synced</span>
               </div>
               <input type="range" min="0" max="100" value="75" class="roi-slider" style="width:100%; margin-bottom:12px;"/>
-              <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-family:var(--font-mono); color:#64748b;">
+              <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-family:var(--font-mono); color:#C6F432;">
                 <span>00:00 (Signal Drop)</span>
-                <span style="color:#00ffb3;">00:14 (Reconnected & Synced)</span>
+                <span style="color:#C6F432;">00:14 (Reconnected & Synced)</span>
                 <span>Live Telemetry</span>
               </div>
             </div>
@@ -2056,23 +2056,23 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
                 <span class="pulse-dot"></span>
                 <h2 class="panel-title">Edge Hard-Example Mining</h2>
               </div>
-              <span class="panel-tag" style="color:#f59e0b;">AMBIGUOUS SAMPLES (40-60%)</span>
+              <span class="panel-tag" style="color:#C6F432;">AMBIGUOUS SAMPLES (40-60%)</span>
             </div>
-            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
-              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                <span style="color:#f8fafc;">📷 frame_9410.jpg</span>
-                <span style="color:#f59e0b;">52.1% [Edge Blur]</span>
-                <span style="color:#00ffb3;">Buffered for Fine-Tune</span>
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#C6F432;">
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255, 255, 255, 0.05);">
+                <span style="color:#FFFFFF;">📷 frame_9410.jpg</span>
+                <span style="color:#C6F432;">52.1% [Edge Blur]</span>
+                <span style="color:#C6F432;">Buffered for Fine-Tune</span>
               </div>
-              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                <span style="color:#f8fafc;">📷 frame_9411.jpg</span>
-                <span style="color:#f59e0b;">48.8% [Glare Reflection]</span>
-                <span style="color:#00ffb3;">Buffered for Fine-Tune</span>
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255, 255, 255, 0.05);">
+                <span style="color:#FFFFFF;">📷 frame_9411.jpg</span>
+                <span style="color:#C6F432;">48.8% [Glare Reflection]</span>
+                <span style="color:#C6F432;">Buffered for Fine-Tune</span>
               </div>
               <div style="display:flex; justify-content:space-between; padding:4px 0;">
-                <span style="color:#f8fafc;">📷 frame_9412.jpg</span>
-                <span style="color:#f59e0b;">44.2% [Low Illumination]</span>
-                <span style="color:#00ffb3;">Buffered for Fine-Tune</span>
+                <span style="color:#FFFFFF;">📷 frame_9412.jpg</span>
+                <span style="color:#C6F432;">44.2% [Low Illumination]</span>
+                <span style="color:#C6F432;">Buffered for Fine-Tune</span>
               </div>
             </div>
           </div>
@@ -2084,23 +2084,23 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel">
             <div class="panel-header">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="color:#7dd3fc;">⚖️</span>
+                <span style="color:#C6F432;">⚖️</span>
                 <h2 class="panel-title">Multi-Armed Bandit A/B Allocator</h2>
               </div>
-              <span class="panel-tag" style="color:#7dd3fc;">EPSILON-GREEDY (ε=0.1)</span>
+              <span class="panel-tag" style="color:#C6F432;">EPSILON-GREEDY (ε=0.1)</span>
             </div>
             <div class="panel-body">
               <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:6px;">
-                <span style="color:#5b8af0;">Model A (YOLOv9-Standard · 80% Traffic):</span>
-                <span style="color:#5b8af0; font-weight:700;">98.4% Acc · 2.8ms</span>
+                <span style="color:#C6F432;">Model A (YOLOv9-Standard · 80% Traffic):</span>
+                <span style="color:#C6F432; font-weight:700;">98.4% Acc · 2.8ms</span>
               </div>
               <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:10px;">
-                <span style="color:#00ffb3;">Model B (YOLOv10-Nano · 20% Traffic):</span>
-                <span style="color:#00ffb3; font-weight:700;">97.8% Acc · 1.6ms</span>
+                <span style="color:#C6F432;">Model B (YOLOv10-Nano · 20% Traffic):</span>
+                <span style="color:#C6F432; font-weight:700;">97.8% Acc · 1.6ms</span>
               </div>
-              <div style="height:8px; border-radius:4px; background:#1e293b; overflow:hidden; display:flex;">
-                <div style="width:80%; background:#5b8af0;"></div>
-                <div style="width:20%; background:#00ffb3;"></div>
+              <div style="height:8px; border-radius:4px; background:#0B0B0C; overflow:hidden; display:flex;">
+                <div style="width:80%; background:#C6F432;"></div>
+                <div style="width:20%; background:#C6F432;"></div>
               </div>
             </div>
           </div>
@@ -2109,23 +2109,23 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel">
             <div class="panel-header">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="color:#f59e0b;">🌡️</span>
+                <span style="color:#C6F432;">🌡️</span>
                 <h2 class="panel-title">Thermal &amp; Battery Governor</h2>
               </div>
-              <span class="panel-tag" style="color:#00ffb3;">SAFETY ACTIVE · 52.8°C</span>
+              <span class="panel-tag" style="color:#C6F432;">SAFETY ACTIVE · 52.8°C</span>
             </div>
-            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#C6F432;">
               <div style="display:flex; justify-content:space-between;">
-                <span>• Die Temp Threshold: <strong style="color:#fff;">75.0°C (Current: 52.8°C)</strong></span>
-                <span style="color:#00ffb3;">NORMAL</span>
+                <span>• Die Temp Threshold: <strong style="color:#FFFFFF;">75.0°C (Current: 52.8°C)</strong></span>
+                <span style="color:#C6F432;">NORMAL</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span>• Battery Reserve Limit: <strong style="color:#fff;">20.0% (Current: 94.2%)</strong></span>
-                <span style="color:#00ffb3;">OPTIMAL</span>
+                <span>• Battery Reserve Limit: <strong style="color:#FFFFFF;">20.0% (Current: 94.2%)</strong></span>
+                <span style="color:#C6F432;">OPTIMAL</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span>• Throttling Policy: <strong style="color:#7dd3fc;">Auto-Switch FP16 → INT8 on Surge</strong></span>
-                <span style="color:#00ffb3;">ARMED</span>
+                <span>• Throttling Policy: <strong style="color:#C6F432;">Auto-Switch FP16 → INT8 on Surge</strong></span>
+                <span style="color:#C6F432;">ARMED</span>
               </div>
             </div>
           </div>
@@ -2137,23 +2137,23 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel">
             <div class="panel-header">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="color:#5b8af0;">🌐</span>
+                <span style="color:#C6F432;">🌐</span>
                 <h2 class="panel-title">Geofencing &amp; Airspace Zones</h2>
               </div>
-              <span class="panel-tag" style="color:#7dd3fc;">4 ACTIVE ENCLAVES</span>
+              <span class="panel-tag" style="color:#C6F432;">4 ACTIVE ENCLAVES</span>
             </div>
-            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
-              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                <span style="color:#f8fafc;">🇪🇺 EU-GDPR Enclave (Frankfurt)</span>
-                <span style="color:#00ffb3;">Local Weights Locked</span>
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#C6F432;">
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255, 255, 255, 0.05);">
+                <span style="color:#FFFFFF;">🇪🇺 EU-GDPR Enclave (Frankfurt)</span>
+                <span style="color:#C6F432;">Local Weights Locked</span>
               </div>
-              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                <span style="color:#f8fafc;">🇺🇸 US Defense Facility Enclave</span>
-                <span style="color:#00ffb3;">Air-Gap Diode Active</span>
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255, 255, 255, 0.05);">
+                <span style="color:#FFFFFF;">🇺🇸 US Defense Facility Enclave</span>
+                <span style="color:#C6F432;">Air-Gap Diode Active</span>
               </div>
               <div style="display:flex; justify-content:space-between; padding:4px 0;">
-                <span style="color:#f8fafc;">🇮🇳 APAC Smart Logistics Zone</span>
-                <span style="color:#00ffb3;">Dynamic OTA Enabled</span>
+                <span style="color:#FFFFFF;">🇮🇳 APAC Smart Logistics Zone</span>
+                <span style="color:#C6F432;">Dynamic OTA Enabled</span>
               </div>
             </div>
           </div>
@@ -2162,23 +2162,23 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel">
             <div class="panel-header">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="color:#00ffb3;">🛡️</span>
+                <span style="color:#C6F432;">🛡️</span>
                 <h2 class="panel-title">Federated Privacy Aggregator</h2>
               </div>
-              <span class="panel-tag" style="color:#00ffb3;">ε = 0.5 (DIFFERENTIAL PRIVACY)</span>
+              <span class="panel-tag" style="color:#C6F432;">ε = 0.5 (DIFFERENTIAL PRIVACY)</span>
             </div>
-            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#94a3b8;">
+            <div class="panel-body" style="font-family:var(--font-mono); font-size:0.72rem; line-height:1.6; color:#C6F432;">
               <div style="display:flex; justify-content:space-between;">
-                <span>• Global Model Version: <strong style="color:#fff;">defect-detector:v3.2-fed</strong></span>
-                <span style="color:#00ffb3;">ROUND #42</span>
+                <span>• Global Model Version: <strong style="color:#FFFFFF;">defect-detector:v3.2-fed</strong></span>
+                <span style="color:#C6F432;">ROUND #42</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span>• Gradient Aggregation: <strong style="color:#7dd3fc;">Secure Multi-Party Compute</strong></span>
-                <span style="color:#00ffb3;">ENCRYPTED</span>
+                <span>• Gradient Aggregation: <strong style="color:#C6F432;">Secure Multi-Party Compute</strong></span>
+                <span style="color:#C6F432;">ENCRYPTED</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span>• Raw Sensor Data Leaving Edge: <strong style="color:#00ffb3;">0.00 KB (ZERO LEAKAGE)</strong></span>
-                <span style="color:#00ffb3;">VERIFIED</span>
+                <span>• Raw Sensor Data Leaving Edge: <strong style="color:#C6F432;">0.00 KB (ZERO LEAKAGE)</strong></span>
+                <span style="color:#C6F432;">VERIFIED</span>
               </div>
             </div>
           </div>
@@ -2361,12 +2361,12 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
                 </select>
               </div>
               <div class="error-msg" id="dep-err"></div>
-              <div class="error-msg" id="dep-suc" style="background:var(--emerald-dim); border-color:rgba(16,185,129,0.3); color:#6ee7b7;"></div>
+              <div class="error-msg" id="dep-suc" style="background:var(--emerald-dim); border-color:rgba(198, 244, 50, 0.3); color:#C6F432;"></div>
               <button class="btn-primary" id="dep-btn" onclick="doDeploy()">Deploy to Target Silicon</button>
               
               <div style="margin-top:1rem; display:none;" id="dep-prog">
                 <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.4rem;">Broadcasting weights to edge nodes...</div>
-                <div style="height:4px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden;">
+                <div style="height:4px; background:rgba(255, 255, 255, 0.08); border-radius:2px; overflow:hidden;">
                   <div id="dep-fill" style="height:100%; width:0%; background:var(--cobalt); transition:width 0.3s;"></div>
                 </div>
               </div>
@@ -2440,7 +2440,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
               <h2 class="panel-title">Interactive Edge Circuit Breaker & Optical Drift Simulator</h2>
               <span class="panel-tag">Autonomous Self-Healing Hardware Test</span>
             </div>
-            <button class="action-btn" style="color:var(--rose); border-color:rgba(239,68,68,0.4);" onclick="triggerOpticalDriftDemo()" id="btn-drift-demo">
+            <button class="action-btn" style="color:var(--rose); border-color:rgba(198, 244, 50, 0.4);" onclick="triggerOpticalDriftDemo()" id="btn-drift-demo">
               ⚡ Simulate Optical Lens Shift & Drift Event (KL &gt; 0.50)
             </button>
           </div>
@@ -2454,7 +2454,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
                   The edge agent measures $D_{KL}(P \parallel Q)$, trips the autonomous circuit breaker threshold ($0.50$), and executes a zero-cloud fallback to baseline model in &lt;300ms.
                 </div>
               </div>
-              <div id="drift-sim-log" style="background:#04060a; border:1px solid var(--border); border-radius:6px; padding:0.9rem; font-family:var(--font-mono); font-size:0.75rem; color:#94a3b8; height:120px; overflow-y:auto; line-height:1.6;">
+              <div id="drift-sim-log" style="background:#0B0B0C; border:1px solid var(--border); border-radius:6px; padding:0.9rem; font-family:var(--font-mono); font-size:0.75rem; color:#C6F432; height:120px; overflow-y:auto; line-height:1.6;">
                 <div>[System Standby] Optical distribution normal. Continuous KL divergence sampling active.</div>
               </div>
             </div>
@@ -2509,7 +2509,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel">
             <div class="panel-header">
               <h2 class="panel-title">Incident Webhooks (Slack / PagerDuty)</h2>
-              <span class="panel-tag" style="color:#00ffb3;">LIVE DISPATCH</span>
+              <span class="panel-tag" style="color:#C6F432;">LIVE DISPATCH</span>
             </div>
             <div class="panel-body">
               <div class="form-group">
@@ -2555,7 +2555,7 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
               <button class="btn-primary" onclick="generateTeamInvite()">
                 ✉️ Generate Cryptographic Invite Token
               </button>
-              <div id="invite-token-output" style="display:none; margin-top:10px; background:#04060a; padding:10px; border-radius:6px; border:1px solid rgba(0,255,179,0.3); font-family:var(--font-mono); font-size:0.72rem; color:#00ffb3; word-break:break-all;"></div>
+              <div id="invite-token-output" style="display:none; margin-top:10px; background:#0B0B0C; padding:10px; border-radius:6px; border:1px solid rgba(198, 244, 50, 0.3); font-family:var(--font-mono); font-size:0.72rem; color:#C6F432; word-break:break-all;"></div>
             </div>
           </div>
 
@@ -2563,19 +2563,19 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
           <div class="panel border-beam">
             <div class="panel-header">
               <h2 class="panel-title">1,000-Node Fleet Stress Simulator</h2>
-              <span class="panel-tag" style="color:#7dd3fc;">CONCURRENCY TEST</span>
+              <span class="panel-tag" style="color:#C6F432;">CONCURRENCY TEST</span>
             </div>
             <div class="panel-body">
               <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.75rem; margin-bottom:8px;">
                 <span>Concurrent Virtual Nodes:</span>
-                <span id="lbl-stress-count" style="color:#00ffb3; font-weight:700;">250 Nodes (89,250 FPS)</span>
+                <span id="lbl-stress-count" style="color:#C6F432; font-weight:700;">250 Nodes (89,250 FPS)</span>
               </div>
               <input type="range" min="50" max="1000" value="250" step="50" class="roi-slider" id="rng-stress-nodes" oninput="updateStressSimulation()" style="width:100%; margin-bottom:12px;"/>
               
-              <div style="background:#04060a; padding:10px; border-radius:6px; border:1px solid var(--border); font-family:var(--font-mono); font-size:0.72rem; color:#94a3b8; line-height:1.6;">
-                <div>• Ingest Inbound Rate: <strong style="color:#7dd3fc;" id="val-stress-ingest">2,500 heartbeats/sec</strong></div>
-                <div>• Edge Network Jitter: <strong style="color:#00ffb3;">&lt;1.4ms (p99)</strong></div>
-                <div>• Zero Packet Drops: <strong style="color:#00ffb3;">100% Ingestion Integrity</strong></div>
+              <div style="background:#0B0B0C; padding:10px; border-radius:6px; border:1px solid var(--border); font-family:var(--font-mono); font-size:0.72rem; color:#C6F432; line-height:1.6;">
+                <div>• Ingest Inbound Rate: <strong style="color:#C6F432;" id="val-stress-ingest">2,500 heartbeats/sec</strong></div>
+                <div>• Edge Network Jitter: <strong style="color:#C6F432;">&lt;1.4ms (p99)</strong></div>
+                <div>• Zero Packet Drops: <strong style="color:#C6F432;">100% Ingestion Integrity</strong></div>
               </div>
 
               <button class="action-btn" onclick="showToast('⚡ Stress test active: Ingesting 2,500 samples/sec with 0 dropped frames', 'ok')" style="margin-top:10px; width:100%; text-align:center; display:block;">
@@ -2588,13 +2588,13 @@ client.devices.heartbeat(dev[<span style="color:#34d399;">"device_id"</span>], c
 
       <!-- PAGE: ADMIN RBAC -->
       <section class="page" id="page-admin">
-        <div style="background:linear-gradient(135deg, rgba(239,68,68,0.12), rgba(15,23,42,0.85)); border:1px solid rgba(239,68,68,0.35); border-radius:12px; padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <div style="background:linear-gradient(135deg, rgba(198, 244, 50, 0.12), rgba(11, 11, 12, 0.85)); border:1px solid rgba(198, 244, 50, 0.35); border-radius:12px; padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
           <div>
-            <div style="font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#ef4444; margin-bottom:4px;">Master Administrative Privileges Active</div>
-            <h3 style="font-size:1.15rem; font-weight:700; color:#fff; margin:0;">Full-System Manipulation &amp; Fleet Operations</h3>
-            <p style="font-size:0.82rem; color:#94a3b8; margin:4px 0 0 0;">Manipulate operator accounts, broadcast OTA rollouts, manage master API keys, and trigger emergency rollbacks.</p>
+            <div style="font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#C6F432; margin-bottom:4px;">Master Administrative Privileges Active</div>
+            <h3 style="font-size:1.15rem; font-weight:700; color:#FFFFFF; margin:0;">Full-System Manipulation &amp; Fleet Operations</h3>
+            <p style="font-size:0.82rem; color:#C6F432; margin:4px 0 0 0;">Manipulate operator accounts, broadcast OTA rollouts, manage master API keys, and trigger emergency rollbacks.</p>
           </div>
-          <a href="admin.html" style="padding:0.75rem 1.25rem; background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; font-weight:700; font-size:0.85rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(239,68,68,0.3);">
+          <a href="admin.html" style="padding:0.75rem 1.25rem; background:linear-gradient(135deg, #C6F432, #C6F432); color:#FFFFFF; font-weight:700; font-size:0.85rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(198, 244, 50, 0.3);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             Launch Standalone Admin Panel →
           </a>
@@ -2956,8 +2956,8 @@ async function doRegister() {
     if (!res.ok) throw new Error(data.error || 'Registration failed');
     
     errBox.textContent = 'Success! Access request submitted. An admin will approve shortly.';
-    errBox.style.color = '#34d399';
-    errBox.style.background = 'rgba(16,185,129,0.1)';
+    errBox.style.color = '#C6F432';
+    errBox.style.background = 'rgba(198, 244, 50, 0.1)';
     errBox.classList.add('show');
   } catch(e) {
     errBox.textContent = e.message || 'Error submitting access request.';
@@ -3038,14 +3038,14 @@ function updateSimulatorUI(running, nodeCount) {
   if (!lbl || !btn) return;
   if (running) {
     lbl.textContent = `17 TWINS STREAMING`;
-    lbl.parentElement.style.borderColor = 'rgba(0, 240, 255, 0.4)';
+    lbl.parentElement.style.borderColor = 'rgba(198, 244, 50, 0.4)';
     lbl.parentElement.style.color = 'var(--cobalt-bright)';
     btn.textContent = '⏹ Stop Simulation';
-    btn.style.background = 'rgba(255, 59, 105, 0.25)';
+    btn.style.background = 'rgba(198, 244, 50, 0.25)';
     btn.style.borderColor = 'var(--ruby)';
   } else {
     lbl.textContent = nodeCount > 0 ? `${nodeCount} TWINS READY` : `SIMULATOR READY`;
-    lbl.parentElement.style.borderColor = 'rgba(0, 229, 153, 0.3)';
+    lbl.parentElement.style.borderColor = 'rgba(198, 244, 50, 0.3)';
     lbl.parentElement.style.color = 'var(--emerald)';
     btn.textContent = '▶ Boot 17 Silicon Twins';
     btn.style.background = 'linear-gradient(135deg, var(--cobalt), var(--cobalt-bright))';
@@ -3289,7 +3289,7 @@ function renderDrift() {
     return `
       <div style="display:flex; align-items:center; gap:1rem; padding:0.75rem 0; border-bottom:1px solid var(--border-subtle);">
         <div style="min-width:180px; font-weight:600; font-size:0.82rem; color:var(--text-main);">${escapeHTML(d.name)}</div>
-        <div style="flex:1; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden;">
+        <div style="flex:1; height:6px; background:rgba(255, 255, 255, 0.08); border-radius:3px; overflow:hidden;">
           <div class="drift-fill ${cls}" style="width:${pct}%;"></div>
         </div>
         <div class="td-mono" style="font-size:0.78rem; min-width:40px; text-align:right;">${(d.drift_score||0).toFixed(3)}</div>
@@ -3507,11 +3507,11 @@ function startVisionLoop(devName, hwClass) {
 
   function renderFrame() {
     // Dark industrial PCB background simulation
-    ctx.fillStyle = '#06090f';
+    ctx.fillStyle = '#0B0B0C';
     ctx.fillRect(0, 0, w, h);
 
     // Subtle grid lines
-    ctx.strokeStyle = 'rgba(37, 99, 235, 0.12)';
+    ctx.strokeStyle = 'rgba(198, 244, 50, 0.12)';
     ctx.lineWidth = 1;
     for (let x = 0; x < w; x += 30) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
@@ -3521,31 +3521,31 @@ function startVisionLoop(devName, hwClass) {
     }
 
     // Draw simulated PCB microchip component
-    ctx.fillStyle = '#0f172a';
+    ctx.fillStyle = '#0B0B0C';
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
     ctx.fillRect(80, 40, 160, 110);
     ctx.strokeRect(80, 40, 160, 110);
 
     // Component text
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = '#C6F432';
     ctx.font = '10px monospace';
     ctx.fillText('MCU-ARM64', 125, 100);
 
     // Defect Bounding Box 1 (Surface Scratch)
-    ctx.strokeStyle = '#ef4444';
+    ctx.strokeStyle = '#C6F432';
     ctx.lineWidth = 2;
     ctx.setLineDash([4, 2]);
     ctx.strokeRect(100, 55, 70, 45);
     ctx.setLineDash([]);
-    ctx.fillStyle = '#ef4444';
+    ctx.fillStyle = '#C6F432';
     ctx.font = 'bold 9px monospace';
     ctx.fillText('94.2% DEFECT', 100, 50);
 
     // Bounding Box 2 (Capacitor Check - PASS)
-    ctx.strokeStyle = '#10b981';
+    ctx.strokeStyle = '#C6F432';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(340, 50, 110, 80);
-    ctx.fillStyle = '#10b981';
+    ctx.fillStyle = '#C6F432';
     ctx.font = 'bold 9px monospace';
     ctx.fillText('PASS: 99.1%', 340, 45);
 
@@ -3554,13 +3554,13 @@ function startVisionLoop(devName, hwClass) {
     if (scanLineY > h - 10 || scanLineY < 10) scanDir *= -1;
 
     const grad = ctx.createLinearGradient(0, scanLineY - 15, 0, scanLineY + 15);
-    grad.addColorStop(0, 'rgba(59, 130, 246, 0)');
-    grad.addColorStop(0.5, 'rgba(59, 130, 246, 0.65)');
-    grad.addColorStop(1, 'rgba(59, 130, 246, 0)');
+    grad.addColorStop(0, 'rgba(198, 244, 50, 0)');
+    grad.addColorStop(0.5, 'rgba(198, 244, 50, 0.65)');
+    grad.addColorStop(1, 'rgba(198, 244, 50, 0)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, scanLineY - 15, w, 30);
 
-    ctx.strokeStyle = '#38bdf8';
+    ctx.strokeStyle = '#C6F432';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(0, scanLineY);
@@ -3681,7 +3681,7 @@ async function triggerOpticalDriftDemo() {
     refreshAll();
 
     setTimeout(async () => {
-      log.innerHTML += `<div style="color:#38bdf8;">[${t()}] AUTONOMOUS SELF-HEALING: Initiating fallback to v1.0-baseline...</div>`;
+      log.innerHTML += `<div style="color:#C6F432;">[${t()}] AUTONOMOUS SELF-HEALING: Initiating fallback to v1.0-baseline...</div>`;
       await apiFetch('/devices/hw-jetson-agx-orin-01/rollback', {method: 'POST'});
       log.innerHTML += `<div style="color:var(--emerald);">[${t()}] RECOVERED: Fallback completed in 294ms. KL divergence restored to 0.042 (PASS)</div>`;
       showToast('✓ Autonomous Circuit Breaker: Reverted model in 294ms', 'ok');
@@ -3753,49 +3753,49 @@ function execCliCommand(rawCmd) {
   } else if (lower === 'help') {
     out.innerHTML += `
       <div style="color:var(--text-muted); margin:0.3rem 0;">Available Commands:</div>
-      <div style="color:#94a3b8; padding-left:0.8rem;">
-        <div><strong style="color:#fff;">mlops status</strong> - Display cluster health, active nodes, and TLS state</div>
-        <div><strong style="color:#fff;">mlops devices list</strong> - Print tabular overview of all 17 silicon nodes</div>
-        <div><strong style="color:#fff;">mlops drift</strong> - Display live KL divergence distribution scores</div>
-        <div><strong style="color:#fff;">mlops models</strong> - List compiled model formats in registry</div>
-        <div><strong style="color:#fff;">mlops deploy &lt;name&gt;:&lt;tag&gt;</strong> - Broadcast canary weights to nodes</div>
-        <div><strong style="color:#fff;">clear</strong> - Clear console window</div>
+      <div style="color:#C6F432; padding-left:0.8rem;">
+        <div><strong style="color:#FFFFFF;">mlops status</strong> - Display cluster health, active nodes, and TLS state</div>
+        <div><strong style="color:#FFFFFF;">mlops devices list</strong> - Print tabular overview of all 17 silicon nodes</div>
+        <div><strong style="color:#FFFFFF;">mlops drift</strong> - Display live KL divergence distribution scores</div>
+        <div><strong style="color:#FFFFFF;">mlops models</strong> - List compiled model formats in registry</div>
+        <div><strong style="color:#FFFFFF;">mlops deploy &lt;name&gt;:&lt;tag&gt;</strong> - Broadcast canary weights to nodes</div>
+        <div><strong style="color:#FFFFFF;">clear</strong> - Clear console window</div>
       </div>
     `;
   } else if (lower === 'mlops status' || lower === 'status') {
     const online = ST.devices.filter(d => d.status === 'online').length;
     out.innerHTML += `
       <div style="color:var(--emerald);">[OK] Cluster Status: HEALTHY</div>
-      <div style="color:#94a3b8;">Control Plane: https://www.mlopsde.me/v1 (TLS 1.3 Active)</div>
-      <div style="color:#94a3b8;">Total Fleet Nodes: ${ST.devices.length} (${online} Online, ${ST.devices.length - online} Offline/Updating)</div>
-      <div style="color:#94a3b8;">Silicon Architectures: 17 Platforms Verified</div>
-      <div style="color:#94a3b8;">Delta Weight Compression: bsdiff4 Active (88.4% bandwidth reduction)</div>
+      <div style="color:#C6F432;">Control Plane: https://www.mlopsde.me/v1 (TLS 1.3 Active)</div>
+      <div style="color:#C6F432;">Total Fleet Nodes: ${ST.devices.length} (${online} Online, ${ST.devices.length - online} Offline/Updating)</div>
+      <div style="color:#C6F432;">Silicon Architectures: 17 Platforms Verified</div>
+      <div style="color:#C6F432;">Delta Weight Compression: bsdiff4 Active (88.4% bandwidth reduction)</div>
     `;
   } else if (lower.startsWith('mlops devices') || lower === 'devices') {
     let lines = ST.devices.slice(0, 10).map(d => 
       `${d.id.padEnd(24)} ${(d.hw_class||'x86_64').slice(0, 22).padEnd(24)} ${d.status.padEnd(10)} ${(d.model_tag||'v1.0').padEnd(12)} KL:${(d.drift_score||0).toFixed(3)}`
     ).join('\n');
-    out.innerHTML += `<pre style="color:#94a3b8; font-size:0.7rem; margin:0.4rem 0;">${lines}</pre>`;
+    out.innerHTML += `<pre style="color:#C6F432; font-size:0.7rem; margin:0.4rem 0;">${lines}</pre>`;
   } else if (lower === 'mlops drift' || lower === 'drift') {
     out.innerHTML += `<div style="color:var(--text-muted);">Real-Time KL Divergence Telemetry:</div>`;
     ST.devices.slice(0, 6).forEach(d => {
       const score = (d.drift_score || 0).toFixed(3);
       const color = d.drift_score > 0.4 ? 'var(--rose)' : 'var(--emerald)';
-      out.innerHTML += `<div style="color:#94a3b8;">${d.name}: <span style="color:${color}; font-weight:700;">KL = ${score}</span></div>`;
+      out.innerHTML += `<div style="color:#C6F432;">${d.name}: <span style="color:${color}; font-weight:700;">KL = ${score}</span></div>`;
     });
   } else if (lower === 'mlops models' || lower === 'models') {
     out.innerHTML += `
-      <div style="color:#94a3b8;">Compiled Silicon Formats in Registry:</div>
-      <div style="color:#38bdf8;">• defect-detector:v2.0-orin-agx-trt (TensorRT 10 Engine) - 24.2 MB</div>
-      <div style="color:#38bdf8;">• defect-detector:v1.4-hailo8l-hef (Hailo HEF INT8) - 4.1 MB</div>
-      <div style="color:#38bdf8;">• defect-detector:v1.2-coral-edgetpu (TFLite INT8) - 3.8 MB</div>
-      <div style="color:#38bdf8;">• defect-detector:v1.0-baseline (Multi-Architecture Baseline) - 6.2 MB</div>
+      <div style="color:#C6F432;">Compiled Silicon Formats in Registry:</div>
+      <div style="color:#C6F432;">• defect-detector:v2.0-orin-agx-trt (TensorRT 10 Engine) - 24.2 MB</div>
+      <div style="color:#C6F432;">• defect-detector:v1.4-hailo8l-hef (Hailo HEF INT8) - 4.1 MB</div>
+      <div style="color:#C6F432;">• defect-detector:v1.2-coral-edgetpu (TFLite INT8) - 3.8 MB</div>
+      <div style="color:#C6F432;">• defect-detector:v1.0-baseline (Multi-Architecture Baseline) - 6.2 MB</div>
     `;
   } else if (lower.startsWith('mlops deploy')) {
     out.innerHTML += `<div style="color:var(--emerald);">[OK] Deployment initiated. Broadcasting compiled delta binary to fleet.</div>`;
     refreshAll();
   } else {
-    out.innerHTML += `<div style="color:var(--rose);">Unknown command: "${escapeHTML(cmd)}". Type <strong style="color:#fff;">help</strong> for command list.</div>`;
+    out.innerHTML += `<div style="color:var(--rose);">Unknown command: "${escapeHTML(cmd)}". Type <strong style="color:#FFFFFF;">help</strong> for command list.</div>`;
   }
 
   out.scrollTop = out.scrollHeight;
@@ -3855,8 +3855,8 @@ function initChart() {
       datasets: [{
         label: 'Fleet Average KL Divergence',
         data,
-        borderColor: '#3b82f6',
-        backgroundColor: 'rgba(59, 130, 246, 0.08)',
+        borderColor: '#C6F432',
+        backgroundColor: 'rgba(198, 244, 50, 0.08)',
         borderWidth: 2,
         fill: true,
         tension: 0.35,
@@ -3868,8 +3868,8 @@ function initChart() {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b', maxTicksLimit: 8 } },
-        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b' }, beginAtZero: true, max: 0.6 }
+        x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#C6F432', maxTicksLimit: 8 } },
+        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#C6F432' }, beginAtZero: true, max: 0.6 }
       }
     }
   });
@@ -3896,11 +3896,11 @@ function updateMapMarkers() {
 
   ST.devices.forEach(d => {
     const coords = deviceCoords[d.id] || [(Math.random()*40)-20, (Math.random()*60)-30];
-    const color = d.status === 'online' ? '#10b981' : d.status === 'updating' ? '#f59e0b' : '#ef4444';
+    const color = d.status === 'online' ? '#C6F432' : d.status === 'updating' ? '#C6F432' : '#C6F432';
     const marker = L.circleMarker(coords, {
       radius: 6,
       fillColor: color,
-      color: '#fff',
+      color: '#FFFFFF',
       weight: 1,
       opacity: 0.9,
       fillOpacity: 0.85
@@ -4057,10 +4057,10 @@ function initMissionControlFX() {
     const ctx = canvas.getContext('2d');
     let angle = 0;
     const targets = [
-      { r: 0.65, a: 0.8, name: 'AGX-ORIN', color: '#00ffb3' },
-      { r: 0.42, a: 2.1, name: 'HAILO-8', color: '#00ffb3' },
-      { r: 0.78, a: 3.9, name: 'CORAL-TPU', color: '#00f0ff' },
-      { r: 0.55, a: 5.2, name: 'RPI5-EDGE', color: '#5b8af0' }
+      { r: 0.65, a: 0.8, name: 'AGX-ORIN', color: '#C6F432' },
+      { r: 0.42, a: 2.1, name: 'HAILO-8', color: '#C6F432' },
+      { r: 0.78, a: 3.9, name: 'CORAL-TPU', color: '#C6F432' },
+      { r: 0.55, a: 5.2, name: 'RPI5-EDGE', color: '#C6F432' }
     ];
 
     function drawRadar() {
@@ -4077,7 +4077,7 @@ function initMissionControlFX() {
       for (let i = 1; i <= 3; i++) {
         ctx.beginPath();
         ctx.arc(cx, cy, (radius / 3) * i, 0, Math.PI * 2);
-        ctx.strokeStyle = i === 3 ? 'rgba(91, 138, 240, 0.4)' : 'rgba(91, 138, 240, 0.16)';
+        ctx.strokeStyle = i === 3 ? 'rgba(198, 244, 50, 0.4)' : 'rgba(198, 244, 50, 0.16)';
         ctx.stroke();
       }
 
@@ -4087,7 +4087,7 @@ function initMissionControlFX() {
       ctx.lineTo(cx, cy + radius);
       ctx.moveTo(cx - radius, cy);
       ctx.lineTo(cx + radius, cy);
-      ctx.strokeStyle = 'rgba(91, 138, 240, 0.18)';
+      ctx.strokeStyle = 'rgba(198, 244, 50, 0.18)';
       ctx.stroke();
 
       // Sweeping Beam Gradient
@@ -4096,9 +4096,9 @@ function initMissionControlFX() {
       ctx.translate(cx, cy);
       ctx.rotate(angle);
       const grad = ctx.createLinearGradient(0, 0, radius, 0);
-      grad.addColorStop(0, 'rgba(0, 255, 179, 0)');
-      grad.addColorStop(0.8, 'rgba(0, 255, 179, 0.28)');
-      grad.addColorStop(1, 'rgba(0, 255, 179, 0.75)');
+      grad.addColorStop(0, 'rgba(198, 244, 50, 0)');
+      grad.addColorStop(0.8, 'rgba(198, 244, 50, 0.28)');
+      grad.addColorStop(1, 'rgba(198, 244, 50, 0.75)');
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.arc(0, 0, radius, -0.22, 0);
@@ -4121,7 +4121,7 @@ function initMissionControlFX() {
         ctx.shadowBlur = 0;
 
         // Label
-        ctx.fillStyle = '#94a3b8';
+        ctx.fillStyle = '#C6F432';
         ctx.font = '8px "JetBrains Mono", monospace';
         ctx.fillText(tgt.name, tx + 6, ty + 3);
       });
@@ -4138,12 +4138,12 @@ function initMissionControlFX() {
     const ctx = canvas.getContext('2d');
     
     const nodes = [
-      { id: 'gw', x: 0.5, y: 0.45, label: 'Orin AGX Ingest Gateway', type: 'gw', color: '#5b8af0', size: 10, ping: '2.8ms' },
-      { id: 'w1', x: 0.2, y: 0.25, label: 'Hailo-8L Worker 01', type: 'npu', color: '#00ffb3', size: 7, ping: '6.1ms' },
-      { id: 'w2', x: 0.8, y: 0.25, label: 'Coral TPU QA-Inspector', type: 'tpu', color: '#f59e0b', size: 7, ping: '9.4ms' },
-      { id: 'w3', x: 0.18, y: 0.72, label: 'RK3588 Robotics AGV', type: 'npu', color: '#00ffb3', size: 7, ping: '8.2ms' },
-      { id: 'w4', x: 0.82, y: 0.72, label: 'RPi 5 Vision Pod', type: 'npu', color: '#00ffb3', size: 7, ping: '18.5ms' },
-      { id: 'w5', x: 0.5, y: 0.85, label: 'Intel NUC OpenVINO', type: 'gw', color: '#7dd3fc', size: 8, ping: '5.4ms' }
+      { id: 'gw', x: 0.5, y: 0.45, label: 'Orin AGX Ingest Gateway', type: 'gw', color: '#C6F432', size: 10, ping: '2.8ms' },
+      { id: 'w1', x: 0.2, y: 0.25, label: 'Hailo-8L Worker 01', type: 'npu', color: '#C6F432', size: 7, ping: '6.1ms' },
+      { id: 'w2', x: 0.8, y: 0.25, label: 'Coral TPU QA-Inspector', type: 'tpu', color: '#C6F432', size: 7, ping: '9.4ms' },
+      { id: 'w3', x: 0.18, y: 0.72, label: 'RK3588 Robotics AGV', type: 'npu', color: '#C6F432', size: 7, ping: '8.2ms' },
+      { id: 'w4', x: 0.82, y: 0.72, label: 'RPi 5 Vision Pod', type: 'npu', color: '#C6F432', size: 7, ping: '18.5ms' },
+      { id: 'w5', x: 0.5, y: 0.85, label: 'Intel NUC OpenVINO', type: 'gw', color: '#C6F432', size: 8, ping: '5.4ms' }
     ];
 
     const links = [
@@ -4174,7 +4174,7 @@ function initMissionControlFX() {
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
-        ctx.strokeStyle = 'rgba(91, 138, 240, 0.18)';
+        ctx.strokeStyle = 'rgba(198, 244, 50, 0.18)';
         ctx.lineWidth = 1.2;
         ctx.stroke();
 
@@ -4185,8 +4185,8 @@ function initMissionControlFX() {
 
         ctx.beginPath();
         ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#00ffb3';
-        ctx.shadowColor = '#00ffb3';
+        ctx.fillStyle = '#C6F432';
+        ctx.shadowColor = '#C6F432';
         ctx.shadowBlur = 6;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -4201,7 +4201,7 @@ function initMissionControlFX() {
         const pulse = Math.sin(t * 2 + (n.x * 10)) * 3;
         ctx.beginPath();
         ctx.arc(nx, ny, n.size + 4 + pulse, 0, Math.PI * 2);
-        ctx.strokeStyle = n.color === '#5b8af0' ? 'rgba(91, 138, 240, 0.3)' : 'rgba(0, 255, 179, 0.25)';
+        ctx.strokeStyle = n.color === '#C6F432' ? 'rgba(198, 244, 50, 0.3)' : 'rgba(198, 244, 50, 0.25)';
         ctx.stroke();
 
         // Node Body
@@ -4214,11 +4214,11 @@ function initMissionControlFX() {
         ctx.shadowBlur = 0;
 
         // Node Label
-        ctx.fillStyle = '#f8fafc';
+        ctx.fillStyle = '#FFFFFF';
         ctx.font = '600 10px "JetBrains Mono", monospace';
         ctx.fillText(n.label, nx - 40, ny - 14);
 
-        ctx.fillStyle = '#7dd3fc';
+        ctx.fillStyle = '#C6F432';
         ctx.font = '9px "JetBrains Mono", monospace';
         ctx.fillText(n.ping, nx - 12, ny + 20);
       });
@@ -4291,9 +4291,9 @@ function initMissionControlFX() {
       }
 
       // Draw 3 Channels
-      drawWave(latHistory, 1.5, 6.0, '#00f0ff', 2);
-      drawWave(tempHistory, 45, 65, '#f59e0b', 1.8);
-      drawWave(fpsHistory, 300, 400, '#00ffb3', 2);
+      drawWave(latHistory, 1.5, 6.0, '#C6F432', 2);
+      drawWave(tempHistory, 45, 65, '#C6F432', 1.8);
+      drawWave(fpsHistory, 300, 400, '#C6F432', 2);
 
       requestAnimationFrame(renderOscilloscope);
     }
@@ -4328,14 +4328,14 @@ async function handleVisionImageUpload(input) {
         const data = await res.json();
         
         // Draw Real Classified Bounding Boxes
-        ctx.strokeStyle = '#ef4444';
+        ctx.strokeStyle = '#C6F432';
         ctx.lineWidth = 2.5;
         const bx = canvas.width * 0.35, by = canvas.height * 0.25, bw = canvas.width * 0.3, bh = canvas.height * 0.5;
         ctx.strokeRect(bx, by, bw, bh);
 
-        ctx.fillStyle = 'rgba(239,68,68,0.85)';
+        ctx.fillStyle = 'rgba(198, 244, 50, 0.85)';
         ctx.fillRect(bx, by - 22, 180, 22);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#FFFFFF';
         ctx.font = '700 11px "JetBrains Mono", monospace';
         ctx.fillText('SURFACE_SCRATCH [97.8%]', bx + 6, by - 6);
 
@@ -4434,12 +4434,12 @@ function handleTermKey(e) {
     inp.value = '';
 
     const cmdRow = document.createElement('div');
-    cmdRow.style.color = '#00ffb3';
+    cmdRow.style.color = '#C6F432';
     cmdRow.textContent = `operator@hw-jetson-agx-orin:~$ ${cmd}`;
     log.appendChild(cmdRow);
 
     const outRow = document.createElement('div');
-    outRow.style.color = '#94a3b8';
+    outRow.style.color = '#C6F432';
     outRow.style.margin = '4px 0 8px 0';
     if (cmd === 'mlops status' || cmd === 'status') {
       outRow.textContent = '● Daemon: ACTIVE (PID: 1042) · Silicon: Jetson AGX Orin · Model: defect-detector:v3.2 · Latency: 2.8ms · KL: 0.042 (OK)';
@@ -4462,57 +4462,57 @@ window.addEventListener('DOMContentLoaded', checkAuth);
 </script>
 
 <!-- ZERO-INBOUND REMOTE EDGE WEB TERMINAL MODAL -->
-<div id="remote-edge-terminal" style="display:none; position:fixed; bottom:20px; right:20px; width:min(640px, 92vw); height:380px; background:#030712; border:1px solid rgba(91,138,240,0.4); border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,0.9); z-index:99999; flex-direction:column; overflow:hidden; backdrop-filter:blur(20px);">
-  <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(91,138,240,0.1); border-bottom:1px solid rgba(91,138,240,0.2); padding:8px 14px; font-family:var(--font-mono); font-size:0.75rem;">
+<div id="remote-edge-terminal" style="display:none; position:fixed; bottom:20px; right:20px; width:min(640px, 92vw); height:380px; background:#0B0B0C; border:1px solid rgba(198, 244, 50, 0.4); border-radius:12px; box-shadow:0 24px 60px rgba(11, 11, 12, 0.9); z-index:99999; flex-direction:column; overflow:hidden; backdrop-filter:blur(20px);">
+  <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(198, 244, 50, 0.1); border-bottom:1px solid rgba(198, 244, 50, 0.2); padding:8px 14px; font-family:var(--font-mono); font-size:0.75rem;">
     <div style="display:flex; align-items:center; gap:8px;">
-      <span style="width:8px; height:8px; border-radius:50%; background:#00ffb3; box-shadow:0 0 8px #00ffb3;"></span>
-      <span style="color:#fff; font-weight:700;">REMOTE EDGE TERMINAL (TLS 1.3 REVERSE TUNNEL)</span>
+      <span style="width:8px; height:8px; border-radius:50%; background:#C6F432; box-shadow:0 0 8px #C6F432;"></span>
+      <span style="color:#FFFFFF; font-weight:700;">REMOTE EDGE TERMINAL (TLS 1.3 REVERSE TUNNEL)</span>
     </div>
     <div style="display:flex; align-items:center; gap:10px;">
-      <span style="color:#7dd3fc; font-size:0.68rem;">hw-jetson-agx-orin-01</span>
-      <button onclick="toggleRemoteTerminal()" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:1rem;">✕</button>
+      <span style="color:#C6F432; font-size:0.68rem;">hw-jetson-agx-orin-01</span>
+      <button onclick="toggleRemoteTerminal()" style="background:none; border:none; color:#C6F432; cursor:pointer; font-size:1rem;">✕</button>
     </div>
   </div>
-  <div id="term-log" style="flex:1; padding:12px 14px; overflow-y:auto; font-family:var(--font-mono); font-size:0.75rem; line-height:1.6; color:#94a3b8;">
-    <div style="color:#7dd3fc;">[TUNNEL_INIT] Zero-inbound reverse SSH session established over TLS 1.3.</div>
-    <div style="color:#64748b;">Type 'status', 'models', or 'help' to run edge diagnostic commands.</div>
+  <div id="term-log" style="flex:1; padding:12px 14px; overflow-y:auto; font-family:var(--font-mono); font-size:0.75rem; line-height:1.6; color:#C6F432;">
+    <div style="color:#C6F432;">[TUNNEL_INIT] Zero-inbound reverse SSH session established over TLS 1.3.</div>
+    <div style="color:#C6F432;">Type 'status', 'models', or 'help' to run edge diagnostic commands.</div>
   </div>
-  <div style="display:flex; align-items:center; background:#04060a; border-top:1px solid rgba(255,255,255,0.08); padding:8px 14px; font-family:var(--font-mono); font-size:0.75rem;">
-    <span style="color:#00ffb3; margin-right:8px;">operator@jetson:~$</span>
-    <input type="text" id="term-input" onkeydown="handleTermKey(event)" placeholder="Type edge command and press Enter..." style="flex:1; background:transparent; border:none; outline:none; color:#fff; font-family:inherit; font-size:inherit;"/>
+  <div style="display:flex; align-items:center; background:#0B0B0C; border-top:1px solid rgba(255, 255, 255, 0.08); padding:8px 14px; font-family:var(--font-mono); font-size:0.75rem;">
+    <span style="color:#C6F432; margin-right:8px;">operator@jetson:~$</span>
+    <input type="text" id="term-input" onkeydown="handleTermKey(event)" placeholder="Type edge command and press Enter..." style="flex:1; background:transparent; border:none; outline:none; color:#FFFFFF; font-family:inherit; font-size:inherit;"/>
   </div>
 </div>
 
 <!-- RESTRICTED AIR-GAPPED CONTROL PLANE LOCK SCREEN (SHOWN TO NON-ADMINS) -->
-<div id="admin-restricted-screen" style="display:none; position:fixed; inset:0; z-index:999999; background:radial-gradient(ellipse at 50% 20%, #0d1224 0%, #030611 100%); flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;">
-  <div style="max-width:540px; background:rgba(10, 16, 32, 0.88); border:1px solid rgba(239, 68, 68, 0.35); border-radius:18px; padding:2.5rem 2rem; box-shadow:0 24px 60px rgba(0,0,0,0.8), 0 0 40px rgba(239,68,68,0.15); backdrop-filter:blur(24px);">
-    <div style="width:68px; height:68px; border-radius:16px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem;">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<div id="admin-restricted-screen" style="display:none; position:fixed; inset:0; z-index:999999; background:radial-gradient(ellipse at 50% 20%, #0B0B0C 0%, #0B0B0C 100%); flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;">
+  <div style="max-width:540px; background:rgba(11, 11, 12, 0.88); border:1px solid rgba(198, 244, 50, 0.35); border-radius:18px; padding:2.5rem 2rem; box-shadow:0 24px 60px rgba(11, 11, 12, 0.8), 0 0 40px rgba(198, 244, 50, 0.15); backdrop-filter:blur(24px);">
+    <div style="width:68px; height:68px; border-radius:16px; background:rgba(198, 244, 50, 0.12); border:1px solid rgba(198, 244, 50, 0.4); display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem;">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
         <line x1="12" y1="15" x2="12" y2="18"/>
       </svg>
     </div>
-    <div style="display:inline-block; font-size:0.72rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#ef4444; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:999px; padding:0.25rem 0.85rem; margin-bottom:1rem;">
+    <div style="display:inline-block; font-size:0.72rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#C6F432; background:rgba(198, 244, 50, 0.1); border:1px solid rgba(198, 244, 50, 0.3); border-radius:999px; padding:0.25rem 0.85rem; margin-bottom:1rem;">
       Air-Gapped Control Plane
     </div>
-    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:800; color:#ffffff; margin-bottom:0.75rem;">
+    <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:800; color:#FFFFFF; margin-bottom:0.75rem;">
       Administrator Clearance Required
     </h2>
-    <p style="color:#94a3b8; font-size:0.9rem; line-height:1.55; margin-bottom:1.5rem;">
+    <p style="color:#C6F432; font-size:0.9rem; line-height:1.55; margin-bottom:1.5rem;">
       Real-time fleet control, silicon edge telemetry, and model rollouts are restricted exclusively to the primary administrator. Sign in with your administrator credentials to access this dashboard.
     </p>
-    <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:0.85rem 1rem; margin-bottom:1.75rem; text-align:left; font-size:0.8rem; color:#cbd5e1; font-family:'IBM Plex Mono',monospace;">
-      <div>Authenticated As: <span id="restricted-current-email" style="color:#38bdf8;">None</span></div>
-      <div>Access Role: <span id="restricted-current-role" style="color:#f59e0b;">Public Visitor</span></div>
-      <div style="margin-top:4px; font-size:0.72rem; color:#64748b;">Clearance Status: DENIED (Code 403)</div>
+    <div style="background:rgba(11, 11, 12, 0.7); border:1px solid rgba(255, 255, 255, 0.08); border-radius:10px; padding:0.85rem 1rem; margin-bottom:1.75rem; text-align:left; font-size:0.8rem; color:#FFFFFF; font-family:'IBM Plex Mono',monospace;">
+      <div>Authenticated As: <span id="restricted-current-email" style="color:#C6F432;">None</span></div>
+      <div>Access Role: <span id="restricted-current-role" style="color:#C6F432;">Public Visitor</span></div>
+      <div style="margin-top:4px; font-size:0.72rem; color:#C6F432;">Clearance Status: DENIED (Code 403)</div>
     </div>
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-      <a href="login.html?notice=admin_clearance_required" style="flex:1; min-width:180px; padding:0.85rem 1.25rem; background:linear-gradient(135deg, #ef4444, #dc2626); color:#ffffff; font-weight:700; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem; box-shadow:0 4px 14px rgba(239,68,68,0.3);">
+      <a href="login.html?notice=admin_clearance_required" style="flex:1; min-width:180px; padding:0.85rem 1.25rem; background:linear-gradient(135deg, #C6F432, #C6F432); color:#FFFFFF; font-weight:700; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem; box-shadow:0 4px 14px rgba(198, 244, 50, 0.3);">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
         Sign In as Administrator
       </a>
-      <a href="index.html" style="padding:0.85rem 1.25rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#e2e8f0; font-weight:600; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem;">
+      <a href="index.html" style="padding:0.85rem 1.25rem; background:rgba(255, 255, 255, 0.06); border:1px solid rgba(255, 255, 255, 0.12); color:#FFFFFF; font-weight:600; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem;">
         Return to Homepage
       </a>
     </div>

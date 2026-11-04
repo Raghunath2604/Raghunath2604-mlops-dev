@@ -14,10 +14,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg-base: #0B0B0C;
-  --bg-surface: #101012;
-  --bg-card: #141417;
-  --bg-card-hover: #1A1A1E;
-  --bg-input: #101012;
+  --bg-surface: #0B0B0C;
+  --bg-card: #0B0B0C;
+  --bg-card-hover: #0B0B0C;
+  --bg-input: #0B0B0C;
   
   --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.04);
@@ -25,12 +25,12 @@
   
   --accent-blue: #C6F432;
   --neon-mint: #C6F432;
-  --alert-amber: #FFB300;
-  --rose: #FF2E63;
+  --alert-amber: #C6F432;
+  --rose: #C6F432;
   
   --text-main: #FFFFFF;
-  --text-muted: #94A3B8;
-  --text-dim: #64748B;
+  --text-muted: #C6F432;
+  --text-dim: #C6F432;
   
   --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -50,7 +50,7 @@ body {
 /* Header */
 header {
   height: 64px;
-  background: rgba(8, 14, 27, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -67,7 +67,7 @@ header {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .brand-icon {
@@ -76,8 +76,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(91, 138, 240, 0.1);
-  border: 1px solid rgba(91, 138, 240, 0.3);
+  background: rgba(198, 244, 50, 0.1);
+  border: 1px solid rgba(198, 244, 50, 0.3);
   border-radius: 8px;
 }
 
@@ -93,8 +93,8 @@ header {
   align-items: center;
   gap: 6px;
   padding: 3px 10px;
-  background: rgba(0, 255, 179, 0.1);
-  border: 1px solid rgba(0, 255, 179, 0.3);
+  background: rgba(198, 244, 50, 0.1);
+  border: 1px solid rgba(198, 244, 50, 0.3);
   border-radius: 9999px;
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -131,18 +131,18 @@ header {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #5B8AF0, #3B6FD8);
-  border: 1px solid #5B8AF0;
-  color: #fff;
+  background: linear-gradient(135deg, #C6F432, #C6F432);
+  border: 1px solid #C6F432;
+  color: #FFFFFF;
 }
 .btn-primary:hover {
   filter: brightness(1.1);
-  box-shadow: 0 0 16px rgba(91, 138, 240, 0.4);
+  box-shadow: 0 0 16px rgba(198, 244, 50, 0.4);
 }
 
 /* Nav Tabs */
 .admin-nav {
-  background: rgba(8, 14, 27, 0.6);
+  background: rgba(11, 11, 12, 0.6);
   border-bottom: 1px solid var(--border);
   padding: 0 28px;
   display: flex;
@@ -165,7 +165,7 @@ header {
   gap: 8px;
   transition: all var(--transition);
 }
-.tab-btn:hover { color: #fff; }
+.tab-btn:hover { color: #FFFFFF; }
 .tab-btn.active {
   color: var(--neon-mint);
   border-bottom-color: var(--neon-mint);
@@ -223,7 +223,7 @@ main {
   font-family: var(--font-mono);
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .stat-sub {
@@ -255,7 +255,7 @@ main {
 .panel-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #fff;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -282,7 +282,7 @@ table {
 
 th {
   padding: 12px 18px;
-  background: rgba(4, 7, 14, 0.5);
+  background: rgba(11, 11, 12, 0.5);
   font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -310,13 +310,13 @@ tr:hover td { background: var(--bg-card-hover); }
   font-weight: 600;
   font-family: var(--font-mono);
 }
-.badge-admin { background: rgba(0, 255, 179, 0.12); color: var(--neon-mint); border: 1px solid rgba(0, 255, 179, 0.3); }
-.badge-engineer { background: rgba(91, 138, 240, 0.12); color: var(--accent-blue); border: 1px solid rgba(91, 138, 240, 0.3); }
+.badge-admin { background: rgba(198, 244, 50, 0.12); color: var(--neon-mint); border: 1px solid rgba(198, 244, 50, 0.3); }
+.badge-engineer { background: rgba(198, 244, 50, 0.12); color: var(--accent-blue); border: 1px solid rgba(198, 244, 50, 0.3); }
 .badge-user { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border); }
 
-.badge-approved { background: rgba(0, 255, 179, 0.12); color: var(--neon-mint); }
-.badge-pending { background: rgba(255, 179, 0, 0.12); color: var(--alert-amber); }
-.badge-rejected { background: rgba(255, 46, 99, 0.12); color: var(--rose); }
+.badge-approved { background: rgba(198, 244, 50, 0.12); color: var(--neon-mint); }
+.badge-pending { background: rgba(198, 244, 50, 0.12); color: var(--alert-amber); }
+.badge-rejected { background: rgba(198, 244, 50, 0.12); color: var(--rose); }
 
 /* Action Buttons */
 .btn-action {
@@ -337,18 +337,18 @@ tr:hover td { background: var(--bg-card-hover); }
   background: rgba(255, 255, 255, 0.1);
 }
 .btn-action.approve {
-  background: rgba(0, 255, 179, 0.1);
-  border-color: rgba(0, 255, 179, 0.3);
+  background: rgba(198, 244, 50, 0.1);
+  border-color: rgba(198, 244, 50, 0.3);
   color: var(--neon-mint);
 }
-.btn-action.approve:hover { background: rgba(0, 255, 179, 0.2); }
+.btn-action.approve:hover { background: rgba(198, 244, 50, 0.2); }
 
 .btn-action.reject {
-  background: rgba(255, 46, 99, 0.1);
-  border-color: rgba(255, 46, 99, 0.3);
+  background: rgba(198, 244, 50, 0.1);
+  border-color: rgba(198, 244, 50, 0.3);
   color: var(--rose);
 }
-.btn-action.reject:hover { background: rgba(255, 46, 99, 0.2); }
+.btn-action.reject:hover { background: rgba(198, 244, 50, 0.2); }
 
 /* Form inputs in panels */
 .admin-input {
@@ -356,7 +356,7 @@ tr:hover td { background: var(--bg-card-hover); }
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 12px;
-  color: #fff;
+  color: #FFFFFF;
   font-family: var(--font-main);
   font-size: 0.82rem;
   outline: none;
@@ -369,7 +369,7 @@ tr:hover td { background: var(--bg-card-hover); }
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(3, 6, 12, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(12px);
   align-items: center;
   justify-content: center;
@@ -385,7 +385,7 @@ tr:hover td { background: var(--bg-card-hover); }
   border-radius: 16px;
   padding: 26px;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 50px rgba(11, 11, 12, 0.6);
 }
 
 .modal-close {
@@ -397,7 +397,7 @@ tr:hover td { background: var(--bg-card-hover); }
   font-size: 1.2rem;
   cursor: pointer;
 }
-.modal-close:hover { color: #fff; }
+.modal-close:hover { color: #FFFFFF; }
 
 .form-group {
   margin-bottom: 14px;
@@ -417,7 +417,7 @@ tr:hover td { background: var(--bg-card-hover); }
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: rgba(8, 16, 28, 0.95);
+  background: rgba(11, 11, 12, 0.95);
   border: 1px solid var(--neon-mint);
   border-radius: 10px;
   padding: 12px 18px;
@@ -425,8 +425,8 @@ tr:hover td { background: var(--bg-card-hover); }
   align-items: center;
   gap: 10px;
   font-size: 0.84rem;
-  color: #fff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  color: #FFFFFF;
+  box-shadow: 0 8px 30px rgba(11, 11, 12, 0.5);
   transform: translateY(100px);
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -445,7 +445,7 @@ tr:hover td { background: var(--bg-card-hover); }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider {
   position: absolute; cursor: pointer;
-  inset: 0; background-color: rgba(255,255,255,0.1);
+  inset: 0; background-color: rgba(255, 255, 255, 0.1);
   border-radius: 24px; transition: .3s;
   border: 1px solid var(--border);
 }
@@ -456,7 +456,7 @@ tr:hover td { background: var(--bg-card-hover); }
   transition: .3s;
 }
 input:checked + .slider { background-color: var(--neon-mint); border-color: var(--neon-mint); }
-input:checked + .slider:before { transform: translateX(20px); background-color: #04070e; }
+input:checked + .slider:before { transform: translateX(20px); background-color: #0B0B0C; }
 </style>
   <link rel="stylesheet" href="/tokens.css" />
 </head>
@@ -467,8 +467,8 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
     <a href="index.html" class="brand">
       <div class="brand-icon">
         <svg viewBox="0 0 32 32" width="22" height="22" fill="none">
-          <polygon points="16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5" stroke="#5B8AF0" stroke-width="1.8" stroke-linejoin="round"/>
-          <circle cx="16" cy="16" r="3" fill="#00FFB3"/>
+          <polygon points="16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5" stroke="#C6F432" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="3" fill="#C6F432"/>
         </svg>
       </div>
       <div class="brand-name">MLOps<span>.dev</span></div>
@@ -540,23 +540,23 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00FFB3" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
           System Health &amp; Infrastructure
         </div>
         <button class="btn-action" onclick="loadOverview()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Refresh Telemetry</button>
       </div>
       <div style="padding:20px; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px;">
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
+        <div style="background:rgba(255, 255, 255, 0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
           <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; margin-bottom:6px;">Database Engine</div>
-          <div id="sys-db-type" style="font-size:1.05rem; font-weight:700; color:#fff;">Connecting...</div>
+          <div id="sys-db-type" style="font-size:1.05rem; font-weight:700; color:#FFFFFF;">Connecting...</div>
           <div style="font-size:0.75rem; color:var(--neon-mint); margin-top:4px;">● Connection Active · Latency &lt; 12ms</div>
         </div>
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
+        <div style="background:rgba(255, 255, 255, 0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
           <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; margin-bottom:6px;">Hardware Simulation Twins</div>
-          <div id="sys-sim-status" style="font-size:1.05rem; font-weight:700; color:#fff;">17 Silicon Nodes Active</div>
+          <div id="sys-sim-status" style="font-size:1.05rem; font-weight:700; color:#FFFFFF;">17 Silicon Nodes Active</div>
           <div style="font-size:0.75rem; color:var(--accent-blue); margin-top:4px;">Heartbeats streaming at 3.0s interval</div>
         </div>
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
+        <div style="background:rgba(255, 255, 255, 0.02); border:1px solid var(--border); border-radius:10px; padding:16px;">
           <div style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase; margin-bottom:6px;">Platform Maintenance Mode</div>
           <div style="display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
             <span id="sys-maint-label" style="font-size:0.92rem; font-weight:600; color:var(--text-muted);">Normal Operation</span>
@@ -615,7 +615,7 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B8AF0" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
           Over-the-Air (OTA) Model Broadcast Controller
         </div>
         <button class="btn-action reject" onclick="triggerEmergencyRollback()">
@@ -686,9 +686,9 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
         <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.6; margin-bottom:16px;">
           Master API keys have direct programmatic clearance to edge model provisioning, device heartbeats, and cluster configuration. Store securely in CI/CD keystores or hardware HSMs.
         </p>
-        <div id="new-key-banner" style="display:none; margin-bottom:16px; padding:14px; background:rgba(0,255,179,0.08); border:1px solid rgba(0,255,179,0.3); border-radius:10px;">
+        <div id="new-key-banner" style="display:none; margin-bottom:16px; padding:14px; background:rgba(198, 244, 50, 0.08); border:1px solid rgba(198, 244, 50, 0.3); border-radius:10px;">
           <div style="font-size:0.75rem; font-weight:700; color:var(--neon-mint); margin-bottom:4px;">NEW KEY GENERATED — SAVE IMMEDIATELY</div>
-          <div id="new-key-val" style="font-family:var(--font-mono); font-size:0.88rem; color:#fff; word-break:break-all;"></div>
+          <div id="new-key-val" style="font-family:var(--font-mono); font-size:0.88rem; color:#FFFFFF; word-break:break-all;"></div>
         </div>
       </div>
     </div>
@@ -729,7 +729,7 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 <div id="modal-create-user" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-create-user')">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal('modal-create-user')">✕</button>
-    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#fff;">Invite / Create Operator</h3>
+    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#FFFFFF;">Invite / Create Operator</h3>
     <form onsubmit="submitCreateUser(event)">
       <div class="form-group">
         <label class="form-label">Operator Email *</label>
@@ -767,10 +767,10 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 <div id="modal-edit-user" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-edit-user')">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal('modal-edit-user')">✕</button>
-    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#fff;">Edit Operator Clearance</h3>
+    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#FFFFFF;">Edit Operator Clearance</h3>
     <input type="hidden" id="edit-user-id"/>
     <div style="margin-bottom:14px; font-size:0.85rem; color:var(--text-muted);">
-      Target Operator: <strong id="edit-user-email" style="color:#fff;"></strong>
+      Target Operator: <strong id="edit-user-email" style="color:#FFFFFF;"></strong>
     </div>
     <div class="form-group">
       <label class="form-label">Role Clearance</label>
@@ -811,7 +811,7 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 <div id="modal-create-key" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-create-key')">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal('modal-create-key')">✕</button>
-    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#fff;">Generate Master API Key</h3>
+    <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:14px; color:#FFFFFF;">Generate Master API Key</h3>
     <form onsubmit="submitCreateKey(event)">
       <div class="form-group">
         <label class="form-label">Key Label *</label>
@@ -970,14 +970,14 @@ function renderUsers(users) {
     
     let oauthPills = '<span style="color:var(--text-dim); font-size:0.75rem;">Password</span>';
     if (u.oauth_providers && u.oauth_providers.length) {
-      oauthPills = u.oauth_providers.map(p => `<span class="badge" style="background:rgba(255,255,255,0.06); text-transform:capitalize;">${p.provider}</span>`).join(' ');
+      oauthPills = u.oauth_providers.map(p => `<span class="badge" style="background:rgba(255, 255, 255, 0.06); text-transform:capitalize;">${p.provider}</span>`).join(' ');
     }
 
     const isCurrent = currentAdmin && currentAdmin.id === u.id;
     return `
       <tr>
         <td>
-          <div style="font-weight:700; color:#fff;">${u.name || u.id}</div>
+          <div style="font-weight:700; color:#FFFFFF;">${u.name || u.id}</div>
           <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-dim);">${u.id}</div>
         </td>
         <td>${roleBadge}</td>
@@ -1139,20 +1139,20 @@ function renderDevices(devs) {
   tbody.innerHTML = devs.map(d => {
     const isDrift = (d.drift_score || 0) >= 0.15;
     const driftBadge = isDrift 
-      ? `<span class="badge" style="background:rgba(255,46,99,0.12); color:var(--rose);">${d.drift_score.toFixed(3)} DRIFT</span>`
-      : `<span class="badge" style="background:rgba(0,255,179,0.08); color:var(--neon-mint);">${d.drift_score.toFixed(3)} Normal</span>`;
+      ? `<span class="badge" style="background:rgba(198, 244, 50, 0.12); color:var(--rose);">${d.drift_score.toFixed(3)} DRIFT</span>`
+      : `<span class="badge" style="background:rgba(198, 244, 50, 0.08); color:var(--neon-mint);">${d.drift_score.toFixed(3)} Normal</span>`;
 
     const stateColor = d.status === 'online' || d.status === 'healthy' ? 'var(--neon-mint)' : (d.status === 'maintenance' ? 'var(--alert-amber)' : 'var(--rose)');
 
     return `
       <tr>
         <td>
-          <div style="font-weight:700; color:#fff;">${d.name || d.id}</div>
+          <div style="font-weight:700; color:#FFFFFF;">${d.name || d.id}</div>
           <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-dim);">${d.id}</div>
         </td>
         <td style="font-family:var(--font-mono); font-size:0.78rem;">${d.hw_class || 'Jetson / Edge'}</td>
         <td><span style="display:inline-flex; align-items:center; gap:5px; font-weight:600; color:${stateColor}; text-transform:uppercase; font-size:0.74rem;">● ${d.status}</span></td>
-        <td><span class="badge" style="background:rgba(91,138,240,0.12); color:var(--accent-blue);">${d.model_tag || 'v1.0.0'}</span></td>
+        <td><span class="badge" style="background:rgba(198, 244, 50, 0.12); color:var(--accent-blue);">${d.model_tag || 'v1.0.0'}</span></td>
         <td>${driftBadge}</td>
         <td style="font-family:var(--font-mono); font-size:0.76rem;">${d.latency_ms ? d.latency_ms.toFixed(1) : 18.4}ms</td>
         <td style="font-size:0.72rem; color:var(--text-dim);">${d.last_seen ? d.last_seen.slice(11, 19) : 'Just now'}</td>
@@ -1286,7 +1286,7 @@ function renderAuditLogs(logs) {
       <tr>
         <td style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-dim);">${l.created_at ? l.created_at.slice(0, 19).replace('T', ' ') : '—'}</td>
         <td style="font-family:var(--font-mono); font-size:0.76rem;">${l.owner_id || 'system'}</td>
-        <td><span class="badge" style="background:rgba(91,138,240,0.1); color:var(--accent-blue);">${l.event_type || 'OP'}</span></td>
+        <td><span class="badge" style="background:rgba(198, 244, 50, 0.1); color:var(--accent-blue);">${l.event_type || 'OP'}</span></td>
         <td style="font-family:var(--font-mono); font-size:0.74rem;">${l.device_id || 'cluster'}</td>
         <td><span class="badge badge-approved">${l.status || 'SUCCESS'}</span></td>
         <td style="font-size:0.78rem; color:var(--text-muted);">${l.msg || '—'}</td>

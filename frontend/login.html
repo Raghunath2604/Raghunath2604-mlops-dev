@@ -24,25 +24,25 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  --bg-slate: #9ca3af;
-  --bg-gradient: radial-gradient(circle at 50% 50%, #b4becc 0%, #9aa5b5 60%, #8794a4 100%);
+  --bg-slate: #FFFFFF;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #C6F432 60%, #C6F432 100%);
   
-  --card-bg: radial-gradient(circle at 8% 92%, #fed876 0%, #feeab0 24%, #fbf9f5 55%, #fdfdfc 100%);
+  --card-bg: radial-gradient(circle at 8% 92%, #C6F432 0%, #C6F432 24%, #FFFFFF 55%, #FFFFFF 100%);
   --card-border: rgba(255, 255, 255, 0.85);
-  --card-shadow: 0 35px 80px -15px rgba(26, 36, 51, 0.32), 0 0 1px 1px rgba(0, 0, 0, 0.04);
+  --card-shadow: 0 35px 80px -15px rgba(11, 11, 12, 0.32), 0 0 1px 1px rgba(11, 11, 12, 0.04);
   
-  --text-main: #18181b;
-  --text-muted: #71717a;
-  --text-dim: #a1a1aa;
+  --text-main: #0B0B0C;
+  --text-muted: #FFFFFF;
+  --text-dim: #FFFFFF;
   
-  --input-bg: #f3f1eb;
-  --input-bg-focus: #ffffff;
-  --input-text: #18181b;
-  --input-placeholder: #a1a1aa;
+  --input-bg: #FFFFFF;
+  --input-bg-focus: #FFFFFF;
+  --input-text: #0B0B0C;
+  --input-placeholder: #FFFFFF;
   
-  --brand-yellow: #ffd056;
-  --brand-yellow-hover: #fec438;
-  --brand-yellow-active: #eab327;
+  --brand-yellow: #C6F432;
+  --brand-yellow-hover: #C6F432;
+  --brand-yellow-active: #C6F432;
   
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
@@ -111,10 +111,10 @@ html, body {
   align-self: flex-start;
   gap: 8px;
   padding: 7px 22px;
-  border: 1.2px solid #c9cbce;
+  border: 1.2px solid #FFFFFF;
   border-radius: var(--radius-pill);
   text-decoration: none;
-  color: #1e293b;
+  color: #0B0B0C;
   font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -125,7 +125,7 @@ html, body {
 
 .brand-pill-link:hover {
   background: rgba(255, 255, 255, 0.8);
-  border-color: #94a3b8;
+  border-color: #C6F432;
   transform: translateY(-1px);
 }
 
@@ -148,7 +148,7 @@ html, body {
 .form-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #18181b;
+  color: #0B0B0C;
   letter-spacing: -0.03em;
   margin-bottom: 4px;
 }
@@ -177,7 +177,7 @@ html, body {
 .form-label {
   font-size: 0.76rem;
   font-weight: 500;
-  color: #71717a;
+  color: #FFFFFF;
   padding-left: 16px;
   letter-spacing: 0.01em;
 }
@@ -208,13 +208,13 @@ html, body {
 }
 
 .input-pill:hover {
-  background: #ece9e2;
+  background: #FFFFFF;
 }
 
 .input-pill:focus {
   background: var(--input-bg-focus);
-  border-color: #fbc638;
-  box-shadow: 0 0 0 3px rgba(254, 208, 86, 0.25);
+  border-color: #C6F432;
+  box-shadow: 0 0 0 3px rgba(198, 244, 50, 0.25);
 }
 
 .input-btn-eye {
@@ -222,7 +222,7 @@ html, body {
   right: 16px;
   background: none;
   border: none;
-  color: #71717a;
+  color: #FFFFFF;
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -232,13 +232,13 @@ html, body {
 }
 
 .input-btn-eye:hover {
-  color: #18181b;
+  color: #0B0B0C;
 }
 
 /* Submit Yellow Pill Button */
 .btn-submit-yellow {
   background: var(--brand-yellow);
-  color: #18181b;
+  color: #0B0B0C;
   font-size: 0.94rem;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -248,7 +248,7 @@ html, body {
   width: 100%;
   cursor: pointer;
   margin-top: 4px;
-  box-shadow: 0 6px 16px -4px rgba(254, 208, 86, 0.45);
+  box-shadow: 0 6px 16px -4px rgba(198, 244, 50, 0.45);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
@@ -259,7 +259,7 @@ html, body {
 .btn-submit-yellow:hover {
   background: var(--brand-yellow-hover);
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px -4px rgba(254, 208, 86, 0.55);
+  box-shadow: 0 8px 20px -4px rgba(198, 244, 50, 0.55);
 }
 
 .btn-submit-yellow:active {
@@ -283,7 +283,7 @@ html, body {
 
 .btn-social-pill {
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid #dedad0;
+  border: 1px solid #FFFFFF;
   border-radius: var(--radius-pill);
   padding: 10px 14px;
   display: flex;
@@ -292,17 +292,17 @@ html, body {
   gap: 8px;
   font-size: 0.84rem;
   font-weight: 600;
-  color: #27272a;
+  color: #0B0B0C;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
 }
 
 .btn-social-pill:hover {
-  background: #ffffff;
-  border-color: #b8b4a9;
+  background: #FFFFFF;
+  border-color: #FFFFFF;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 10px rgba(11, 11, 12, 0.06);
 }
 
 /* Footer Links */
@@ -311,13 +311,13 @@ html, body {
   justify-content: space-between;
   align-items: center;
   font-size: 0.76rem;
-  color: #71717a;
+  color: #FFFFFF;
   padding-top: 10px;
   margin-top: 6px;
 }
 
 .form-footer-row a {
-  color: #18181b;
+  color: #0B0B0C;
   text-decoration: underline;
   text-underline-offset: 3px;
   font-weight: 500;
@@ -325,7 +325,7 @@ html, body {
 }
 
 .form-footer-row a:hover {
-  color: #d97706;
+  color: #C6F432;
 }
 
 /* ── Right Column: Hero Visual Container ── */
@@ -334,7 +334,7 @@ html, body {
   border-radius: var(--radius-hero);
   overflow: hidden;
   height: 100%;
-  background-color: #2b313c;
+  background-color: #0B0B0C;
   background-image: url('login-hero.jpg');
   background-size: cover;
   background-position: center 30%;
@@ -345,7 +345,7 @@ html, body {
 .hero-vignette {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.02) 40%, rgba(0, 0, 0, 0.28) 100%);
+  background: linear-gradient(180deg, rgba(11, 11, 12, 0.1) 0%, rgba(11, 11, 12, 0.02) 40%, rgba(11, 11, 12, 0.28) 100%);
   pointer-events: none;
 }
 
@@ -361,21 +361,21 @@ html, body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.6);
-  color: #18181b;
+  color: #0B0B0C;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 14px rgba(11, 11, 12, 0.12);
   transition: all 0.2s ease;
 }
 
 .btn-hero-close:hover {
-  background: #ffffff;
+  background: #FFFFFF;
   transform: scale(1.08) rotate(90deg);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 6px 18px rgba(11, 11, 12, 0.18);
 }
 
 /* ── Floating Overlaid UI Cards ── */
@@ -390,11 +390,11 @@ html, body {
 
 .hero-pill-yellow {
   background: var(--brand-yellow);
-  color: #18181b;
+  color: #0B0B0C;
   border-radius: 12px;
   padding: 8px 14px;
   font-size: 0.78rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 8px 20px rgba(11, 11, 12, 0.18);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -418,7 +418,7 @@ html, body {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #18181b;
+  background: #0B0B0C;
 }
 
 .pill-subtitle {
@@ -432,15 +432,15 @@ html, body {
   position: absolute;
   top: 16px;
   left: 32px;
-  background: rgba(30, 32, 38, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #ffffff;
+  color: #FFFFFF;
   border-radius: 10px;
   padding: 6px 12px;
   font-size: 0.66rem;
   font-family: var(--font-mono);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 8px 20px rgba(11, 11, 12, 0.28);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -470,7 +470,7 @@ html, body {
   height: 48px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 6px 20px rgba(11, 11, 12, 0.22);
   object-fit: cover;
   transition: transform 0.25s ease;
 }
@@ -494,8 +494,8 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 16px;
   padding: 12px 18px 14px;
-  color: #ffffff;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.18);
+  color: #FFFFFF;
+  box-shadow: 0 14px 36px rgba(11, 11, 12, 0.18);
   z-index: 6;
   width: 275px;
   overflow: hidden;
@@ -528,7 +528,7 @@ html, body {
 }
 
 .cal-col.active-day {
-  color: #ffffff;
+  color: #FFFFFF;
   font-weight: 800;
 }
 
@@ -577,7 +577,7 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 16px;
   padding: 12px 16px 10px;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 14px 32px rgba(11, 11, 12, 0.16);
   z-index: 6;
   width: 195px;
 }
@@ -592,7 +592,7 @@ html, body {
 .white-card-title {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #18181b;
+  color: #0B0B0C;
   letter-spacing: -0.01em;
 }
 
@@ -606,7 +606,7 @@ html, body {
 .white-card-time {
   font-size: 0.65rem;
   font-weight: 500;
-  color: #71717a;
+  color: #FFFFFF;
   font-family: var(--font-mono);
   margin-bottom: 8px;
 }
@@ -620,10 +620,10 @@ html, body {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
+  border: 2px solid #FFFFFF;
   object-fit: cover;
   margin-left: -6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px rgba(11, 11, 12, 0.12);
 }
 
 .card-avatar-mini:first-child {
@@ -634,7 +634,7 @@ html, body {
 .oauth-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.68);
+  background: rgba(11, 11, 12, 0.68);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 10000;
@@ -651,11 +651,11 @@ html, body {
 .oauth-modal-card {
   width: 100%;
   max-width: 440px;
-  background: #fbf9f4;
+  background: #FFFFFF;
   border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: 26px;
   padding: 28px;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 30px 70px rgba(11, 11, 12, 0.35);
   position: relative;
 }
 
@@ -663,7 +663,7 @@ html, body {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(11, 11, 12, 0.05);
   border: none;
   width: 32px;
   height: 32px;
@@ -673,13 +673,13 @@ html, body {
   align-items: center;
   justify-content: center;
   font-size: 0.95rem;
-  color: #71717a;
+  color: #FFFFFF;
   transition: all 0.15s ease;
 }
 
 .modal-close-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: #18181b;
+  background: rgba(11, 11, 12, 0.1);
+  color: #0B0B0C;
 }
 
 /* 6-Digit OTP Verification Modal Styles */
@@ -696,9 +696,9 @@ html, body {
   text-align: center;
   font-size: 1.6rem;
   font-weight: 700;
-  color: #18181b;
-  background: #ffffff;
-  border: 1.5px solid rgba(0, 0, 0, 0.14);
+  color: #0B0B0C;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(11, 11, 12, 0.14);
   border-radius: 14px;
   outline: none;
   transition: all 0.2s ease;
@@ -706,14 +706,14 @@ html, body {
 }
 
 .otp-digit-input:focus {
-  border-color: #18181b;
-  box-shadow: 0 0 0 3px rgba(254, 219, 93, 0.55);
-  background: #ffffff;
+  border-color: #0B0B0C;
+  box-shadow: 0 0 0 3px rgba(198, 244, 50, 0.55);
+  background: #FFFFFF;
 }
 
 .otp-digit-input.filled {
-  border-color: #18181b;
-  background: #fff;
+  border-color: #0B0B0C;
+  background: #FFFFFF;
 }
 
 .otp-resend-wrap {
@@ -721,14 +721,14 @@ html, body {
   justify-content: space-between;
   align-items: center;
   font-size: 0.82rem;
-  color: #71717a;
+  color: #FFFFFF;
   margin-bottom: 18px;
 }
 
 .otp-resend-btn {
   background: none;
   border: none;
-  color: #18181b;
+  color: #0B0B0C;
   font-weight: 600;
   cursor: pointer;
   padding: 0;
@@ -737,7 +737,7 @@ html, body {
 }
 
 .otp-resend-btn:disabled {
-  color: #a1a1aa;
+  color: #FFFFFF;
   cursor: not-allowed;
   text-decoration: none;
 }
@@ -750,13 +750,13 @@ html, body {
 }
 
 .quick-chip {
-  background: #f2efe9;
-  border: 1.2px solid #dedad0;
+  background: #FFFFFF;
+  border: 1.2px solid #FFFFFF;
   border-radius: var(--radius-pill);
   padding: 7px 14px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #18181b;
+  color: #0B0B0C;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -765,23 +765,23 @@ html, body {
 }
 
 .quick-chip:hover {
-  background: #ffffff;
-  border-color: #ffd056;
+  background: #FFFFFF;
+  border-color: #C6F432;
   transform: translateY(-1px);
 }
 
 .quick-chip.founder {
-  background: #fffbeb;
-  border-color: #ffd056;
-  color: #b45309;
+  background: #FFFFFF;
+  border-color: #C6F432;
+  color: #C6F432;
 }
 
 .gh-preview-box {
   display: none;
   align-items: center;
   gap: 12px;
-  background: #ffffff;
-  border: 1px solid #dedad0;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
   border-radius: 16px;
   padding: 10px 14px;
   margin-bottom: 12px;
@@ -804,12 +804,12 @@ html, body {
 .gh-preview-name {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #18181b;
+  color: #0B0B0C;
 }
 
 .gh-preview-bio {
   font-size: 0.72rem;
-  color: #71717a;
+  color: #FFFFFF;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -820,13 +820,13 @@ html, body {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: #18181b;
-  color: #ffffff;
+  background: #0B0B0C;
+  color: #FFFFFF;
   padding: 12px 20px;
   border-radius: var(--radius-pill);
   font-size: 0.84rem;
   font-weight: 600;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 16px 36px rgba(11, 11, 12, 0.25);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -843,16 +843,16 @@ html, body {
   pointer-events: auto;
 }
 
-.toast.success { background: #064e3b; color: #a7f3d0; border: 1px solid #059669; }
-.toast.error { background: #4c0519; color: #fecdd3; border: 1px solid #e11d48; }
+.toast.success { background: #0B0B0C; color: #C6F432; border: 1px solid #C6F432; }
+.toast.error { background: #0B0B0C; color: #C6F432; border: 1px solid #C6F432; }
 
 /* Spinner */
 .spinner {
   display: inline-block;
   width: 15px;
   height: 15px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-top-color: #18181b;
+  border: 2px solid rgba(11, 11, 12, 0.2);
+  border-top-color: #0B0B0C;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -894,7 +894,7 @@ html, body {
     max-width: 440px;
     padding: 24px 20px;
     border-radius: 26px;
-    box-shadow: 0 20px 50px -10px rgba(26, 36, 51, 0.28);
+    box-shadow: 0 20px 50px -10px rgba(11, 11, 12, 0.28);
   }
   
   .auth-hero-column {
@@ -950,19 +950,19 @@ html, body {
       <!-- Top Brand Badge Pill -->
       <a href="index.html" class="brand-pill-link" title="Return to MLOps.dev Home">
         <svg class="brand-icon-mini" width="16" height="16" viewBox="0 0 32 32" fill="none" style="width:16px;height:16px;min-width:16px;max-width:16px;">
-          <polygon points="16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5" stroke="#18181b" stroke-width="2.2" stroke-linejoin="round"/>
-          <circle cx="16" cy="16" r="3" fill="#ffd056"/>
+          <polygon points="16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5" stroke="#0B0B0C" stroke-width="2.2" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="3" fill="#C6F432"/>
         </svg>
         <span>MLOps.dev</span>
       </a>
 
       <!-- Security Notice Banner (if triggered) -->
-      <div id="notice-security-banner" style="display:none; margin-top:14px; padding:10px 14px; border-radius:14px; background:#fef2f2; border:1px solid #fecaca; text-align:left;">
-        <div style="display:flex; align-items:center; gap:6px; color:#b91c1c; font-weight:700; font-size:0.78rem; margin-bottom:2px;">
+      <div id="notice-security-banner" style="display:none; margin-top:14px; padding:10px 14px; border-radius:14px; background:#FFFFFF; border:1px solid #C6F432; text-align:left;">
+        <div style="display:flex; align-items:center; gap:6px; color:#C6F432; font-weight:700; font-size:0.78rem; margin-bottom:2px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span id="notice-banner-title">RESTRICTED CONTROL PLANE</span>
         </div>
-        <div id="notice-banner-text" style="font-size:0.72rem; color:#991b1b; line-height:1.4;">
+        <div id="notice-banner-text" style="font-size:0.72rem; color:#C6F432; line-height:1.4;">
           Administrator clearance required. Please sign in with your administrator account.
         </div>
       </div>
@@ -1016,10 +1016,10 @@ html, body {
           <div class="social-buttons-grid">
             <button type="button" class="btn-social-pill shimmer-btn" onclick="handleSocialAuth('google')" title="Sign in with Google">
               <svg width="16" height="16" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                <path fill="#C6F432" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#C6F432" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#C6F432" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#C6F432" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
               <span>Google</span>
             </button>
@@ -1077,8 +1077,8 @@ html, body {
         <img class="avatar-bubble av-1" src="avatar-1.jpg" alt="Fleet Architect" />
         <img class="avatar-bubble av-2" src="avatar-2.jpg" alt="Robotics Engineer" />
         <img class="avatar-bubble av-3" src="avatar-3.jpg" alt="ML Systems Lead" />
-        <div id="live-operator-badge" style="position:absolute; bottom:-22px; right:0; background:rgba(3,7,18,0.85); border:1px solid rgba(0,255,179,0.3); padding:2px 8px; border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#00ffb3; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:5px;">
-          <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#00ffb3; box-shadow:0 0 6px #00ffb3; animation: pulse-dot 1.8s infinite ease-in-out;"></span>
+        <div id="live-operator-badge" style="position:absolute; bottom:-22px; right:0; background:rgba(11, 11, 12, 0.85); border:1px solid rgba(198, 244, 50, 0.3); padding:2px 8px; border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#C6F432; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:5px;">
+          <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#C6F432; box-shadow:0 0 6px #C6F432; animation: pulse-dot 1.8s infinite ease-in-out;"></span>
           <span id="live-operator-text">3 OPERATORS ONLINE</span>
         </div>
       </div>
@@ -1110,7 +1110,7 @@ html, body {
       <div class="hero-white-card">
         <div class="white-card-header">
           <span class="white-card-title" id="live-meeting-title">Daily Sync · Edge Rollout</span>
-          <span class="white-card-dot" style="background:#10b981; animation: pulse-dot 2s infinite ease-in-out;"></span>
+          <span class="white-card-dot" style="background:#C6F432; animation: pulse-dot 2s infinite ease-in-out;"></span>
         </div>
         <div class="white-card-time" id="live-meeting-time">12:00pm–01:00pm UTC</div>
         <div class="white-card-avatars">
@@ -1130,10 +1130,10 @@ html, body {
     <div class="oauth-modal-card">
       <button class="modal-close-btn" type="button" onclick="closeOauthModal()">✕</button>
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-        <div id="oauth-provider-icon" style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:#ece9e2; border-radius:50%;"></div>
+        <div id="oauth-provider-icon" style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:#FFFFFF; border-radius:50%;"></div>
         <div>
-          <h3 id="oauth-modal-title" style="font-size:1.15rem; font-weight:700; color:#18181b;">Sign In with Google</h3>
-          <p id="oauth-modal-sub" style="font-size:0.75rem; color:#71717a;">Sign in to access your Fleet Dashboard</p>
+          <h3 id="oauth-modal-title" style="font-size:1.15rem; font-weight:700; color:#0B0B0C;">Sign In with Google</h3>
+          <p id="oauth-modal-sub" style="font-size:0.75rem; color:#FFFFFF;">Sign in to access your Fleet Dashboard</p>
         </div>
       </div>
 
@@ -1164,10 +1164,10 @@ html, body {
     <div class="oauth-modal-card">
       <button class="modal-close-btn" type="button" onclick="closeOtpModal()">✕</button>
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-        <div style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:#fedb5d; border-radius:50%; font-size:1.15rem;">✉️</div>
+        <div style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:#C6F432; border-radius:50%; font-size:1.15rem;">✉️</div>
         <div>
-          <h3 style="font-size:1.15rem; font-weight:700; color:#18181b;">Verify Your Email</h3>
-          <p id="otp-modal-sub" style="font-size:0.75rem; color:#71717a;">We sent a 6-digit code to <strong id="otp-target-email" style="color:#18181b;">your email</strong></p>
+          <h3 style="font-size:1.15rem; font-weight:700; color:#0B0B0C;">Verify Your Email</h3>
+          <p id="otp-modal-sub" style="font-size:0.75rem; color:#FFFFFF;">We sent a 6-digit code to <strong id="otp-target-email" style="color:#0B0B0C;">your email</strong></p>
         </div>
       </div>
 
@@ -1190,7 +1190,7 @@ html, body {
       </button>
 
       <div style="text-align:center; margin-top:12px;">
-        <a href="javascript:void(0)" onclick="closeOtpModal()" style="font-size:0.78rem; color:#71717a; text-decoration:none;">Wrong email? Change address</a>
+        <a href="javascript:void(0)" onclick="closeOtpModal()" style="font-size:0.78rem; color:#FFFFFF; text-decoration:none;">Wrong email? Change address</a>
       </div>
     </div>
   </div>
@@ -1542,7 +1542,7 @@ html, body {
         inputLabel.textContent = 'Google Account Email';
         input.placeholder = 'yourname@gmail.com';
         input.value = '';
-        icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>`;
+        icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24"><path fill="#C6F432" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#C6F432" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#C6F432" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#C6F432" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>`;
         const btnLabel = document.getElementById('btn-oauth-label');
         if (btnLabel) btnLabel.textContent = 'Continue with Google →';
       } else if (provider === 'github') {

@@ -23,9 +23,9 @@
 
     const PARTICLE_COUNT = Math.min(Math.floor(window.innerWidth / 18), 75);
     const MAX_DISTANCE = 130;
-    const ACCENT_COLOR = 'rgba(91, 138, 240, ';
-    const SECONDARY_COLOR = 'rgba(0, 255, 179, ';
-    const CYAN_COLOR = 'rgba(0, 240, 255, ';
+    const ACCENT_COLOR = 'rgba(198, 244, 50, ';
+    const SECONDARY_COLOR = 'rgba(198, 244, 50, ';
+    const CYAN_COLOR = 'rgba(255, 255, 255, ';
 
     function resize() {
       const rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : canvas.getBoundingClientRect();

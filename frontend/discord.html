@@ -14,36 +14,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0B0B0C;--bg1:#111113;--bg2:#161618;--blue:#C6F432;--green:#C6F432;--snow:#FFFFFF;--muted:#5A6A8A;--dim:#2A3450;--border:rgba(79,127,239,.12);--border2:rgba(79,127,239,.25);--discord:#5865F2}
+:root{--bg:#0B0B0C;--bg1:#0B0B0C;--bg2:#0B0B0C;--blue:#C6F432;--green:#C6F432;--snow:#FFFFFF;--muted:#C6F432;--dim:#0B0B0C;--border:rgba(198, 244, 50, .12);--border2:rgba(198, 244, 50, .25);--discord:#C6F432}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{background:var(--bg);color:var(--snow);font-family:'Inter',sans-serif;line-height:1.65;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(79,127,239,.04)1px,transparent 1px),linear-gradient(90deg,rgba(79,127,239,.04)1px,transparent 1px);background-size:52px 52px;pointer-events:none}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(198, 244, 50, .04)1px,transparent 1px),linear-gradient(90deg,rgba(198, 244, 50, .04)1px,transparent 1px);background-size:52px 52px;pointer-events:none}
 .card{position:relative;z-index:1;background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:3rem 2.5rem;max-width:520px;width:100%;text-align:center}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--discord),transparent);border-radius:16px 16px 0 0}
 .discord-icon{width:72px;height:72px;background:var(--discord);border-radius:16px;display:grid;place-items:center;margin:0 auto 1.5rem}
-.discord-icon svg{width:40px;height:40px;fill:#fff}
+.discord-icon svg{width:40px;height:40px;fill:#FFFFFF}
 .ey{font-family:monospace;font-size:.68rem;color:var(--discord);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;display:block}
-.card h1{font-size:1.8rem;font-weight:700;letter-spacing:-.04em;color:#E8EDF8;margin-bottom:.6rem;line-height:1.1}
+.card h1{font-size:1.8rem;font-weight:700;letter-spacing:-.04em;color:#FFFFFF;margin-bottom:.6rem;line-height:1.1}
 .card p{font-size:.92rem;color:var(--muted);line-height:1.72;margin-bottom:2rem;font-weight:300}
-.join-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--discord);border:none;border-radius:8px;color:#fff;font-size:1rem;font-weight:700;padding:.85rem 2rem;cursor:pointer;text-decoration:none;transition:all .25s;font-family:'Inter',sans-serif;width:100%;justify-content:center}
-.join-btn:hover{background:#4752C4;transform:translateY(-2px);box-shadow:0 8px 32px rgba(88,101,242,.3)}
+.join-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--discord);border:none;border-radius:8px;color:#FFFFFF;font-size:1rem;font-weight:700;padding:.85rem 2rem;cursor:pointer;text-decoration:none;transition:all .25s;font-family:'Inter',sans-serif;width:100%;justify-content:center}
+.join-btn:hover{background:#C6F432;transform:translateY(-2px);box-shadow:0 8px 32px rgba(198, 244, 50, .3)}
 .join-btn svg{width:20px;height:20px;fill:currentColor}
 .channels{display:flex;flex-direction:column;gap:.5rem;margin:2rem 0;text-align:left}
-.channel{display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:7px;font-size:.84rem;color:var(--muted);font-weight:300}
+.channel{display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;background:rgba(255, 255, 255, .03);border:1px solid var(--border);border-radius:7px;font-size:.84rem;color:var(--muted);font-weight:300}
 .channel-hash{font-family:monospace;font-size:1.1rem;color:var(--dim);flex-shrink:0}
-.channel-name{font-weight:500;color:#9AAAC8;margin-right:.4rem}
+.channel-name{font-weight:500;color:#C6F432;margin-right:.4rem}
 .divider{height:1px;background:var(--border);margin:1.5rem 0}
 .alt-links{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
 .alt-link{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:.8rem;padding:.45rem .9rem;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem}
 .alt-link:hover{border-color:var(--border2);color:var(--snow)}
 .founder-note{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.6}
-.founder-note strong{color:#9AAAC8;font-weight:500}
-#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(8,12,22,.97);backdrop-filter:blur(20px);border-top:1px solid rgba(79,127,239,.15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.founder-note strong{color:#C6F432;font-weight:500}
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(11, 11, 12, .97);backdrop-filter:blur(20px);border-top:1px solid rgba(198, 244, 50, .15);padding:.85rem clamp(1.5rem,5%,4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1)}
 #cookie-banner.show{transform:translateY(0)}
-.cb-text{font-size:.78rem;color:#5A6A8A;max-width:580px;font-weight:300}.cb-text a{color:#4F7FEF;text-decoration:none}
+.cb-text{font-size:.78rem;color:#C6F432;max-width:580px;font-weight:300}.cb-text a{color:#C6F432;text-decoration:none}
 .cb-actions{display:flex;gap:.6rem}
-.cb-accept{background:#4F7FEF;border:none;border-radius:6px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
-.cb-decline{background:none;border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#5A6A8A;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
+.cb-accept{background:#C6F432;border:none;border-radius:6px;color:#FFFFFF;font-family:inherit;font-size:.78rem;font-weight:600;padding:.38rem .9rem;cursor:pointer}
+.cb-decline{background:none;border:1px solid rgba(255, 255, 255, .1);border-radius:6px;color:#C6F432;font-family:inherit;font-size:.78rem;padding:.38rem .9rem;cursor:pointer}
 </style>
   <link rel="stylesheet" href="/tokens.css" />
 </head>

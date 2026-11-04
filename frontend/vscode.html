@@ -19,8 +19,8 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background-color: var(--stitch-bg-primary, #030712);
-  color: var(--stitch-text-primary, #f8fafc);
+  background-color: var(--stitch-bg-primary, #0B0B0C);
+  color: var(--stitch-text-primary, #FFFFFF);
   font-family: var(--stitch-font-sans, 'Plus Jakarta Sans', sans-serif);
   line-height: 1.6;
   min-height: 100vh;
@@ -35,7 +35,7 @@ body {
   justify-content: space-between;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
   border-bottom: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
-  background: rgba(3, 7, 18, 0.85);
+  background: rgba(11, 11, 12, 0.85);
   backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
@@ -46,7 +46,7 @@ body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #fff;
+  color: #FFFFFF;
   font-family: var(--stitch-font-display, 'Space Grotesk', sans-serif);
   font-weight: 700;
   font-size: 1.05rem;
@@ -66,7 +66,7 @@ body {
   margin-bottom: 0.8rem;
 }
 .ide-desc {
-  color: var(--stitch-text-secondary, #94a3b8);
+  color: var(--stitch-text-secondary, #C6F432);
   font-size: 1.05rem;
   max-width: 650px;
   margin: 0 auto 2.5rem;
@@ -83,11 +83,11 @@ body {
 }
 
 .ide-box {
-  background: var(--stitch-bg-secondary, #080e1a);
+  background: var(--stitch-bg-secondary, #0B0B0C);
   border: 1px solid var(--stitch-border-glass, rgba(255, 255, 255, 0.08));
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 50px rgba(11, 11, 12, 0.6);
 }
 
 .shortcut-row {
@@ -95,17 +95,17 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 .shortcut-row:last-child { border-bottom: none; }
 .kbd {
   font-family: var(--stitch-font-mono, monospace);
   font-size: 0.75rem;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 2px 8px;
   border-radius: 4px;
-  color: #7dd3fc;
+  color: #C6F432;
 }
 
 @media(max-width: 800px) {
@@ -121,14 +121,14 @@ body {
 <!-- NAV -->
 <nav class="ide-nav">
   <a href="index.html" class="brand-link">
-    <div style="width:28px; height:28px; background:linear-gradient(135deg, #5B8AF0, #00FFB3); border-radius:6px; display:grid; place-items:center;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
+    <div style="width:28px; height:28px; background:linear-gradient(135deg, #C6F432, #C6F432); border-radius:6px; display:grid; place-items:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7"/></svg>
     </div>
-    <span>MLOps<span style="color:#5B8AF0;">.dev</span></span>
+    <span>MLOps<span style="color:#C6F432;">.dev</span></span>
   </a>
   <div style="display:flex; gap:12px; align-items:center;">
-    <a href="docs.html" style="color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Docs</a>
-    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(91,138,240,0.15); border:1px solid rgba(91,138,240,0.4); color:#7dd3fc; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
+    <a href="docs.html" style="color:#C6F432; text-decoration:none; font-size:0.85rem; font-weight:600; padding:6px 12px;">Docs</a>
+    <a href="dashboard.html" class="shimmer-btn" style="background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.4); color:#C6F432; text-decoration:none; padding:6px 14px; border-radius:6px; font-size:0.8rem; font-weight:700;">
       <span>Dashboard →</span>
     </a>
   </div>
@@ -136,7 +136,7 @@ body {
 
 <!-- HERO -->
 <section class="ide-hero">
-  <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(91,138,240,0.1); border:1px solid rgba(91,138,240,0.35); padding:6px 16px; border-radius:999px; font-family:var(--stitch-font-mono, monospace); font-size:0.8rem; font-weight:700; color:#7dd3fc; margin-bottom:1.2rem;">
+  <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(198, 244, 50, 0.1); border:1px solid rgba(198, 244, 50, 0.35); padding:6px 16px; border-radius:999px; font-family:var(--stitch-font-mono, monospace); font-size:0.8rem; font-weight:700; color:#C6F432; margin-bottom:1.2rem;">
     <span>⚡ VS CODE &amp; JETBRAINS EXTENSION</span>
   </div>
   <h1 class="ide-title">Deploy Edge AI Directly Inside Your IDE</h1>
@@ -146,45 +146,45 @@ body {
 <!-- MAIN -->
 <main class="ide-container">
   <div class="ide-box border-beam">
-    <h2 style="font-size:1.25rem; font-weight:800; color:#fff; margin-bottom:1rem; font-family:var(--stitch-font-display, sans-serif);">Install via VS Code Marketplace</h2>
-    <p style="font-size:0.85rem; color:#94a3b8; margin-bottom:1.2rem;">Search for <code>MLOps.dev Edge Copilot</code> in the VS Code Extensions tab or install via terminal:</p>
+    <h2 style="font-size:1.25rem; font-weight:800; color:#FFFFFF; margin-bottom:1rem; font-family:var(--stitch-font-display, sans-serif);">Install via VS Code Marketplace</h2>
+    <p style="font-size:0.85rem; color:#C6F432; margin-bottom:1.2rem;">Search for <code>MLOps.dev Edge Copilot</code> in the VS Code Extensions tab or install via terminal:</p>
     
     <div class="code-wrap" style="margin:0 0 1.5rem 0;">
       <div class="code-bar">
         <span class="code-lang">BASH</span>
         <button class="code-copy" onclick="(navigator.clipboard ? navigator.clipboard.writeText('code --install-extension mlops-dev.edge-copilot') : Promise.resolve()).catch(()=>{}); showToast('✓ Copied install command', 'ok');">copy</button>
       </div>
-      <div class="code-body" style="color:#00ffb3; font-weight:700;">code --install-extension mlops-dev.edge-copilot</div>
+      <div class="code-body" style="color:#C6F432; font-weight:700;">code --install-extension mlops-dev.edge-copilot</div>
     </div>
 
-    <a href="https://marketplace.visualstudio.com" target="_blank" rel="noopener" class="shimmer-btn" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#fff; font-weight:700; padding:10px 18px; border-radius:8px; display:inline-block; text-decoration:none; font-size:0.85rem;">
+    <a href="https://marketplace.visualstudio.com" target="_blank" rel="noopener" class="shimmer-btn" style="background:linear-gradient(135deg, #C6F432, #C6F432); border:none; color:#FFFFFF; font-weight:700; padding:10px 18px; border-radius:8px; display:inline-block; text-decoration:none; font-size:0.85rem;">
       Open in Visual Studio Marketplace →
     </a>
   </div>
 
   <div class="ide-box">
-    <h2 style="font-size:1.25rem; font-weight:800; color:#fff; margin-bottom:1rem; font-family:var(--stitch-font-display, sans-serif);">Keybinding Cheat Sheet</h2>
+    <h2 style="font-size:1.25rem; font-weight:800; color:#FFFFFF; margin-bottom:1rem; font-family:var(--stitch-font-display, sans-serif);">Keybinding Cheat Sheet</h2>
     
     <div class="shortcut-row">
-      <span style="font-size:0.84rem; color:#f8fafc;">Deploy Model to Fleet</span>
+      <span style="font-size:0.84rem; color:#FFFFFF;">Deploy Model to Fleet</span>
       <span class="kbd">Cmd + Shift + D</span>
     </div>
     <div class="shortcut-row">
-      <span style="font-size:0.84rem; color:#f8fafc;">Stream Live Drift Telemetry</span>
+      <span style="font-size:0.84rem; color:#FFFFFF;">Stream Live Drift Telemetry</span>
       <span class="kbd">Cmd + Shift + T</span>
     </div>
     <div class="shortcut-row">
-      <span style="font-size:0.84rem; color:#f8fafc;">Emergency Circuit Rollback</span>
+      <span style="font-size:0.84rem; color:#FFFFFF;">Emergency Circuit Rollback</span>
       <span class="kbd">Cmd + Shift + R</span>
     </div>
     <div class="shortcut-row">
-      <span style="font-size:0.84rem; color:#f8fafc;">Open Remote Edge Terminal</span>
+      <span style="font-size:0.84rem; color:#FFFFFF;">Open Remote Edge Terminal</span>
       <span class="kbd">Cmd + Shift + E</span>
     </div>
   </div>
 </main>
 
-<div id="toast" role="alert" style="position:fixed;bottom:24px;right:24px;background:#0d1527;border:1px solid #5b8af0;color:#e2e8f0;padding:10px 18px;border-radius:8px;font-size:0.82rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.6);opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;z-index:9999;">
+<div id="toast" role="alert" style="position:fixed;bottom:24px;right:24px;background:#0B0B0C;border:1px solid #C6F432;color:#FFFFFF;padding:10px 18px;border-radius:8px;font-size:0.82rem;font-weight:600;box-shadow:0 10px 30px rgba(11, 11, 12, 0.6);opacity:0;transform:translateY(10px);transition:all 0.25s ease;pointer-events:none;z-index:9999;">
   <span id="toast-msg"></span>
 </div>
 <script>
