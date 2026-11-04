@@ -59,7 +59,7 @@ Commission any physical Linux board (Raspberry Pi, NVIDIA Jetson, Intel NUC, or 
 
 ```bash
 # Connects to live control plane & starts systemd service automatically:
-curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo
+curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token $MLOPS_API_KEY
 ```
 
 View your hardware live at: **[https://www.mlopsde.me/dashboard](https://www.mlopsde.me/dashboard)**
@@ -158,18 +158,18 @@ If you'd like to run the API server locally for development or testing:
    cd Raghunath2604-mlops-dev
    ```
 
-2. Run the mock local API server:
+2. Run the local control plane API server:
    ```bash
    cd sdk
-   pip install flask flask-cors requests resend gunicorn
+   pip install -r requirements.txt
    python server/api.py
    ```
 
-3. Run the demo script (in a new terminal):
+3. Run the live end-to-end client verification suite:
    ```bash
-   export MLOPS_API_KEY=demo
+   export MLOPS_API_KEY=key_demo
    export MLOPS_API_URL=http://localhost:8000/v1
-   python demo.py
+   python verify_client.py
    ```
 
 ---

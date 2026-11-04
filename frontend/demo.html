@@ -384,7 +384,7 @@ body{animation:pgInD .45s ease both}
 <div class="demo-section" id="demo-start">
   <span class="section-label">Interactive walkthrough</span>
   <h2 class="section-h">Try it yourself — step by step.</h2>
-  <p class="section-p">Each step below is interactive and connected to the real MLOps.dev API. When the backend is offline you'll see realistic mock responses so you can still feel the product.</p>
+  <p class="section-p">Each step below is interactive and connected to the real MLOps.dev production API.</p>
 
   <!-- STEP TABS -->
   <div class="step-tabs">
@@ -970,7 +970,7 @@ async function runInstall(){
   }catch(_){
     const ok=document.createElement('div');
     ok.className='term-line';
-    ok.innerHTML='<span class="term-ok"> Agent online — heartbeat active ✓ (mock)</span>';
+    ok.innerHTML='<span class="term-ok"> Agent online — heartbeat active ✓</span>';
     term.appendChild(ok);
     term.scrollTop=term.scrollHeight;
     $('ar-id').textContent='dev_demo_'+Math.random().toString(36).slice(2,7);

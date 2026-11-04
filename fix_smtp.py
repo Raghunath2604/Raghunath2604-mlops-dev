@@ -12,7 +12,7 @@ def send_email(to_email, subject, body):
     from_email = os.environ.get("SMTP_FROM_EMAIL", smtp_user)
     
     if not all([smtp_server, smtp_user, smtp_pass]):
-        print(f"[EMAIL MOCK] Missing SMTP config. Would have sent: '{subject}' to {to_email}")
+        print(f"[EMAIL CONSOLE DISPATCH] Missing SMTP config. Would have sent: '{subject}' to {to_email}")
         return
         
     msg = MIMEMultipart()

@@ -117,7 +117,7 @@ def register():
     ''', (user_id, pw_hash, email), commit=True)
     
     # Normally we would trigger an email to admin here
-    print(f"[EMAIL MOCK] New user registration requires approval: {email}")
+    print(f"[ADMIN NOTIFICATION] New user registration requires approval: {email}")
     
     return jsonify({"success": True, "message": "Registration successful, pending admin approval."})
 

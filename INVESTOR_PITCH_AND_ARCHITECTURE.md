@@ -134,7 +134,7 @@ export MLOPS_SERVER_URL="http://<YOUR_IP_OR_DOMAIN>:8000"
 export MLOPS_API_KEY="demo"
 
 # Run the edge agent daemon
-python mock_edge_device.py --name "Jetson-Production-Edge" --hw "jetson_orin"
+python edge_device.py --name "Jetson-Production-Edge" --hw "jetson_orin"
 ```
 The device registers automatically, reports hardware metrics (CPU, RAM, Temp), receives model updates pushed from the dashboard, and streams live telemetry.
 

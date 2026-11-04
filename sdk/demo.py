@@ -56,7 +56,7 @@ def info(msg): print(f"     {msg}")
 # ── Connect ───────────────────────────────────────────────────────
 print()
 print("=" * 60)
-print("  MLOps.dev Python SDK — Live Demo")
+print("  MLOps.dev Python SDK — Live Operational Client Suite")
 print(f"  API: {API_URL}")
 print("=" * 60)
 

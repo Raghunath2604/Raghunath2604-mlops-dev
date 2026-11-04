@@ -75,10 +75,21 @@ class MLOpsAgent:
         """Background loop to send heartbeats and sync deployments."""
         while self._running:
             try:
-                # In a real agent, use psutil to get real metrics
-                ram_mb = 120 + (self._inference_count % 50) 
-                cpu_pct = 15.5
+                # Read real host metrics via psutil if available
+                ram_mb = 128.0
+                cpu_pct = 12.0
                 temp_c = 45.0
+                try:
+                    import psutil
+                    proc = psutil.Process()
+                    ram_mb = round(proc.memory_info().rss / (1024 * 1024), 1)
+                    cpu_pct = round(psutil.cpu_percent(interval=None), 1)
+                    if os.path.exists("/sys/class/thermal/thermal_zone0/temp"):
+                        with open("/sys/class/thermal/thermal_zone0/temp", "r") as tf:
+                            raw = float(tf.read().strip())
+                            temp_c = round(raw / 1000.0, 1) if raw > 1000 else round(raw, 1)
+                except Exception:
+                    pass
                 
                 with self._telemetry_lock:
                     drift = self._drift_score

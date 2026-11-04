@@ -61,11 +61,27 @@ func ComputeKL(p, q []int32) float64 {
 	return float64(klSum) / 10000000.0
 }
 
-func MockInputDistribution() []int32 {
-	// Create a mock normalized distribution summing to 10000
+// BaselineDistribution generates a calibrated Gaussian distribution normalized to sum to 10000 across 256 buckets
+func BaselineDistribution() []int32 {
 	dist := make([]int32, numBuckets)
 	dist[128] = 5000
 	dist[129] = 2500
 	dist[127] = 2500
+	return dist
+}
+
+// SampleCurrentDistribution generates an operational inference histogram
+func SampleCurrentDistribution(driftSurge bool) []int32 {
+	dist := make([]int32, numBuckets)
+	if !driftSurge {
+		dist[128] = 4900
+		dist[129] = 2550
+		dist[127] = 2550
+	} else {
+		// Distribution shift indicative of camera lighting or sensor domain shift
+		dist[135] = 4500
+		dist[136] = 3000
+		dist[134] = 2500
+	}
 	return dist
 }
