@@ -33,7 +33,7 @@ jobs:
       - name: 1. Live Public Endpoint HTTP Probe
         run: |
           echo "Testing live production health endpoint..."
-          curl -fsSL https://mlopsde.me/v1/health | grep -q '"status":"ok"' || { echo "Health endpoint probe failed"; exit 1; }
+          curl -fsSL -H 'User-Agent: Mozilla/5.0' https://mlopsde.me/v1/health | grep -q '"status":"ok"' || { echo "Health endpoint probe failed"; exit 1; }
           echo "Live health check passed."
 
       - name: 2. Core 6-Pillar Architecture Verification

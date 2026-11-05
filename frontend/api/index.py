@@ -32,6 +32,8 @@ def safe_json(s, default=None):
 import time
 import uuid
 import hashlib
+import base64
+import hmac
 import sqlite3
 import psycopg2
 import psycopg2.extras
