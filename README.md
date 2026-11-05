@@ -28,13 +28,11 @@
 
 ---
 
-## 🏆 Real-World Enterprise Case Study & Field Validation
+## 🔬 Systems Engineering Specification & Silicon Benchmarks
 
-> *"Before MLOps.dev, our robotics fleet suffered from silent accuracy drops in changing warehouse lighting and bricked Jetson boards during manual OTA updates. MLOps.dev completely solved this: mathematical KL-divergence drift tracking caught errors before packages were misclassified, and the autonomous circuit breaker rolled back bad models in 294 milliseconds without human intervention."*  
-> — **Ravi Teja**, *Principal Edge AI & Autonomous Robotics Lead, Apex Robotics Labs*
+MLOps.dev eliminates the two systemic failure modes of distributed edge AI: **silent input distribution drift** and **bricked edge devices during OTA rollouts**. When ambient conditions shift or cameras foul, our embedded statistical engine trips an autonomous rollback in under 300ms—without manual SSH intervention or cloud dependency.
 
-Read the full technical whitepaper & production engineering dossier:  
-📖 **[Read the Complete User 1 Technical Dossier (IEEE Specification)](user1_documentation.md)**
+📖 **[Read the Systems Engineering Specification & Hardware Benchmark Dossier](user1_documentation.md)**
 
 <div align="center">
   <img src="docs/assets/fig1_edge_mlops_architecture.jpg" width="850" alt="MLOps.dev Fleet Control Plane Architecture">
@@ -70,12 +68,12 @@ View your hardware live at: **[https://www.mlopsde.me/dashboard](https://www.mlo
 
 | Document | Description |
 | :--- | :--- |
-| [**User 1 Production Case Study**](user1_documentation.md) | **Certified IEEE technical whitepaper, physical Jetson Orin benchmarks, and 294ms circuit breaker validation.** |
+| [**Systems Engineering Specification**](user1_documentation.md) | **Fleet control plane architecture, physical Jetson AGX Orin benchmarks, and 294ms circuit breaker validation.** |
 | [**Implementation Plan**](implementation-plan.md) | 4-Phase Work Breakdown Structure, Gantt schedule, and technical workstreams. |
 | [**Product Requirements (PRD)**](docs-prd.md) | Problem analysis, buyer personas, 17-silicon platform matrix, and pricing model. |
 | [**System Architecture**](architecture.md) | Edge-to-cloud distributed topology, `bsdiff4` delta compression, and KL math. |
 | [**Backend Schema**](backend-schema.md) | Complete PostgreSQL/SQLite ERD, 10 table definitions, and index strategies. |
-| [**UI/UX Design System**](uiux-design.md) | Obsidian & Electric Cobalt design tokens, typography, and component specifications. |
+| [**UI/UX Design System**](uiux-design.md) | 3-Color Design System (Midnight Black, Pure White, Lime Green) specifications. |
 | [**Engineering Rules**](rules.md) | Zero-Slop standards, hardware cgroup constraints, and security directives. |
 | [**Execution Tasks**](tasks.md) | Completed Phase 1 launch deliverables and Phase 2/3 engineering roadmaps. |
 | [**Technical Requirements (TRD)**](technical-required-document.md) | Minimum hardware compute envelopes, telemetry bandwidth budgets, and TLS 1.3. |
