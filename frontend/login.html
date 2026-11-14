@@ -1207,7 +1207,7 @@ html, body {
     let ghDebounceTimer = null;
     let verifiedGhProfile = null;
 
-    const API_BASE = (window.location.protocol === 'file:' || (window.location.port !== '8000' && window.location.port !== '')) ? '' : '';
+    const API_BASE = (window.location.protocol === 'file:') ? 'https://mlopsde.me' : '';
 
     function togglePasswordVisibility() {
       const inp = document.getElementById('inp-password');

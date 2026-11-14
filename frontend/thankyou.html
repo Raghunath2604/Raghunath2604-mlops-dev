@@ -12,7 +12,7 @@ gtag('js',new Date());
 gtag('config','G-T4N00SB1DN',{'anonymize_ip':true});
 gtag('event','sign_up',{'method':'waitlist'}); //,{'anonymize_ip':true,'send_page_view':true});
 </script>
-<link rel="canonical" href="https://www.mlops.dev/thankyou"/>
+<link rel="canonical" href="https://www.mlopsde.me/thankyou"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="description" content="Thank you for joining MLOps.dev. You're on the early access list. We'll be in touch with next steps for your edge ML deployment journey."/>
 <title>Welcome to MLOps.dev — You're on the list</title>
@@ -149,7 +149,7 @@ h1{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:-.04em;color:
         <h3>🚀 Move up the list — share your spot</h3>
         <p>Each person who signs up using your link bumps you up 5 positions. The first 100 get lifetime Starter free.</p>
         <div class="ref-url-row">
-          <input class="ref-url" id="ref-url" readonly value="https://www.mlops.dev?ref=loading"/>
+          <input class="ref-url" id="ref-url" readonly value="https://www.mlopsde.me?ref=loading"/>
           <button class="ref-copy-btn" onclick="copyRefLink()">Copy link</button>
         </div>
         <div class="ref-share-row">
@@ -193,7 +193,7 @@ function declineCookies(){localStorage.setItem('cookie_consent','declined');var 
 (function(){
   var email = localStorage.getItem('last_wl_email') || '';
   var refCode = email ? btoa(email).replace(/[^a-zA-Z0-9]/g,'').slice(0,8) : Math.random().toString(36).slice(2,10);
-  var refUrl = 'https://www.mlops.dev?ref=' + refCode;
+  var refUrl = 'https://www.mlopsde.me?ref=' + refCode;
   var inp = document.getElementById('ref-url');
   if(inp) inp.value = refUrl;
   window._refUrl = refUrl;
@@ -210,18 +210,18 @@ function copyRefLink(){
   });
 }
 function shareTwitter(){
-  var url = encodeURIComponent(window._refUrl||'https://www.mlops.dev');
+  var url = encodeURIComponent(window._refUrl||'https://www.mlopsde.me');
   var text = encodeURIComponent('Just joined the @mlopsdev waitlist — deploy ML models to edge devices without SSH scripts. Offline-first, drift-aware. Free for small fleets.');
   window.open('https://twitter.com/intent/tweet?text='+text+'&url='+url,'_blank');
   if(typeof gtag!=='undefined') gtag('event','referral_share',{'platform':'twitter'});
 }
 function shareLinkedIn(){
-  var url = encodeURIComponent(window._refUrl||'https://www.mlops.dev');
+  var url = encodeURIComponent(window._refUrl||'https://www.mlopsde.me');
   window.open('https://www.linkedin.com/sharing/share-offsite/?url='+url,'_blank');
   if(typeof gtag!=='undefined') gtag('event','referral_share',{'platform':'linkedin'});
 }
 function shareHN(){
-  var url = encodeURIComponent(window._refUrl||'https://www.mlops.dev');
+  var url = encodeURIComponent(window._refUrl||'https://www.mlopsde.me');
   var title = encodeURIComponent('MLOps.dev – Deploy ML models to edge devices without SSH scripts');
   window.open('https://news.ycombinator.com/submitlink?u='+url+'&t='+title,'_blank');
   if(typeof gtag!=='undefined') gtag('event','referral_share',{'platform':'hackernews'});

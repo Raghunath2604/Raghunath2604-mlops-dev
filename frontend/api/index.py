@@ -433,7 +433,7 @@ def _init_postgres(db_url):
             demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             cursor.execute('''
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
-                VALUES ('admin', %s, 'demo@nodepilot.dev', 'enterprise', 10, 'admin', 'approved')
+                VALUES ('admin', %s, 'admin@mlopsde.me', 'enterprise', 10, 'admin', 'approved')
             ''', (demo_hash,))
 
         # Seed initial models if table is empty
@@ -656,7 +656,7 @@ def init_db():
             demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             db.execute('''
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
-                VALUES ('admin', ?, 'demo@nodepilot.dev', 'enterprise', 10, 'admin', 'approved')
+                VALUES ('admin', ?, 'admin@mlopsde.me', 'enterprise', 10, 'admin', 'approved')
             ''', (demo_hash,))
 
         # Seed models if empty
@@ -930,7 +930,7 @@ def auth_login():
     turnstile_token = data.get("turnstile_response", "").strip()
     
     # Verify Turnstile (bypass if token not supplied or known demo accounts)
-    is_demo = (email in ['demo', 'demo@nodepilot.dev', 'admin', 'demo@mlops.dev', 'admin@mlops.dev']) and (password in ['demo', 'demo1234', 'admin'])
+    is_demo = (email in ['demo', 'admin@mlopsde.me', 'admin', 'demo@mlops.dev', 'admin@mlops.dev']) and (password in ['demo', 'demo1234', 'admin'])
     if not is_demo and not key and turnstile_token:
         if not verify_turnstile(turnstile_token, expected_action="login"):
             return jsonify({"error": "Failed CAPTCHA verification"}), 400
@@ -1517,6 +1517,7 @@ def auth_oauth_github():
 # ── Devices ───────────────────────────────────────────────────────
 @app.route("/v1/devices/register", methods=["POST"])
 @app.route("/devices/register", methods=["POST"])
+@app.route("/v1/devices", methods=["POST"])
 @require_auth
 def devices_register():
     data = request.get_json(silent=True) or {}
@@ -2237,6 +2238,58 @@ def compiler_compile():
 @app.route("/v1/models", methods=["POST"])
 @require_auth
 def models_push():
+    # Support JSON metadata registration
+    if request.is_json:
+        data = request.get_json(silent=True) or {}
+        name = data.get("name") or data.get("model_name") or ""
+        tag = data.get("tag") or data.get("model_tag") or data.get("model_ver") or "latest"
+        fmt = data.get("format", "onnx")
+        variant = data.get("variant", "all")
+        sha256 = data.get("sha256") or hashlib.sha256(f"{name}:{tag}:{variant}".encode()).hexdigest()
+        size_bytes = int(data.get("size_bytes") or data.get("file_size") or 7400000)
+        metadata = json.dumps(data.get("metadata", {}))
+
+        from werkzeug.utils import secure_filename
+        clean_name = secure_filename(name) or name
+        clean_tag = secure_filename(tag) or tag
+        clean_variant = secure_filename(variant) or variant
+        if not clean_name:
+            return jsonify({"error": "A valid model name is required"}), 400
+
+        db = get_db()
+        mv_id = f"mv_{uuid.uuid4().hex[:8]}"
+        try:
+            db_query(db, """
+                INSERT INTO models (id, owner_id, name, tag, format, variant, size_bytes, sha256, metadata)
+                VALUES (?,?,?,?,?,?,?,?,?)
+                ON CONFLICT(name, tag, variant) DO UPDATE SET
+                    size_bytes=excluded.size_bytes,
+                    sha256=excluded.sha256,
+                    metadata=excluded.metadata,
+                    created_at=CURRENT_TIMESTAMP
+            """, (mv_id, g.user_id, name, tag, fmt, variant, size_bytes, sha256, metadata), commit=True)
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+        db_query(db, 
+            "INSERT INTO audit_log (id, owner_id, event_type, model_name, model_tag, status, msg) VALUES (?,?,?,?,?,?,?)",
+            (str(uuid.uuid4()), g.user_id, "model_push", name, tag, "success", f"Registered model {name}:{tag} ({variant}, {size_bytes//1024}KB)"), commit=True
+        )
+
+        return jsonify({
+            "success": True,
+            "data": {
+                "id": mv_id,
+                "name": name,
+                "tag": tag,
+                "format": fmt,
+                "variant": variant,
+                "size_bytes": size_bytes,
+                "sha256": sha256,
+                "metadata": json.loads(metadata)
+            }
+        }), 201
+
     # Accept multipart form upload
     if "model" not in request.files:
         return jsonify({"error": "No model file in request"}), 400
@@ -2380,13 +2433,13 @@ def models_delete(name, tag):
 def deployments_create():
     data        = request.get_json(silent=True) or {}
     model_name  = data.get("model_name", "")
-    model_tag   = data.get("model_tag",  "latest")
-    target      = data.get("target", "")
+    model_tag   = data.get("model_tag") or data.get("model_ver") or "latest"
+    target      = data.get("target") or "all"
     stages_in   = data.get("stages", [])
     health_gate = data.get("health_gate", {})
 
-    if not model_name or not target:
-        return jsonify({"error": "model_name and target are required"}), 400
+    if not model_name:
+        return jsonify({"error": "model_name is required"}), 400
 
     db    = get_db()
     dep_id = f"dep_{uuid.uuid4().hex[:8]}"

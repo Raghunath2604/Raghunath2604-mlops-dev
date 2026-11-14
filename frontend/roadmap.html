@@ -368,7 +368,7 @@ footer a{color:#C6F432;text-decoration:none}
 </div>
 
 <footer>
-  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlops.dev">www.mlops.dev</a></div>
+  <div>© 2025 MLOps.dev Technologies Pvt. Ltd. · Raghunathareddy GR · <a href="https://www.mlopsde.me">www.mlopsde.me</a></div>
   <div class="foot-links">
     <a href="index.html">Home</a><a href="changelog.html">Changelog</a><a href="docs.html">Docs</a>
     <a href="faq.html">FAQ</a><a href="https://discord.gg/Tb47N9NaPk" target="_blank" rel="noopener">Discord</a>
@@ -426,7 +426,7 @@ function filterBoard(tag, el){
 function submitSuggestion(){
   var val = document.getElementById('suggest-input').value.trim();
   if(!val) return;
-  fetch('https://api.mlopsde.me/api/waitlist',{
+  fetch('/api/waitlist',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({email:'suggestion@roadmap',source:'roadmap_suggestion',use_case:val})

@@ -2666,7 +2666,7 @@ async function apiFetch(path, opts={}) {
   if (!token) {
     try {
       const u = JSON.parse(localStorage.getItem('mlops_user') || localStorage.getItem('np_user') || '{}');
-      token = u.token || u.id || (u.is_admin ? 'demo' : null);
+      token = u.token || u.id || null;
     } catch(e) {}
   }
   const authHeader = token ? { 'Authorization': `Bearer ${token}` } : {};

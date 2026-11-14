@@ -31,18 +31,17 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F7FEF'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2300E5A0'/%3E%3C/svg%3E"/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://www.mlops.dev"/>
+<meta property="og:url" content="https://www.mlopsde.me"/>
 <meta property="og:title" content="MLOps.dev by Raghunathareddy GR — CEO &amp; Founder — Deploy ML models to edge devices at scale"/>
 <meta property="og:description" content="The only MLOps platform built for the real world. Offline-first sync. Drift detection. Canary deployments. Built for Jetson, Raspberry Pi, Coral."/>
-<meta property="og:image" content="https://www.mlops.dev/og-image.png"/>
+<meta property="og:image" content="https://www.mlopsde.me/og-image.png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
-<meta name="twitter:image" content="https://www.mlops.dev/og-image.png"/>
-<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.mlopsde.me/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="author" content="Raghunathareddy GR"/>
 <meta name="theme-color" content="#C6F432"/>
-<link rel="canonical" href="https://www.mlops.dev"/>
+<link rel="canonical" href="https://www.mlopsde.me"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
@@ -55,8 +54,8 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
     {
       "@type": "Organization",
       "name": "MLOps.dev",
-      "url": "https://www.mlops.dev",
-      "logo": "https://www.mlops.dev/og-image.png",
+      "url": "https://www.mlopsde.me",
+      "logo": "https://www.mlopsde.me/og-image.png",
       "contactPoint": {
         "@type": "ContactPoint",
         "email": "hello@mlops.dev",
@@ -82,7 +81,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Linux",
       "description": "Deploy, monitor, and heal ML models on edge devices. Offline-first sync, drift detection, canary deployments.",
-      "url": "https://www.mlops.dev",
+      "url": "https://www.mlopsde.me",
       "offers": [
         {
           "@type": "Offer",
@@ -789,7 +788,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
     <div class="footer-brand">
       <div class="footer-brand-logo" onclick="scrollToTop()">MLOps<em>.dev</em></div>
       <p class="footer-brand-p">The MLOps platform for the real world.</p>
-      <a href="https://www.mlops.dev" class="footer-brand-url" target="_blank" rel="noopener">www.mlops.dev</a>
+      <a href="https://www.mlopsde.me" class="footer-brand-url" target="_blank" rel="noopener">www.mlopsde.me</a>
     </div>
     <div class="footer-col">
       <h4>Product</h4>
@@ -842,7 +841,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 
 <script>
 'use strict';
-const API='https://mlops-dev-server.onrender.com/api';
+const API = (window.location.protocol === 'file:') ? 'https://mlopsde.me/api' : '/api';
 const $=id=>document.getElementById(id);
 const smoothTo=id=>{const el=$(id);if(el)el.scrollIntoView({behavior:'smooth'});};
 const scrollToTop=()=>window.scrollTo({top:0,behavior:'smooth'});
@@ -866,7 +865,7 @@ function closeModal(){$('modal').classList.remove('open');document.body.style.ov
 function comingSoon(title,body,url){
   $('modal-title').textContent=title;
   $('modal-body').textContent=body||'Coming soon.';
-  const u=$('modal-url');u.textContent=url||'https://www.mlops.dev';u.href=url||'https://www.mlops.dev';
+  const u=$('modal-url');u.textContent=url||'https://www.mlopsde.me';u.href=url||'https://www.mlopsde.me';
   $('modal').classList.add('open');document.body.style.overflow='hidden';
 }
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal();});
