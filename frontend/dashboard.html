@@ -1674,7 +1674,7 @@ client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], c
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         <span>Cluster Settings</span>
       </button>
-      <a href="admin.html" class="sb-item" id="nav-master-admin" style="color:var(--ruby, #C6F432); font-weight:700;">
+      <a href="admin.html" class="sb-item" id="nav-master-admin" style="display:none; color:var(--ruby, #C6F432); font-weight:700;">
         <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         <span>Master Admin Suite</span>
         <span class="sb-badge alert" style="background:#C6F432; color:#FFFFFF; display:inline-block; margin-left:auto;">ADMIN</span>
@@ -1691,10 +1691,10 @@ client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], c
 
     <div class="sb-footer">
       <div class="sb-user-card">
-        <div class="sb-avatar" id="sb-ava">AD</div>
+        <div class="sb-avatar" id="sb-ava">OP</div>
         <div class="sb-user-info">
-          <div class="sb-username" id="sb-uname">Administrator</div>
-          <div class="sb-userrole" id="sb-urole">Cluster Admin</div>
+          <div class="sb-username" id="sb-uname">Operator</div>
+          <div class="sb-userrole" id="sb-urole">Developer</div>
         </div>
       </div>
       <button class="btn-logout" onclick="doLogout()">Sign Out of Control Plane</button>
@@ -1739,7 +1739,7 @@ client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], c
         <div class="cluster-pill"><div class="live-dot"></div><span>Connected · TLS 1.3</span></div>
       </div>
       <div class="topbar-right">
-        <a href="admin.html" class="action-btn" style="background:rgba(198, 244, 50, 0.14); border-color:rgba(198, 244, 50, 0.4); color:#C6F432; font-weight:700; text-decoration:none;" title="Open Master Admin Control Suite">
+        <a href="admin.html" class="action-btn" id="topbar-admin-btn" style="display:none; background:rgba(198, 244, 50, 0.14); border-color:rgba(198, 244, 50, 0.4); color:#C6F432; font-weight:700; text-decoration:none;" title="Open Master Admin Control Suite">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           <span>Admin Suite</span>
         </a>
@@ -2989,21 +2989,30 @@ function bootApp(user) {
     avaEl.textContent = initials;
   }
 
-  document.getElementById('sb-uname').textContent = user.name || user.email || 'Administrator';
+  document.getElementById('sb-uname').textContent = user.name || user.email || 'Operator';
   
-  let roleTitle = user.role || 'Member';
-  if (user.provider === 'github') {
+  const isMasterAdmin = Boolean(user && (user.is_admin === true || user.role === 'admin'));
+  let roleTitle = 'Developer';
+  if (isMasterAdmin) {
+    roleTitle = 'Cluster Admin';
+  } else if (user.provider === 'github') {
     roleTitle = 'GitHub Developer';
   } else if (user.provider === 'google') {
     roleTitle = 'Google Cloud Engineer';
-  } else if (user.role === 'admin') {
-    roleTitle = 'Cluster Admin';
+  } else if (user.role) {
+    roleTitle = user.role.charAt(0).toUpperCase() + user.role.slice(1);
   }
   document.getElementById('sb-urole').textContent = roleTitle;
 
-  if (document.getElementById('nav-admin')) {
-    document.getElementById('nav-admin').style.display = (user.role === 'admin' || user.provider) ? 'flex' : 'none';
-  }
+  // Master Admin Navigation items strictly guarded: only true admins see them
+  const navMaster = document.getElementById('nav-master-admin');
+  if (navMaster) navMaster.style.display = isMasterAdmin ? 'flex' : 'none';
+
+  const navAdmin = document.getElementById('nav-admin');
+  if (navAdmin) navAdmin.style.display = isMasterAdmin ? 'flex' : 'none';
+
+  const topbarAdmin = document.getElementById('topbar-admin-btn');
+  if (topbarAdmin) topbarAdmin.style.display = isMasterAdmin ? 'inline-flex' : 'none';
 
   const activeToken = user.token || localStorage.getItem('mlops_token') || user.id || 'sk_live_' + (user.id || 'primary');
   if (document.getElementById('s-key')) document.getElementById('s-key').value = activeToken;
