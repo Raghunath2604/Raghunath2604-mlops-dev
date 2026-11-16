@@ -184,8 +184,12 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 <div id="mob-backdrop" onclick="closeMobNav()" aria-hidden="true"></div>
 <div id="mob-nav" aria-label="Mobile navigation">
   <button class="mn-link" onclick="smoothTo('platform');closeMobNav()">Platform<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="smoothTo('comparison');closeMobNav()" style="color:#C6F432; font-weight:700;">VS Competitors<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-link" onclick="smoothTo('how');closeMobNav()">How it works<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-link" onclick="smoothTo('pricing');closeMobNav()">Pricing<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="location.href='benchmarks.html';closeMobNav()">Benchmarks<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="location.href='compiler.html';closeMobNav()">Auto-Compiler<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  <button class="mn-link" onclick="location.href='fleet-map.html';closeMobNav()">Fleet Map<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-link" onclick="location.href='about.html';closeMobNav()">About<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-link" onclick="location.href='blog.html';closeMobNav()">Blog<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
   <button class="mn-link" onclick="location.href='demo.html';closeMobNav()">Watch demo<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg></button>
@@ -194,7 +198,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 </div>
 
 <!-- TOP ZERO-TRUST TELEMETRY & ZULU MISSION RIBBON -->
-<div class="stitch-telemetry-ribbon" style="display:flex; align-items:center; justify-content:space-between; padding:6px 32px; background:rgba(11, 11, 12, 0.94); border-bottom:1px solid rgba(198, 244, 50, 0.2); font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#C6F432; position:relative; z-index:100; backdrop-filter:blur(16px);">
+<div class="stitch-telemetry-ribbon" style="display:flex; align-items:center; justify-content:space-between; padding:0 32px; background:rgba(8, 9, 12, 0.95); border-bottom:1px solid rgba(255, 255, 255, 0.08); font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#C6F432; backdrop-filter:blur(16px);">
   <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
     <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(198, 244, 50, 0.08); border:1px solid rgba(198, 244, 50, 0.28); border-radius:4px; padding:2px 8px; color:#C6F432; font-weight:700;">
       <span>UTC / ZULU</span>
@@ -231,6 +235,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   </div>
   <div class="nav-links">
     <a onclick="smoothTo('platform')" data-s="platform">Platform</a>
+    <a onclick="smoothTo('comparison')" data-s="comparison" style="color:#C6F432; font-weight:700;">VS Competitors</a>
     <a href="fleet-map.html" style="color:#C6F432; font-weight:700;">🌐 Fleet Map</a>
     <a href="playground.html" style="color:#C6F432; font-weight:600;">AI Playground</a>
     <a href="compiler.html">Auto-Compiler</a>
@@ -417,30 +422,30 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
       <!-- Traditional MLOps -->
-      <div style="background:rgba(198, 244, 50, 0.06); border:1px solid rgba(198, 244, 50, 0.25); border-radius:10px; padding:1.4rem;">
-        <div style="display:flex; align-items:center; gap:8px; color:#C6F432; font-weight:700; font-size:0.88rem; margin-bottom:12px;">
-          <span>❌ Traditional Cloud / Cron MLOps</span>
+      <div style="background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.25); border-radius:10px; padding:1.4rem;">
+        <div style="display:flex; align-items:center; gap:8px; color:#F87171; font-weight:700; font-size:0.88rem; margin-bottom:12px;">
+          <span>❌ Traditional Cloud / Cron MLOps (W&B, MLflow, Manual SSH)</span>
         </div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#C6F432; line-height:1.7;">
-          <div>• 00:00 — New model pushed over SSH</div>
-          <div>• 00:15 — Camera lighting shifts; drift undetected</div>
-          <div>• 01:30 — Quality team notices 8,400 bad parts</div>
-          <div>• 02:10 — On-call engineer logs in to rollback</div>
-          <div style="color:#C6F432; font-weight:700; margin-top:8px;">💥 TOTAL IMPACT: 2h 10m outage · $64,000 scrap</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#94A3B8; line-height:1.7;">
+          <div>• 00:00 — New model pushed over raw SSH / Docker run</div>
+          <div>• 00:15 — Camera lighting shifts; drift completely undetected</div>
+          <div>• 01:30 — Quality inspection flags 8,400 defect parts</div>
+          <div>• 02:10 — On-call engineer logs in to manually rollback</div>
+          <div style="color:#EF4444; font-weight:700; margin-top:10px; background:rgba(239, 68, 68, 0.12); border:1px solid rgba(239, 68, 68, 0.3); padding:6px 10px; border-radius:6px;">💥 TOTAL IMPACT: 2h 10m outage · $64,000 scrap</div>
         </div>
       </div>
 
       <!-- MLOps.dev Autonomous Circuit Breaker -->
-      <div style="background:rgba(198, 244, 50, 0.06); border:1px solid rgba(198, 244, 50, 0.3); border-radius:10px; padding:1.4rem; position:relative; overflow:hidden;">
+      <div style="background:rgba(16, 185, 129, 0.06); border:1px solid rgba(198, 244, 50, 0.35); border-radius:10px; padding:1.4rem; position:relative; overflow:hidden;">
         <div style="display:flex; align-items:center; gap:8px; color:#C6F432; font-weight:700; font-size:0.88rem; margin-bottom:12px;">
           <span>⚡ MLOps.dev Autonomous Circuit Breaker</span>
         </div>
-        <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#C6F432; line-height:1.7;">
-          <div>• 00:00 — Staged 10% canary deployed</div>
-          <div>• 00:00:01 — Edge agent calculates KL divergence (0.584)</div>
-          <div>• 00:00:01.294 — Circuit trips; reverted to golden baseline</div>
-          <div>• 00:00:02 — Slack/PagerDuty audit dispatch sent</div>
-          <div style="color:#C6F432; font-weight:700; margin-top:8px;">✅ TOTAL IMPACT: 294ms rollback · 0 bad parts</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#E2E8F0; line-height:1.7;">
+          <div>• 00:00 — Staged 10% canary deployed to edge nodes</div>
+          <div>• 00:00:01 — Edge engine calculates KL divergence (>0.5)</div>
+          <div>• 00:00:01.294 — Circuit trips: 294ms rollback to golden baseline</div>
+          <div>• 00:00:02 — Immutable audit trail & Slack/PagerDuty dispatched</div>
+          <div style="color:#10B981; font-weight:700; margin-top:10px; background:rgba(16, 185, 129, 0.15); border:1px solid rgba(16, 185, 129, 0.3); padding:6px 10px; border-radius:6px;">✅ TOTAL IMPACT: 294ms rollback · 0 bad parts · $0 scrap</div>
         </div>
       </div>
     </div>
@@ -539,23 +544,226 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
     <div style="display:flex; flex-direction:column; gap:14px;">
       <div>
         <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.75rem; margin-bottom:6px;">
-          <span style="color:#C6F432;">❌ AWS SageMaker / Docker OTA (Full Weights Download):</span>
-          <span style="color:#C6F432; font-weight:700;">500.0 MB · $50,000 / 10K devices</span>
+          <span style="color:#F87171;">❌ AWS SageMaker / Docker OTA (Full Container & Weights):</span>
+          <span style="color:#EF4444; font-weight:700;">500.0 MB · $50,000 / mo per 10K fleet</span>
         </div>
-        <div style="height:12px; border-radius:6px; background:#0B0B0C; overflow:hidden;">
-          <div style="width:100%; height:100%; background:linear-gradient(90deg, #C6F432, #C6F432);"></div>
+        <div style="height:12px; border-radius:6px; background:#121824; overflow:hidden;">
+          <div style="width:100%; height:100%; background:linear-gradient(90deg, #EF4444, #DC2626); border-radius:6px;"></div>
         </div>
       </div>
 
       <div>
         <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.75rem; margin-bottom:6px;">
-          <span style="color:#C6F432;">⚡ MLOps.dev Binary Delta Patch (Changed Weights Only):</span>
-          <span style="color:#C6F432; font-weight:700;">14.2 MB · $1,420 / 10K devices (-97%)</span>
+          <span style="color:#E2E8F0;">⚡ MLOps.dev Binary Delta Patch (Changed Quantized Weights):</span>
+          <span style="color:#C6F432; font-weight:700;">14.2 MB · $1,420 / mo per 10K fleet (-97.1%)</span>
         </div>
-        <div style="height:12px; border-radius:6px; background:#0B0B0C; overflow:hidden;">
-          <div style="width:2.9%; height:100%; background:linear-gradient(90deg, #C6F432, #C6F432); box-shadow:0 0 10px #C6F432;"></div>
+        <div style="height:12px; border-radius:6px; background:#121824; overflow:hidden;">
+          <div style="width:2.9%; min-width:18px; height:100%; background:linear-gradient(90deg, #10B981, #C6F432); box-shadow:0 0 12px #C6F432; border-radius:6px;"></div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPETITOR BATTLECARD & HEAD-TO-HEAD MATRIX -->
+<div class="competitor-wrap" id="comparison" style="max-width:1160px; margin:4.5rem auto 0; padding:0 1.5rem;">
+  <div style="text-align:center; margin-bottom:2.5rem;">
+    <span class="sec-ey rv" style="color:#C6F432; font-family:'JetBrains Mono',monospace; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; display:inline-flex; align-items:center; gap:6px;">
+      <span style="width:6px; height:6px; border-radius:50%; background:#C6F432; box-shadow:0 0 8px #C6F432;"></span>
+      Competitive Moat &amp; Head-to-Head Architecture
+    </span>
+    <h2 class="sec-h rv d1" style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.8rem, 3.5vw, 2.6rem); font-weight:800; color:#FFFFFF; margin:0.6rem 0 0.8rem;">
+      Built for the Physical Edge. Not Cloud Workstations.
+    </h2>
+    <p style="color:#94A3B8; font-size:1rem; max-width:680px; margin:0 auto; line-height:1.6;">
+      Legacy cloud platforms like AWS SageMaker, Edge Impulse, and Weights &amp; Biases fail when networks drop, models drift in factories, or micro-NPUs overheat. Here is how MLOps.dev dominates:
+    </p>
+  </div>
+
+  <!-- Competitive Table -->
+  <div style="background:linear-gradient(135deg, rgba(8, 9, 12, 0.95), rgba(11, 14, 20, 0.98)); border:1px solid rgba(255, 255, 255, 0.08); border-radius:16px; overflow:hidden; box-shadow:0 24px 64px rgba(0, 0, 0, 0.6);">
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.86rem;">
+        <thead>
+          <tr style="background:rgba(255, 255, 255, 0.03); border-bottom:1px solid rgba(255, 255, 255, 0.08);">
+            <th style="padding:1.2rem 1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em;">Capability / Dimension</th>
+            <th style="padding:1.2rem 1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#08090C; background:#C6F432; font-weight:800; letter-spacing:0.04em;">⚡ MLOps.dev</th>
+            <th style="padding:1.2rem 1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em;">AWS SageMaker Edge</th>
+            <th style="padding:1.2rem 1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em;">Edge Impulse</th>
+            <th style="padding:1.2rem 1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em;">Weights &amp; Biases</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1: Heterogeneous Silicon Targets -->
+          <tr style="border-bottom:1px solid rgba(255, 255, 255, 0.04);">
+            <td style="padding:1.1rem 1.4rem; font-weight:700; color:#FFFFFF;">
+              17+ Heterogeneous Silicon Targets
+              <div style="font-size:0.72rem; color:#94A3B8; font-weight:400; margin-top:2px;">NVIDIA Orin, Hailo-8L, Coral, RKNN, OpenVINO</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; background:rgba(198, 244, 50, 0.04); color:#C6F432; font-weight:700;">
+              <span style="display:inline-flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                Full 17-Silicon Matrix
+              </span>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Discontinued</span>
+              <div style="font-size:0.7rem; color:#64748B;">Neo compiler deprecated</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#F59E0B; font-weight:600;">⚠ MCUs Only</span>
+              <div style="font-size:0.7rem; color:#64748B;">Cortex-M; no 275-TOPS NPUs</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Cloud Only</span>
+              <div style="font-size:0.7rem; color:#64748B;">0 edge runtime targets</div>
+            </td>
+          </tr>
+
+          <!-- Row 2: In-Situ Autonomous Rollback -->
+          <tr style="border-bottom:1px solid rgba(255, 255, 255, 0.04);">
+            <td style="padding:1.1rem 1.4rem; font-weight:700; color:#FFFFFF;">
+              In-Situ Drift Circuit Breakers
+              <div style="font-size:0.72rem; color:#94A3B8; font-weight:400; margin-top:2px;">Autonomous rollback when cameras or sensors drift</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; background:rgba(198, 244, 50, 0.04); color:#C6F432; font-weight:700;">
+              <span style="display:inline-flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                294ms Local Rollback
+              </span>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Batch Cloud Only</span>
+              <div style="font-size:0.7rem; color:#64748B;">Requires cloud round-trip (hrs)</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ None</span>
+              <div style="font-size:0.7rem; color:#64748B;">Manual firmware reflashing</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Passive Logging</span>
+              <div style="font-size:0.7rem; color:#64748B;">No physical actuator control</div>
+            </td>
+          </tr>
+
+          <!-- Row 3: Cellular / Bandwidth OTA Efficiency -->
+          <tr style="border-bottom:1px solid rgba(255, 255, 255, 0.04);">
+            <td style="padding:1.1rem 1.4rem; font-weight:700; color:#FFFFFF;">
+              Binary Differential OTA Patching
+              <div style="font-size:0.72rem; color:#94A3B8; font-weight:400; margin-top:2px;">Cellular / satellite bandwidth costs for fleet updates</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; background:rgba(198, 244, 50, 0.04); color:#C6F432; font-weight:700;">
+              <span style="display:inline-flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                97.1% Bandwidth Saved
+              </span>
+              <div style="font-size:0.7rem; color:#94A3B8; font-family:'JetBrains Mono',monospace;">14.2MB patch vs 500MB</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Full Container (500MB+)</span>
+              <div style="font-size:0.7rem; color:#64748B;">$50K/mo on cellular SIMs</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#F59E0B; font-weight:600;">⚠ Full Binary Image</span>
+              <div style="font-size:0.7rem; color:#64748B;">Complete flash memory wipe</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ None</span>
+              <div style="font-size:0.7rem; color:#64748B;">Artifact registry only</div>
+            </td>
+          </tr>
+
+          <!-- Row 4: Air-Gapped & Offline Resilience -->
+          <tr style="border-bottom:1px solid rgba(255, 255, 255, 0.04);">
+            <td style="padding:1.1rem 1.4rem; font-weight:700; color:#FFFFFF;">
+              Air-Gapped &amp; Offline Telemetry Buffer
+              <div style="font-size:0.72rem; color:#94A3B8; font-weight:400; margin-top:2px;">Operation in mines, maritime vessels, or remote factories</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; background:rgba(198, 244, 50, 0.04); color:#C6F432; font-weight:700;">
+              <span style="display:inline-flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                90-Day SQLite Buffer
+              </span>
+              <div style="font-size:0.7rem; color:#94A3B8; font-family:'JetBrains Mono',monospace;">Zero data loss on reconnect</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Cloud Dependent</span>
+              <div style="font-size:0.7rem; color:#64748B;">AWS IAM token expiry drops ops</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Limited Buffer</span>
+              <div style="font-size:0.7rem; color:#64748B;">RAM buffer drops during reboot</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ Fails Offline</span>
+              <div style="font-size:0.7rem; color:#64748B;">Requires HTTPS endpoint</div>
+            </td>
+          </tr>
+
+          <!-- Row 5: Agent Footprint & Performance -->
+          <tr style="border-bottom:1px solid rgba(255, 255, 255, 0.04);">
+            <td style="padding:1.1rem 1.4rem; font-weight:700; color:#FFFFFF;">
+              Edge Footprint &amp; Runtime Overhead
+              <div style="font-size:0.72rem; color:#94A3B8; font-weight:400; margin-top:2px;">Memory and CPU consumption on resource-constrained boards</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; background:rgba(198, 244, 50, 0.04); color:#C6F432; font-weight:700;">
+              <span style="display:inline-flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                &lt;8MB Binary · &lt;15MB RAM
+              </span>
+              <div style="font-size:0.7rem; color:#94A3B8; font-family:'JetBrains Mono',monospace;">Single Go/Rust daemon</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ &gt;500MB RAM</span>
+              <div style="font-size:0.7rem; color:#64748B;">Greengrass Java runtime</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#F59E0B; font-weight:600;">⚠ C++ Source Build</span>
+              <div style="font-size:0.7rem; color:#64748B;">Manual toolchain integration</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ &gt;200MB RAM</span>
+              <div style="font-size:0.7rem; color:#64748B;">Heavy Python process</div>
+            </td>
+          </tr>
+
+          <!-- Row 6: Zero-Trust Security & SBOM -->
+          <tr>
+            <td style="padding:1.1rem 1.4rem; font-weight:700; color:#FFFFFF;">
+              Zero-Trust Supply Chain &amp; TPM
+              <div style="font-size:0.72rem; color:#94A3B8; font-weight:400; margin-top:2px;">Hardware encryption, SLSA L3 provenance, and model signing</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; background:rgba(198, 244, 50, 0.04); color:#C6F432; font-weight:700;">
+              <span style="display:inline-flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                Hardware TPM + Cosign L3
+              </span>
+              <div style="font-size:0.7rem; color:#94A3B8; font-family:'JetBrains Mono',monospace;">FIPS 140-3 Enclave Verified</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#F59E0B; font-weight:600;">⚠ Basic S3 SSE</span>
+              <div style="font-size:0.7rem; color:#64748B;">No edge hardware root-of-trust</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ None</span>
+              <div style="font-size:0.7rem; color:#64748B;">Unsigned binary payloads</div>
+            </td>
+            <td style="padding:1.1rem 1.4rem; color:#94A3B8;">
+              <span style="color:#EF4444; font-weight:600;">✗ None</span>
+              <div style="font-size:0.7rem; color:#64748B;">No hardware cryptographic attestation</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Footer Callout in Table -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.6rem; background:rgba(255, 255, 255, 0.02); border-top:1px solid rgba(255, 255, 255, 0.06); flex-wrap:wrap; gap:12px;">
+      <div style="font-size:0.82rem; color:#94A3B8;">
+        Migrating from AWS Greengrass, SageMaker Neo, or custom Docker OTA pipelines?
+      </div>
+      <a href="login.html" style="background:#C6F432; color:#08090C; font-weight:800; font-size:0.8rem; padding:8px 18px; border-radius:6px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+        Launch Live Migration Sandbox →
+      </a>
     </div>
   </div>
 </div>
@@ -639,21 +847,21 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
       <div class="tcard rv d1">
         <div class="tcard-q"><strong>NVIDIA Jetson AGX Orin &amp; Nano</strong><br>Native TensorRT 10.x integration with zero-copy shared memory. Sub-1ms drift calculations across 142 FPS camera pipelines with differential binary patching.</div>
         <div class="tcard-author">
-          <div class="tcard-av" style="background:#C6F432;color:#FFFFFF">NV</div>
+          <div class="tcard-av" style="background:#C6F432;color:#08090C;font-weight:800;">NV</div>
           <div><div class="tcard-name">Jetson Linux / Tegra 35.4+</div><div class="tcard-role">AArch64 · CUDA 12.2 · TensorRT</div></div>
         </div>
       </div>
       <div class="tcard rv d2">
         <div class="tcard-q"><strong>Raspberry Pi 5 &amp; Coral TPU</strong><br>Optimized ONNX Runtime &amp; PyCoral acceleration. Offline-resilient SQLite buffer stores 90 days of telemetry during extended network outages.</div>
         <div class="tcard-author">
-          <div class="tcard-av" style="background:#C6F432;color:#FFFFFF">PI</div>
+          <div class="tcard-av" style="background:#C6F432;color:#08090C;font-weight:800;">PI</div>
           <div><div class="tcard-name">Broadcom BCM2712 / ARMv8</div><div class="tcard-role">Debian 12 Bookworm · USB/PCIe TPU</div></div>
         </div>
       </div>
       <div class="tcard rv d3">
         <div class="tcard-q"><strong>Industrial x86 &amp; Custom Gateways</strong><br>Single self-contained Go daemon (&lt;8MB binary, &lt;15MB RAM). Automated rollback health gates prevent fleet downtime during firmware or kernel updates.</div>
         <div class="tcard-author">
-          <div class="tcard-av" style="background:#C6F432;color:#FFFFFF">X86</div>
+          <div class="tcard-av" style="background:#C6F432;color:#08090C;font-weight:800;">X86</div>
           <div><div class="tcard-name">Intel Core / Elkhart Lake / AMD</div><div class="tcard-role">Ubuntu Core / Yocto / Alpine Linux</div></div>
         </div>
       </div>
@@ -1244,11 +1452,15 @@ $('wl-form').addEventListener('submit',async function(e){
     {g:'Pages',ic:'brief',t:'Careers',s:'3 open roles',a:()=>location.href='careers.html'},
     {g:'Pages',ic:'act',t:'System Status',s:'All systems operational',a:()=>location.href='status.html'},
     {g:'Pages',ic:'code',t:'Silicon Benchmarks & ROI',s:'17-platform hardware comparison',a:()=>location.href='benchmarks.html'},
+    {g:'Pages',ic:'mon',t:'Auto-Compiler Studio',s:'PyTorch to 17 silicon targets in <60s',a:()=>location.href='compiler.html'},
+    {g:'Pages',ic:'act',t:'Global Fleet Map',s:'Live edge silicon digital twins',a:()=>location.href='fleet-map.html'},
+    {g:'Pages',ic:'user',t:'Investor Data Room',s:'Unit economics, ARR engine, and moat',a:()=>location.href='investors.html'},
     {g:'Pages',ic:'film',t:'Motion Poster',s:'Cinematic brand experience',a:()=>location.href='poster.html'},
     {g:'Actions',ic:'arr',t:'Join Waitlist',s:'Get early access — free',a:()=>smoothTo('wl')},
     {g:'Actions',ic:'mail',t:'Email the Founder',s:'hello@mlops.dev',a:()=>location.href='mailto:hello@mlops.dev'},
     {g:'Actions',ic:'gh',t:'GitHub',s:'Open-source edge agent',a:()=>comingSoon('GitHub','github.com/Raghunath2604/Raghunath2604-mlops-dev','https://github.com/Raghunath2604/Raghunath2604-mlops-dev')},
     {g:'Sections',ic:'lay',t:'Platform',s:'Spec sheet — jump to section',a:()=>smoothTo('platform')},
+    {g:'Sections',ic:'lay',t:'Competitor Battlecard',s:'Head-to-head vs AWS SageMaker & Edge Impulse',a:()=>smoothTo('comparison')},
     {g:'Sections',ic:'tag',t:'Pricing',s:'Plans and pricing',a:()=>smoothTo('pricing')},
     {g:'Sections',ic:'code',t:'How it works',s:'4-step deployment flow',a:()=>smoothTo('how')},
   ];
@@ -1273,7 +1485,7 @@ $('wl-form').addEventListener('submit',async function(e){
         </div>`;
       });
     });
-    if(!filtered.length)html=`<div style="padding:2rem;text-align:center;font-size:.82rem;color:#0B0B0C">No results for "${q}"</div>`;
+    if(!filtered.length)html=`<div style="padding:2rem;text-align:center;font-size:.82rem;color:#94A3B8">No results for "${q}"</div>`;
     res.innerHTML=html;
   }
 

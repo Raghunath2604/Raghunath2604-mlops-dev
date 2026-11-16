@@ -55,6 +55,21 @@ test.describe('Landing Page UI', () => {
     // #C6F432 (Lime Green) is rgb(198, 244, 50)
     expect(bg).toBe('rgb(198, 244, 50)');
   });
+
+  test('Competitor Battlecard displays head-to-head architectural advantages', async ({ page }) => {
+    const battlecard = page.locator('#comparison');
+    await expect(battlecard).toBeAttached();
+    
+    // Check that competitor headers and key metrics exist
+    const tableText = await battlecard.innerText();
+    const upperText = tableText.toUpperCase();
+    expect(upperText).toContain('AWS SAGEMAKER EDGE');
+    expect(upperText).toContain('EDGE IMPULSE');
+    expect(upperText).toContain('WEIGHTS & BIASES');
+    expect(tableText).toContain('17+ Heterogeneous Silicon Targets');
+    expect(tableText).toContain('294ms Local Rollback');
+    expect(tableText).toContain('97.1% Bandwidth Saved');
+  });
 });
 
 test.describe('Dashboard UI & Access Control', () => {

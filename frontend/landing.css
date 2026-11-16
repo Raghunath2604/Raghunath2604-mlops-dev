@@ -545,7 +545,7 @@ button{cursor:pointer;font-family:inherit}
 .modal-url:hover{background:rgba(198, 244, 50, .18);border-color:rgba(198, 244, 50, .45)}
 .modal-btns{display:flex;gap:.75rem}
 .modal-btn{padding:.6rem 1.2rem;border-radius:8px;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .15s;border:none}
-.modal-btn-p{background:#C6F432;color:#FFFFFF;box-shadow:0 4px 14px rgba(198, 244, 50, 0.35)}.modal-btn-p:hover{background:#C6F432}
+.modal-btn-p{background:#C6F432;color:#08090C;font-weight:800;box-shadow:0 4px 14px rgba(198, 244, 50, 0.35)}.modal-btn-p:hover{background:#d4ff38}
 .modal-btn-g{background:rgba(255, 255, 255, 0.06);border:1px solid rgba(255, 255, 255, .12);color:#FFFFFF}.modal-btn-g:hover{border-color:rgba(198, 244, 50, .5);background:rgba(198, 244, 50, 0.1)}
 
 /* ══ CMD PALETTE ══ */
