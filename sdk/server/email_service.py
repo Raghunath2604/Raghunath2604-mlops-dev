@@ -31,7 +31,7 @@ def send_waitlist_confirmation(email: str, name: str, position: int):
         html = template.replace("{{POSITION}}", f"{position}").replace("{{NAME}}", name or "there")
 
         params = {
-            "from": "Raghunathareddy GR <hello@mlopsde.me>",
+            "from": "Raghunathareddy GR <hello@mlops.dev>",
             "to": [email],
             "subject": f"You're #{position} on the MLOps.dev waitlist",
             "html": html,
@@ -40,12 +40,12 @@ def send_waitlist_confirmation(email: str, name: str, position: int):
     except Exception as e:
         print(f"Failed to send email to {email}: {e}")
 
-def send_admin_approval_email(email: str, name: str, source: str, admin_email: str = "hello@mlopsde.me"):
+def send_admin_approval_email(email: str, name: str, source: str, admin_email: str = "hello@mlops.dev"):
     token = generate_approval_token(email)
     
     # We will point to the backend API endpoint
     # Depending on where the backend is deployed, we construct the URL
-    base_url = "https://api.mlopsde.me"
+    base_url = "https://api.mlops.dev"
     
     approve_url = f"{base_url}/v1/admin/approve?email={quote(email)}&token={token}"
     
@@ -69,7 +69,7 @@ def send_admin_approval_email(email: str, name: str, source: str, admin_email: s
         
     try:
         params = {
-            "from": "MLOps.dev Admin <hello@mlopsde.me>",
+            "from": "MLOps.dev Admin <hello@mlops.dev>",
             "to": [admin_email],
             "subject": f"Access Request: {name} ({email})",
             "html": html,
@@ -79,7 +79,7 @@ def send_admin_approval_email(email: str, name: str, source: str, admin_email: s
         print(f"Failed to send admin approval email for {email}: {e}")
 
 def send_approval_success_email(email: str, name: str, new_api_key: str):
-    dashboard_url = "https://www.mlopsde.me/dashboard"
+    dashboard_url = "https://mlops.dev/dashboard"
     
     html = f"""
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
@@ -105,7 +105,7 @@ def send_approval_success_email(email: str, name: str, new_api_key: str):
         
     try:
         params = {
-            "from": "MLOps.dev Team <hello@mlopsde.me>",
+            "from": "MLOps.dev Team <hello@mlops.dev>",
             "to": [email],
             "subject": "Your MLOps.dev Dashboard Access is Approved!",
             "html": html,

@@ -34,11 +34,11 @@ fi
 
 if [ "$(id -u)" -ne 0 ]; then
     echo "❌ Error: This script must be run as root (or with sudo) to configure systemd."
-    echo "Usage: curl -fsSL https://get.mlopsde.me | sudo MLOPS_API_KEY=your_key sh"
+    echo "Usage: curl -fsSL https://get.mlops.dev | sudo MLOPS_API_KEY=your_key sh"
     exit 1
 fi
 
-API_URL="${MLOPS_API_URL:-https://mlopsde.me/v1}"
+API_URL="${MLOPS_API_URL:-https://mlops.dev/v1}"
 ARCH=$(uname -m)
 HOSTNAME=$(hostname)
 
@@ -60,7 +60,7 @@ import urllib.error
 import socket
 import platform
 
-API_URL = os.environ.get("MLOPS_API_URL", "https://mlopsde.me/v1")
+API_URL = os.environ.get("MLOPS_API_URL", "https://mlops.dev/v1")
 API_KEY = os.environ.get("MLOPS_API_KEY", "demo")
 DEVICE_NAME = socket.gethostname()
 
@@ -181,5 +181,5 @@ systemctl restart mlops-agent.service || true
 echo "=================================================="
 echo "✅ Installation Complete!"
 echo "📡 The agent is running in the background via systemd."
-echo "📊 View your device online at: https://www.mlopsde.me/dashboard"
+echo "📊 View your device online at: https://mlops.dev/dashboard"
 echo "=================================================="

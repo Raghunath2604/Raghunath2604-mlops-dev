@@ -3,7 +3,7 @@
  */
 
 export class MLOpsClient {
-  constructor(apiKey, baseUrl = 'https://api.mlopsde.me/v1') {
+  constructor(apiKey, baseUrl = 'https://api.mlops.dev/v1') {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl.replace(/\/$/, '');
   }

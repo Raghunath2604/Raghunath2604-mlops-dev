@@ -6,7 +6,7 @@ from flask import Blueprint, request, jsonify, redirect
 billing_bp = Blueprint('billing', __name__)
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY", "sk_test_mock")
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://www.mlopsde.me")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://mlops.dev")
 
 @billing_bp.route("/checkout", methods=["POST"])
 def create_checkout_session():

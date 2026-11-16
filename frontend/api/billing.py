@@ -13,8 +13,8 @@ PHONEPE_MERCHANT_ID = os.environ.get("PHONEPE_MERCHANT_ID", "PGTESTPAYUAT")
 PHONEPE_SALT_KEY = os.environ.get("PHONEPE_SALT_KEY", "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399")
 PHONEPE_SALT_INDEX = os.environ.get("PHONEPE_SALT_INDEX", "1")
 
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://www.mlopsde.me")
-API_URL = os.environ.get("MLOPS_API_URL", "https://api.mlopsde.me/v1") # Or wherever /v1 is routed on Vercel
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://mlops.dev")
+API_URL = os.environ.get("MLOPS_API_URL", "https://api.mlops.dev/v1") # Or wherever /v1 is routed on Vercel
 
 if PHONEPE_ENV == "PROD":
     PHONEPE_API_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay"

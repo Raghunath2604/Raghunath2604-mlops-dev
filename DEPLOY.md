@@ -31,13 +31,13 @@ roadmap.mlops.dev, api.mlops.dev, discord, github, pypi.
 
 In Vercel → your project → Settings → Domains → Add each:
 
-  docs.mlopsde.me   → points to the Vercel deployment (active ✅)
+  docs.mlops.dev   → points to the Vercel deployment (active ✅)
   docs.mlops.dev    → add CNAME in DNS (if using mlops.dev)
-  roadmap.mlopsde.me → points to the same Vercel deployment
+  roadmap.mlops.dev → points to the same Vercel deployment
 
 The vercel.json handles all routing automatically:
-- docs.mlopsde.me / docs.mlops.dev → /docs (docs.html)
-- roadmap.mlopsde.me → roadmap.html
+- docs.mlops.dev / docs.mlops.dev → /docs (docs.html)
+- roadmap.mlops.dev → roadmap.html
 
 DNS records to add (in your DNS registrar):
   docs      CNAME  cname.vercel-dns.com

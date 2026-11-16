@@ -876,17 +876,24 @@ function closeModal(id) {
   if (el) el.classList.remove('open');
 }
 
+async function authFetch(endpoint, options = {}) {
+  const token = localStorage.getItem('mlops_token') || localStorage.getItem('token') || localStorage.getItem('np_token');
+  const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+  const headers = { ...authHeaders, ...(options.headers || {}) };
+  return fetch(endpoint, { ...options, headers, credentials: 'include' });
+}
+
 // ── Check Admin Auth On Load ──────────────────────────────────────────
 async function checkAdminAuth() {
   try {
-    const res = await fetch(`${API}/auth/me`, { credentials: 'include' });
+    const res = await authFetch(`${API}/auth/me`);
     if (!res.ok) {
       window.location.href = 'login.html?notice=admin_clearance_required';
       return;
     }
+    const data = await res.json();
     const isMasterAdmin = Boolean(
-      data.user.is_admin ||
-      data.user.role === 'admin'
+      data && data.user && (data.user.is_admin || data.user.role === 'admin')
     );
     if (!data.success || !data.user || !isMasterAdmin) {
       window.location.href = 'login.html?notice=admin_clearance_denied';
@@ -902,7 +909,7 @@ async function checkAdminAuth() {
 // ── 1. Overview Telemetry ─────────────────────────────────────────────
 async function loadOverview() {
   try {
-    const res = await fetch(`${API}/admin/overview`, { credentials: 'include' });
+    const res = await authFetch(`${API}/admin/overview`, { credentials: 'include' });
     if (!res.ok) return;
     const data = await res.json();
     if (data.success && data.overview) {
@@ -925,7 +932,7 @@ async function loadOverview() {
 
 async function toggleMaintenance(val) {
   try {
-    const res = await fetch(`${API}/admin/maintenance`, {
+    const res = await authFetch(`${API}/admin/maintenance`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -946,7 +953,7 @@ async function toggleMaintenance(val) {
 // ── 2. Users Management ───────────────────────────────────────────────
 async function loadUsers() {
   try {
-    const res = await fetch(`${API}/admin/users`, { credentials: 'include' });
+    const res = await authFetch(`${API}/admin/users`, { credentials: 'include' });
     if (!res.ok) return;
     const data = await res.json();
     if (data.success && data.users) {
@@ -1015,7 +1022,7 @@ function filterUsers() {
 
 async function approveUser(uid) {
   try {
-    const res = await fetch(`${API}/admin/users/${uid}/approve`, { method: 'POST', credentials: 'include' });
+    const res = await authFetch(`${API}/admin/users/${uid}/approve`, { method: 'POST', credentials: 'include' });
     if (res.ok) {
       showToast(`User ${uid} approved successfully`);
       loadUsers();
@@ -1027,7 +1034,7 @@ async function approveUser(uid) {
 async function rejectUser(uid) {
   if (!confirm(`Revoke clearance for operator ${uid}?`)) return;
   try {
-    const res = await fetch(`${API}/admin/users/${uid}/reject`, { method: 'POST', credentials: 'include' });
+    const res = await authFetch(`${API}/admin/users/${uid}/reject`, { method: 'POST', credentials: 'include' });
     if (res.ok) {
       showToast(`User ${uid} access revoked`);
       loadUsers();
@@ -1039,7 +1046,7 @@ async function rejectUser(uid) {
 async function deleteUser(uid) {
   if (!confirm(`Permanently delete operator ${uid} and associated credentials?`)) return;
   try {
-    const res = await fetch(`${API}/admin/users/${uid}`, { method: 'DELETE', credentials: 'include' });
+    const res = await authFetch(`${API}/admin/users/${uid}`, { method: 'DELETE', credentials: 'include' });
     if (res.ok) {
       showToast(`User ${uid} deleted`);
       loadUsers();
@@ -1060,7 +1067,7 @@ async function submitCreateUser(e) {
   const limit = document.getElementById('new-user-quota').value;
 
   try {
-    const res = await fetch(`${API}/admin/users/create`, {
+    const res = await authFetch(`${API}/admin/users/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -1098,7 +1105,7 @@ async function submitEditUser() {
   const status = document.getElementById('edit-user-status').value;
 
   try {
-    const res = await fetch(`${API}/admin/users/${uid}/update`, {
+    const res = await authFetch(`${API}/admin/users/${uid}/update`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -1118,7 +1125,7 @@ async function submitEditUser() {
 // ── 3. Fleet & OTA Control ────────────────────────────────────────────
 async function loadDevices() {
   try {
-    const res = await fetch(`${API}/admin/devices`, { credentials: 'include' });
+    const res = await authFetch(`${API}/admin/devices`, { credentials: 'include' });
     if (!res.ok) return;
     const data = await res.json();
     if (data.success && data.devices) {
@@ -1170,7 +1177,7 @@ function renderDevices(devs) {
 
 async function deviceAction(id, action) {
   try {
-    const res = await fetch(`${API}/admin/devices/${id}/action`, {
+    const res = await authFetch(`${API}/admin/devices/${id}/action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -1192,7 +1199,7 @@ async function broadcastOtaUpdate() {
   const strat = document.getElementById('ota-strategy').value;
 
   try {
-    const res = await fetch(`${API}/admin/deploy/broadcast`, {
+    const res = await authFetch(`${API}/admin/deploy/broadcast`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -1211,7 +1218,7 @@ async function broadcastOtaUpdate() {
 async function triggerEmergencyRollback() {
   if (!confirm('EMERGENCY ROLLBACK: Revert all edge nodes to last golden baseline?')) return;
   try {
-    const res = await fetch(`${API}/admin/deploy/rollback`, {
+    const res = await authFetch(`${API}/admin/deploy/rollback`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -1238,7 +1245,7 @@ async function submitCreateKey(e) {
   const role = document.getElementById('new-key-role').value;
 
   try {
-    const res = await fetch(`${API}/admin/keys/create`, {
+    const res = await authFetch(`${API}/admin/keys/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -1263,7 +1270,7 @@ async function submitCreateKey(e) {
 // ── 5. System Audit Log ──────────────────────────────────────────────
 async function loadAuditLogs() {
   try {
-    const res = await fetch(`${API}/admin/audit-logs`, { credentials: 'include' });
+    const res = await authFetch(`${API}/admin/audit-logs`, { credentials: 'include' });
     if (!res.ok) return;
     const data = await res.json();
     if (data.success && data.audit_logs) {

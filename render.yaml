@@ -16,7 +16,7 @@ services:
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: FRONTEND_URL
-        value: "https://www.mlopsde.me"
+        value: "https://mlops.dev"
       - key: THEME_PALETTE
         value: "midnight-black,pure-white,lime-green"
 

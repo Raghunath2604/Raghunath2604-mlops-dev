@@ -100,7 +100,7 @@ app = Flask(__name__)
 Talisman(app, force_https=False, content_security_policy=None)
 
 # Restrict CORS to specific frontend domains
-CORS(app, resources={r"/*": {"origins": ["https://www.mlopsde.me", "https://mlopsde.me", "http://localhost:8000", "http://127.0.0.1:8000", "http://localhost:8080", "http://127.0.0.1:8080"]}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": ["https://mlops.dev", "https://mlops.dev", "http://localhost:8000", "http://127.0.0.1:8000", "http://localhost:8080", "http://127.0.0.1:8080"]}}, supports_credentials=True)
 
 # Set Max Content Length (16MB) to prevent large payload crash attacks
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -433,7 +433,7 @@ def _init_postgres(db_url):
             demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             cursor.execute('''
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
-                VALUES ('admin', %s, 'admin@mlopsde.me', 'enterprise', 10, 'admin', 'approved')
+                VALUES ('admin', %s, 'admin@mlops.dev', 'enterprise', 10, 'admin', 'approved')
             ''', (demo_hash,))
 
         # Seed initial models if table is empty
@@ -656,7 +656,7 @@ def init_db():
             demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             db.execute('''
                 INSERT INTO api_keys (id, key_hash, name, subscription_tier, device_limit, role, approval_status)
-                VALUES ('admin', ?, 'admin@mlopsde.me', 'enterprise', 10, 'admin', 'approved')
+                VALUES ('admin', ?, 'admin@mlops.dev', 'enterprise', 10, 'admin', 'approved')
             ''', (demo_hash,))
 
         # Seed models if empty
@@ -770,13 +770,17 @@ def require_admin(f):
         
         row = None
         if bearer_token:
-            if bearer_token in ["admin", "demo", "demo1234"]:
+            if bearer_token in ["demo", "demo1234"]:
+                return jsonify({"error": "Forbidden - Demo credentials do not possess administrator clearance"}), 403
+            if bearer_token == "admin":
                 row = {"id": "admin", "name": admin_email, "role": "admin"}
             else:
                 token_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
                 row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ? OR key_hash = ?", (bearer_token, token_hash), fetchone=True)
         elif cookie_token:
             clean_token = cookie_token.split(".", 1)[0] if "." in cookie_token else cookie_token
+            if clean_token in ["key_demo", "demo"]:
+                return jsonify({"error": "Forbidden - Demo session does not possess administrator clearance"}), 403
             row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = ?", (clean_token,), fetchone=True)
             
         if not row:
@@ -786,7 +790,7 @@ def require_admin(f):
         email = (row.get("name") if isinstance(row, dict) else row[1] or "").strip().lower()
         uid = row.get("id") if isinstance(row, dict) else row[0]
         
-        if role == "admin" or email == admin_email or (uid == "admin" and bearer_token is not None):
+        if (role == "admin" or email == admin_email or uid == "admin") and uid != "key_demo":
             g.user_id = uid
             g.role = "admin"
             g.is_admin = True
@@ -816,8 +820,12 @@ def require_auth(f):
             key_hash = hashlib.sha256(bearer_token.encode()).hexdigest()
             demo_hash = hashlib.sha256(b'demo1234').hexdigest()
             demo_hash2 = hashlib.sha256(b'demo').hexdigest()
-            if bearer_token in ['demo', 'demo1234', 'admin']:
-                row = db_query(db, "SELECT id, name, role FROM api_keys WHERE id = 'admin' OR key_hash = ? OR key_hash = ?", (demo_hash, demo_hash2), fetchone=True)
+            if bearer_token in ['demo', 'demo1234']:
+                row = db_query(db, "SELECT id, name, role FROM api_keys WHERE id = 'key_demo' OR key_hash = ? OR key_hash = ?", (demo_hash, demo_hash2), fetchone=True)
+                if not row:
+                    row = {"id": "key_demo", "name": "demo@mlops.dev", "role": "developer"}
+            elif bearer_token == 'admin':
+                row = db_query(db, "SELECT id, name, role FROM api_keys WHERE id = 'admin'", fetchone=True)
                 if not row:
                     row = {"id": "admin", "name": admin_email, "role": "admin"}
             else:
@@ -833,7 +841,7 @@ def require_auth(f):
         email = (row["name"] if isinstance(row, dict) else row[1] or "").strip().lower()
         role = (row["role"] if isinstance(row, dict) else row[2] or "user").strip().lower()
         
-        is_admin = (role == "admin" or email == admin_email or (uid == "admin" and bearer_token is not None))
+        is_admin = bool((role == "admin" and uid != "key_demo") or (email and email == admin_email) or (uid == "admin" and bearer_token is not None))
         g.user_id = uid
         g.is_admin = is_admin
         g.role = "admin" if is_admin else role
@@ -934,19 +942,24 @@ def auth_login():
     turnstile_token = data.get("turnstile_response", "").strip()
     
     # Verify Turnstile (bypass if token not supplied or known demo accounts)
-    is_demo = (email in ['demo', 'admin@mlopsde.me', 'admin', 'demo@mlops.dev', 'admin@mlops.dev']) and (password in ['demo', 'demo1234', 'admin'])
-    if not is_demo and not key and turnstile_token:
+    is_admin_login = (email in ['admin', 'admin@mlops.dev']) and (password in ['admin', 'admin1234'])
+    is_demo_login = (email in ['demo', 'demo@mlops.dev']) and (password in ['demo', 'demo1234'])
+    if not is_admin_login and not is_demo_login and not key and turnstile_token:
         if not verify_turnstile(turnstile_token, expected_action="login"):
             return jsonify({"error": "Failed CAPTCHA verification"}), 400
     
     db = get_db()
     row = None
     
-    if is_demo:
+    if is_admin_login:
         row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = 'admin'", fetchone=True)
         if not row:
             init_db()
             row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = 'admin'", fetchone=True)
+    elif is_demo_login:
+        row = db_query(db, "SELECT id, name, role, approval_status, subscription_tier FROM api_keys WHERE id = 'key_demo'", fetchone=True)
+        if not row:
+            row = {"id": "key_demo", "name": "demo@mlops.dev", "role": "developer", "approval_status": "approved", "subscription_tier": "starter"}
     elif email and password:
         pw_hash = hashlib.sha256(password.encode()).hexdigest()
         salted_pw_hash = hashlib.sha256((email + password).encode()).hexdigest()
@@ -965,7 +978,8 @@ def auth_login():
         
     admin_email = os.environ.get("ADMIN_EMAIL", "raghunathareddygr94@gmail.com").strip().lower()
     user_email = (row.get("name") or "").strip().lower()
-    is_admin = bool(row.get("role") == "admin" or user_email == admin_email or row.get("id") == "admin")
+    user_role = (row.get("role") or "developer").strip().lower()
+    is_admin = bool((user_role == "admin" and row.get("id") != "key_demo") or (user_email and user_email == admin_email) or (row.get("id") == "admin" and not is_demo_login))
 
     resp = make_response(jsonify({
         "success": True,
@@ -1236,10 +1250,10 @@ def _create_oauth_redirect_response(user, provider, display_name, email, avatar_
 
 def _get_base_url():
     proto = request.headers.get("X-Forwarded-Proto", "https" if request.is_secure else "http")
-    host = request.headers.get("X-Forwarded-Host") or request.headers.get("Host") or "mlopsde.me"
+    host = request.headers.get("X-Forwarded-Host") or request.headers.get("Host") or "mlops.dev"
     if "localhost" in host or "127.0.0.1" in host:
         return f"{proto}://{host}"
-    return "https://mlopsde.me"
+    return "https://mlops.dev"
 
 def _get_oauth_env(key):
     val = os.environ.get(key, "").strip()
@@ -1544,7 +1558,7 @@ def devices_register():
         current_count = (db_query(db, "SELECT COUNT(*) FROM devices WHERE owner_id=?", (owner,), fetchone=True) or [0])[0]
         if current_count >= limit:
             return jsonify({
-                "error": f"Device limit ({limit}) reached for your tier ({user_row.get('subscription_tier', 'starter') if isinstance(user_row, dict) else 'starter'}). Upgrade at https://www.mlopsde.me/pricing to register additional hardware.",
+                "error": f"Device limit ({limit}) reached for your tier ({user_row.get('subscription_tier', 'starter') if isinstance(user_row, dict) else 'starter'}). Upgrade at https://mlops.dev/pricing to register additional hardware.",
                 "code": "DEVICE_QUOTA_EXCEEDED",
                 "limit": limit,
                 "current_count": current_count

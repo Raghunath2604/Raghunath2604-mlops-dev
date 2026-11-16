@@ -15,7 +15,7 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 <!-- Cloudflare Turnstile -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-<link rel="canonical" href="https://www.mlopsde.me/dashboard"/>
+<link rel="canonical" href="https://mlops.dev/dashboard"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232563EB'/%3E%3Cpolygon points='16,4 4,10.5 4,21.5 16,28 28,21.5 28,10.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Cline x1='16' y1='4' x2='16' y2='28' stroke='%23fff' stroke-width='1.2' stroke-opacity='.5'/%3E%3Cline x1='4' y1='10.5' x2='28' y2='21.5' stroke='%23fff' stroke-width='1.2' stroke-opacity='.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2338BDF8'/%3E%3C/svg%3E"/>
 <title>Fleet Dashboard — MLOps.dev</title>
@@ -1411,7 +1411,7 @@ html, body {
         Run this command via SSH / terminal on your physical device (NVIDIA Jetson, Raspberry Pi, Intel NUC, or x86 server) with root privileges:
       </div>
       <div style="position:relative; background:#0B0B0C; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.73rem; color:var(--cobalt-bright); word-break:break-all; line-height:1.5;">
-        <span id="curl-cmd-text">curl -fsSL https://mlopsde.me/install.sh | sudo bash -s -- --token YOUR_API_KEY --url https://mlopsde.me/v1</span>
+        <span id="curl-cmd-text">curl -fsSL https://mlops.dev/install.sh | sudo bash -s -- --token YOUR_API_KEY --url https://mlops.dev/v1</span>
         <button type="button" class="action-btn" onclick="copyHwSnippet('curl-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
       <div style="margin-top:0.8rem; font-size:0.72rem; color:var(--text-dim); line-height:1.4;">
@@ -1429,7 +1429,7 @@ html, body {
 <span style="color:#C6F432;">pip</span> install mlops-dev
 
 <span style="color:#C6F432;">from</span> mlops_dev <span style="color:#C6F432;">import</span> Client
-client = Client(api_key=<span style="color:#C6F432;">"sk_live_..."</span>, base_url=<span style="color:#C6F432;">"https://mlopsde.me/v1"</span>)
+client = Client(api_key=<span style="color:#C6F432;">"sk_live_..."</span>, base_url=<span style="color:#C6F432;">"https://mlops.dev/v1"</span>)
 
 <span style="color:#C6F432;"># Register device and start heartbeat</span>
 dev = client.devices.register(name=<span style="color:#C6F432;">"orin-edge-01"</span>, hardware=<span style="color:#C6F432;">"NVIDIA Jetson AGX Orin"</span>)
@@ -1444,7 +1444,7 @@ client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], c
         Deploy as a background container with full GPU/NPU device pass-through:
       </div>
       <div style="position:relative; background:#0B0B0C; border:1px solid var(--border); border-radius:6px; padding:0.8rem 1rem; font-family:var(--font-mono); font-size:0.72rem; color:var(--emerald); word-break:break-all; line-height:1.5;">
-        <span id="docker-cmd-text">docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="YOUR_API_KEY" -e MLOPS_API_URL="https://mlopsde.me/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest</span>
+        <span id="docker-cmd-text">docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="YOUR_API_KEY" -e MLOPS_API_URL="https://mlops.dev/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest</span>
         <button type="button" class="action-btn" onclick="copyHwSnippet('docker-cmd-text')" style="position:absolute; top:6px; right:6px; font-size:0.68rem; padding:3px 8px;">📋 Copy</button>
       </div>
     </div>
@@ -1487,7 +1487,7 @@ client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], c
   </div>
   <div id="cli-output" class="cli-output">
     <div style="color:var(--text-dim);">MLOps.dev Distributed Edge Control Plane CLI v1.4.2</div>
-    <div style="color:var(--text-dim);">Connected to https://www.mlopsde.me/v1 (TLS 1.3 Active). Type <span style="color:var(--cobalt-bright); font-weight:600;">help</span> for commands.</div>
+    <div style="color:var(--text-dim);">Connected to https://mlops.dev/v1 (TLS 1.3 Active). Type <span style="color:var(--cobalt-bright); font-weight:600;">help</span> for commands.</div>
     <div style="margin-top:0.4rem; color:var(--emerald);">Cluster healthy: 18 nodes connected across 17 silicon targets.</div>
     <br>
   </div>
@@ -2485,7 +2485,7 @@ client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], c
             <div class="panel-body">
               <div class="form-group">
                 <label>Control Plane API Endpoint</label>
-                <input class="form-control td-mono" value="https://www.mlopsde.me/v1" readonly/>
+                <input class="form-control td-mono" value="https://mlops.dev/v1" readonly/>
               </div>
               <div class="form-group">
                 <label>Active API Token</label>
@@ -2498,7 +2498,7 @@ client.devices.heartbeat(dev[<span style="color:#C6F432;">"device_id"</span>], c
               <div class="form-group" style="margin-top:1.5rem;">
                 <label>Physical Edge Node Install Command</label>
                 <div style="display:flex; gap:0.5rem;">
-                  <input class="form-control td-mono" id="inp-install-cmd" value="curl -sSL https://www.mlopsde.me/install.sh | bash -s -- --token YOUR_API_KEY" readonly/>
+                  <input class="form-control td-mono" id="inp-install-cmd" value="curl -sSL https://mlops.dev/install.sh | bash -s -- --token YOUR_API_KEY" readonly/>
                   <button class="action-btn" onclick="navigator.clipboard.writeText(document.getElementById('inp-install-cmd').value); showToast('Copied Install Command', 'ok');">Copy</button>
                 </div>
               </div>
@@ -3007,8 +3007,8 @@ function bootApp(user) {
 
   const activeToken = user.token || localStorage.getItem('mlops_token') || user.id || 'sk_live_' + (user.id || 'primary');
   if (document.getElementById('s-key')) document.getElementById('s-key').value = activeToken;
-  if (document.getElementById('inp-install-cmd')) document.getElementById('inp-install-cmd').value = `curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token ${activeToken}`;
-  if (document.getElementById('curl-cmd-text')) document.getElementById('curl-cmd-text').textContent = `curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token ${activeToken} --url https://www.mlopsde.me/v1`;
+  if (document.getElementById('inp-install-cmd')) document.getElementById('inp-install-cmd').value = `curl -fsSL https://mlops.dev/install.sh | sudo bash -s -- --token ${activeToken}`;
+  if (document.getElementById('curl-cmd-text')) document.getElementById('curl-cmd-text').textContent = `curl -fsSL https://mlops.dev/install.sh | sudo bash -s -- --token ${activeToken} --url https://mlops.dev/v1`;
 
   refreshAll();
   initChart();
@@ -3402,7 +3402,7 @@ function copyHwPythonCode() {
   const code = `pip install mlops-dev
 
 from mlops_dev import Client
-client = Client(api_key="${userToken}", base_url="https://mlopsde.me/v1")
+client = Client(api_key="${userToken}", base_url="https://mlops.dev/v1")
 
 # Register device and start heartbeat
 dev = client.devices.register(name="orin-edge-01", hardware="NVIDIA Jetson AGX Orin")
@@ -3424,11 +3424,11 @@ function openAddDev() {
     const userToken = localStorage.getItem('mlops_token') || 'demo';
     const curlEl = document.getElementById('curl-cmd-text');
     if (curlEl) {
-      curlEl.textContent = `curl -fsSL https://mlopsde.me/install.sh | sudo bash -s -- --token ${userToken} --url https://mlopsde.me/v1`;
+      curlEl.textContent = `curl -fsSL https://mlops.dev/install.sh | sudo bash -s -- --token ${userToken} --url https://mlops.dev/v1`;
     }
     const dockerEl = document.getElementById('docker-cmd-text');
     if (dockerEl) {
-      dockerEl.textContent = `docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="${userToken}" -e MLOPS_API_URL="https://mlopsde.me/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest`;
+      dockerEl.textContent = `docker run -d --restart=always --name mlops-agent -e MLOPS_API_KEY="${userToken}" -e MLOPS_API_URL="https://mlops.dev/v1" -v /dev:/dev --privileged ghcr.io/mlops-dev/agent:latest`;
     }
   }
 }
@@ -3766,7 +3766,7 @@ function execCliCommand(rawCmd) {
     const online = ST.devices.filter(d => d.status === 'online').length;
     out.innerHTML += `
       <div style="color:var(--emerald);">[OK] Cluster Status: HEALTHY</div>
-      <div style="color:#C6F432;">Control Plane: https://www.mlopsde.me/v1 (TLS 1.3 Active)</div>
+      <div style="color:#C6F432;">Control Plane: https://mlops.dev/v1 (TLS 1.3 Active)</div>
       <div style="color:#C6F432;">Total Fleet Nodes: ${ST.devices.length} (${online} Online, ${ST.devices.length - online} Offline/Updating)</div>
       <div style="color:#C6F432;">Silicon Architectures: 17 Platforms Verified</div>
       <div style="color:#C6F432;">Delta Weight Compression: bsdiff4 Active (88.4% bandwidth reduction)</div>
@@ -4398,7 +4398,7 @@ function generateTeamInvite() {
   const out = document.getElementById('invite-token-output');
   if (out) {
     out.style.display = 'block';
-    out.textContent = `Invite Link for ${email} (${role.toUpperCase()}):\nhttps://mlopsde.me/login?invite=${token}&role=${role}`;
+    out.textContent = `Invite Link for ${email} (${role.toUpperCase()}):\nhttps://mlops.dev/login?invite=${token}&role=${role}`;
     navigator.clipboard.writeText(out.textContent);
     showToast('✓ Generated and copied cryptographic invite link!', 'ok');
   }

@@ -4,7 +4,7 @@
   <p><strong>Deploy ML models to edge devices without SSH scripts. Offline-first, drift-aware.</strong></p>
 
   <a href="https://pypi.org/project/mlops-dev/"><img src="https://img.shields.io/pypi/v/mlops-dev.svg?style=flat-square" alt="PyPI version"></a>
-  <a href="https://www.mlopsde.me"><img src="https://img.shields.io/badge/Website-mlopsde.me-blue.svg?style=flat-square" alt="Website"></a>
+  <a href="https://mlops.dev"><img src="https://img.shields.io/badge/Website-mlops.dev-blue.svg?style=flat-square" alt="Website"></a>
   <a href="https://discord.gg/Tb47N9NaPk"><img src="https://img.shields.io/discord/1337?color=7289da&label=Discord&logo=discord&style=flat-square" alt="Discord"></a>
   <a href="https://github.com/Raghunath2604/Raghunath2604-mlops-dev/blob/main/sdk/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
 </div>
@@ -57,10 +57,10 @@ Commission any physical Linux board (Raspberry Pi, NVIDIA Jetson, Intel NUC, or 
 
 ```bash
 # Connects to live control plane & starts systemd service automatically:
-curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token $MLOPS_API_KEY
+curl -fsSL https://mlops.dev/install.sh | sudo bash -s -- --token $MLOPS_API_KEY
 ```
 
-View your hardware live at: **[https://www.mlopsde.me/dashboard](https://www.mlopsde.me/dashboard)**
+View your hardware live at: **[https://mlops.dev/dashboard](https://mlops.dev/dashboard)**
 
 ---
 
@@ -174,9 +174,9 @@ If you'd like to run the API server locally for development or testing:
 
 ## 🔗 Links & Community
 
-- **Website:** [www.mlopsde.me](https://www.mlopsde.me)
-- **Waitlist:** [Join the Early Access Waitlist](https://www.mlopsde.me/#wl)
-- **Public Roadmap:** [roadmap.mlopsde.me](https://roadmap.mlopsde.me)
+- **Website:** [mlops.dev](https://mlops.dev)
+- **Waitlist:** [Join the Early Access Waitlist](https://mlops.dev/#wl)
+- **Public Roadmap:** [roadmap.mlops.dev](https://roadmap.mlops.dev)
 - **Discord Community:** [Join Discord](https://discord.gg/Tb47N9NaPk)
 
 ## 📄 License

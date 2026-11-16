@@ -7,10 +7,10 @@
 
 ## 1. Production Deployment Inventory
 
-- **Production Domain:** `https://www.mlopsde.me` & `https://mlopsde.me`
-- **Dashboard Interface:** `https://www.mlopsde.me/dashboard`
-- **Edge Installer:** `https://www.mlopsde.me/install.sh` (or `https://get.mlopsde.me`)
-- **API Base URL:** `https://www.mlopsde.me/v1`
+- **Production Domain:** `https://mlops.dev` & `https://mlops.dev`
+- **Dashboard Interface:** `https://mlops.dev/dashboard`
+- **Edge Installer:** `https://mlops.dev/install.sh` (or `https://get.mlops.dev`)
+- **API Base URL:** `https://mlops.dev/v1`
 - **Vercel Project:** `raghunathareddygr94-9147s-projects/mlops-dev`
 - **Active Production Deployment ID:** `dpl_agcVG2brzhoiuVtiUckLNfTkGgck`
 

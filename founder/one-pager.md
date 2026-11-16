@@ -2,7 +2,7 @@
 
 **Founder:** Raghunathareddy GR (CEO & Founder)  
 **Company:** MLOps.dev Technologies Pvt. Ltd.  
-**Production Platform:** [https://www.mlopsde.me](https://www.mlopsde.me) · **Python SDK:** `pip install mlops-dev`
+**Production Platform:** [https://mlops.dev](https://mlops.dev) · **Python SDK:** `pip install mlops-dev`
 
 ---
 

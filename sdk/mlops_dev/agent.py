@@ -14,7 +14,7 @@ class MLOpsAgent:
     Runs on IoT/Edge devices to manage model syncing, heartbeats, and telemetry drift.
     """
     
-    def __init__(self, api_key: str, device_name: str, hw_class: str, api_url: str = "https://api.mlopsde.me/v1"):
+    def __init__(self, api_key: str, device_name: str, hw_class: str, api_url: str = "https://api.mlops.dev/v1"):
         self.api_key = api_key
         self.device_name = device_name
         self.hw_class = hw_class

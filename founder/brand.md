@@ -23,7 +23,7 @@ The brand strictly enforces a 3-color cyber-aerospace palette:
 ---
 
 ## 3. Trademarks, Domains & Digital Handles
-- **Production Web Domain:** `https://www.mlopsde.me` (Secured via Cloudflare edge SSL/TLS with DDoS protection).
+- **Production Web Domain:** `https://mlops.dev` (Secured via Cloudflare edge SSL/TLS with DDoS protection).
 - **Python Package Index (PyPI):** `mlops-dev` (`pip install mlops-dev`).
 - **GitHub Repository:** `github.com/Raghunath2604/Raghunath2604-mlops-dev`.
 - **Discord Community:** `discord.gg/Tb47N9NaPk`.

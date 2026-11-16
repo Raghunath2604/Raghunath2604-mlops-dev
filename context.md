@@ -3,7 +3,7 @@
 **File:** `context.md`  
 **Version:** 3.0.0 (Production-Verified)  
 **Author:** Raghunathareddy GR (CEO & Founder)  
-**Live Production URL:** [https://mlopsde.me](https://mlopsde.me)  
+**Live Production URL:** [https://mlops.dev](https://mlops.dev)  
 **Primary Admin Account:** `raghunathareddygr94@gmail.com`  
 
 ---
@@ -22,9 +22,9 @@
 
 ## 2. What Is Actually Working (Live in Production)
 
-Every layer below is completely implemented, operational, and deployed to production at [**mlopsde.me**](https://mlopsde.me):
+Every layer below is completely implemented, operational, and deployed to production at [**mlops.dev**](https://mlops.dev):
 
-### A. Authentication & Zero-Trust Access Gateway ([`login.html`](https://mlopsde.me/login))
+### A. Authentication & Zero-Trust Access Gateway ([`login.html`](https://mlops.dev/login))
 - **Google OAuth Integration**: Direct Google account sign-in via client authorization flow.
 - **GitHub OAuth Integration**: Direct GitHub developer profile connection with live GitHub API profile preview card.
 - **6-Digit Corporate Email OTP**: Live code dispatch and verification flow with ephemeral token countdown timer (`03:00` countdown).
@@ -32,7 +32,7 @@ Every layer below is completely implemented, operational, and deployed to produc
 - **Live Hardware Radar & Metric Tiles**: Real-time silicon radar tracking active silicon pods, GPU Compute Load (`84.7%`), HBM3e Throughput (`91.2 TB/s`), and mTLS 1.3 quantum-resistant cert.
 - **Bottom Compliance Bar**: `SOC2 TYPE II • FIPS 140-3 L4 ENCLAVE • QUANTUM-RESISTANT TLS 1.3 • AIR-GAPPED TELEMETRY • MLOps.dev v1.0.4 Enterprise`.
 
-### B. Master Mission Control Dashboard ([`dashboard.html`](https://mlopsde.me/dashboard))
+### B. Master Mission Control Dashboard ([`dashboard.html`](https://mlops.dev/dashboard))
 - **Strict Administrator Clearance Gate**: Only the primary administrator (`raghunathareddygr94@gmail.com`) can view and operate the live fleet. Non-admin users are locked out with an Air-Gapped Clearance Screen (HTTP 403 Forbidden).
 - **Top Military Zulu Mission Clock**: Real-time millisecond ticker running at 43ms intervals (`00:00:00.000 UTC`).
 - **Tactical Vector Drift Radar**: HTML5 canvas rendering a 360° Azimuth sonar sweep beam scanning active hardware twins (AGX Orin, Hailo-8, Coral TPU, RPi5) with live HUD readouts (Azimuth angle, tilt, mean cosine similarity `0.9782`).
@@ -42,7 +42,7 @@ Every layer below is completely implemented, operational, and deployed to produc
 - **Interactive Edge CLI Terminal Drawer**: Embedded bash-like terminal drawer supporting `mlops status`, `mlops devices list`, `mlops drift`, and `help`.
 - **Live Optical Vision Stream & Defect Overlay**: Canvas-rendered 4K camera stream simulating Sony IMX477 optical inspection with real-time bounding box defect detection (`TensorRT FP16 @ 43.4 FPS`).
 
-### C. Master Admin Control Panel ([`admin.html`](https://mlopsde.me/admin.html))
+### C. Master Admin Control Panel ([`admin.html`](https://mlops.dev/admin.html))
 - **Enclave RBAC & User Approvals**: Administrator controls to approve pending operator access requests, elevate developer accounts, or revoke tokens.
 - **Fleet Quotas & Air-Gap Kill Switches**: Emergency buttons to freeze all OTA rollouts, force fleet-wide rollback, or purge offline queues.
 - **Immutable Security Audit Log**: Real-time event bus capturing all administrator actions with timestamp, operator ID, and cryptographic hashes.
@@ -93,7 +93,7 @@ MLOps.dev natively orchestrates 17 distinct hardware architectures categorized a
 Any physical edge device running Linux can be provisioned into the fleet in under 60 seconds using the 1-line installer:
 
 ```bash
-curl -fsSL https://www.mlopsde.me/install.sh | sudo bash -s -- --token demo
+curl -fsSL https://mlops.dev/install.sh | sudo bash -s -- --token demo
 ```
 
 **What `install.sh` executes:**
@@ -152,7 +152,7 @@ GitHub Repository: https://github.com/Raghunath2604/Raghunath2604-mlops-dev
 └── Hosting Platform: Vercel Production
     ├── Edge CDN: Global Anycast Network
     ├── Serverless Region: Washington, D.C. (iad1)
-    ├── Domain: mlopsde.me (DNS & TLS via Vercel)
+    ├── Domain: mlops.dev (DNS & TLS via Vercel)
     └── Backend Runtimes: Python 3.12 (uv package manager)
 ```
 

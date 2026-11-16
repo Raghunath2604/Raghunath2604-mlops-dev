@@ -121,7 +121,7 @@ The agent dynamically interrogates sysfs and procfs to extract authentic silicon
 ### 3.1 Serverless Application Shell (`frontend/api/index.py`)
 Built on Flask with production-hardened middleware:
 - **Talisman Security Headers:** Strict CSP, `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`.
-- **CORS Whitelist:** Explicit cross-origin boundary restricted to `https://www.mlopsde.me` and `https://mlopsde.me`.
+- **CORS Whitelist:** Explicit cross-origin boundary restricted to `https://mlops.dev` and `https://mlops.dev`.
 - **Flask-Limiter:** Global rate limiting (100 req/min default, 5 req/min on `/v1/auth/login` and `/v1/auth/register`).
 - **Payload Sanitization:** Hard 16MB maximum payload cutoff to defeat buffer overload and decompression bomb attacks.
 

@@ -13,7 +13,7 @@ Score: 8/10 | Vote: FUND IF
 
 ## The questions I would ask the founder
 1. What is the ONE feature you will refuse to build, even if a large customer asks for it?
-2. What does the first 60 seconds feel like for an engineer running `curl -fsSL https://www.mlopsde.me/install.sh` on their Jetson?
+2. What does the first 60 seconds feel like for an engineer running `curl -fsSL https://mlops.dev/install.sh` on their Jetson?
 3. What parts of the UI are superfluous and can be stripped away to make the primary workflow even faster?
 
 ## If FUND IF: the conditions

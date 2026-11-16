@@ -97,7 +97,7 @@ def heartbeat():
         deployment_info = {
             "model_name": active_dep["model_name"],
             "model_tag": active_dep["model_tag"],
-            "url": f"https://api.mlopsde.me/v1/models/download/{active_dep['model_name']}/{active_dep['model_tag']}"
+            "url": f"https://api.mlops.dev/v1/models/download/{active_dep['model_name']}/{active_dep['model_tag']}"
         }
     
     if hasattr(db, 'commit'): db.commit()
