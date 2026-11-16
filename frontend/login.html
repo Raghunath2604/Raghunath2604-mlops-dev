@@ -1790,14 +1790,16 @@ html, body {
       if (!textEl) return;
       try {
         const token = localStorage.getItem('mlops_token') || localStorage.getItem('token');
-        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-        const res = await fetch('/v1/status', { headers }).catch(() => null);
-        if (res && res.ok) {
-          const data = await res.json().catch(() => ({}));
-          const nodes = (data && (data.online_nodes || data.active_nodes || (data.nodes && data.nodes.length))) || 18;
-          const drift = data && typeof data.drift_detected !== 'undefined' ? data.drift_detected : 0;
-          textEl.textContent = `${nodes} NODES ONLINE · ${drift} DRIFT`;
-          return;
+        if (token) {
+          const headers = { 'Authorization': `Bearer ${token}` };
+          const res = await fetch('/v1/status', { headers }).catch(() => null);
+          if (res && res.ok) {
+            const data = await res.json().catch(() => ({}));
+            const nodes = (data && (data.online_nodes || data.active_nodes || (data.nodes && data.nodes.length))) || 18;
+            const drift = data && typeof data.drift_detected !== 'undefined' ? data.drift_detected : 0;
+            textEl.textContent = `${nodes} NODES ONLINE · ${drift} DRIFT`;
+            return;
+          }
         }
       } catch (e) {
         // graceful fallback

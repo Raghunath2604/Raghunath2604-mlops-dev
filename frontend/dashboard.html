@@ -3915,7 +3915,9 @@ function updateMapMarkers() {
 function startSSE() {
   if (sseSource) return;
   try {
-    sseSource = new EventSource(`${API}/fleet/stream`, {withCredentials: true});
+    const token = localStorage.getItem('mlops_token') || localStorage.getItem('token') || localStorage.getItem('np_token');
+    const sseUrl = token ? `${API}/fleet/stream?token=${encodeURIComponent(token)}` : `${API}/fleet/stream`;
+    sseSource = new EventSource(sseUrl, {withCredentials: true});
     sseSource.onmessage = e => {
       try {
         const d = JSON.parse(e.data);
@@ -3956,7 +3958,9 @@ async function checkAuth() {
 
   try {
     let user = null;
-    const resp = await fetch(`${API}/auth/me`, {credentials: 'include'}).catch(() => null);
+    const token = localStorage.getItem('mlops_token') || localStorage.getItem('token') || localStorage.getItem('np_token');
+    const authHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const resp = await fetch(`${API}/auth/me`, {headers: authHeaders, credentials: 'include'}).catch(() => null);
     if (resp && resp.ok) {
       const data = await resp.json().catch(() => ({}));
       if (data && data.user) {

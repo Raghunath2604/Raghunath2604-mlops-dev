@@ -759,6 +759,8 @@ def require_admin(f):
         auth_header = request.headers.get("Authorization", "")
         if auth_header.startswith("Bearer "):
             bearer_token = auth_header.split(" ", 1)[1].strip()
+        elif request.args.get("token"):
+            bearer_token = request.args.get("token").strip()
 
         if not cookie_token and not bearer_token:
             return jsonify({"error": "Admin Authentication Required"}), 401
@@ -801,6 +803,8 @@ def require_auth(f):
         auth_header = request.headers.get("Authorization", "")
         if auth_header.startswith("Bearer "):
             bearer_token = auth_header.split(" ", 1)[1].strip()
+        elif request.args.get("token"):
+            bearer_token = request.args.get("token").strip()
 
         if not cookie_token and not bearer_token:
             return jsonify({"error": "Missing Authentication (Cookie or Header)"}), 401
