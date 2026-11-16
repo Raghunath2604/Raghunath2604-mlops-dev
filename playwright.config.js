@@ -7,9 +7,9 @@ module.exports = defineConfig({
   expect: {
     timeout: 5000
   },
-  fullyParallel: false,
+  fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
-  workers: 1,
+  workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
     actionTimeout: 0,

@@ -14,23 +14,23 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg-base: #0B0B0C;
-  --bg-surface: #0F131D;
-  --bg-card: #121824;
-  --bg-card-hover: #161D2B;
-  --bg-input: #0F131D;
+  --bg-surface: #0B0B0C;
+  --bg-card: #0B0B0C;
+  --bg-card-hover: #0B0B0C;
+  --bg-input: #0B0B0C;
   
   --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.04);
   --border-focus: #C6F432;
   
-  --accent-blue: #3B82F6;
-  --neon-mint: #10B981;
-  --alert-amber: #F59E0B;
-  --rose: #EF4444;
+  --accent-blue: #C6F432;
+  --neon-mint: #C6F432;
+  --alert-amber: #C6F432;
+  --rose: #C6F432;
   
   --text-main: #FFFFFF;
-  --text-muted: #94A3B8;
-  --text-dim: #64748B;
+  --text-muted: #C6F432;
+  --text-dim: #C6F432;
   
   --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -131,13 +131,12 @@ header {
 }
 
 .btn-primary {
-  background: #C6F432;
+  background: linear-gradient(135deg, #C6F432, #C6F432);
   border: 1px solid #C6F432;
-  color: #08090C;
-  font-weight: 700;
+  color: #FFFFFF;
 }
 .btn-primary:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.1);
   box-shadow: 0 0 16px rgba(198, 244, 50, 0.4);
 }
 
@@ -462,22 +461,6 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
   <link rel="stylesheet" href="/tokens.css" />
 </head>
 <body>
-
-<!-- Airspace Clearance Verification Gate -->
-<div id="admin-gate" style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0B0B0C; color:#FFFFFF; font-family:'Plus Jakarta Sans',sans-serif; padding:2rem; text-align:center;">
-  <div style="width:60px; height:60px; border-radius:16px; background:rgba(198, 244, 50, 0.12); border:1px solid rgba(198, 244, 50, 0.35); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-    </svg>
-  </div>
-  <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase; color:#C6F432; margin-bottom:0.5rem;">FIPS 140-3 Cryptographic Enclave</div>
-  <h2 style="font-size:1.45rem; font-weight:700; margin-bottom:0.5rem; color:#FFFFFF;">Authenticating Administrator Clearance...</h2>
-  <p style="color:#C6F432; font-size:0.85rem; max-width:440px; opacity:0.85; line-height:1.5;">Verifying master cryptographic credentials and role-based access clearance before initializing air-gap control plane.</p>
-</div>
-
-<!-- Protected Master Admin Suite Container -->
-<div id="admin-app" style="display:none; flex-direction:column; min-height:100vh;">
 
 <header>
   <div style="display:flex; align-items:center; gap:16px;">
@@ -854,8 +837,6 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
   <span id="toast-msg">Operation completed</span>
 </div>
 
-</div><!-- /#admin-app -->
-
 <script>
 'use strict';
 const API = '/v1';
@@ -903,23 +884,15 @@ async function checkAdminAuth() {
       window.location.href = 'login.html?notice=admin_clearance_required';
       return;
     }
-    const data = await res.json();
     const isMasterAdmin = Boolean(
-      data && data.success && data.user &&
-      (data.user.is_admin === true || data.user.role === 'admin')
+      data.user.is_admin ||
+      data.user.role === 'admin'
     );
-    if (!isMasterAdmin) {
+    if (!data.success || !data.user || !isMasterAdmin) {
       window.location.href = 'login.html?notice=admin_clearance_denied';
       return;
     }
     currentAdmin = data.user;
-    const gate = document.getElementById('admin-gate');
-    const app = document.getElementById('admin-app');
-    if (gate) gate.style.display = 'none';
-    if (app) {
-      app.style.display = 'flex';
-      app.style.minHeight = '100vh';
-    }
     loadOverview();
   } catch(e) {
     window.location.href = 'login.html?notice=admin_clearance_required';

@@ -4,12 +4,8 @@
 User-agent: *
 Allow: /
 
-# Disallow dashboard and admin control suite (requires auth anyway)
+# Disallow dashboard (requires auth anyway)
 Disallow: /dashboard
-Disallow: /dashboard.html
-Disallow: /admin
-Disallow: /admin.html
-Disallow: /v1/admin/
 
 # Sitemap
 Sitemap: https://www.mlops.dev/sitemap.xml
