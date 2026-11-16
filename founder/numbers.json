@@ -1,0 +1,27 @@
+{
+  "business": "MLOps.dev (Edge AI Fleet Management SaaS)",
+  "unit": "subscription_month",
+  "price": 149.00,
+  "variable": [
+    {"label": "Cloudflare & Edge Bandwidth", "cost": 4.50},
+    {"label": "Managed Database & Cache", "cost": 6.20},
+    {"label": "Payment Processing (2.9% + $0.30)", "cost": 4.62},
+    {"label": "Telemetry & Log Storage", "cost": 3.50}
+  ],
+  "fixed_monthly": [
+    {"label": "WSGI Backend Infrastructure", "cost": 120.00},
+    {"label": "Logging & Monitoring", "cost": 60.00},
+    {"label": "DNS, Domains & Certificates", "cost": 25.00},
+    {"label": "Tooling & Security Automation", "cost": 95.00}
+  ],
+  "startup": [
+    {"label": "Infrastructure Provisioning", "cost": 250.00},
+    {"label": "Domain & Branding Registration", "cost": 180.00},
+    {"label": "E2E Testing Infrastructure", "cost": 120.00},
+    {"label": "Developer Launch Assets", "cost": 200.00}
+  ],
+  "days_per_month": 30,
+  "capacity_per_day": 50,
+  "plan_per_day": 2.5,
+  "ramp_per_day": [0.2, 0.4, 0.7, 1.0, 1.3, 1.6, 1.9, 2.1, 2.3, 2.4, 2.5, 2.5]
+}

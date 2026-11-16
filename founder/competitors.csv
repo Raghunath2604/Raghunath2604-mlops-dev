@@ -1,0 +1,7 @@
+name,type,url,location_or_channel,price_of_comparable_item,what_it_sells,positioning_line,rating,review_count,source_date
+AWS IoT Greengrass,Direct,https://aws.amazon.com/greengrass/,Cloud / AWS,$0.16/device/month + AWS data transfer & cloud charges,Edge runtime & cloud management,"Build intelligent IoT devices faster",4.1,280,2026-11-01
+Azure IoT Edge,Direct,https://azure.microsoft.com/en-us/products/iot-edge,Cloud / Azure,$0.00 base + Azure IoT Hub $25-$500/mo,Edge container deployment & telemetry,"Deploy cloud intelligence directly on IoT edge devices",4.0,210,2026-11-01
+BalenaCloud,Direct,https://www.balena.io/pricing,Cloud SaaS,$99/mo (Starter) to $299/mo (Production) for up to 50 devices,Linux IoT fleet management & container OTA,"A complete set of tools to build deploy and manage IoT fleets",4.6,185,2026-11-01
+Edge Impulse,Direct,https://edgeimpulse.com/pricing,Cloud SaaS,$0 (Community) to Custom Enterprise ($2500+/mo),Embedded ML training and firmware deployment,"The industry-leading edge AI platform",4.5,140,2026-11-01
+Weights & Biases,Indirect,https://wandb.ai/pricing,Cloud SaaS,$0 (Free) to $50/user/mo,ML experiment tracking & model registry,"The developer-first MLOps platform",4.6,320,2026-11-01
+Custom SSH / Ansible Scripts,Substitute,Internal DIY,In-house,$0 direct cost ($8000+/mo developer engineering time),Bash/Python automation scripts & cron jobs,"In-house script automation",2.1,95,2026-11-01

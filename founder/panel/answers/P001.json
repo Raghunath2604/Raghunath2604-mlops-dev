@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "quality",
+  "reason": "Offline-first SQLite caching and local KL-divergence drift calculation satisfies our air-gap compliance requirements.",
+  "objection": "Is model weight encryption verified at rest and in transit?",
+  "would_change_my_mind": "SOC2 type II report or on-premise Docker deployment option.",
+  "price_too_cheap": 49,
+  "price_cheap": 149,
+  "price_expensive": 399,
+  "price_too_expensive": 999
+}

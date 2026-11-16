@@ -1,0 +1,32 @@
+{
+  "business": "MLOps.dev — Edge AI Fleet Operations & Drift Control Plane",
+  "target": "Edge ML Engineers, Robotics Technical Leads, and IoT Operations Directors deploying AI models to hardware",
+  "where": "Global B2B SaaS (https://www.mlopsde.me)",
+  "age": [26, 52],
+  "segments": [
+    {"name": "Robotics & Drone Startup Lead", "share": 0.35, "income": [90000, 160000]},
+    {"name": "Industrial Manufacturing Plant Director", "share": 0.40, "income": [140000, 240000]},
+    {"name": "Smart Retail Systems Architect", "share": 0.25, "income": [130000, 210000]}
+  ],
+  "behaviours": [
+    {"name": "Burned by Bad OTA", "share": 0.25, "how": "Has bricked remote hardware in production using custom Bash/SSH scripts."},
+    {"name": "Data Transfer Hawk", "share": 0.20, "how": "Manages devices over metered 4G/LTE cellular connections; audits every MB."},
+    {"name": "Security & Air-Gap Auditor", "share": 0.20, "how": "Demands strict on-premise local verification and zero cloud model leaks."},
+    {"name": "PLG Self-Server", "share": 0.20, "how": "Refuses sales calls; wants to pip install or curl in 2 minutes and test locally."},
+    {"name": "ROI Pragmatist", "share": 0.15, "how": "Calculates cost against technician travel & truck rolls ($1500 per visit)."}
+  ],
+  "objections": [
+    "Will this agent consume too much RAM or CPU on constrained edge silicon?",
+    "Is my neural network weights IP protected from leaking to third parties?",
+    "Can we run this fully air-gapped on our factory local network without WAN access?",
+    "What happens if the cellular connection drops mid-download of a model binary?",
+    "Is $149/mo too expensive when our fleet is only 15 devices right now?",
+    "Does it support our specific hardware acceleration (TensorRT / Hailo / Coral)?"
+  ],
+  "habits": [
+    "you manage 25 NVIDIA Jetson Orin cameras across 3 manufacturing facilities",
+    "you monitor device telemetry via Prometheus and Grafana dashboards daily",
+    "you deploy updated defect detection vision models every two weeks",
+    "you dread getting paged on weekends because a remote retail camera stopped responding"
+  ]
+}

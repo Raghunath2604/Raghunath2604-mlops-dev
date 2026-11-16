@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Arjun",
+  "age": 41,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 213000,
+  "behaviour": "Security & Air-Gap Auditor",
+  "behaviour_how": "Demands strict on-premise local verification and zero cloud model leaks.",
+  "objection": "Will this agent consume too much RAM or CPU on constrained edge silicon?",
+  "habit": "you monitor device telemetry via Prometheus and Grafana dashboards daily"
+ },
+ {
+  "id": "P002",
+  "name": "Emil",
+  "age": 39,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 197000,
+  "behaviour": "PLG Self-Server",
+  "behaviour_how": "Refuses sales calls; wants to pip install or curl in 2 minutes and test locally.",
+  "objection": "Will this agent consume too much RAM or CPU on constrained edge silicon?",
+  "habit": "you monitor device telemetry via Prometheus and Grafana dashboards daily"
+ },
+ {
+  "id": "P003",
+  "name": "Luca",
+  "age": 31,
+  "segment": "Smart Retail Systems Architect",
+  "income": 138000,
+  "behaviour": "Security & Air-Gap Auditor",
+  "behaviour_how": "Demands strict on-premise local verification and zero cloud model leaks.",
+  "objection": "Will this agent consume too much RAM or CPU on constrained edge silicon?",
+  "habit": "you dread getting paged on weekends because a remote retail camera stopped responding"
+ },
+ {
+  "id": "P004",
+  "name": "Owen",
+  "age": 46,
+  "segment": "Robotics & Drone Startup Lead",
+  "income": 154000,
+  "behaviour": "Data Transfer Hawk",
+  "behaviour_how": "Manages devices over metered 4G/LTE cellular connections; audits every MB.",
+  "objection": "Is my neural network weights IP protected from leaking to third parties?",
+  "habit": "you manage 25 NVIDIA Jetson Orin cameras across 3 manufacturing facilities"
+ },
+ {
+  "id": "P005",
+  "name": "Mei",
+  "age": 35,
+  "segment": "Robotics & Drone Startup Lead",
+  "income": 145000,
+  "behaviour": "Data Transfer Hawk",
+  "behaviour_how": "Manages devices over metered 4G/LTE cellular connections; audits every MB.",
+  "objection": "Does it support our specific hardware acceleration (TensorRT / Hailo / Coral)?",
+  "habit": "you monitor device telemetry via Prometheus and Grafana dashboards daily"
+ },
+ {
+  "id": "P006",
+  "name": "Sam",
+  "age": 36,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 179000,
+  "behaviour": "Burned by Bad OTA",
+  "behaviour_how": "Has bricked remote hardware in production using custom Bash/SSH scripts.",
+  "objection": "Will this agent consume too much RAM or CPU on constrained edge silicon?",
+  "habit": "you monitor device telemetry via Prometheus and Grafana dashboards daily"
+ },
+ {
+  "id": "P007",
+  "name": "Kai",
+  "age": 49,
+  "segment": "Smart Retail Systems Architect",
+  "income": 189000,
+  "behaviour": "PLG Self-Server",
+  "behaviour_how": "Refuses sales calls; wants to pip install or curl in 2 minutes and test locally.",
+  "objection": "What happens if the cellular connection drops mid-download of a model binary?",
+  "habit": "you deploy updated defect detection vision models every two weeks"
+ },
+ {
+  "id": "P008",
+  "name": "Felix",
+  "age": 39,
+  "segment": "Robotics & Drone Startup Lead",
+  "income": 108000,
+  "behaviour": "Data Transfer Hawk",
+  "behaviour_how": "Manages devices over metered 4G/LTE cellular connections; audits every MB.",
+  "objection": "Is $149/mo too expensive when our fleet is only 15 devices right now?",
+  "habit": "you manage 25 NVIDIA Jetson Orin cameras across 3 manufacturing facilities"
+ },
+ {
+  "id": "P009",
+  "name": "Aria",
+  "age": 43,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 171000,
+  "behaviour": "PLG Self-Server",
+  "behaviour_how": "Refuses sales calls; wants to pip install or curl in 2 minutes and test locally.",
+  "objection": "Is my neural network weights IP protected from leaking to third parties?",
+  "habit": "you deploy updated defect detection vision models every two weeks"
+ },
+ {
+  "id": "P010",
+  "name": "Victor",
+  "age": 44,
+  "segment": "Robotics & Drone Startup Lead",
+  "income": 143000,
+  "behaviour": "ROI Pragmatist",
+  "behaviour_how": "Calculates cost against technician travel & truck rolls ($1500 per visit).",
+  "objection": "What happens if the cellular connection drops mid-download of a model binary?",
+  "habit": "you dread getting paged on weekends because a remote retail camera stopped responding"
+ },
+ {
+  "id": "P011",
+  "name": "Zara",
+  "age": 50,
+  "segment": "Robotics & Drone Startup Lead",
+  "income": 155000,
+  "behaviour": "Security & Air-Gap Auditor",
+  "behaviour_how": "Demands strict on-premise local verification and zero cloud model leaks.",
+  "objection": "Can we run this fully air-gapped on our factory local network without WAN access?",
+  "habit": "you deploy updated defect detection vision models every two weeks"
+ },
+ {
+  "id": "P012",
+  "name": "Lena",
+  "age": 38,
+  "segment": "Robotics & Drone Startup Lead",
+  "income": 159000,
+  "behaviour": "PLG Self-Server",
+  "behaviour_how": "Refuses sales calls; wants to pip install or curl in 2 minutes and test locally.",
+  "objection": "Is my neural network weights IP protected from leaking to third parties?",
+  "habit": "you dread getting paged on weekends because a remote retail camera stopped responding"
+ },
+ {
+  "id": "P013",
+  "name": "Rosa",
+  "age": 30,
+  "segment": "Robotics & Drone Startup Lead",
+  "income": 131000,
+  "behaviour": "Security & Air-Gap Auditor",
+  "behaviour_how": "Demands strict on-premise local verification and zero cloud model leaks.",
+  "objection": "Can we run this fully air-gapped on our factory local network without WAN access?",
+  "habit": "you deploy updated defect detection vision models every two weeks"
+ },
+ {
+  "id": "P014",
+  "name": "Jasper",
+  "age": 43,
+  "segment": "Smart Retail Systems Architect",
+  "income": 170000,
+  "behaviour": "ROI Pragmatist",
+  "behaviour_how": "Calculates cost against technician travel & truck rolls ($1500 per visit).",
+  "objection": "Can we run this fully air-gapped on our factory local network without WAN access?",
+  "habit": "you dread getting paged on weekends because a remote retail camera stopped responding"
+ },
+ {
+  "id": "P015",
+  "name": "Leila",
+  "age": 28,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 239000,
+  "behaviour": "Data Transfer Hawk",
+  "behaviour_how": "Manages devices over metered 4G/LTE cellular connections; audits every MB.",
+  "objection": "Is $149/mo too expensive when our fleet is only 15 devices right now?",
+  "habit": "you dread getting paged on weekends because a remote retail camera stopped responding"
+ },
+ {
+  "id": "P016",
+  "name": "Daniel",
+  "age": 49,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 165000,
+  "behaviour": "Burned by Bad OTA",
+  "behaviour_how": "Has bricked remote hardware in production using custom Bash/SSH scripts.",
+  "objection": "Can we run this fully air-gapped on our factory local network without WAN access?",
+  "habit": "you monitor device telemetry via Prometheus and Grafana dashboards daily"
+ },
+ {
+  "id": "P017",
+  "name": "Kira",
+  "age": 40,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 195000,
+  "behaviour": "ROI Pragmatist",
+  "behaviour_how": "Calculates cost against technician travel & truck rolls ($1500 per visit).",
+  "objection": "What happens if the cellular connection drops mid-download of a model binary?",
+  "habit": "you monitor device telemetry via Prometheus and Grafana dashboards daily"
+ },
+ {
+  "id": "P018",
+  "name": "Gabriel",
+  "age": 46,
+  "segment": "Smart Retail Systems Architect",
+  "income": 198000,
+  "behaviour": "Burned by Bad OTA",
+  "behaviour_how": "Has bricked remote hardware in production using custom Bash/SSH scripts.",
+  "objection": "What happens if the cellular connection drops mid-download of a model binary?",
+  "habit": "you manage 25 NVIDIA Jetson Orin cameras across 3 manufacturing facilities"
+ },
+ {
+  "id": "P019",
+  "name": "Clara",
+  "age": 49,
+  "segment": "Industrial Manufacturing Plant Director",
+  "income": 184000,
+  "behaviour": "Burned by Bad OTA",
+  "behaviour_how": "Has bricked remote hardware in production using custom Bash/SSH scripts.",
+  "objection": "Does it support our specific hardware acceleration (TensorRT / Hailo / Coral)?",
+  "habit": "you dread getting paged on weekends because a remote retail camera stopped responding"
+ },
+ {
+  "id": "P020",
+  "name": "Quinn",
+  "age": 33,
+  "segment": "Smart Retail Systems Architect",
+  "income": 205000,
+  "behaviour": "Burned by Bad OTA",
+  "behaviour_how": "Has bricked remote hardware in production using custom Bash/SSH scripts.",
+  "objection": "Will this agent consume too much RAM or CPU on constrained edge silicon?",
+  "habit": "you dread getting paged on weekends because a remote retail camera stopped responding"
+ }
+]

@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "price",
+  "reason": "At $149/mo for 50 devices, saving even one technician truck roll ($1,500) pays for the entire year of software.",
+  "objection": "Does it require complex ongoing maintenance?",
+  "would_change_my_mind": "Automated fleet health summaries.",
+  "price_too_cheap": 49,
+  "price_cheap": 129,
+  "price_expensive": 299,
+  "price_too_expensive": 599
+}

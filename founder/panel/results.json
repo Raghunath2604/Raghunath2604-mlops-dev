@@ -1,0 +1,140 @@
+{
+ "business": "MLOps.dev — Edge AI Fleet Operations & Drift Control Plane",
+ "seed": 46661,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 17,
+ "passes": 3,
+ "buy_rate": 0.85,
+ "by_segment": [
+  [
+   "Industrial Manufacturing Plant Director",
+   8,
+   1.0
+  ],
+  [
+   "Smart Retail Systems Architect",
+   5,
+   0.8
+  ],
+  [
+   "Robotics & Drone Startup Lead",
+   7,
+   0.7142857142857143
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "PLG Self-Server",
+   4,
+   1.0
+  ],
+  [
+   "Data Transfer Hawk",
+   4,
+   1.0
+  ],
+  [
+   "Burned by Bad OTA",
+   5,
+   1.0
+  ],
+  [
+   "ROI Pragmatist",
+   3,
+   1.0
+  ],
+  [
+   "Security & Air-Gap Auditor",
+   4,
+   0.25
+  ]
+ ],
+ "by_income": [
+  [
+   "$189,000 and up",
+   7,
+   1.0
+  ],
+  [
+   "$155,000 to $189,000",
+   7,
+   0.8571428571428571
+  ],
+  [
+   "under $155,000",
+   6,
+   0.6666666666666666
+  ]
+ ],
+ "why_not": [
+  [
+   "trust",
+   3,
+   [
+    "We cannot connect factory cameras to a multi-tenant cloud without SOC2 verification and full air-gap guarantees.",
+    "We cannot connect factory cameras to a multi-tenant cloud without SOC2 verification and full air-gap guarantees."
+   ],
+   [
+    "P003",
+    "P011"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "need",
+   9,
+   [
+    "Delta OTA patching down to 12MB and autonomous rollback in 300ms directly solves our biggest downtime nightmare.",
+    "Delta OTA patching down to 12MB and autonomous rollback in 300ms directly solves our biggest downtime nightmare."
+   ],
+   [
+    "P004",
+    "P005"
+   ]
+  ],
+  [
+   "convenience",
+   4,
+   [
+    "Free Starter tier for 10 devices lets us test immediately with curl. $149/mo for 50 devices is an easy corporate card expense.",
+    "Free Starter tier for 10 devices lets us test immediately with curl. $149/mo for 50 devices is an easy corporate card expense."
+   ],
+   [
+    "P002",
+    "P007"
+   ]
+  ],
+  [
+   "price",
+   3,
+   [
+    "At $149/mo for 50 devices, saving even one technician truck roll ($1,500) pays for the entire year of software.",
+    "At $149/mo for 50 devices, saving even one technician truck roll ($1,500) pays for the entire year of software."
+   ],
+   [
+    "P010",
+    "P014"
+   ]
+  ],
+  [
+   "quality",
+   1,
+   [
+    "Offline-first SQLite caching and local KL-divergence drift calculation satisfies our air-gap compliance requirements."
+   ],
+   [
+    "P001"
+   ]
+  ]
+ ],
+ "flip": [
+  "Air-gapped on-premise enterprise control plane license.",
+  "Air-gapped on-premise enterprise control plane license.",
+  "Air-gapped on-premise enterprise control plane license."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 20
+}
