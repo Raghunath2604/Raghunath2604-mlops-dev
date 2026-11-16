@@ -5,24 +5,24 @@
 
 /* --- DARK MODE (enhanced) --- */
 body.dark-mode {
-  --bg: #0B0B0C;
-  --bg-card: #0B0B0C;
-  --bg-hover: #0B0B0C;
+  --bg: #08090C;
+  --bg-card: #0F131D;
+  --bg-hover: #161D2B;
   --text: #FFFFFF;
-  --muted: #FFFFFF;
+  --muted: #94A3B8;
   --border: rgba(255, 255, 255, 0.08);
-  --shadow: 0 1px 3px rgba(11, 11, 12, 0.3), 0 1px 2px rgba(11, 11, 12, 0.2);
+  --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
   background: var(--bg);
   color: var(--text);
 }
 
 body.dark-mode .sidebar {
-  background: #0B0B0C;
+  background: #0B0E14;
   border-right: 1px solid var(--border);
 }
 
 body.dark-mode .sb-link {
-  color: #FFFFFF;
+  color: #94A3B8;
   transition: all 0.15s ease;
 }
 
@@ -34,23 +34,24 @@ body.dark-mode .sb-link:hover {
 body.dark-mode .sb-link.active {
   background: rgba(198, 244, 50, 0.12);
   color: #C6F432;
+  font-weight: 600;
 }
 
 body.dark-mode .panel, body.dark-mode .kpi {
-  background: #0B0B0C;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 body.dark-mode .panel:hover, body.dark-mode .kpi:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 body.dark-mode input, body.dark-mode select {
-  background: #0B0B0C;
+  background: #141A26;
   color: var(--text);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -60,8 +61,8 @@ body.dark-mode input:focus, body.dark-mode select:focus {
 }
 
 body.dark-mode .ftable th {
-  color: #FFFFFF;
-  border-bottom-color: rgba(255, 255, 255, 0.06);
+  color: #94A3B8;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -69,10 +70,11 @@ body.dark-mode .ftable th {
 
 body.dark-mode .ftable td {
   border-bottom-color: rgba(255, 255, 255, 0.04);
+  color: #E2E8F0;
 }
 
 body.dark-mode .ftable tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* --- THEME SWITCH (refined) --- */

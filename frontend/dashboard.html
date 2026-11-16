@@ -42,11 +42,11 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
 
 :root {
   --bg-base: #0B0B0C;
-  --bg-surface: #0B0B0C;
-  --bg-card: #0B0B0C;
-  --bg-card-hover: #0B0B0C;
-  --bg-lift: #0B0B0C;
-  --bg-input: #0B0B0C;
+  --bg-surface: #0F131D;
+  --bg-card: #121824;
+  --bg-card-hover: #161D2B;
+  --bg-lift: #1A2234;
+  --bg-input: #0F131D;
   
   --border: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.04);
@@ -54,21 +54,21 @@ gtag('config','G-T4N00SB1DN',{'anonymize_ip':true,'send_page_view':true});
   --border-accent: rgba(198, 244, 50, 0.35);
 
   --text-main: #FFFFFF;
-  --text-muted: #C6F432;
-  --text-dim: #C6F432;
-  --text-inverse: #0B0B0C;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
+  --text-inverse: #08090C;
 
-  --cobalt: #C6F432;
-  --cobalt-bright: #C6F432;
-  --cobalt-dim: rgba(198, 244, 50, 0.12);
-  --cobalt-border: rgba(198, 244, 50, 0.28);
+  --cobalt: #3B82F6;
+  --cobalt-bright: #60A5FA;
+  --cobalt-dim: rgba(59, 130, 246, 0.12);
+  --cobalt-border: rgba(59, 130, 246, 0.28);
   
-  --emerald: #C6F432;
-  --emerald-dim: rgba(198, 244, 50, 0.12);
-  --amber: #C6F432;
-  --amber-dim: rgba(198, 244, 50, 0.12);
-  --rose: #C6F432;
-  --rose-dim: rgba(198, 244, 50, 0.12);
+  --emerald: #10B981;
+  --emerald-dim: rgba(16, 185, 129, 0.12);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245, 158, 11, 0.12);
+  --rose: #EF4444;
+  --rose-dim: rgba(239, 68, 68, 0.12);
 
   --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -957,6 +957,8 @@ html, body {
   .sidebar { width: 68px; min-width: 68px; }
   .sb-brand span, .sb-group-title, .sb-item span, .sb-badge, .sb-user-info, .btn-logout { display: none; }
   .sb-item { justify-content: center; padding: 0.75rem; }
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    BESPOKE AEROSPACE MISSION CONTROL & STITCH ZERO-TRUST STYLES
    ═══════════════════════════════════════════════════════════════════ */
@@ -1034,12 +1036,13 @@ html, body {
   margin-bottom: 1.5rem;
 }
 .radar-panel-tactical {
-  background: #0B0B0C;
-  border: 1px solid rgba(198, 244, 50, 0.24);
-  border-radius: 10px;
+  background: #0F1420;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   padding: 1.2rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 .radar-panel-tactical::before {
   content: '';
@@ -1081,9 +1084,9 @@ html, body {
   height: 220px;
   position: relative;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(11, 11, 12, 0.7) 0%, #0B0B0C 70%);
+  background: radial-gradient(circle, rgba(15, 20, 32, 0.9) 0%, #080B12 70%);
   border: 1px solid rgba(198, 244, 50, 0.35);
-  box-shadow: 0 0 25px rgba(198, 244, 50, 0.15), inset 0 0 25px rgba(198, 244, 50, 0.08);
+  box-shadow: 0 0 25px rgba(198, 244, 50, 0.12), inset 0 0 25px rgba(198, 244, 50, 0.06);
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -1108,20 +1111,21 @@ html, body {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 4px;
 }
-.hud-val-cyan { color: #C6F432; font-weight: 700; }
-.hud-val-mint { color: #C6F432; font-weight: 700; }
-.hud-val-gold { color: #C6F432; font-weight: 700; }
+.hud-val-cyan { color: #38BDF8; font-weight: 700; }
+.hud-val-mint { color: #34D399; font-weight: 700; }
+.hud-val-gold { color: #F59E0B; font-weight: 700; }
 
 /* Optical Diode Queue & Canary Traffic Splitter */
 .airgap-canary-panel {
-  background: #0B0B0C;
-  border: 1px solid rgba(198, 244, 50, 0.22);
-  border-radius: 10px;
+  background: #0F1420;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   padding: 1.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 .diode-header {
   display: flex;

@@ -8,41 +8,46 @@
 
 :root {
   /* ── Precision Spatial Obsidian Surfaces (OLED True Black Layering) ── */
-  --stitch-void: #0B0B0C;
-  --stitch-surface-lowest: #0B0B0C;
-  --stitch-surface-low: #0B0B0C;
-  --stitch-surface-card: #0B0B0C;
-  --stitch-surface-container: #0B0B0C;
-  --stitch-surface-high: #0B0B0C;
-  --stitch-surface-highest: #0B0B0C;
-  --stitch-surface-elevated: #0B0B0C;
+  --stitch-void: #08090C;
+  --stitch-surface-lowest: #0B0E14;
+  --stitch-surface-low: #0F131D;
+  --stitch-surface-card: #121824;
+  --stitch-surface-container: #161D2B;
+  --stitch-surface-high: #1A2234;
+  --stitch-surface-highest: #202A40;
+  --stitch-surface-elevated: #151C2A;
 
-  /* ── Engineering Telemetry & Status Accents ── */
-  --stitch-cobalt: #C6F432;
-  --stitch-cobalt-glow: rgba(198, 244, 50, 0.28);
-  --stitch-cobalt-subtle: rgba(198, 244, 50, 0.12);
+  /* ── Signature Brand & Status Accents ── */
+  --stitch-accent: #C6F432;
+  --stitch-accent-glow: rgba(198, 244, 50, 0.28);
+  --stitch-accent-subtle: rgba(198, 244, 50, 0.12);
+
+  --stitch-cobalt: #3B82F6;
+  --stitch-cobalt-glow: rgba(59, 130, 246, 0.28);
+  --stitch-cobalt-subtle: rgba(59, 130, 246, 0.12);
   
-  --stitch-emerald: #C6F432;
-  --stitch-emerald-glow: rgba(198, 244, 50, 0.28);
-  --stitch-emerald-subtle: rgba(198, 244, 50, 0.10);
+  --stitch-emerald: #10B981;
+  --stitch-emerald-glow: rgba(16, 185, 129, 0.28);
+  --stitch-emerald-subtle: rgba(16, 185, 129, 0.12);
 
-  --stitch-cyan: #C6F432;
-  --stitch-cyan-glow: rgba(198, 244, 50, 0.25);
+  --stitch-cyan: #06B6D4;
+  --stitch-cyan-glow: rgba(6, 182, 212, 0.25);
 
-  --stitch-crimson: #C6F432;
-  --stitch-crimson-glow: rgba(198, 244, 50, 0.25);
-  --stitch-crimson-subtle: rgba(198, 244, 50, 0.10);
+  --stitch-crimson: #EF4444;
+  --stitch-crimson-glow: rgba(239, 68, 68, 0.25);
+  --stitch-crimson-subtle: rgba(239, 68, 68, 0.12);
 
-  --stitch-amber: #C6F432;
-  --stitch-amber-glow: rgba(198, 244, 50, 0.25);
+  --stitch-amber: #F59E0B;
+  --stitch-amber-glow: rgba(245, 158, 11, 0.25);
 
   /* ── Calibrated High-Contrast Typography (WCAG AAA Compliant) ── */
   --stitch-text-primary: #FFFFFF;
-  --stitch-text-secondary: #C6F432;
-  --stitch-text-dim: #C6F432;
-  --stitch-text-muted: #C6F432;
-  --stitch-text-mono-cyan: #C6F432;
-  --stitch-text-mono-mint: #C6F432;
+  --stitch-text-secondary: #E2E8F0;
+  --stitch-text-dim: #94A3B8;
+  --stitch-text-muted: #64748B;
+  --stitch-text-mono-cyan: #38BDF8;
+  --stitch-text-mono-mint: #34D399;
+  --stitch-text-accent: #C6F432;
 
   /* ── Precision Font Stacks ── */
   --stitch-font-display: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
@@ -53,8 +58,8 @@
   --stitch-border-subtle: rgba(255, 255, 255, 0.08);
   --stitch-border-default: rgba(255, 255, 255, 0.12);
   --stitch-border-active: rgba(198, 244, 50, 0.60);
-  --stitch-border-emerald: rgba(198, 244, 50, 0.50);
-  --stitch-border-crimson: rgba(198, 244, 50, 0.40);
+  --stitch-border-emerald: rgba(16, 185, 129, 0.50);
+  --stitch-border-crimson: rgba(239, 68, 68, 0.40);
 
   /* ── Metric Radii & Spacing ── */
   --stitch-radius-xs: 4px;
@@ -528,16 +533,18 @@ a, button, input, select, textarea, [role="button"],
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9999;
+  z-index: 8990;
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(11, 11, 12, 0.85);
+  background: rgba(11, 14, 20, 0.88);
   border: 1px solid rgba(198, 244, 50, 0.35);
   border-radius: 9999px;
   padding: 6px 12px;
-  box-shadow: 0 20px 50px rgba(11, 11, 12, 0.8), 0 0 30px rgba(198, 244, 50, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(198, 244, 50, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .manus-dock-item {
   display: flex;
@@ -594,54 +601,8 @@ a, button, input, select, textarea, [role="button"],
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   STRICT 3-COLOR THEME: Midnight Black (#0B0B0C), Pure White (#FFFFFF), Lime Green (#C6F432)
+   Enterprise Brand Theme & Utility Bindings
    ═══════════════════════════════════════════════════════════════════ */
-:root {
-  --stitch-void: #0B0B0C;
-  --stitch-surface-lowest: #0B0B0C;
-  --stitch-surface-low: #0B0B0C;
-  --stitch-surface-card: #0B0B0C;
-  --stitch-surface-container: #0B0B0C;
-  --stitch-surface-high: #0B0B0C;
-  --stitch-surface-highest: #0B0B0C;
-  --stitch-surface-elevated: #0B0B0C;
-
-  --stitch-cobalt: #C6F432;
-  --stitch-cobalt-glow: rgba(198, 244, 50, 0.28);
-  --stitch-cobalt-subtle: rgba(198, 244, 50, 0.12);
-
-  --stitch-emerald: #C6F432;
-  --stitch-emerald-glow: rgba(198, 244, 50, 0.28);
-  --stitch-emerald-subtle: rgba(198, 244, 50, 0.12);
-
-  --stitch-cyan: #C6F432;
-  --stitch-cyan-glow: rgba(198, 244, 50, 0.25);
-
-  --stitch-crimson: #C6F432;
-  --stitch-crimson-glow: rgba(198, 244, 50, 0.25);
-  --stitch-crimson-subtle: rgba(198, 244, 50, 0.10);
-
-  --stitch-amber: #C6F432;
-  --stitch-amber-glow: rgba(198, 244, 50, 0.25);
-
-  --stitch-text-primary: #FFFFFF;
-  --stitch-text-secondary: #FFFFFF;
-  --stitch-text-dim: #FFFFFF;
-  --stitch-text-muted: #FFFFFF;
-  --stitch-text-mono-cyan: #C6F432;
-  --stitch-text-mono-mint: #C6F432;
-
-  --stitch-border-subtle: rgba(255, 255, 255, 0.15);
-  --stitch-border-default: rgba(255, 255, 255, 0.25);
-  --stitch-border-active: #C6F432;
-  --stitch-border-emerald: #C6F432;
-  --stitch-border-crimson: #C6F432;
-
-  --theme-midnight: #0B0B0C;
-  --theme-white: #FFFFFF;
-  --theme-lime: #C6F432;
-  --theme-lime-hover: #C6F432;
-}
 
 body {
   background-color: #0B0B0C !important;

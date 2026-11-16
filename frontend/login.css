@@ -5,32 +5,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg-slate: #0B0B0C;
-  --bg-gradient: #0B0B0C;
+  --bg-slate: #08090C;
+  --bg-gradient: #08090C;
   
-  --card-bg: #0B0B0C;
-  --card-border: rgba(255, 255, 255, 0.12);
-  --card-shadow: 0 35px 80px -15px rgba(11, 11, 12, 0.8), 0 0 1px 1px rgba(198, 244, 50, 0.2);
+  --card-bg: #0D1117;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(198, 244, 50, 0.15);
   
   --text-main: #FFFFFF;
-  --text-muted: #FFFFFF;
-  --text-dim: #FFFFFF;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
   
-  --input-bg: #0B0B0C;
-  --input-bg-focus: #0B0B0C;
+  --input-bg: #141923;
+  --input-bg-focus: #181F2C;
   --input-text: #FFFFFF;
-  --input-placeholder: #FFFFFF;
+  --input-placeholder: #64748B;
   
   --brand-yellow: #C6F432;
-  --brand-yellow-hover: #C6F432;
-  --brand-yellow-active: #C6F432;
+  --brand-yellow-hover: #D4FF3D;
+  --brand-yellow-active: #B5E025;
   
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
   
   --radius-pill: 9999px;
-  --radius-card: 32px;
-  --radius-hero: 26px;
+  --radius-card: 20px;
+  --radius-hero: 16px;
 }
 
 *, *::before, *::after {

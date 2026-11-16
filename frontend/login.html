@@ -24,32 +24,32 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  --bg-slate: #FFFFFF;
-  --bg-gradient: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #C6F432 60%, #C6F432 100%);
+  --bg-slate: #08090C;
+  --bg-gradient: #08090C;
   
-  --card-bg: radial-gradient(circle at 8% 92%, #C6F432 0%, #C6F432 24%, #FFFFFF 55%, #FFFFFF 100%);
-  --card-border: rgba(255, 255, 255, 0.85);
-  --card-shadow: 0 35px 80px -15px rgba(11, 11, 12, 0.32), 0 0 1px 1px rgba(11, 11, 12, 0.04);
+  --card-bg: #0D1117;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(198, 244, 50, 0.15);
   
-  --text-main: #0B0B0C;
-  --text-muted: #FFFFFF;
-  --text-dim: #FFFFFF;
+  --text-main: #FFFFFF;
+  --text-muted: #94A3B8;
+  --text-dim: #64748B;
   
-  --input-bg: #FFFFFF;
-  --input-bg-focus: #FFFFFF;
-  --input-text: #0B0B0C;
-  --input-placeholder: #FFFFFF;
+  --input-bg: #141923;
+  --input-bg-focus: #181F2C;
+  --input-text: #FFFFFF;
+  --input-placeholder: #64748B;
   
   --brand-yellow: #C6F432;
-  --brand-yellow-hover: #C6F432;
-  --brand-yellow-active: #C6F432;
+  --brand-yellow-hover: #D4FF3D;
+  --brand-yellow-active: #B5E025;
   
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
   
   --radius-pill: 9999px;
-  --radius-card: 32px;
-  --radius-hero: 26px;
+  --radius-card: 20px;
+  --radius-hero: 16px;
 }
 
 *, *::before, *::after {
@@ -60,7 +60,12 @@
 
 html, body {
   min-height: 100vh;
-  background: var(--bg-gradient);
+  background-color: #08090C;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(198, 244, 50, 0.08) 0%, transparent 60%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
   color: var(--text-main);
   font-family: var(--font-sans);
   display: flex;
@@ -68,6 +73,7 @@ html, body {
   justify-content: center;
   padding: 20px;
   -webkit-font-smoothing: antialiased;
+}
 }
 
 /* ── Main Outer Card Container ── */
@@ -110,22 +116,23 @@ html, body {
   align-items: center;
   align-self: flex-start;
   gap: 8px;
-  padding: 7px 22px;
-  border: 1.2px solid #FFFFFF;
+  padding: 6px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-pill);
   text-decoration: none;
-  color: #0B0B0C;
-  font-size: 0.92rem;
+  color: #FFFFFF;
+  font-size: 0.88rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(8px);
   transition: all 0.2s ease;
 }
 
 .brand-pill-link:hover {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: #C6F432;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(198, 244, 50, 0.5);
+  color: #C6F432;
   transform: translateY(-1px);
 }
 
@@ -148,7 +155,7 @@ html, body {
 .form-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #0B0B0C;
+  color: #FFFFFF;
   letter-spacing: -0.03em;
   margin-bottom: 4px;
 }
@@ -177,8 +184,8 @@ html, body {
 .form-label {
   font-size: 0.76rem;
   font-weight: 500;
-  color: #FFFFFF;
-  padding-left: 16px;
+  color: #94A3B8;
+  padding-left: 14px;
   letter-spacing: 0.01em;
 }
 
@@ -192,7 +199,7 @@ html, body {
 .input-pill {
   width: 100%;
   background: var(--input-bg);
-  border: 1.5px solid transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-pill);
   padding: 12px 20px;
   font-size: 0.88rem;
@@ -208,13 +215,13 @@ html, body {
 }
 
 .input-pill:hover {
-  background: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .input-pill:focus {
   background: var(--input-bg-focus);
   border-color: #C6F432;
-  box-shadow: 0 0 0 3px rgba(198, 244, 50, 0.25);
+  box-shadow: 0 0 0 3px rgba(198, 244, 50, 0.2);
 }
 
 .input-btn-eye {
@@ -222,7 +229,7 @@ html, body {
   right: 16px;
   background: none;
   border: none;
-  color: #FFFFFF;
+  color: #94A3B8;
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -232,7 +239,7 @@ html, body {
 }
 
 .input-btn-eye:hover {
-  color: #0B0B0C;
+  color: #FFFFFF;
 }
 
 /* Submit Yellow Pill Button */
@@ -282,8 +289,8 @@ html, body {
 }
 
 .btn-social-pill {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid #FFFFFF;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-pill);
   padding: 10px 14px;
   display: flex;
@@ -292,17 +299,18 @@ html, body {
   gap: 8px;
   font-size: 0.84rem;
   font-weight: 600;
-  color: #0B0B0C;
+  color: #E2E8F0;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
 }
 
 .btn-social-pill:hover {
-  background: #FFFFFF;
-  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(11, 11, 12, 0.06);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Footer Links */
@@ -311,13 +319,13 @@ html, body {
   justify-content: space-between;
   align-items: center;
   font-size: 0.76rem;
-  color: #FFFFFF;
+  color: #94A3B8;
   padding-top: 10px;
   margin-top: 6px;
 }
 
 .form-footer-row a {
-  color: #0B0B0C;
+  color: #FFFFFF;
   text-decoration: underline;
   text-underline-offset: 3px;
   font-weight: 500;
@@ -332,6 +340,16 @@ html, body {
 .auth-hero-column {
   position: relative;
   border-radius: var(--radius-hero);
+  overflow: hidden;
+  height: 100%;
+  background: #0B0E17;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+}
   overflow: hidden;
   height: 100%;
   background-color: #0B0B0C;
@@ -651,11 +669,11 @@ html, body {
 .oauth-modal-card {
   width: 100%;
   max-width: 440px;
-  background: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: 26px;
+  background: #0F1420;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
   padding: 28px;
-  box-shadow: 0 30px 70px rgba(11, 11, 12, 0.35);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(198, 244, 50, 0.15);
   position: relative;
 }
 
@@ -663,7 +681,7 @@ html, body {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(11, 11, 12, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   border: none;
   width: 32px;
   height: 32px;
@@ -673,13 +691,13 @@ html, body {
   align-items: center;
   justify-content: center;
   font-size: 0.95rem;
-  color: #FFFFFF;
+  color: #94A3B8;
   transition: all 0.15s ease;
 }
 
 .modal-close-btn:hover {
-  background: rgba(11, 11, 12, 0.1);
-  color: #0B0B0C;
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
 }
 
 /* 6-Digit OTP Verification Modal Styles */
@@ -696,24 +714,24 @@ html, body {
   text-align: center;
   font-size: 1.6rem;
   font-weight: 700;
-  color: #0B0B0C;
-  background: #FFFFFF;
-  border: 1.5px solid rgba(11, 11, 12, 0.14);
-  border-radius: 14px;
+  color: #FFFFFF;
+  background: #151B28;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
   outline: none;
   transition: all 0.2s ease;
   font-family: inherit;
 }
 
 .otp-digit-input:focus {
-  border-color: #0B0B0C;
-  box-shadow: 0 0 0 3px rgba(198, 244, 50, 0.55);
-  background: #FFFFFF;
+  border-color: #C6F432;
+  box-shadow: 0 0 0 3px rgba(198, 244, 50, 0.25);
+  background: #1B2334;
 }
 
 .otp-digit-input.filled {
-  border-color: #0B0B0C;
-  background: #FFFFFF;
+  border-color: #C6F432;
+  background: #151B28;
 }
 
 .otp-resend-wrap {
@@ -721,14 +739,14 @@ html, body {
   justify-content: space-between;
   align-items: center;
   font-size: 0.82rem;
-  color: #FFFFFF;
+  color: #94A3B8;
   margin-bottom: 18px;
 }
 
 .otp-resend-btn {
   background: none;
   border: none;
-  color: #0B0B0C;
+  color: #C6F432;
   font-weight: 600;
   cursor: pointer;
   padding: 0;
@@ -1057,70 +1075,73 @@ html, body {
         </svg>
       </a>
 
-      <!-- 1. Top-Left Floating Task Pill Stack -->
-      <div class="hero-floating-pill-stack" id="live-hero-task-stack">
-        <div class="hero-pill-yellow">
-          <div class="pill-row-top">
-            <span class="pill-title" id="live-task-title">Task Review With Team</span>
-            <span class="pill-dot-dark" style="animation: pulse-dot 2s infinite ease-in-out;"></span>
+      <!-- Enclave Header Badge & Dynamic Slot -->
+      <div style="position:relative; z-index:5; display:flex; flex-direction:column; gap:12px; max-width:calc(100% - 48px);">
+        <div style="display:inline-flex; align-items:center; gap:8px; align-self:flex-start; background:rgba(198, 244, 50, 0.1); border:1px solid rgba(198, 244, 50, 0.3); padding:5px 12px; border-radius:999px; max-width:100%;">
+          <span style="width:7px; height:7px; border-radius:50%; background:#C6F432; box-shadow:0 0 8px #C6F432; animation:pulse-dot 1.5s infinite; flex-shrink:0;"></span>
+          <span style="font-family:var(--font-mono); font-size:0.65rem; color:#C6F432; font-weight:700; letter-spacing:0.04em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">FIPS 140-3 ENCLAVE</span>
+        </div>
+
+        <!-- Dynamic Task Pill (Maintains JS bindings) -->
+        <div class="hero-floating-pill-stack" id="live-hero-task-stack" style="position:static; margin-top:4px;">
+          <div class="hero-pill-yellow" style="background:#141A26; border:1px solid rgba(255,255,255,0.1); color:#FFFFFF; border-radius:10px; padding:10px 14px;">
+            <div class="pill-row-top" style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="pill-title" id="live-task-title" style="color:#FFFFFF; font-weight:600; font-size:0.82rem;">Edge Fleet Sync &amp; Triage</span>
+              <span class="pill-dot-dark" style="background:#10B981; animation: pulse-dot 2s infinite ease-in-out; width:6px; height:6px; border-radius:50%;"></span>
+            </div>
+            <span class="pill-subtitle" id="live-task-time" style="color:#94A3B8; font-size:0.72rem;">09:30am–10:00am</span>
           </div>
-          <span class="pill-subtitle" id="live-task-time">09:30am–10:00am</span>
-        </div>
-        <div class="hero-pill-dark-under">
-          <span id="live-task-countdown">09:30am–10:00am</span>
-          <span class="pill-dot-yellow" style="animation: pulse-dot 1.5s infinite ease-in-out;"></span>
-        </div>
-      </div>
-
-      <!-- 2. Overlapping Circular Avatar Cluster -->
-      <div class="hero-avatar-cluster" title="Active Fleet Operators">
-        <img class="avatar-bubble av-1" src="avatar-1.jpg" alt="Fleet Architect" />
-        <img class="avatar-bubble av-2" src="avatar-2.jpg" alt="Robotics Engineer" />
-        <img class="avatar-bubble av-3" src="avatar-3.jpg" alt="ML Systems Lead" />
-        <div id="live-operator-badge" style="position:absolute; bottom:-22px; right:0; background:rgba(11, 11, 12, 0.85); border:1px solid rgba(198, 244, 50, 0.3); padding:2px 8px; border-radius:999px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#C6F432; font-weight:700; white-space:nowrap; display:flex; align-items:center; gap:5px;">
-          <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#C6F432; box-shadow:0 0 6px #C6F432; animation: pulse-dot 1.8s infinite ease-in-out;"></span>
-          <span id="live-operator-text">3 OPERATORS ONLINE</span>
+          <div class="hero-pill-dark-under" style="position:static; margin-top:6px; background:#0F1420; border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:6px 12px; display:flex; justify-content:space-between; align-items:center;">
+            <span id="live-task-countdown" style="color:#94A3B8; font-size:0.68rem;">Next Sync Window (15m left)</span>
+            <span class="pill-dot-yellow" style="background:#C6F432; width:5px; height:5px; border-radius:50%;"></span>
+          </div>
         </div>
       </div>
 
-      <!-- 3. Center/Mid-Right Frosted Glass Calendar Widget -->
-      <div class="hero-calendar-glass" id="live-hero-calendar">
-        <div class="calendar-days-row" id="live-cal-days">
-          <div class="cal-col">Sun</div>
-          <div class="cal-col">Mon</div>
-          <div class="cal-col">Tue</div>
-          <div class="cal-col">Wed</div>
-          <div class="cal-col">Thu</div>
-          <div class="cal-col">Fri</div>
-          <div class="cal-col">Sat</div>
-        </div>
-        <div class="calendar-dates-row" id="live-cal-dates">
-          <div class="cal-col">22</div>
-          <div class="cal-col">23</div>
-          <div class="cal-col">24</div>
-          <div class="cal-col active-day">25</div>
-          <div class="cal-col">26</div>
-          <div class="cal-col">27</div>
-          <div class="cal-col">28</div>
-        </div>
-        <div class="calendar-hatched-bg"></div>
-      </div>
+      <!-- Live Silicon Matrix Telemetry Card -->
+      <div style="position:relative; z-index:5; background:rgba(16, 21, 31, 0.85); border:1px solid rgba(255, 255, 255, 0.08); border-radius:14px; padding:16px; margin:14px 0; backdrop-filter:blur(12px);">
+        <div style="font-size:0.66rem; font-family:var(--font-mono); color:#64748B; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; font-weight:600;">Live Silicon Hardware Twins</div>
+        
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); background:rgba(255,255,255,0.02); padding:7px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.04);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#10B981; box-shadow:0 0 6px #10B981;"></span>
+              <span style="color:#FFFFFF; font-weight:600;">Jetson AGX Orin</span>
+            </div>
+            <span style="color:#10B981; font-weight:500;">8.4ms @ 119 FPS</span>
+          </div>
 
-      <!-- 4. Bottom-Left White Card: Daily Meeting -->
-      <div class="hero-white-card">
-        <div class="white-card-header">
-          <span class="white-card-title" id="live-meeting-title">Daily Sync · Edge Rollout</span>
-          <span class="white-card-dot" style="background:#C6F432; animation: pulse-dot 2s infinite ease-in-out;"></span>
-        </div>
-        <div class="white-card-time" id="live-meeting-time">12:00pm–01:00pm UTC</div>
-        <div class="white-card-avatars">
-          <img class="card-avatar-mini" src="avatar-1.jpg" alt="Lead Engineer" />
-          <img class="card-avatar-mini" src="avatar-2.jpg" alt="Robotics Ops" />
-          <img class="card-avatar-mini" src="avatar-3.jpg" alt="Model Compiler" />
-          <img class="card-avatar-mini" src="avatar-1.jpg" alt="Security Auditor" />
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); background:rgba(255,255,255,0.02); padding:7px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.04);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#F59E0B; box-shadow:0 0 6px #F59E0B;"></span>
+              <span style="color:#FFFFFF; font-weight:600;">RPi 5 ARM64</span>
+            </div>
+            <span style="color:#F59E0B; font-weight:500;">Canary (50%)</span>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); background:rgba(255,255,255,0.02); padding:7px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.04);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:#06B6D4; box-shadow:0 0 6px #06B6D4;"></span>
+              <span style="color:#FFFFFF; font-weight:600;">Coral Edge TPU</span>
+            </div>
+            <span style="color:#06B6D4; font-weight:500;">INT8 Nominal</span>
+          </div>
         </div>
       </div>
 
+      <!-- Bottom Status & Telemetry Row (maintaining JS IDs) -->
+      <div style="position:relative; z-index:5; display:flex; align-items:center; justify-content:space-between; margin-top:auto;">
+        <div id="live-operator-badge" style="display:flex; align-items:center; gap:6px; background:#141A26; border:1px solid rgba(198, 244, 50, 0.25); padding:5px 12px; border-radius:999px;">
+          <span style="width:6px; height:6px; border-radius:50%; background:#C6F432; box-shadow:0 0 6px #C6F432; animation:pulse-dot 1.8s infinite;"></span>
+          <span id="live-operator-text" style="font-family:var(--font-mono); font-size:0.68rem; color:#C6F432; font-weight:700;">17 / 17 NODES NOMINAL</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:0.68rem; color:#64748B;" id="live-meeting-time">
+          TLS 1.3 · SUB-10MS
+        </div>
+      </div>
+
+      <!-- Hidden hook targets to prevent JS null ref errors -->
+      <div style="display:none;" id="live-hero-calendar"><div id="live-cal-dates"></div></div>
     </div>
 
   </div>
@@ -1130,19 +1151,19 @@ html, body {
     <div class="oauth-modal-card">
       <button class="modal-close-btn" type="button" onclick="closeOauthModal()">✕</button>
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-        <div id="oauth-provider-icon" style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:#FFFFFF; border-radius:50%;"></div>
+        <div id="oauth-provider-icon" style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:#181F2C; border:1px solid rgba(255,255,255,0.1); border-radius:50%;"></div>
         <div>
-          <h3 id="oauth-modal-title" style="font-size:1.15rem; font-weight:700; color:#0B0B0C;">Sign In with Google</h3>
-          <p id="oauth-modal-sub" style="font-size:0.75rem; color:#FFFFFF;">Sign in to access your Fleet Dashboard</p>
+          <h3 id="oauth-modal-title" style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">Sign In with Google</h3>
+          <p id="oauth-modal-sub" style="font-size:0.75rem; color:#94A3B8;">Sign in to access your Fleet Dashboard</p>
         </div>
       </div>
 
       <!-- Live GitHub Profile Preview Box -->
-      <div id="gh-live-preview" class="gh-preview-box" style="display:none;">
+      <div id="gh-live-preview" class="gh-preview-box" style="display:none; background:#141A26; border:1px solid rgba(255,255,255,0.1);">
         <img id="gh-prev-avatar" class="gh-preview-avatar" src="avatar-1.jpg" alt="GitHub Profile Photo" />
         <div class="gh-preview-info">
-          <div id="gh-prev-name" class="gh-preview-name">Developer</div>
-          <div id="gh-prev-bio" class="gh-preview-bio">Verified Team Member</div>
+          <div id="gh-prev-name" class="gh-preview-name" style="color:#FFFFFF;">Developer</div>
+          <div id="gh-prev-bio" class="gh-preview-bio" style="color:#94A3B8;">Verified Team Member</div>
         </div>
       </div>
 
@@ -1164,10 +1185,10 @@ html, body {
     <div class="oauth-modal-card">
       <button class="modal-close-btn" type="button" onclick="closeOtpModal()">✕</button>
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-        <div style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:#C6F432; border-radius:50%; font-size:1.15rem;">✉️</div>
+        <div style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; background:rgba(198, 244, 50, 0.15); border:1px solid rgba(198, 244, 50, 0.3); border-radius:50%; font-size:1.15rem;">✉️</div>
         <div>
-          <h3 style="font-size:1.15rem; font-weight:700; color:#0B0B0C;">Verify Your Email</h3>
-          <p id="otp-modal-sub" style="font-size:0.75rem; color:#FFFFFF;">We sent a 6-digit code to <strong id="otp-target-email" style="color:#0B0B0C;">your email</strong></p>
+          <h3 style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">Verify Your Email</h3>
+          <p id="otp-modal-sub" style="font-size:0.75rem; color:#94A3B8;">We sent a 6-digit code to <strong id="otp-target-email" style="color:#C6F432;">your email</strong></p>
         </div>
       </div>
 
